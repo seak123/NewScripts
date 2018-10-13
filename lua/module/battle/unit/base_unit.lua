@@ -7,13 +7,15 @@
 local this = class("base_unit")
 local property = require("module.battle.unit.component.property")
 
-function this:ctor( data )
+function this:ctor( sess,data )
+    self.sess = sess
     self.name = data.name
+    self.data = data
     self.property = property.new(self,this.unpack_prop(data))
 end
 
 function this:update(  )
-    -- body
+   
 end
 
 function this.unpack_prop( data )
@@ -24,5 +26,18 @@ function this.unpack_prop( data )
     end
     return prop
 end
+
+function this:init(  )
+    -- init event
+    local function make_event(self,name)
+        self[name] = function(obj, src) 
+          obj:dispatch(name, src)
+        end
+    end
+    -- event end
+    self.entity = self.sess.map.CreateEntity(self.data.id)
+end
+
+  
 
 return this

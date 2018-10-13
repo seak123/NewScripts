@@ -7,12 +7,17 @@
 local base = require("module.battle.unit.base_unit")
 local this = class("creature",base)
 
-function this:ctor( data )
-    this.super:ctor(data)
+function this:ctor( sess,data )
+    this.super:ctor(sess,data)
+    self.init()
 end
 
 function this:update( delta )
     self.super:update(delta)
+end
+
+function this:init(  )
+    this.super:init()
 end
 
 

@@ -18,4 +18,9 @@ this.PROPERTY = {
     speed = this.VALUE
 }
 
+this.MAPMATRIX = {
+    column = 1920,
+    row = 1080
+}
+
 return this

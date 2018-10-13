@@ -10,12 +10,26 @@ function lua_init(  )
     return root
 end
 
+---------------------------lua function
+
 function lua_update( delta )
     root.session:update(delta)
 end
 
 function add_unit( data)
     root.session.field:add_unit(data)
+end
+
+---------------------------csharp functon
+
+-- function CreateEntity( unitid )
+--     return api.CreateEntity(unitid)
+-- end
+
+--MapField,Entity,Particle
+
+function GetMapField(  )
+    return api.GetMapField()
 end
 
 
