@@ -11,21 +11,11 @@ function lua_init(  )
 end
 
 function lua_update( delta )
---    if flag == 0 and time > 5 then
---     flag = 1
---     print("lua: Add unit 1")
---     --if api == nil then print("api is nil") end
---     --api.AddUnit(0,6,10)
---     --print("lua: Add unit 1")
---     --print(tostring(api.GetBattleField()))
---    end
+    root.session:update(delta)
 end
 
-function add_unit( data )
-    print(tostring(data))
-    for n,v in pairs(data) do
-        --print("data name:"..tostring(n).." value:"..tostring(v))
-    end
+function add_unit( data)
+    root.session.field:add_unit(data)
 end
 
 

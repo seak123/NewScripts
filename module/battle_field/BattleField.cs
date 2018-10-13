@@ -8,9 +8,13 @@ public class BattleField : MonoBehaviour {
 
     public AssetManager assetManager;
 
-    public void AddUnit(int id,float x,float y){
+    public void AddCreature(int id,int side ,float x,float y){
         CreatureData data = assetManager.GetCreatureData(id);
-        Instantiate(data.prefab, new Vector3(x, y, 0), Quaternion.identity);
+        var unitdata = AssetManager.PackCreatureData(data);
+        unitdata.side = side;
+        unitdata.init_x = x;
+        unitdata.init_y = y;
+        GameRoot.GetInstance().Bridge.AddUnit(unitdata);
     }
    
 }

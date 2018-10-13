@@ -5,7 +5,7 @@
     time:2018-10-05 21:24:06
 ]]
 local this = class("property")
-local def = require("module.data.battle_def")
+local def = require("module.battle.battle_def")
 
 function this:ctor( master,prop )
     self:init()

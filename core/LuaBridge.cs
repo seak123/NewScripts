@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using LuaInterface;
 using PowerInject;
+using Data;
 
 [Insert]
     public class LuaBridge : MonoBehaviour
@@ -52,9 +53,8 @@ using PowerInject;
             luaUpdate.EndPCall();
         }
 
-    public void AddUnit(){
+    public void AddUnit(UnitData data){
         LuaFunction func = luaState.GetFunction("add_unit");
-        CreatureData data = GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(0);
         func.BeginPCall();
         func.Push(data);
         func.PCall();

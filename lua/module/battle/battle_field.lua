@@ -5,22 +5,27 @@
     time:2018-10-05 12:38:12
 ]]
 local this = class("battle_field")
+local creature = require("module.battle.unit.creature")
 
 function this:ctor( )
-    self.units = {}
+    self.units = {{},{}}
     self.counter = 0
 end
 
-function this:add_unit( unit )
-    print("create new unit "..unit.name)
+function this:add_unit( data)
+    print("create new unit "..data.name)
+    local unit = creature.new(data)
     unit.uid = self.counter
+    unit.side = data.side
     self.counter = self.counter + 1
-    table.insert( self.units,unit)
+    table.insert( self.units[data.side],unit)
 end
 
 function this:update( delta )
-    for _,unit in ipairs(self.units) do
-        unit:update(delta)
+    for side,array in pairs(self.units) do
+        for _,unit in ipairs(array) do
+            unit:update(delta)
+        end
     end
 end
 
