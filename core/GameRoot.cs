@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using PowerInject;
+using Map;
+using System;
 
 [Power]
 [Insert]
 public class GameRoot : MonoBehaviour {
 
     public GameObject[] dontDestroy;
+
+    public static Action init;
 
     private static GameRoot instance;
 
@@ -22,6 +26,9 @@ public class GameRoot : MonoBehaviour {
 
     [Inject]
     public BattleField BattleField { get; set; }
+
+    [Inject]
+    public MapField MapField { get; set; }
 
 	// Use this for initialization
 	void Start () {
@@ -38,6 +45,14 @@ public class GameRoot : MonoBehaviour {
 
     public static GameRoot GetInstance(){
         return instance ?? null;
+    }
+
+    private void Update()
+    {
+        if(init != null){
+            init();
+            init = null;
+        }
     }
 
 }

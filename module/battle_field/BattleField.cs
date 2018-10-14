@@ -16,5 +16,14 @@ public class BattleField : MonoBehaviour {
         unitdata.init_y = y;
         GameRoot.GetInstance().Bridge.AddUnit(unitdata);
     }
+
+    [OnInjected]
+    public void AddRootAction(){
+        GameRoot.init += Init;
+    }
+
+    public void Init(){
+        Debug.Log("BattleField Init");
+    }
    
 }

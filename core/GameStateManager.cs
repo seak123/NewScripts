@@ -10,5 +10,12 @@ public class GameStateManager : MonoBehaviour
     {
 
     }
+    [OnInjected]
+    void AddRootAction(){
+        GameRoot.init += Init;
+    }
+    public void Init(){
+
+    }
 
 }

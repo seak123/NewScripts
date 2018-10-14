@@ -20,10 +20,14 @@ public class Schedular : MonoBehaviour {
         }
 	}
     [OnInjected]
+    public void AddRootAction(){
+        GameRoot.init += Init;
+    }
+
     public void Init()
     {
         //Bridge.Init();
-        Debug.Log("schedular");
+        Debug.Log("Schedular Init");
     }
 
 }

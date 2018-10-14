@@ -41,4 +41,13 @@ function this:get( name )
     end 
 end
 
+function this.unpack_prop( data )
+    local prop_def = require("module.battle.battle_def").PROPERTY
+    local prop = {}
+    for n,_ in pairs(prop_def) do
+        prop[n] = data[n]
+    end
+    return prop
+end
+
 return this

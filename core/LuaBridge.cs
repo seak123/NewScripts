@@ -40,6 +40,11 @@ using Data;
         Init();
 
     }
+
+    [OnInjected]
+    public void AddRootAction(){
+        GameRoot.init += Init;
+    }
        
         public void Init()
         {
