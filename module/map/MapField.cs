@@ -41,6 +41,11 @@ namespace Map
 
         }
 
+        public void GetLogicPos(out int x,out int y){
+            float x = (c - BattleDef.columnGridNum / 2)/Transfer2GridFactor;
+            float y = (r - BattleDef.rowGridNum / 2) / Transfer2GridFactor+ centerOffset;
+        }
+
         public Vector2 GetGridPosition(int r,int c){
 
             float x = (c - BattleDef.columnGridNum / 2)/Transfer2GridFactor;
