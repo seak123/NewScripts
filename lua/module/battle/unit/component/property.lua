@@ -10,13 +10,13 @@ local def = require("module.battle.battle_def")
 function this:ctor( master,prop )
     self:init()
     self.master = master
-    for n,v in ipairs(prop) do
+    for n,v in pairs(prop) do
         self[n.."base"] = v
     end
 end
 
 function this:init(  )
-    for n,v in ipairs(def.PROPERTY) do
+    for n,v in pairs(def.PROPERTY) do
         if v == def.RATE then
             self[n.."base"] = 0
             self[n.."add"] = 0 
@@ -37,7 +37,7 @@ function this:get( name )
     if def.PROPERTY[name] == def.RATE then
         return self[name.."base"] + self[name.."add"]
     else
-        return self[name.."base"]*(1+self[name.."rate"] + self[name.."base"])
+        return self[name.."base"]*(1+self[name.."rate"] + self[name.."add"])
     end 
 end
 

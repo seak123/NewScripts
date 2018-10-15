@@ -21,6 +21,8 @@ end
 
 function this:update( delta )
     self.super:update(delta)
+    local des_pos = {X=0,Y=0}
+    self.transform:update(delta,des_pos)
 end
 
 
