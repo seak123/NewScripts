@@ -5,7 +5,7 @@ using UnityEngine;
 public static class BattleDef  {
 
     //map data
-    public static int rowGridNum = 880;
+    public static int rowGridNum = 448;
 
-    public static int columnGridNum = 1980;
+    public static int columnGridNum = 1152;
 }
