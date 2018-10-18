@@ -52,11 +52,12 @@ namespace Map
         }
 
         public void TryMove(int unit_id,int s_x,int s_y,int e_x,int e_y,float value,out bool canMove,out int nextX,out int nextY,out float offset){
-            canMove = true;
-            nextX = (int)Math.Floor(s_x + value);
-            nextY = s_y;
-            offset = value-(float)(nextX-s_x);
+            //canMove = true;
+            //nextX = (int)Math.Floor(s_x + value);
+            //nextY = s_y;
+            //offset = value-(float)(nextX-s_x);
         }
+
 
         //public Vector2 GetGridPosition(int r,int c){
         //
