@@ -55,6 +55,7 @@ namespace Map
 
         public void TryMove(int unit_id,int s_x,int s_y,int e_x,int e_y,float value,out bool canMove,out int nextX,out int nextY,out float offset,out bool completed){
             int radius = mng.GetCreatureData(unit_id).radius;
+            int wholeDistance = Distance(s_x,s_y,e_x,e_y);
 
             //init
             for (int x = Math.Max(0, s_x - radius); x < Math.Min(BattleDef.columnGridNum, s_x + radius); ++x)
@@ -65,7 +66,7 @@ namespace Map
                 }
             }
             //completed
-            if(Distance(s_x,s_y,e_x,e_y)<=value){
+            if(wholeDistance<=value){
                 if(IsCanMove(e_x,e_y,radius)){
                     canMove = true;
                     nextX = e_x;
@@ -81,6 +82,11 @@ namespace Map
                 }
                 return;
             }
+            //try move
+            int keyX = 0;
+            int keyY = 0;
+            GetGridPos(e_x-s_x)/wholeDistance*value+s_x,(e_y-s_y)/wholeDistance*value+s_y,keyX,keyY);
+
             canMove = true;
             nextX = 0;
             nextY = 0;
@@ -91,9 +97,7 @@ namespace Map
         private float Distance(int s_x,int s_y,int e_x,int e_y){
             int dis_x = Math.Abs(e_x - s_x);
             int dis_y = Math.Abs(e_y - s_y);
-            int length = Math.Max(dis_x, dis_y);
-            int width = Math.Min(dis_x, dis_y);
-            return width * DiagoFactor + length - width;
+            return (float)Math.Sqrt(dis_x*dis_x + dis_y*dis_y)
         }
 
         private bool IsCanMove(int grid_x,int grid_y,int radius){
