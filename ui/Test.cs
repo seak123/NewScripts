@@ -5,6 +5,9 @@ using UnityEngine;
 public class Test:MonoBehaviour  {
 
     public void CreateTopCreature(){
-        GameRoot.GetInstance().BattleField.AddCreature(1,1, 0f, 8.96f);
+        GameRoot.GetInstance().BattleField.AddCreature(1,1, 0f, 0f);
+    }
+    public void CreateMidCreature(){
+        GameRoot.GetInstance().BattleField.AddCreature(2, 1, 2f, 0f);
     }
 }

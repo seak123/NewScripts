@@ -21,15 +21,18 @@ end
 function this:update( delta,des_pos )
     self.des_pos = des_pos
     local can_move = false
+    local completed = false
     if self.des_pos ~= nil then
         local value = delta * self.master.property:get("speed") + self.offset
-        can_move,self.grid_pos.X,self.grid_pos.Y,self.offset = self.master.sess.map:TryMove(self.master.id,self.grid_pos.X,self.grid_pos.Y,self.des_pos.X,self.des_pos.Y,value,nil,nil,nil,nil)
+        can_move,self.grid_pos.X,self.grid_pos.Y,self.offset,completed = self.master.sess.map:TryMove(self.master.id,self.grid_pos.X,self.grid_pos.Y,self.des_pos.X,self.des_pos.Y,value,nil,nil,nil,nil,nil)
     end
     if can_move == true then
         self.position.X,self.position.Y = self.master.sess.map:GetLogicPos(self.grid_pos.X,self.grid_pos.Y,nil,nil)
+        --print("id:"..self.master.id.." new pos:"..self.position.X.." "..self.position.Y)
         self.master.entity:SetTransform(self.position.X,self.position.Y)
     end
     self.des_pos = nil
+    return completed
 end
 
 return this

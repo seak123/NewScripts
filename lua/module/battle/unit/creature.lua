@@ -8,20 +8,32 @@ local base = require("module.battle.unit.base_unit")
 local this = class("creature",base)
 
 local transform = require("module.battle.unit.component.transform")
+local property = require("module.battle.unit.component.property")
 
 function this:ctor( sess,data )
-    self.super:ctor(sess,data)
+    self.sess = sess
+    self.id = data.id
+    self.name = data.name
+    self.data = data
+    self.property = property.new(self,property.unpack_prop(data))
     self.transform = transform.new(self,data)
-    self.init()
+    self:init()
 end
 
 function this:init(  )
-    this.super:init()
+    -- init event
+    local function make_event(self,name)
+        self[name] = function(obj, src) 
+          obj:dispatch(name, src)
+        end
+    end
+    -- event end
+    self.entity = self.sess.map:CreateEntity(self.data.id,self.data.init_x,self.data.init_y)
 end
 
 function this:update( delta )
     self.super:update(delta)
-    local des_pos = {X=0,Y=0}
+    local des_pos = {X=447,Y=0}
     self.transform:update(delta,des_pos)
 end
 

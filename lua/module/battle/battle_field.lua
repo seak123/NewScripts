@@ -25,6 +25,7 @@ end
 function this:update( delta )
     for side,array in pairs(self.units) do
         for _,unit in ipairs(array) do
+            print("unit.id = "..unit.id.." uid="..unit.uid)
             unit:update(delta)
         end
     end

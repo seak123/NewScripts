@@ -8,11 +8,7 @@ local this = class("base_unit")
 local property = require("module.battle.unit.component.property")
 
 function this:ctor( sess,data )
-    self.sess = sess
-    self.id = data.id
-    self.name = data.name
-    self.data = data
-    self.property = property.new(self,property.unpack_prop(data))
+    
 end
 
 function this:update(  )

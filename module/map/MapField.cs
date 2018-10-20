@@ -55,7 +55,7 @@ namespace Map
 
         public void TryMove(int unit_id,int s_x,int s_y,int e_x,int e_y,float value,out bool canMove,out int nextX,out int nextY,out float offset,out bool completed){
             int radius = mng.GetCreatureData(unit_id).radius;
-            int wholeDistance = Distance(s_x,s_y,e_x,e_y);
+            float wholeDistance = Distance(s_x,s_y,e_x,e_y);
 
             //init
             for (int x = Math.Max(0, s_x - radius); x < Math.Min(BattleDef.columnGridNum, s_x + radius); ++x)
@@ -65,15 +65,20 @@ namespace Map
                     grids[x, y] = false;
                 }
             }
+
             //completed
-            if(wholeDistance<=value){
-                if(IsCanMove(e_x,e_y,radius)){
+            if (wholeDistance <= value)
+            {
+                if (IsCanMove(e_x, e_y, radius))
+                {
                     canMove = true;
                     nextX = e_x;
                     nextY = e_y;
                     offset = 0;
                     completed = true;
-                }else{
+                }
+                else
+                {
                     canMove = false;
                     nextX = s_x;
                     nextY = s_y;
@@ -85,28 +90,111 @@ namespace Map
             //try move
             int keyX = 0;
             int keyY = 0;
-            GetGridPos(e_x-s_x)/wholeDistance*value+s_x,(e_y-s_y)/wholeDistance*value+s_y,keyX,keyY);
+            int interval = (int)Math.Floor((value * Transfer2GridFactor));
+            keyX = (int)Math.Floor((e_x - s_x) / wholeDistance * interval) + s_x;
+            keyY = (int)Math.Floor((e_y - s_y) / wholeDistance * interval) + s_y;
+    
+            for (int i = 0; i <= 2 * interval;++i){
 
-            canMove = true;
-            nextX = 0;
-            nextY = 0;
+                int delta_X1 = Mod(keyX+i-s_x,interval);
+                int temX1 = s_x+delta_X1;
+                int delta_Y1 = (int)Math.Floor(Math.Sqrt(interval * interval - delta_X1 * delta_X1));
+                int flag1 = keyY > s_y ? 1 : -1;
+                delta_Y1 = Math.Abs(keyX+i-s_x) > interval ? -flag1 * delta_Y1 : flag1 * delta_Y1;
+                int temY1 = s_y + delta_Y1;
+                float temDistance1 = Distance(temX1, temY1, e_x, e_y);
+                bool canMove1 = IsCanMove(temX1, temY1, radius);
+
+                int delta_X2 = Mod(keyX - i - s_x, interval);
+                int temX2 = s_x + delta_X2;
+                int delta_Y2 = (int)Math.Floor(Math.Sqrt(interval * interval - delta_X2 * delta_X2));
+                int flag2 = keyY > s_y ? 1 : -1;
+                delta_Y2 = Math.Abs(keyX + i - s_x) > interval ? -flag2 * delta_Y2 : flag2 * delta_Y2;
+                int temY2 = s_y + delta_Y2;
+                float temDistance2 = Distance(temX2, temY2, e_x, e_y);
+                bool canMove2 = IsCanMove(temX2, temY2, radius);
+
+                if(canMove1&&canMove2){
+                    if(temDistance1<temDistance2){
+                        canMove = true;
+                        nextX = temX1;
+                        nextY = temY1;
+                        offset = value-Distance(s_x, s_y, nextX, nextY);
+                        completed = false;
+                        MarkCannotMove(nextX, nextY, radius);
+                        return;
+                    }
+                    else{
+                        canMove = true;
+                        nextX = temX2;
+                        nextY = temY2;
+                        offset = value - Distance(s_x, s_y, nextX, nextY);
+                        completed = false;
+                        MarkCannotMove(nextX, nextY, radius);
+                        return;
+                    }
+                }else if(canMove1){
+                    canMove = true;
+                    nextX = temX1;
+                    nextY = temY1;
+                    offset = value - Distance(s_x, s_y, nextX, nextY);
+                    completed = false;
+                    MarkCannotMove(nextX, nextY, radius);
+                    return;
+                }
+                else if(canMove2){
+                    canMove = true;
+                    nextX = temX2;
+                    nextY = temY2;
+                    offset = value - Distance(s_x, s_y, nextX, nextY);
+                    completed = false;
+                    MarkCannotMove(nextX, nextY, radius);
+                    return;
+                }
+
+            }
+
+
+            canMove = false;
+            nextX = s_x;
+            nextY = s_y;
             offset = 0;
             completed = false;
+            MarkCannotMove(nextX, nextY, radius);
+            return;
+        }
+
+        private int Mod(int value,int round){
+            int flag = value > 0 ? 1:-1;
+            value = Math.Abs(value);
+            if (value > round) value = 2 * round - value;
+            return value * flag;
         }
 
         private float Distance(int s_x,int s_y,int e_x,int e_y){
-            int dis_x = Math.Abs(e_x - s_x);
-            int dis_y = Math.Abs(e_y - s_y);
-            return (float)Math.Sqrt(dis_x*dis_x + dis_y*dis_y)
+            float dis_x = Math.Abs(e_x - s_x);
+            float dis_y = Math.Abs(e_y - s_y);
+            return (float)Math.Sqrt(dis_x * dis_x + dis_y * dis_y);
         }
 
         private bool IsCanMove(int grid_x,int grid_y,int radius){
+            if (grid_x < 0 || grid_x >= BattleDef.columnGridNum || grid_y < 0 || grid_y >= BattleDef.rowGridNum) return false;
             for (int x = Math.Max(0, grid_x - radius); x < Math.Min(BattleDef.columnGridNum, grid_x + radius);++x){
                 for (int y = Math.Max(0, grid_y - radius); y < Math.Min(BattleDef.rowGridNum, grid_y + radius);++y){
                     if (grids[x, y] == true) return false;
                 }
             }
             return true;
+        }
+
+        private void MarkCannotMove(int grid_x,int grid_y,int radius){
+            for (int x = Math.Max(0, grid_x - radius); x < Math.Min(BattleDef.columnGridNum, grid_x + radius); ++x)
+            {
+                for (int y = Math.Max(0, grid_y - radius); y < Math.Min(BattleDef.rowGridNum, grid_y + radius); ++y)
+                {
+                    grids[x, y] = true;
+                }
+            }
         }
     }
 }
