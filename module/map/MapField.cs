@@ -10,8 +10,8 @@ namespace Map
     public class MapField : MonoBehaviour
     {
         private bool[,] grids;
-        private readonly float Transfer2GridFactor = 25;
-        private readonly float DiagoFactor = (float)Math.Sqrt(2);
+        private readonly float Transfer2GridFactor = BattleDef.Transfer2GridFactor;
+        private readonly float DiagoFactor = 1.4f;//(float)Math.Sqrt(2)
         //private float centerOffset = 0.365f;
 
         private AssetManager mng;
@@ -23,7 +23,10 @@ namespace Map
 
         public Entity CreateEntity(int id,float x,float y){
             GameObject obj = Instantiate(mng.GetCreatureData(id).prefab, new Vector3(x, y, 0), Quaternion.identity);
-            return obj.AddComponent<Entity>();
+            var entity = obj.AddComponent<Entity>();
+            entity.id = id;
+            entity.radius = mng.GetCreatureData(id).radius;
+            return entity;
         }
 
         [OnInjected]
@@ -48,136 +51,88 @@ namespace Map
             grid_y = (int)Math.Floor(y * Transfer2GridFactor);
         }
 
-        public void GetLogicPos(int grid_x,int grid_y,out float pos_x,out float pos_y){
+        public void GetViewPos(int grid_x,int grid_y,out float pos_x,out float pos_y){
             pos_x = grid_x/Transfer2GridFactor;
             pos_y = grid_y/ Transfer2GridFactor;
         }
 
-        public void TryMove(int unit_id,int s_x,int s_y,int e_x,int e_y,float value,out bool canMove,out int nextX,out int nextY,out float offset,out bool completed){
+        public HeapNode GetAStarRoute(int unit_id,int s_x,int s_y,int e_x,int e_y){
             int radius = mng.GetCreatureData(unit_id).radius;
-            float wholeDistance = Distance(s_x,s_y,e_x,e_y);
+            int maxG = BattleDef.maxSpeed / 30 * BattleDef.aStarUpdateFrame;
 
-            //init
-            for (int x = Math.Max(0, s_x - radius); x < Math.Min(BattleDef.columnGridNum, s_x + radius); ++x)
-            {
-                for (int y = Math.Max(0, s_y - radius); y < Math.Min(BattleDef.rowGridNum, s_y + radius); ++y)
-                {
-                    grids[x, y] = false;
-                }
+            MapMinHeap heap = new MapMinHeap();
+            HeapNode root = new HeapNode();
+            HeapNode currNode = null;
+            List<HeapNode> CloseList = new List<HeapNode>();
+            heap.Push(s_x, s_y, 0f,Distance(s_x, s_y, e_x, e_y),root);
+            while (heap.Count()>0){
+                int count = heap.Count();
+                currNode = heap.Pop();
+                CloseList.Add(currNode);
+                int roundX, roundY;
+
+                if (currNode.X == e_x && currNode.Y == e_y || currNode.G>maxG) break;
+
+                // execute 8-round grids
+                roundX = currNode.X - 1;
+                roundY = currNode.Y + 1;
+                if(CloseList.FindIndex(node=>node.X ==roundX&&node.Y==roundY)==-1 && IsCanMove(roundX,roundY,radius))
+                heap.Find(roundX, roundY, currNode.G + DiagoFactor, Distance(roundX, roundY, e_x, e_y), currNode);
+
+                roundX = currNode.X;
+                roundY = currNode.Y + 1;
+                if (CloseList.FindIndex(node => node.X == roundX && node.Y == roundY) == -1 && IsCanMove(roundX, roundY, radius))
+                    heap.Find(roundX, roundY, currNode.G + 1f, Distance(roundX, roundY, e_x, e_y), currNode);
+
+                roundX = currNode.X + 1;
+                roundY = currNode.Y + 1;
+                    if (CloseList.FindIndex(node => node.X == roundX && node.Y == roundY) == -1 && IsCanMove(roundX, roundY, radius))
+                    heap.Find(roundX, roundY, currNode.G + DiagoFactor, Distance(roundX, roundY, e_x, e_y), currNode);
+
+                roundX = currNode.X - 1;
+                roundY = currNode.Y;
+                    if (CloseList.FindIndex(node => node.X == roundX && node.Y == roundY) == -1 && IsCanMove(roundX, roundY, radius))
+                    heap.Find(roundX, roundY, currNode.G + 1f, Distance(roundX, roundY, e_x, e_y), currNode);
+
+                roundX = currNode.X + 1;
+                roundY = currNode.Y;
+                    if (CloseList.FindIndex(node => node.X == roundX && node.Y == roundY) == -1 && IsCanMove(roundX, roundY, radius))
+                    heap.Find(roundX, roundY, currNode.G + 1f, Distance(roundX, roundY, e_x, e_y), currNode);
+
+                roundX = currNode.X - 1;
+                roundY = currNode.Y - 1;
+                    if (CloseList.FindIndex(node => node.X == roundX && node.Y == roundY) == -1 && IsCanMove(roundX, roundY, radius))
+                    heap.Find(roundX, roundY, currNode.G + DiagoFactor, Distance(roundX, roundY, e_x, e_y), currNode);
+
+                roundX = currNode.X;
+                roundY = currNode.Y - 1;
+                    if (CloseList.FindIndex(node => node.X == roundX && node.Y == roundY) == -1 && IsCanMove(roundX, roundY, radius))
+                    heap.Find(roundX, roundY, currNode.G + 1f, Distance(roundX, roundY, e_x, e_y), currNode);
+
+                roundX = currNode.X + 1;
+                roundY = currNode.Y - 1;
+                    if (CloseList.FindIndex(node => node.X == roundX && node.Y == roundY) == -1 && IsCanMove(roundX, roundY, radius))
+                    heap.Find(roundX, roundY, currNode.G + DiagoFactor, Distance(roundX, roundY, e_x, e_y), currNode);
+            }
+            while(currNode.Parent != null){
+                currNode.Parent.Next = currNode;
+                currNode = currNode.Parent;
             }
 
-            //completed
-            if (wholeDistance <= value)
-            {
-                if (IsCanMove(e_x, e_y, radius))
-                {
-                    canMove = true;
-                    nextX = e_x;
-                    nextY = e_y;
-                    offset = 0;
-                    completed = true;
-                }
-                else
-                {
-                    canMove = false;
-                    nextX = s_x;
-                    nextY = s_y;
-                    offset = 0;
-                    completed = true;
-                }
-                return;
-            }
-            //try move
-            int keyX = 0;
-            int keyY = 0;
-            int interval = (int)Math.Floor((value * Transfer2GridFactor));
-            keyX = (int)Math.Floor((e_x - s_x) / wholeDistance * interval) + s_x;
-            keyY = (int)Math.Floor((e_y - s_y) / wholeDistance * interval) + s_y;
-    
-            for (int i = 0; i <= 2 * interval;++i){
-
-                int delta_X1 = Mod(keyX+i-s_x,interval);
-                int temX1 = s_x+delta_X1;
-                int delta_Y1 = (int)Math.Floor(Math.Sqrt(interval * interval - delta_X1 * delta_X1));
-                int flag1 = keyY > s_y ? 1 : -1;
-                delta_Y1 = Math.Abs(keyX+i-s_x) > interval ? -flag1 * delta_Y1 : flag1 * delta_Y1;
-                int temY1 = s_y + delta_Y1;
-                float temDistance1 = Distance(temX1, temY1, e_x, e_y);
-                bool canMove1 = IsCanMove(temX1, temY1, radius);
-
-                int delta_X2 = Mod(keyX - i - s_x, interval);
-                int temX2 = s_x + delta_X2;
-                int delta_Y2 = (int)Math.Floor(Math.Sqrt(interval * interval - delta_X2 * delta_X2));
-                int flag2 = keyY > s_y ? 1 : -1;
-                delta_Y2 = Math.Abs(keyX + i - s_x) > interval ? -flag2 * delta_Y2 : flag2 * delta_Y2;
-                int temY2 = s_y + delta_Y2;
-                float temDistance2 = Distance(temX2, temY2, e_x, e_y);
-                bool canMove2 = IsCanMove(temX2, temY2, radius);
-
-                if(canMove1&&canMove2){
-                    if(temDistance1<temDistance2){
-                        canMove = true;
-                        nextX = temX1;
-                        nextY = temY1;
-                        offset = value-Distance(s_x, s_y, nextX, nextY);
-                        completed = false;
-                        MarkCannotMove(nextX, nextY, radius);
-                        return;
-                    }
-                    else{
-                        canMove = true;
-                        nextX = temX2;
-                        nextY = temY2;
-                        offset = value - Distance(s_x, s_y, nextX, nextY);
-                        completed = false;
-                        MarkCannotMove(nextX, nextY, radius);
-                        return;
-                    }
-                }else if(canMove1){
-                    canMove = true;
-                    nextX = temX1;
-                    nextY = temY1;
-                    offset = value - Distance(s_x, s_y, nextX, nextY);
-                    completed = false;
-                    MarkCannotMove(nextX, nextY, radius);
-                    return;
-                }
-                else if(canMove2){
-                    canMove = true;
-                    nextX = temX2;
-                    nextY = temY2;
-                    offset = value - Distance(s_x, s_y, nextX, nextY);
-                    completed = false;
-                    MarkCannotMove(nextX, nextY, radius);
-                    return;
-                }
-
-            }
-
-
-            canMove = false;
-            nextX = s_x;
-            nextY = s_y;
-            offset = 0;
-            completed = false;
-            MarkCannotMove(nextX, nextY, radius);
-            return;
+            return currNode;
         }
 
-        private int Mod(int value,int round){
-            int flag = value > 0 ? 1:-1;
-            value = Math.Abs(value);
-            if (value > round) value = 2 * round - value;
-            return value * flag;
-        }
 
-        private float Distance(int s_x,int s_y,int e_x,int e_y){
+        public float Distance(int s_x,int s_y,int e_x,int e_y){
             float dis_x = Math.Abs(e_x - s_x);
             float dis_y = Math.Abs(e_y - s_y);
-            return (float)Math.Sqrt(dis_x * dis_x + dis_y * dis_y);
+            //return (float)Math.Sqrt(dis_x * dis_x + dis_y * dis_y);
+            float width = Math.Max(dis_x, dis_y);
+            float height = Math.Min(dis_x, dis_y);
+            return height * DiagoFactor + width - height;
         }
 
-        private bool IsCanMove(int grid_x,int grid_y,int radius){
+        public bool IsCanMove(int grid_x,int grid_y,int radius){
             if (grid_x < 0 || grid_x >= BattleDef.columnGridNum || grid_y < 0 || grid_y >= BattleDef.rowGridNum) return false;
             for (int x = Math.Max(0, grid_x - radius); x < Math.Min(BattleDef.columnGridNum, grid_x + radius);++x){
                 for (int y = Math.Max(0, grid_y - radius); y < Math.Min(BattleDef.rowGridNum, grid_y + radius);++y){
@@ -187,12 +142,12 @@ namespace Map
             return true;
         }
 
-        private void MarkCannotMove(int grid_x,int grid_y,int radius){
+        public void MarkMovable(int grid_x,int grid_y,int radius,bool cannotMove){
             for (int x = Math.Max(0, grid_x - radius); x < Math.Min(BattleDef.columnGridNum, grid_x + radius); ++x)
             {
                 for (int y = Math.Max(0, grid_y - radius); y < Math.Min(BattleDef.rowGridNum, grid_y + radius); ++y)
                 {
-                    grids[x, y] = true;
+                    grids[x, y] = cannotMove;
                 }
             }
         }

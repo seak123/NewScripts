@@ -8,7 +8,7 @@ public class BattleField : MonoBehaviour {
 
     public AssetManager assetManager;
 
-    public void AddCreature(int id,int side ,float x,float y){
+    public void AddCreature(int id,int side ,int x,int y){
         CreatureData data = assetManager.GetCreatureData(id);
         var unitdata = AssetManager.PackCreatureData(data);
         unitdata.side = side;

@@ -29,12 +29,18 @@ function this:init(  )
     end
     -- event end
     self.entity = self.sess.map:CreateEntity(self.data.id,self.data.init_x,self.data.init_y)
+    if self.id == 1 then
+    local des_pos = {X=300,Y=200}
+    self.transform:Go(des_pos)
+    else
+        local des_pos = {X=300,Y=200}
+        self.transform:Go(des_pos)
+    end
 end
 
 function this:update( delta )
     self.super:update(delta)
-    local des_pos = {X=447,Y=0}
-    self.transform:update(delta,des_pos)
+    self.transform:update(delta)
 end
 
 

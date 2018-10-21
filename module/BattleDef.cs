@@ -8,4 +8,11 @@ public static class BattleDef  {
     public static int rowGridNum = 448;
 
     public static int columnGridNum = 1152;
+
+
+    public static int maxSpeed = 64;
+
+    public static int aStarUpdateFrame = 15;
+
+    public static float Transfer2GridFactor = 25;
 }
