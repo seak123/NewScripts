@@ -20,6 +20,36 @@ function this:ctor( sess,data )
     self:init()
 end
 
+this.move_action1 = {
+    state = "running",
+    des_pos = {X = 300,Y = 0},
+    update = function(unit)
+        unit.transform.des_pos = {X = 300,Y = 0}
+     end
+     ,
+     check = function ( unit )
+         if unit.transform.grid_pos.X == 300 and unit.transform.grid_pos.Y == 0 then
+            this.move_action1.state = "completed"
+            print("action1 completed")
+         end
+     end
+}
+
+this.move_action2 = {
+    state = "running",
+    des_pos = {X = 300,Y = 0},
+    update = function(unit)
+        unit.transform.des_pos = {X = 300,Y = 0}
+     end
+     ,
+     check = function ( unit )
+         if unit.transform.grid_pos.X == 300 and unit.transform.grid_pos.Y == 0 then
+            this.move_action2.state = "completed"
+            print("action2 completed")
+         end
+     end
+}
+
 function this:init(  )
     -- init event
     local function make_event(self,name)
@@ -28,18 +58,26 @@ function this:init(  )
         end
     end
     -- event end
+    print("@@create entity, X="..self.data.init_x.." Y="..self.data.init_y)
     self.entity = self.sess.map:CreateEntity(self.data.id,self.data.init_x,self.data.init_y)
+    
     if self.id == 1 then
-    local des_pos = {X=300,Y=200}
-    self.transform:Go(des_pos)
+        self.action = this.move_action1
     else
-        local des_pos = {X=300,Y=200}
-        self.transform:Go(des_pos)
+        self.action = this.move_action2
     end
 end
 
+
+
 function this:update( delta )
     self.super:update(delta)
+
+    if self.action.state == "running" then
+        self.action.update(self)
+        self.action.check(self)
+    end
+
     self.transform:update(delta)
 end
 

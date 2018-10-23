@@ -14,14 +14,11 @@ namespace Map
         public int id;
         public int uid;
         public int radius;
-        private int RouteUpdateFlag = 0;
-        private int posX = 0;
-        private int posY = 0;
+        public int posX = 0;
+        public int posY = 0;
 
-        private int toX = 0;
-        private int toY = 0;
-        private float toViewX = 0;
-        private float toViewY = 0;
+        private int RouteUpdateFlag = 0;
+       
 
         HeapNode currMapNode;
 
@@ -35,32 +32,23 @@ namespace Map
             gameObject.transform.position = new Vector3(x, 0, y);
         }
 
-        public void GoForward(int s_x,int s_y,int e_x,int e_y){
+        /*public void GoForward(int s_x,int s_y,int e_x,int e_y){
             RouteUpdateFlag = 0;
-            toX = e_x;
-            toY = e_y;
-            GameRoot.GetInstance().MapField.GetViewPos(toX, toY, out toViewX, out toViewY);
+            //toX = e_x;
+            //toY = e_y;
+            //GameRoot.GetInstance().MapField.GetViewPos(toX, toY, out toViewX, out toViewY);
             //currMapNode = GameRoot.GetInstance().MapField.GetAStarRoute(id, s_x, s_y, e_x, e_y);
-        }
+        }*/
 
-        public void Move(float value,out int gridX,out int gridY,out float offset)
+        public void Move(int toX,int toY,float value,out int gridX,out int gridY,out float offset)
         {
-            /*MapField field = GameRoot.GetInstance().MapField;
-            int startX = currMapNode.X;
-            int startY = currMapNode.Y;
-            while(field.Distance(currMapNode.Next.X,currMapNode.Next.Y,startX,startY)<value){
-                currMapNode = currMapNode.Next;
-            }
-            offset = value - field.Distance(currMapNode.X, currMapNode.Y, startX, startY);
-            gridX = currMapNode.X;
-            gridY = currMapNode.Y;
-            SetTransform(gridX, gridY);
-            posX = gridX;
-            posY = gridY;*/
+            //init data
 
             MapField field = GameRoot.GetInstance().MapField;
-            //int radius = GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(id).radius;
-            //int radius = 4;
+
+            float toViewX, toViewY;
+            field.GetViewPos(toX, toY, out toViewX, out toViewY);
+
             field.MarkMovable(posX, posY, radius, false);
 
             if (state == TransformState.Straight)
@@ -68,8 +56,8 @@ namespace Map
                 float nowViewX = gameObject.transform.position.x;
                 float nowViewY = gameObject.transform.position.z;
                 float factor = value/BattleDef.Transfer2GridFactor / Vector2.Distance(new Vector2(toViewX, toViewY), new Vector2(nowViewX, nowViewY));
-                float nextViewX = nowViewX + (toViewX - nowViewX) * factor;
-                float nextViewY = nowViewY + (toViewY - nowViewY) * factor;
+                float nextViewX = Mathf.Max(0,Mathf.Min(BattleDef.columnGridNum-1,nowViewX + (toViewX - nowViewX) * factor));
+                float nextViewY = Mathf.Max(0, Mathf.Min(BattleDef.rowGridNum - 1,nowViewY + (toViewY - nowViewY) * factor));
                 field.GetGridPos(nextViewX, nextViewY, out gridX, out gridY);
                 if (field.IsCanMove(gridX, gridY, radius))
                 {

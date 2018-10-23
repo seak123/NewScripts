@@ -15,16 +15,12 @@ function this:ctor( master,data )
     self.des_pos = nil
 end
 
-function this:Go( des_pos )
-    self.des_pos = des_pos
-    self.master.entity:GoForward(self.grid_pos.X,self.grid_pos.Y,self.des_pos.X,self.des_pos.Y)
-end
-
 
 function this:update( delta )
     if self.des_pos ~= nil then
         local value = delta * self.master.property:get("speed") + self.offset
-        self.grid_pos.X,self.grid_pos.Y,self.offset= self.master.entity:Move(value,nil,nil,nil)
+        self.grid_pos.X,self.grid_pos.Y,self.offset= self.master.entity:Move(self.des_pos.X,self.des_pos.Y,value,nil,nil,nil)
+        self.des_pos = nil
     end
 end
 

@@ -21,11 +21,16 @@ namespace Map
 
         }
 
-        public Entity CreateEntity(int id,float x,float y){
-            GameObject obj = Instantiate(mng.GetCreatureData(id).prefab, new Vector3(x, y, 0), Quaternion.identity);
+        public Entity CreateEntity(int id,int gridX,int gridY){
+            float x, y;
+            GetViewPos(gridX, gridY, out x, out y);
+            GameObject obj = Instantiate(mng.GetCreatureData(id).prefab, new Vector3(x, 0, y), Quaternion.identity);
             var entity = obj.AddComponent<Entity>();
+            //init entity
             entity.id = id;
             entity.radius = mng.GetCreatureData(id).radius;
+            entity.posX = gridX;
+            entity.posY = gridY;
             return entity;
         }
 
