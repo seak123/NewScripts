@@ -8,8 +8,8 @@ this.ACTION = {
 }
 this.execute = "module.battle.unit.behavior_tree.action_node"
 
-function this:ctor(  )
-    self.action_type = this.ACTION.Move
-end
+
+this.action_type = this.ACTION.Move
+
 
 return this

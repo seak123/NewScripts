@@ -8,8 +8,7 @@ this.Type = {
     EnemyAround = 2
 }
 
-function this:ctor(  )
-    self.type = this.Type.Foward
-end
+this.type = this.Type.Foward
+
 
 return this
