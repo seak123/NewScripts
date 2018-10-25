@@ -22,6 +22,24 @@ function this:add_unit( data)
     table.insert( self.units[data.side],unit)
 end
 
+function this:find_enemy( unit )
+    local enemy_side = 3 - unit.side
+    for _,u in ipairs(self.units[enemy_side]) do
+        if self:distance(unit,u) < 100 then
+            return u
+        end
+    end
+    return nil
+end
+
+function this:distance(a_unit,b_unit  )
+    local a_tran = a_unit.transform
+    local b_tran = b_unit.transform
+    local x = a_tran.gird_pos.X - b_tran.gird_pos.X
+    local y = a_tran.gird_pos.Y - b_tran.gird_pos.Y
+    return math.sqrt( x*x + y*y )
+end
+
 function this:update( delta )
     for side,array in pairs(self.units) do
         for _,unit in ipairs(array) do

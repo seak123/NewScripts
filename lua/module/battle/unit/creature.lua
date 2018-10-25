@@ -9,6 +9,8 @@ local this = class("creature",base)
 
 local transform = require("module.battle.unit.component.transform")
 local property = require("module.battle.unit.component.property")
+local behavior_tree = require("module.battle.unit.behavior_tree.behavior_tree")
+local bt_config = require("module.battle.unit.component.test_ai_config")
 
 function this:ctor( sess,data )
     self.sess = sess
@@ -17,6 +19,7 @@ function this:ctor( sess,data )
     self.data = data
     self.property = property.new(self,property.unpack_prop(data))
     self.transform = transform.new(self,data)
+    self.betree = behavior_tree:build(self,bt_config)
     self:init()
 end
 
@@ -73,10 +76,7 @@ end
 function this:update( delta )
     self.super:update(delta)
 
-    if self.action.state == "running" then
-        self.action.update(self)
-        self.action.check(self)
-    end
+    self.betree:update()
 
     self.transform:update(delta)
 end

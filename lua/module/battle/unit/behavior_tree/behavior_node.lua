@@ -7,7 +7,7 @@
 --local base = require("module.battle.unit.behavior_tree.base_node")
 local this = class("behavior_node")
 
-function this:ctor( vo )
+function this:ctor( vo ,database)
     -- sel;par;seq;
     self.vo = vo
     self.controll_type = vo.controll_type
@@ -19,12 +19,18 @@ function this:ctor( vo )
     self.active_index = 1
 
     --init
+    self:init_data(database)
     if self.vo.decorator ~= nil then
         for _,v in ipairs(self.vo.decorator) do
             local dec = require(v.execute).new(v)
+            dec:init_data(database)
             table.insert( self.decorators, dec )
         end
     end
+end
+
+function this:init_data( database )
+    self.database = database
 end
 
 function this:update(  )
