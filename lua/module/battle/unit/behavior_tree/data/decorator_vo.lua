@@ -4,8 +4,8 @@ local this = class("decorator_vo",base)
 this.execute = "module.battle.unit.behavior_tree.decorator"
 
 this.Type = {
-    Foward = 1,
-    EnemyAround = 2
+    Forward = "Forward",
+    EnemyAround = "EnemyAround"
 }
 
 this.type = this.Type.Foward

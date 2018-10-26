@@ -26,6 +26,7 @@ end
 
 function this:check_EnemyAround(  )
     local field = self.database.master.sess.field
+    print("@@check enemy")
     local unit = field:find_enemy(self.database.master)
     if unit == nil then
         return false

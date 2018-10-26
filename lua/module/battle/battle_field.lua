@@ -25,18 +25,19 @@ end
 function this:find_enemy( unit )
     local enemy_side = 3 - unit.side
     for _,u in ipairs(self.units[enemy_side]) do
-        if self:distance(unit,u) < 100 then
+        if self:distance(unit,u) < 250 then
             return u
         end
     end
+    print("return nil")
     return nil
 end
 
 function this:distance(a_unit,b_unit  )
     local a_tran = a_unit.transform
     local b_tran = b_unit.transform
-    local x = a_tran.gird_pos.X - b_tran.gird_pos.X
-    local y = a_tran.gird_pos.Y - b_tran.gird_pos.Y
+    local x = a_tran.grid_pos.X - b_tran.grid_pos.X
+    local y = a_tran.grid_pos.Y - b_tran.grid_pos.Y
     return math.sqrt( x*x + y*y )
 end
 

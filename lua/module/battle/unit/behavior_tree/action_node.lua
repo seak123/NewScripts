@@ -8,8 +8,8 @@ function this:ctor( vo ,database)
       self.running = false
       --init
       self:init_data(database)
-      if self.vo.decorator ~= nil then
-          for _,v in ipairs(self.vo.decorator) do
+      if self.vo.decorators ~= nil then
+          for _,v in ipairs(self.vo.decorators) do
               local dec = require(v.execute).new(v)
               dec:init_data(database)
               table.insert( self.decorators, dec )
@@ -39,7 +39,7 @@ function this:update_MoveUnit(  )
     local field = self.database.master.sess.field
     
     if self.database.enemy ~= nil then
-        if field:distance(self.database.enemy,self.database.master) <20 then
+        if field:distance(self.database.enemy,self.database.master) <60 then
             return "completed"
         end
         self.database.master.transform.des_pos =  self.database.enemy.transform.grid_pos

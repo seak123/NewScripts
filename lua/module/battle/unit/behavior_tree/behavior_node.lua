@@ -20,8 +20,8 @@ function this:ctor( vo ,database)
 
     --init
     self:init_data(database)
-    if self.vo.decorator ~= nil then
-        for _,v in ipairs(self.vo.decorator) do
+    if self.vo.decorators ~= nil then
+        for _,v in ipairs(self.vo.decorators) do
             local dec = require(v.execute).new(v)
             dec:init_data(database)
             table.insert( self.decorators, dec )
@@ -35,7 +35,9 @@ end
 
 function this:update(  )
     for _,v in ipairs(self.decorators) do
+        print("@@check")
         if v:check() == false then
+            print("@@check failure")
             return "failure"
         end
     end

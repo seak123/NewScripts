@@ -16,14 +16,14 @@ de_find.type = decorator.Type.EnemyAround
 
 local be_attack = behavior.new()
 be_attack.controll_type = "seq"
-be_attack:append("subs",ac_attack,ac_move)
+be_attack:append("subs",ac_move,ac_attack)
 be_attack:append("decorators",de_find)
 -----------------------------
 local ac_move0 = action.new()
 ac_move0.action_type = action.ACTION.Move
 
 local de_forward = decorator.new()
-de_forward.type = decorator.Type.Foward
+de_forward.type = decorator.Type.Forward
 
 local be_forward = behavior.new()
 be_forward.controll_type = "seq"
