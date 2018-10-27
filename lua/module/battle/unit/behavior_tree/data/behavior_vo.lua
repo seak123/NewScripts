@@ -7,6 +7,6 @@ this.execute = "module.battle.unit.behavior_tree.behavior_node"
 
 -- sel;par;seq;
 this.controll_type = "sel"
-
+this.priority = 1
 
 return this

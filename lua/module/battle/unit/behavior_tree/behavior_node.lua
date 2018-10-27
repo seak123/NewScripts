@@ -18,7 +18,7 @@ function this:ctor( vo ,database)
     --seq args
     self.active_index = 1
 
-    --init
+    --init data
     self:init_data(database)
     if self.vo.decorators ~= nil then
         for _,v in ipairs(self.vo.decorators) do
@@ -33,20 +33,61 @@ function this:init_data( database )
     self.database = database
 end
 
+function this:init(  )
+    -- decorator init
+
+     --sel init
+     if self.controll_type == "sel" then
+        self.priority_que = {}
+        for _,v in ipairs(self.childs) do
+            local index = v.vo.priority
+            if self.priority_que[index] == nil then
+                self.priority_que[index] = {}
+            end
+            table.insert( self.priority_que[index],v)
+        end
+    end
+end
+
 function this:update(  )
-    for _,v in ipairs(self.decorators) do
-        print("@@check")
-        if v:check() == false then
-            print("@@check failure")
-            return "failure"
+    if self.running == false then
+        for _,v in ipairs(self.decorators) do
+            if v:check() == false then
+                return "failure"
+            end
         end
     end
     return self["update_by_"..self.controll_type](self)
     
 end
 
+function this:abort(  )
+    return self["abort_by_"..self.controll_type](self)
+end
+
 function this:update_by_sel(  )
     if self.running == true then
+        local run_priority = self.active_node.vo.priority
+        if run_priority < #self.priority_que then
+            for index = #self.priority_que,run_priority+1,-1 do
+                local childs = self.priority_que[index]
+                for _,n in ipairs(childs) do
+                    local state = n:update()
+                    if state == "running" then
+                        self:abort()
+                        self.active_node = n
+                        self.running = true
+                        return "running"
+                    end
+                    if state == "completed" then
+                        self:abort()
+                        self.running = false
+                        self.active_node = nil
+                        return "completed"
+                    end
+                end
+            end
+        end
         local state = self.active_node:update()
         if state == "running" then
             return "running"
@@ -57,22 +98,31 @@ function this:update_by_sel(  )
             return "completed"
         end
     end
-    for _,n in ipairs(self.childs) do
-        local state = n:update()
-        if state == "running" then
-            self.active_node = n
-            self.running = true
-           return "running"
-        end
-        if state == "completed" then
-            self.running = false
-            self.active_node = nil
-            return "completed"
+    for index=#self.priority_que,1,-1 do
+        local childs = self.priority_que[index]
+        for _,n in ipairs(childs) do
+            local state = n:update()
+            if state == "running" then
+                self.active_node = n
+                self.running = true
+                return "running"
+            end
+            if state == "completed" then
+                self.running = false
+                self.active_node = nil
+                return "completed"
+            end
         end
     end
     self.running = false
     self.active_node = nil
     return "failure"
+end
+
+function this:abort_by_sel(  )
+    if self.running == true then
+        self.active_node:abort()
+    end
 end
 
 function this:update_by_seq(  )
@@ -98,6 +148,12 @@ function this:update_by_seq(  )
             self.active_node = nil
             return "completed"
         end
+    end
+end
+
+function this:abort_by_seq(  )
+    if self.running == true then
+        self.active_node:abort()
     end
 end
 

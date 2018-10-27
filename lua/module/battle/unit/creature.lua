@@ -33,7 +33,6 @@ this.move_action1 = {
      check = function ( unit )
          if unit.transform.grid_pos.X == 300 and unit.transform.grid_pos.Y == 0 then
             this.move_action1.state = "completed"
-            print("action1 completed")
          end
      end
 }
@@ -48,7 +47,6 @@ this.move_action2 = {
      check = function ( unit )
          if unit.transform.grid_pos.X == 300 and unit.transform.grid_pos.Y == 0 then
             this.move_action2.state = "completed"
-            print("action2 completed")
          end
      end
 }
@@ -61,7 +59,6 @@ function this:init(  )
         end
     end
     -- event end
-    print("@@create entity, X="..self.data.init_x.." Y="..self.data.init_y)
     self.entity = self.sess.map:CreateEntity(self.data.id,self.data.init_x,self.data.init_y)
     
     if self.id == 1 then

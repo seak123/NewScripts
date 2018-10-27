@@ -25,7 +25,6 @@ function this:init(  )
         end
     end
     -- event end
-    print("@@create entity, X="..self.data.init_x.." Y="..self.data.init_y)
     self.entity = self.sess.map:CreateEntity(self.data.id,self.data.init_x,self.data.init_y)
 
 end

@@ -19,8 +19,8 @@ this.PROPERTY = {
 }
 
 this.MAPMATRIX = {
-    column = 576,
-    row = 224
+    column = 1152,
+    row = 448
 }
 
 return this

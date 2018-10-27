@@ -5,10 +5,10 @@ this.execute = "module.battle.unit.behavior_tree.decorator"
 
 this.Type = {
     Forward = "Forward",
-    EnemyAround = "EnemyAround"
+    EnemyAround = "EnemyAround",
+    EnemyInAttackRange = "EnemyInAttackRange"
 }
 
 this.type = this.Type.Foward
-
 
 return this

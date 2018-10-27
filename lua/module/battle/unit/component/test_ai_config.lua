@@ -4,23 +4,28 @@ local decorator = require("module.battle.unit.behavior_tree.data.decorator_vo")
 
 
 
+local de_inrange = decorator.new()
+de_inrange.type = decorator.Type.EnemyInAttackRange
 
 local ac_attack = action.new()
+ac_attack.priority =2
 ac_attack.action_type = action.ACTION.Attack
+ac_attack:append("decorators",de_inrange)
 
 local ac_move = action.new()
-ac_move.action_type = action.ACTION.MoveUnit
+ac_move.action_type = action.ACTION.MoveToUnit
 
 local de_find = decorator.new()
 de_find.type = decorator.Type.EnemyAround
 
 local be_attack = behavior.new()
-be_attack.controll_type = "seq"
+be_attack.controll_type = "sel"
+be_attack.priority = 2
 be_attack:append("subs",ac_move,ac_attack)
 be_attack:append("decorators",de_find)
 -----------------------------
 local ac_move0 = action.new()
-ac_move0.action_type = action.ACTION.Move
+ac_move0.action_type = action.ACTION.MoveToPos
 
 local de_forward = decorator.new()
 de_forward.type = decorator.Type.Forward

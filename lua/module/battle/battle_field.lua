@@ -29,7 +29,6 @@ function this:find_enemy( unit )
             return u
         end
     end
-    print("return nil")
     return nil
 end
 

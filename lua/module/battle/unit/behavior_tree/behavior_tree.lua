@@ -21,6 +21,7 @@ function this:build( master,vo )
                 table.insert( queue, sub_node)
             end
         end
+        node:init()
         table.remove( queue, 1 )
     end
     return root_node
