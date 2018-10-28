@@ -49,7 +49,7 @@ function this:init(  )
     end
 end
 
-function this:update(  )
+function this:update( delta )
     if self.running == false then
         for _,v in ipairs(self.decorators) do
             if v:check() == false then
@@ -57,7 +57,7 @@ function this:update(  )
             end
         end
     end
-    return self["update_by_"..self.controll_type](self)
+    return self["update_by_"..self.controll_type](self,delta)
     
 end
 
@@ -65,14 +65,14 @@ function this:abort(  )
     return self["abort_by_"..self.controll_type](self)
 end
 
-function this:update_by_sel(  )
+function this:update_by_sel( delta )
     if self.running == true then
         local run_priority = self.active_node.vo.priority
         if run_priority < #self.priority_que then
             for index = #self.priority_que,run_priority+1,-1 do
                 local childs = self.priority_que[index]
                 for _,n in ipairs(childs) do
-                    local state = n:update()
+                    local state = n:update(delta)
                     if state == "running" then
                         self:abort()
                         self.active_node = n
@@ -88,7 +88,7 @@ function this:update_by_sel(  )
                 end
             end
         end
-        local state = self.active_node:update()
+        local state = self.active_node:update(delta)
         if state == "running" then
             return "running"
         end
@@ -97,11 +97,14 @@ function this:update_by_sel(  )
             self.active_node = nil
             return "completed"
         end
+        self.running = false
+        self.active_node = nil
+        return "failure"
     end
     for index=#self.priority_que,1,-1 do
         local childs = self.priority_que[index]
         for _,n in ipairs(childs) do
-            local state = n:update()
+            local state = n:update(delta)
             if state == "running" then
                 self.active_node = n
                 self.running = true
@@ -125,10 +128,10 @@ function this:abort_by_sel(  )
     end
 end
 
-function this:update_by_seq(  )
+function this:update_by_seq( delta )
     for i = self.active_index,#self.childs do
         local n = self.childs[i]
-        local state = n:update()
+        local state = n:update(delta)
         if state == "running" then
             self.active_index = i
             self.running = true

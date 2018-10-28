@@ -31,6 +31,7 @@ namespace Map
             entity.radius = mng.GetCreatureData(id).radius;
             entity.posX = gridX;
             entity.posY = gridY;
+            entity.animator = obj.GetComponentInChildren<Animator>();
             return entity;
         }
 

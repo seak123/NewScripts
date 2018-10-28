@@ -21,6 +21,9 @@ function this:ctor( sess,data )
     self.transform = transform.new(self,data)
     self.betree = behavior_tree:build(self,bt_config)
     self:init()
+
+    -- threat_value to every enemy: key is uid,  ps: value will not be cleared
+    self.threat_value = {}
 end
 
 this.move_action1 = {
@@ -61,11 +64,8 @@ function this:init(  )
     -- event end
     self.entity = self.sess.map:CreateEntity(self.data.id,self.data.init_x,self.data.init_y)
     
-    if self.id == 1 then
-        self.action = this.move_action1
-    else
-        self.action = this.move_action2
-    end
+   -- attack cache
+   self.attack_process = 0
 end
 
 
@@ -73,9 +73,22 @@ end
 function this:update( delta )
     self.super:update(delta)
 
-    self.betree:update()
+    self.betree:update(delta)
 
     self.transform:update(delta)
+end
+
+function this:do_attack( delta )
+    local old_value = self.attack_process
+    self.attack_process = self.attack_process + delta
+    if old_value < 0.5 and self.attack_process >= 0.5 then
+        -- make damage
+    end
+    if self.attack_process >= 1 then
+        self.attack_process = 0
+        return true
+    end
+    return false
 end
 
 

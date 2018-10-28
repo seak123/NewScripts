@@ -6,6 +6,7 @@
 ]]
 local this = class("battle_field")
 local creature = require("module.battle.unit.creature")
+local battle_def = require("module.battle.battle_def")
 
 function this:ctor(sess )
     self.sess = sess
@@ -24,12 +25,23 @@ end
 
 function this:find_enemy( unit )
     local enemy_side = 3 - unit.side
+    local enemy = nil
+    local max_threat = -999
     for _,u in ipairs(self.units[enemy_side]) do
-        if self:distance(unit,u) < 250 then
-            return u
+        if self:distance(unit,u) < battle_def.MAPMATRIX.row/2 then
+            local threat = unit.threat_value[u.uid]
+            if threat == nil then
+                -- set base threat_value
+                unit.threat_value[u.uid] = 10
+                threat = 10
+            end
+            if  threat > max_threat then
+                max_threat = threat
+                enemy = u
+            end
         end
     end
-    return nil
+    return enemy
 end
 
 function this:distance(a_unit,b_unit  )

@@ -16,9 +16,10 @@ namespace Map
         public int radius;
         public int posX = 0;
         public int posY = 0;
+        public Animator animator;
 
         private int RouteUpdateFlag = 0;
-       
+        private float animatorAttackSpeed = 1f; 
 
         HeapNode currMapNode;
 
@@ -31,15 +32,15 @@ namespace Map
             GameRoot.GetInstance().MapField.GetViewPos(gridX,gridY,out x,out y);
             gameObject.transform.position = new Vector3(x, 0, y);
         }
+        // >>>>>>>>>>>>>>>>> Transform 
+        public void SetRotation(int toX, int toY){
+            Vector2 direct = new Vector2(toX - posX, toY - posY);
+            float angle = Vector2.Angle(new Vector2(1, 0), direct);
+            angle = direct.y<0? angle:-angle;
+            gameObject.transform.rotation = Quaternion.Euler(0,angle,0);
+        }
 
-        /*public void GoForward(int s_x,int s_y,int e_x,int e_y){
-            RouteUpdateFlag = 0;
-            //toX = e_x;
-            //toY = e_y;
-            //GameRoot.GetInstance().MapField.GetViewPos(toX, toY, out toViewX, out toViewY);
-            //currMapNode = GameRoot.GetInstance().MapField.GetAStarRoute(id, s_x, s_y, e_x, e_y);
-        }*/
-
+     
         public void Move(int toX,int toY,float value,out int gridX,out int gridY,out float offset)
         {
             //init data
@@ -78,7 +79,7 @@ namespace Map
             {
                 RouteUpdateFlag += 1;
                 float startG = currMapNode.G;
-                while ((currMapNode.Next.G - startG) <= value)
+                while (currMapNode.Next != null && (currMapNode.Next.G - startG) <= value)
                 {
                     currMapNode = currMapNode.Next;
                 }
@@ -99,9 +100,30 @@ namespace Map
             offset = 0;
         }
 
+        // >>>>>>>>>>>>>>>>>>>> Animator
+        public void SetAnimationState(int index){
+            animator.SetInteger("State", index);
+        }
+
+        public void CasterAttack(float attack_rate){
+
+            animatorAttackSpeed = attack_rate;
+            animator.SetTrigger("Attack");
+
+        }
+
         private void Start()
         {
             mng = GameRoot.GetInstance().BattleField.assetManager;
+        }
+
+        private void Update()
+        {
+            if(animator.GetCurrentAnimatorStateInfo(0).IsName("Attack")){
+                animator.speed = animatorAttackSpeed;
+            }else{
+                animator.speed = 1;
+            }
         }
 
     }

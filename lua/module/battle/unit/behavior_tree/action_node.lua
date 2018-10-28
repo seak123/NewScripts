@@ -1,11 +1,13 @@
 
 local this = class("action_node")
+local transform = require("module.battle.unit.component.transform")
 
 function this:ctor( vo ,database)
       self.vo = vo
       self.action_type = vo.action_type
       self.decorators = {}
       self.running = false
+      self.max_runtime = 10
       --init
       self:init_data(database)
       if self.vo.decorators ~= nil then
@@ -22,18 +24,22 @@ function this:init_data( database )
 end
 
 function this:init(  )
-    -- body
+    self.runtime = 0
 end
 
-function this:update(  )
+function this:update( delta )
     if self.running == false then
         for _,v in ipairs(self.decorators) do
             if v:check() == false then
                 return "failure"
             end
         end
+        if self["enter_"..self.action_type] ~= nil then
+            self["enter_"..self.action_type](self)
+        end
     end
-    return self["update_"..self.action_type](self)
+
+    return self["update_"..self.action_type](self,delta)
 end
 
 function this:abort(  )
@@ -42,29 +48,75 @@ function this:abort(  )
     end
 end
 
-function this:update_MoveToPos(  )
+function this:enter_MoveToPos(  )
+    self.database.master.entity:SetAnimationState(transform.AnimationState.Walk)
+    self.runtime = 0
+end
+
+function this:update_MoveToPos( delta )
     self.database.master.transform.des_pos = self.database.des_pos
     if self.database.master.transform.grid_pos.X == self.database.des_pos.X and self.database.master.transform.grid_pos.Y == self.database.des_pos.Y then
+        self.running = false
         return "completed"
+    end
+    self.running = true
+    self.runtime = self.runtime + delta
+    if self.runtime > self.max_runtime then
+        self.running = false
+         return "failure" 
     end
     return "running"
 end
 
-function this:update_MoveToUnit(  )
+function this:enter_MoveToEnemy(  )
+    self.database.master.entity:SetAnimationState(transform.AnimationState.Walk)
+    self.runtime = 0
+end
+
+function this:update_MoveToEnemy( delta )
     local field = self.database.master.sess.field
     if self.database.enemy ~= nil then
         if field:distance(self.database.enemy,self.database.master) < 1.5*(self.database.master.data.radius + self.database.enemy.data.radius) then
+            self.running = false
             return "completed"
         end
         self.database.master.transform.des_pos =  self.database.enemy.transform.grid_pos
+        self.running = true
+        self.runtime = self.runtime + delta
+    
+        if self.runtime > self.max_runtime then 
+            self.running = false
+            -- cannot move to this enemy, decrease the threat_value
+            self.database.master.threat_value[self.database.enemy.uid] = self.database.master.threat_value[self.database.enemy.uid] - 1
+            return "failure" 
+        end
+        
         return "running"
     end
+    self.running = false
     return "failure"
 end
 
-function this:update_Attack(  )
-    print("attacking !!!!!!!!!")
-    return "running"
+function this:enter_Attack(  )
+    self.database.master.entity:CasterAttack(self.database.master.property:get("attack_rate"))
+    self.database.master.attack_process = 0
+    self.runtime = 0
+end
+
+function this:update_Attack( delta )
+    local flag = self.database.master:do_attack(delta*self.database.master.property:get("attack_rate"))
+    if flag == false then
+        self.running = true
+        self.runtime = self.runtime + delta
+        if self.runtime > self.max_runtime then
+            self.running = false
+            return "failure" 
+        end
+        return "running"
+    else
+        self.running = false
+        return "completed"
+    end
 end
 
 return this

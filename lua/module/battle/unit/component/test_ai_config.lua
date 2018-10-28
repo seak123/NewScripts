@@ -13,7 +13,7 @@ ac_attack.action_type = action.ACTION.Attack
 ac_attack:append("decorators",de_inrange)
 
 local ac_move = action.new()
-ac_move.action_type = action.ACTION.MoveToUnit
+ac_move.action_type = action.ACTION.MoveToEnemy
 
 local de_find = decorator.new()
 de_find.type = decorator.Type.EnemyAround
