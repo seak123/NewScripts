@@ -53,11 +53,17 @@ function this:find_enemy( unit )
     return enemy
 end
 
+-- args can be unit or pos
 function this:distance(a_unit,b_unit  )
-    local a_tran = a_unit.transform
-    local b_tran = b_unit.transform
-    local x = a_tran.grid_pos.X - b_tran.grid_pos.X
-    local y = a_tran.grid_pos.Y - b_tran.grid_pos.Y
+    local a_pos,b_pos
+    if a_unit.transform ~= nil then
+        a_pos = {X = a_unit.transform.grid_pos.X,Y = a_unit.transform.grid_pos.Y}
+    end
+    if b_unit.transform ~= nil then
+        b_pos = {X = b_unit.transform.grid_pos.X,Y = b_unit.transform.grid_pos.Y}
+    end
+    local x =a_pos.X - b_pos.X
+    local y = a_pos.Y - b_pos.Y
     return math.sqrt( x*x + y*y )
 end
 

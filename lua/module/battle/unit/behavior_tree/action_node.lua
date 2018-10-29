@@ -8,7 +8,7 @@ function this:ctor( vo ,database)
       self.action_type = vo.action_type
       self.decorators = {}
       self.running = false
-      self.max_runtime = 2
+      self.max_runtime = 5
       --init
       self:init_data(database)
       if self.vo.decorators ~= nil then
@@ -52,6 +52,7 @@ end
 function this:enter_MoveToPos(  )
     self.database.master.entity:SetAnimationState(transform.AnimationState.Walk)
     self.runtime = 0
+    self.max_runtime = 2
 end
 
 function this:update_MoveToPos( delta )
@@ -72,13 +73,9 @@ end
 function this:enter_MoveToEnemy(  )
     self.database.master.entity:SetAnimationState(transform.AnimationState.Walk)
     self.runtime = 0
-    self.enemy_in_range = false
-
-    -- check distance
-    local field = self.database.master.sess.field
-    if field:distance(self.database.enemy,self.database.master) < self.max_runtime * battle_def.NormalSpeed then
-        self.enemy_in_range = true
-    end
+    self.max_runtime = 2
+    self.enter_pos = {X = self.database.master.transform.grid_pos.X,
+                      Y = self.database.master.transform.grid_pos.Y }
 end
 
 function this:update_MoveToEnemy( delta )
@@ -94,8 +91,8 @@ function this:update_MoveToEnemy( delta )
     
         if self.runtime > self.max_runtime then 
             self.running = false
-            -- cannot move to this enemy, decrease the threat_value
-            if self.enemy_in_range == true then
+            -- move a bit means cannot move to this enemy, decrease the threat_value
+            if field:distance(self.enter_pos,self.database.master) < self.max_runtime*battle_def.MinSpeed/2 then
                 self.database.master.threat_value[self.database.enemy.uid] = self.database.master.threat_value[self.database.enemy.uid] - 1
             end
             return "failure" 
@@ -111,6 +108,7 @@ function this:enter_Attack(  )
     self.database.master.entity:CasterAttack(self.database.master.property:get("attack_rate"))
     self.database.master.attack_process = 0
     self.runtime = 0
+    self.max_runtime = 5
 end
 
 function this:update_Attack( delta )
