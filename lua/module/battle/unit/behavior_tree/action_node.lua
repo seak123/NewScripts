@@ -1,13 +1,14 @@
 
 local this = class("action_node")
 local transform = require("module.battle.unit.component.transform")
+local battle_def = require("module.battle.battle_def")
 
 function this:ctor( vo ,database)
       self.vo = vo
       self.action_type = vo.action_type
       self.decorators = {}
       self.running = false
-      self.max_runtime = 10
+      self.max_runtime = 2
       --init
       self:init_data(database)
       if self.vo.decorators ~= nil then
@@ -71,6 +72,13 @@ end
 function this:enter_MoveToEnemy(  )
     self.database.master.entity:SetAnimationState(transform.AnimationState.Walk)
     self.runtime = 0
+    self.enemy_in_range = false
+
+    -- check distance
+    local field = self.database.master.sess.field
+    if field:distance(self.database.enemy,self.database.master) < self.max_runtime * battle_def.NormalSpeed then
+        self.enemy_in_range = true
+    end
 end
 
 function this:update_MoveToEnemy( delta )
@@ -87,7 +95,9 @@ function this:update_MoveToEnemy( delta )
         if self.runtime > self.max_runtime then 
             self.running = false
             -- cannot move to this enemy, decrease the threat_value
-            self.database.master.threat_value[self.database.enemy.uid] = self.database.master.threat_value[self.database.enemy.uid] - 1
+            if self.enemy_in_range == true then
+                self.database.master.threat_value[self.database.enemy.uid] = self.database.master.threat_value[self.database.enemy.uid] - 1
+            end
             return "failure" 
         end
         

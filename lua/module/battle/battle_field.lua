@@ -41,6 +41,15 @@ function this:find_enemy( unit )
             end
         end
     end
+    local min_dis = 999
+    for _,u in ipairs(self.units[enemy_side]) do
+        local threat = unit.threat_value[u.uid]
+        local dis = self:distance(unit,u)
+        if threat == max_threat and dis < min_dis then
+            min_dis = dis
+            enemy = u
+        end
+    end
     return enemy
 end
 

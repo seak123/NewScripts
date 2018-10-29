@@ -23,4 +23,8 @@ this.MAPMATRIX = {
     row = 448
 }
 
+this.MaxSpeed = 32
+this.MinSpeed = 4
+this.NormalSpeed = 16
+
 return this
