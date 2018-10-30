@@ -55,7 +55,8 @@ end
 
 -- args can be unit or pos
 function this:distance(a_unit,b_unit  )
-    local a_pos,b_pos
+    local a_pos = a_unit
+    local b_pos = b_unit
     if a_unit.transform ~= nil then
         a_pos = {X = a_unit.transform.grid_pos.X,Y = a_unit.transform.grid_pos.Y}
     end

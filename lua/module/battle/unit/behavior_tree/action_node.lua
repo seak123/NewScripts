@@ -73,7 +73,7 @@ end
 function this:enter_MoveToEnemy(  )
     self.database.master.entity:SetAnimationState(transform.AnimationState.Walk)
     self.runtime = 0
-    self.max_runtime = 2
+    self.max_runtime = 1
     self.enter_pos = {X = self.database.master.transform.grid_pos.X,
                       Y = self.database.master.transform.grid_pos.Y }
 end
@@ -112,7 +112,7 @@ function this:enter_Attack(  )
 end
 
 function this:update_Attack( delta )
-    local flag = self.database.master:do_attack(delta*self.database.master.property:get("attack_rate"))
+    local flag = self.database.master:do_attack(delta*self.database.master.property:get("attack_rate"),self.database.enemy)
     if flag == false then
         self.running = true
         self.runtime = self.runtime + delta

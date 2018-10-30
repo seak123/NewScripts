@@ -10,7 +10,9 @@ local this = class("creature",base)
 local transform = require("module.battle.unit.component.transform")
 local property = require("module.battle.unit.component.property")
 local behavior_tree = require("module.battle.unit.behavior_tree.behavior_tree")
+local entire_skill = require("module.battle.skill.entire_skill")
 local bt_config = require("module.battle.unit.component.test_ai_config")
+local attack_config = require("module.battle.unit.component.test_normal_attack")
 
 function this:ctor( sess,data )
     self.sess = sess
@@ -66,6 +68,8 @@ function this:init(  )
     
    -- attack cache
    self.attack_process = 0
+   -- init skill
+   self.attack_skill = entire_skill.new(attack_config)
 end
 
 
@@ -78,11 +82,11 @@ function this:update( delta )
     self.transform:update(delta)
 end
 
-function this:do_attack( delta )
+function this:do_attack( delta ,enemy)
     local old_value = self.attack_process
     self.attack_process = self.attack_process + delta
     if old_value < 0.5 and self.attack_process >= 0.5 then
-        -- make damage
+        self.attack_skill:execute()
     end
     if self.attack_process >= 1 then
         self.attack_process = 0
