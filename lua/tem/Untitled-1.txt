@@ -1,0 +1,9 @@
+-entire skill:
+caster,pos,target(pos)
+
+--fixed_skill:
+--throw_skill:
+   update:(row_skills)
+---scope_skill:
+   vo:
+   update:(row_skills)

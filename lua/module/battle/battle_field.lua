@@ -23,6 +23,15 @@ function this:add_unit( data)
     table.insert( self.units[data.side],unit)
 end
 
+function this:get_unit( side,uid)
+    for _, v in ipairs(self.units[side]) do
+        if v.uid == uid then
+            return v
+        end
+    end
+    return nil
+end
+
 function this:find_enemy( unit )
     local enemy_side = 3 - unit.side
     local enemy = nil
