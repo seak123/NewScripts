@@ -24,42 +24,22 @@ function this:ctor( sess,data )
     self.threat_value = {}
 end
 
-this.move_action1 = {
-    state = "running",
-    des_pos = {X = 300,Y = 0},
-    update = function(unit)
-        unit.transform.des_pos = {X = 300,Y = 0}
-     end
-     ,
-     check = function ( unit )
-         if unit.transform.grid_pos.X == 300 and unit.transform.grid_pos.Y == 0 then
-            this.move_action1.state = "completed"
-         end
-     end
-}
-
-this.move_action2 = {
-    state = "running",
-    des_pos = {X = 300,Y = 0},
-    update = function(unit)
-        unit.transform.des_pos = {X = 300,Y = 0}
-     end
-     ,
-     check = function ( unit )
-         if unit.transform.grid_pos.X == 300 and unit.transform.grid_pos.Y == 0 then
-            this.move_action2.state = "completed"
-         end
-     end
-}
+local function make_event(self,name)
+    self[name] = function(obj, src) 
+      obj:dispatch(name, src)
+    end
+end
+make_event("pre_damage")
+make_event("pre_damaged")
+make_event("post_damage")
+make_event("post_damaged")
+make_event("pre_heal")
+make_event("pre_healed")
+make_event("post_heal")
+make_event("post_healed")
 
 function this:init(  )
-    -- init event
-    local function make_event(self,name)
-        self[name] = function(obj, src) 
-          obj:dispatch(name, src)
-        end
-    end
-    -- event end
+ 
     self.entity = self.sess.map:CreateEntity(self.data.id,self.data.init_x,self.data.init_y)
     
    -- attack cache
@@ -82,6 +62,10 @@ function this:update( delta )
     self.transform:update(delta)
 end
 
+function this:dispatch( name,src )
+    -- body
+end
+
 function this:do_attack( delta ,enemy)
 
     local old_value = self.attack_process
@@ -99,7 +83,10 @@ end
 
 function this:damage( value,source )
     self.hp = self.hp - value
-    print("get damage "..value)
+end
+
+function this:heal(value,source  )
+    self.hp = self.hp + value
 end
 
 

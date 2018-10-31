@@ -32,4 +32,8 @@ function GetMapField(  )
     return api.GetMapField()
 end
 
+function GetEffectManager(  )
+    return api.GetEffectManager()
+end
+
 

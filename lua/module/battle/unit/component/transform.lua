@@ -7,8 +7,8 @@
 local this = class("transform")
 
 this.AnimationState = {
-    Idle = 0,
-    Walk = 1
+    Idle = "Idle",
+    Walk = "Walk"
 }
 
 function this:ctor( master,data )

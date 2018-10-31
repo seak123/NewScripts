@@ -50,7 +50,7 @@ function this:abort(  )
 end
 
 function this:enter_MoveToPos(  )
-    self.database.master.entity:SetAnimationState(transform.AnimationState.Walk)
+    self.database.master.entity:AnimCasterAction(transform.AnimationState.Walk)
     self.runtime = 0
     self.max_runtime = 2
 end
@@ -71,7 +71,7 @@ function this:update_MoveToPos( delta )
 end
 
 function this:enter_MoveToEnemy(  )
-    self.database.master.entity:SetAnimationState(transform.AnimationState.Walk)
+    self.database.master.entity:AnimCasterAction(transform.AnimationState.Walk)
     self.runtime = 0
     self.max_runtime = 1
     self.enter_pos = {X = self.database.master.transform.grid_pos.X,
@@ -79,7 +79,7 @@ function this:enter_MoveToEnemy(  )
 end
 
 function this:abort_MoveToEnemy(  )
-    self.database.master.entity:SetAnimationState(transform.AnimationState.Idle)
+    self.database.master.entity:AnimCasterBreak()
 end
 
 function this:update_MoveToEnemy( delta )
@@ -109,7 +109,7 @@ function this:update_MoveToEnemy( delta )
 end
 
 function this:enter_Attack(  )
-    self.database.master.entity:CasterAttack(self.database.master.property:get("attack_rate"))
+    self.database.master.entity:AnimCasterAttack(self.database.master.property:get("attack_rate"))
     self.database.master.attack_process = 0
     self.runtime = 0
     self.max_runtime = 5

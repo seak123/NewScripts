@@ -101,14 +101,24 @@ namespace Map
         }
 
         // >>>>>>>>>>>>>>>>>>>> Animator
-        public void SetAnimationState(int index){
-            animator.SetInteger("State", index);
+        public void AnimCasterBreak(){
+            if(!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle")){
+                animator.SetTrigger("Break");
+            }
         }
 
-        public void CasterAttack(float attack_rate){
+        public void AnimCasterAction(string name){
+            if(!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle")){
+                animator.SetTrigger("Break");
+            }
+            animator.SetTrigger(name);
+        }
 
+        public void AnimCasterAttack(float attack_rate){
+            if(!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle")){
+                animator.SetTrigger("Break");
+            }
             animatorAttackSpeed = attack_rate;
-            Debug.Log("Send attack");
             animator.SetTrigger("Attack");
 
         }

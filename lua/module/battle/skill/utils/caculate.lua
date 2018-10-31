@@ -1,4 +1,6 @@
 local this = {}
+local damage_vo = require("module.battle.skill.raw_skill_vo.damage_vo")
+local battle_def = require("module.battle.battle_def")
 
 function this.make_common_attack(rate, add) 
   return function(sess, caster, target) 
@@ -56,8 +58,45 @@ function this.make_special_calc(command)
 end
 
 function this.damage(caster,target,value,type )
-   local flag = 1
-   return flag,value
+  -- flag means: 1, crit;2,miss;
+  local flag,value = 0,0
+  local crit_factor = 1
+  if type == damage_vo.DamageType.Physical then
+    if math.random() > caster.hit_rate and math.random() < target.dodge then
+      flag = 2
+      value = 0
+      return flag,value
+    end
+    
+    if math.random() < caster.crit then
+      flag = 1
+      crit_factor = caster.crit_value
+    end
+  end
+  
+  if type == damage_vo.DamageType.Physical then
+    local target_def = target.unit.property:get("defence")
+    local defence_factor = 1
+    if target_def >= 0 then
+      defence_factor = 1/(target_def/battle_def.DefenceFactor+1)
+    else
+      defence_factor = 2-1/(-target_def/battle_def.DefenceFactor+1)
+    end
+    value = value * defence_factor * crit_factor
+    return flag,value
+  end
+
+  if type == damage_vo.DamageType.Magic then
+    local target_resist = target.unit.property:get("magic_resist")
+    target_resist = math.min( 1,target_resist )
+    value = value * (1-target_resist)
+    return flag,value
+  end
+
+  if type == damage_vo.DamageType.Real then
+    return flag,value
+  end
+
 end
 
 return this
