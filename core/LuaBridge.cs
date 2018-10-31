@@ -37,7 +37,6 @@ using Data;
 
                 luaRoot = tb[0] as LuaTable;
             }
-        Init();
 
     }
 

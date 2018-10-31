@@ -108,6 +108,7 @@ namespace Map
         public void CasterAttack(float attack_rate){
 
             animatorAttackSpeed = attack_rate;
+            Debug.Log("Send attack");
             animator.SetTrigger("Attack");
 
         }

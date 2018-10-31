@@ -78,6 +78,10 @@ function this:enter_MoveToEnemy(  )
                       Y = self.database.master.transform.grid_pos.Y }
 end
 
+function this:abort_MoveToEnemy(  )
+    self.database.master.entity:SetAnimationState(transform.AnimationState.Idle)
+end
+
 function this:update_MoveToEnemy( delta )
     local field = self.database.master.sess.field
     if self.database.enemy ~= nil then

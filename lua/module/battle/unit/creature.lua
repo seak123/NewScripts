@@ -1,9 +1,4 @@
---[[
-    luaide  模板位置位于 Template/FunTemplate/NewFileTemplate.lua 其中 Template 为配置路径 与luaide.luaTemplatesDir
-    luaide.luaTemplatesDir 配置 https://www.showdoc.cc/web/#/luaide?page_id=713062580213505
-    author:{author}
-    time:2018-10-06 13:10:52
-]]
+
 local base = require("module.battle.unit.base_unit")
 local this = class("creature",base)
 
@@ -13,6 +8,7 @@ local behavior_tree = require("module.battle.unit.behavior_tree.behavior_tree")
 local entire_skill = require("module.battle.skill.entire_skill")
 local bt_config = require("module.battle.unit.component.test_ai_config")
 local attack_config = require("module.battle.unit.component.test_normal_attack")
+local pack_data = require("module.battle.skill.utils.pack_database")
 
 function this:ctor( sess,data )
     self.sess = sess
@@ -69,7 +65,11 @@ function this:init(  )
    -- attack cache
    self.attack_process = 0
    -- init skill
-   self.attack_skill = entire_skill.new(attack_config)
+   self.attack_skill = entire_skill.new(self.sess,attack_config)
+
+   self.hp = self.property:get("hp")
+
+   self.time = 0
 end
 
 
@@ -83,16 +83,23 @@ function this:update( delta )
 end
 
 function this:do_attack( delta ,enemy)
+
     local old_value = self.attack_process
     self.attack_process = self.attack_process + delta
     if old_value < 0.5 and self.attack_process >= 0.5 then
-        self.attack_skill:execute()
+        local database = pack_data.pack_database(self,enemy,self.transform.grid_pos)
+        self.attack_skill:execute(database)
     end
     if self.attack_process >= 1 then
         self.attack_process = 0
         return true
     end
     return false
+end
+
+function this:damage( value,source )
+    self.hp = self.hp - value
+    print("get damage "..value)
 end
 
 

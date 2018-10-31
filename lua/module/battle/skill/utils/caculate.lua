@@ -54,4 +54,10 @@ function this.make_special_calc(command)
   local res = dostring(str)
   return res
 end
+
+function this.damage(caster,target,value,type )
+   local flag = 1
+   return flag,value
+end
+
 return this

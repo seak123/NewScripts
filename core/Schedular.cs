@@ -15,8 +15,9 @@ public class Schedular : MonoBehaviour {
     }
 
 	void Update () {
+        float delta = Time.deltaTime;
         if(onUpdate != null){
-            onUpdate(Time.deltaTime);
+            onUpdate(delta);
         }
 	}
     [OnInjected]

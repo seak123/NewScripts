@@ -1,17 +1,18 @@
 local this = class("entire_skill")
 
-function this:ctor( sess,skill_vo,database )
+function this:ctor( sess,skill_vo)
     self.sess = sess
+    self.vo = skill_vo
+end
+
+function this:execute(database )
     self.database = database
     self.playing = {}
-    for _,v in ipairs(skill_vo.root) do
+    for _,v in ipairs(self.vo.root) do
         local skill = require(v.execute).new(v,self.database)
         table.insert( self.playing, skill )
     end
-end
-
-function this:execute( )
-    reg(self)
+    self.sess.skill_mng:reg(self)
 end
 
 function this:update( delta )

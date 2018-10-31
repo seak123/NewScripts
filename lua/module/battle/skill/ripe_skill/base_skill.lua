@@ -11,7 +11,7 @@ function this:build_to_array(name, array)
 		self[name] = target
 	end
 	
-	for _, v in ipairs(array) do 
+	for _, v in ipairs(array) do
 		local temp = require(v.execute)
 		if temp ~= nil then 
 			local exec = temp.new(v)
