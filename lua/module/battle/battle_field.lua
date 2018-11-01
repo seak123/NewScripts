@@ -23,7 +23,7 @@ function this:add_unit( data)
     table.insert( self.units[data.side],unit)
 end
 
-function this:remove_unit( unit )
+function this:unit_die( unit )
     local side = unit.side
     for i, v in ipairs(self.units[side]) do
         if v.uid == unit.uid then

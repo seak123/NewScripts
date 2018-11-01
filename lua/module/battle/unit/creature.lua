@@ -6,18 +6,18 @@ local transform = require("module.battle.unit.component.transform")
 local property = require("module.battle.unit.component.property")
 local behavior_tree = require("module.battle.unit.behavior_tree.behavior_tree")
 local entire_skill = require("module.battle.skill.entire_skill")
-local bt_config = require("module.battle.unit.component.test_ai_config")
-local attack_config = require("module.battle.unit.component.test_normal_attack")
 local pack_data = require("module.battle.skill.utils.pack_database")
+local config_mng = require("config.config_manager")
 
 function this:ctor( sess,data )
     self.sess = sess
     self.id = data.id
+    self.config = require(config_mng.get_config_path(self.id))
     self.name = data.name
     self.data = data
     self.property = property.new(self,property.unpack_prop(data))
     self.transform = transform.new(self,data)
-    self.betree = behavior_tree:build(self,bt_config)
+    self.betree = behavior_tree:build(self,self.config.ai_vo)
     self:init()
 
     -- threat_value to every enemy: key is uid,  ps: value will not be cleared
@@ -37,6 +37,8 @@ make_event("pre_heal")
 make_event("pre_healed")
 make_event("post_heal")
 make_event("post_healed")
+make_event("on_kill")
+make_event("on_die")
 
 function this:init(  )
     -- init data
@@ -47,7 +49,7 @@ function this:init(  )
    -- attack cache
    self.attack_process = 0
    -- init skill
-   self.attack_skill = entire_skill.new(self.sess,attack_config)
+   self.attack_skill = entire_skill.new(self.sess,self.config.normal_attack)
 
    self.hp = self.property:get("hp")
 
@@ -65,7 +67,12 @@ function this:update( delta )
 end
 
 function this:dispatch( name,src )
-    -- body
+    -- if self.alive > 2 and name ~= "on_die" and name ~= "on_undying" and name ~= "post_die" then 
+    --     return 
+    -- end
+    -- local systr = self.sess.systr
+    -- self.buffcont:handle(self.sess, name)
+    -- systr:handle_ev(name, self)
 end
 
 function this:do_attack( delta ,enemy)
@@ -86,6 +93,8 @@ end
 function this:damage( value,source )
     self.hp = self.hp - value
     if self.hp <= 0 then
+        self.hp = 0
+        source:on_kill()
         self:die()
     end
 end
@@ -96,7 +105,8 @@ end
 
 function this:die(  )
     self.alive = 2
-    self.sess.field:remove_unit(self)
+    self:on_die()
+    self.sess.field:unit_die(self)
     self.entity:Die()
 end
 
