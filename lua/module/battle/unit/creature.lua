@@ -24,8 +24,8 @@ function this:ctor( sess,data )
     self.threat_value = {}
 end
 
-local function make_event(self,name)
-    self[name] = function(obj, src) 
+local function make_event(name)
+    this[name] = function(obj, src) 
       obj:dispatch(name, src)
     end
 end
@@ -39,6 +39,8 @@ make_event("post_heal")
 make_event("post_healed")
 
 function this:init(  )
+    -- init data
+    self.alive = 0
  
     self.entity = self.sess.map:CreateEntity(self.data.id,self.data.init_x,self.data.init_y)
     
@@ -83,10 +85,19 @@ end
 
 function this:damage( value,source )
     self.hp = self.hp - value
+    if self.hp <= 0 then
+        self:die()
+    end
 end
 
 function this:heal(value,source  )
     self.hp = self.hp + value
+end
+
+function this:die(  )
+    self.alive = 2
+    self.sess.field:remove_unit(self)
+    self.entity:Die()
 end
 
 

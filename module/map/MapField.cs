@@ -35,6 +35,10 @@ namespace Map
             return entity;
         }
 
+        public void RemoveEntity(Entity entity){
+            MarkMovable(entity.posX, entity.posY, entity.radius, false);
+        }
+
         [OnInjected]
         public void AddRootAction(){
             GameRoot.init += Init;

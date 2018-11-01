@@ -33,7 +33,7 @@ function GetMapField(  )
 end
 
 function GetEffectManager(  )
-    return api.GetEffectManager()
+    --return api.GetEffectManager()
 end
 
 

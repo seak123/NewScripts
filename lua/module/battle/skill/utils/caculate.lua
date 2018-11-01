@@ -59,7 +59,7 @@ end
 
 function this.damage(caster,target,value,type )
   -- flag means: 1, crit;2,miss;
-  local flag,value = 0,0
+  local flag,value = 0,value
   local crit_factor = 1
   if type == damage_vo.DamageType.Physical then
     if math.random() > caster.hit_rate and math.random() < target.dodge then
@@ -73,7 +73,6 @@ function this.damage(caster,target,value,type )
       crit_factor = caster.crit_value
     end
   end
-  
   if type == damage_vo.DamageType.Physical then
     local target_def = target.unit.property:get("defence")
     local defence_factor = 1
@@ -85,7 +84,6 @@ function this.damage(caster,target,value,type )
     value = value * defence_factor * crit_factor
     return flag,value
   end
-
   if type == damage_vo.DamageType.Magic then
     local target_resist = target.unit.property:get("magic_resist")
     target_resist = math.min( 1,target_resist )

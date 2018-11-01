@@ -2,6 +2,7 @@ local this = class("battle_trace")
 
 function this:ctor( sess )
     self.sess = sess
+    self.last = {}
 end
 
 function this:push( trace_data )

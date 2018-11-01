@@ -23,6 +23,16 @@ function this:add_unit( data)
     table.insert( self.units[data.side],unit)
 end
 
+function this:remove_unit( unit )
+    local side = unit.side
+    for i, v in ipairs(self.units[side]) do
+        if v.uid == unit.uid then
+            table.remove( self.units[side], i )
+            return
+        end
+    end
+end
+
 function this:get_unit( side,uid)
     for _, v in ipairs(self.units[side]) do
         if v.uid == uid then
@@ -78,6 +88,7 @@ function this:distance(a_unit,b_unit  )
 end
 
 function this:update( delta )
+    
     for side,array in pairs(self.units) do
         for _,unit in ipairs(array) do
             unit:update(delta)

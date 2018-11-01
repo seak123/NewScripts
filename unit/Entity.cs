@@ -123,6 +123,16 @@ namespace Map
 
         }
 
+        public void Die(){
+            if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+            {
+                animator.SetTrigger("Break");
+            }
+            animator.SetTrigger("Die");
+            GameRoot.GetInstance().MapField.RemoveEntity(this);
+            Destroy(gameObject, 2f);
+        }
+
         private void Start()
         {
             mng = GameRoot.GetInstance().BattleField.assetManager;
