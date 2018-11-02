@@ -9,33 +9,32 @@ function this:ctor( vo )
     self:init_build(vo)
 end
 
-function this:execute(sess, delta ,database)
+function this:execute(sess, delta ,database,target)
     -- base execute
-    if database.target.unit.alive ~= 0 then return true end
-    if self:check(sess,database) == false then
-        return true
+    if target.alive ~= 0 then return end
+    if self:check(sess,database,target) == false then
+        return
     end
 
     -- damage execute
-    local value = self.vo.calc(sess,database.caster,database.target)
+    local value = self.vo.calc(sess,database.caster,target)
 
-    local judge,damage = calc.damage(database.caster, database.target, value, self.vo.damage_type)
+    local judge,damage = calc.damage(database.caster, target, value, self.vo.damage_type)
 
     -- push trace
-    local trace_damage = trace.trace_damage(damage,database.caster.unit,database.target.unit)
+    local trace_damage = trace.trace_damage(damage,database.caster.unit,target)
     sess.trace:push(trace_damage)
 
     database.caster.unit:pre_damage()
-    database.target.unit:pre_damaged()
+    database.target:pre_damaged()
 
     --logic
     database.target.unit:damage(trace_damage.damage_value, database.caster.unit)
     self:life_steal(sess,delta,database,trace_damage)
 
     database.caster.unit:post_damage()
-    database.target.unit:post_damaged()
+    database.target:post_damaged()
 
-    return true
 end
 
 function this:life_steal( sess,delta,database,trace_data )

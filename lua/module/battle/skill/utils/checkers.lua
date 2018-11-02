@@ -39,12 +39,11 @@ function this.check_ap( value )
 end
 
 function this.check_in_range(  )
-    return function ( sess,database )
+    return function ( sess,database ,target)
         local range = database.caster.unit.data.attack_range
         local radius1 = database.caster.unit.data.radius
         local radius2 = database.target.unit.data.radius
-        local target_uid = database.target.unit.uid
-        local target = database.target.unit
+        local target_uid = target.uid
         if sess.field:distance(target,database.caster_pos)< ((radius1+radius2)*1.5 + range + 4) then
             return true
         else
