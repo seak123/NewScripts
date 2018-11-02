@@ -13,6 +13,8 @@ public class GameRoot : MonoBehaviour {
 
     public static Action init;
 
+    public GameObject battleUI;
+
     private static GameRoot instance;
 
     [Inject]
@@ -41,6 +43,7 @@ public class GameRoot : MonoBehaviour {
             }
         }
         instance = this;
+
 	}
 
     public static GameRoot GetInstance(){

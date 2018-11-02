@@ -15,6 +15,7 @@ function this:ctor( sess,data )
     self.config = require(config_mng.get_config_path(self.id))
     self.name = data.name
     self.data = data
+    self.side = data.side
     self.property = property.new(self,property.unpack_prop(data))
     self.transform = transform.new(self,data)
     self.betree = behavior_tree:build(self,self.config.ai_vo)
@@ -44,7 +45,7 @@ function this:init(  )
     -- init data
     self.alive = 0
  
-    self.entity = self.sess.map:CreateEntity(self.data.id,self.data.init_x,self.data.init_y)
+    self.entity = self.sess.map:CreateEntity(self.data.id,self.side,self.data.init_x,self.data.init_y)
     
    -- attack cache
    self.attack_process = 0
@@ -52,6 +53,7 @@ function this:init(  )
    self.attack_skill = entire_skill.new(self.sess,self.config.normal_attack)
 
    self.hp = self.property:get("hp")
+   self.max_hp = self.hp
 
    self.time = 0
 end
@@ -92,6 +94,7 @@ end
 
 function this:damage( value,source )
     self.hp = self.hp - value
+    self.entity:SetHp(self.hp,self.max_hp)
     if self.hp <= 0 then
         self.hp = 0
         source:on_kill()

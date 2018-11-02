@@ -9,7 +9,6 @@ require("utils.functions")
 local this = class("sample")
 local session = require("module.battle_session")
 local creature = require("module.battle.unit.creature")
-local creature_conf = require("config.unit.creature_config")
 
 
 

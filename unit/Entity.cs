@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Map
 {
@@ -12,6 +13,7 @@ namespace Map
     public class Entity : MonoBehaviour
     {
         public int id;
+        public int side;
         public int uid;
         public int radius;
         public int posX = 0;
@@ -19,7 +21,10 @@ namespace Map
         public Animator animator;
 
         private int RouteUpdateFlag = 0;
-        private float animatorAttackSpeed = 1f; 
+        private float animatorAttackSpeed = 1f;
+        private GameObject hpPrefab;
+        private GameObject hpBar;
+        private float hpBarCacheTime = 0;
 
         HeapNode currMapNode;
 
@@ -99,6 +104,19 @@ namespace Map
             gridY = 0;
             offset = 0;
         }
+        // >>>>>>>>>>>>>>>>>>>> UI
+        public void SetHp(float hp, float maxHp)
+        {
+            if (hpBar == null)
+            {
+                hpBar = Instantiate(hpPrefab);
+                hpBar.GetComponent<RectTransform>().parent = GameRoot.GetInstance().battleUI.GetComponent<RectTransform>();
+                hpBar.SetActive(false);
+            }
+            hpBar.SetActive(true);
+            hpBar.GetComponent<Slider>().value = hp / maxHp;
+            hpBarCacheTime = 0;
+        }
 
         // >>>>>>>>>>>>>>>>>>>> Animator
         public void AnimCasterBreak(){
@@ -130,12 +148,19 @@ namespace Map
             }
             animator.SetTrigger("Die");
             GameRoot.GetInstance().MapField.RemoveEntity(this);
+            Destroy(hpBar, 2f);
             Destroy(gameObject, 2f);
         }
 
         private void Start()
         {
             mng = GameRoot.GetInstance().BattleField.assetManager;
+            //init hp bar
+            if(side == 1){
+                hpPrefab = GameRoot.GetInstance().BattleField.assetManager.GreenSlider;
+            }else{
+                hpPrefab = GameRoot.GetInstance().BattleField.assetManager.RedSlider;
+            }
         }
 
         private void Update()
@@ -144,6 +169,23 @@ namespace Map
                 animator.speed = animatorAttackSpeed;
             }else{
                 animator.speed = 1;
+            }
+            if (hpBar != null && hpBar.activeSelf == true)
+            {
+                hpBarCacheTime += Time.deltaTime;
+                Canvas canvas = GameRoot.GetInstance().battleUI.GetComponent<Canvas>();
+                Vector2 screenPos = Camera.main.WorldToScreenPoint(gameObject.transform.Find("S_Hp").gameObject.transform.position);
+                Vector2 uiPos = Vector2.zero;
+                //RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.transform as RectTransform, screenPos, canvas.worldCamera, out uiPos);
+                uiPos.x = screenPos.x - (Screen.width / 2);
+                uiPos.y = screenPos.y - (Screen.height / 2);
+                //hpBar.GetComponent<RectTransform>().position = new Vector3(0, 0, 0);
+                hpBar.transform.position = new Vector3(screenPos.x, screenPos.y, 0);
+
+                if(hpBarCacheTime > 3){
+                    hpBar.SetActive(false);
+                    hpBarCacheTime = 0;
+                }
             }
         }
 

@@ -25,7 +25,7 @@ function this:init(  )
         end
     end
     -- event end
-    self.entity = self.sess.map:CreateEntity(self.data.id,self.data.init_x,self.data.init_y)
+    self.entity = self.sess.map:CreateEntity(self.data.id,self.side,self.data.init_x,self.data.init_y)
 
 end
 
