@@ -26,14 +26,14 @@ function this:execute(sess, delta ,database,target)
     sess.trace:push(trace_damage)
 
     database.caster.unit:pre_damage()
-    database.target:pre_damaged()
+    target:pre_damaged()
 
     --logic
-    database.target.unit:damage(trace_damage.damage_value, database.caster.unit)
+    target:damage(trace_damage.damage_value, database.caster.unit)
     self:life_steal(sess,delta,database,trace_damage)
 
     database.caster.unit:post_damage()
-    database.target:post_damaged()
+    target:post_damaged()
 
 end
 

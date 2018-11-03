@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class CamaraManager : MonoBehaviour {
 
@@ -34,6 +35,9 @@ public class CamaraManager : MonoBehaviour {
     public float xMax = 100;
     public float zMin = -100;
     public float zMax = 100;
+
+    //更新UI
+    public Action UpdateUI;
 
     //这个变量用来记录单指双指的变换
     private bool m_IsSingleFinger;
@@ -134,6 +138,10 @@ public class CamaraManager : MonoBehaviour {
         var position = m_CameraOffset;
         m_Camera.transform.position = position;
         m_Camera.orthographicSize = size;
+        if (UpdateUI != null)
+        {
+            UpdateUI();
+        }
     }
 
 

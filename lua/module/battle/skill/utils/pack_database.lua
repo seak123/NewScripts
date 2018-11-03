@@ -23,8 +23,8 @@ function this.pack_database( _caster,_target,pos )
             -- dodge = target.property:get("dodge")
         },
         caster_pos = {
-            X = _caster.transform.gird_pos.X,
-            Y = _caster.transform.gird_pos.Y
+            X = _caster.transform.grid_pos.X,
+            Y = _caster.transform.grid_pos.Y
         },
         target_pos = {
             X = pos.X,

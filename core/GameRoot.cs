@@ -15,6 +15,8 @@ public class GameRoot : MonoBehaviour {
 
     public GameObject battleUI;
 
+    public GameObject Camara;
+
     private static GameRoot instance;
 
     [Inject]

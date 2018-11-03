@@ -112,6 +112,7 @@ namespace Map
                 hpBar = Instantiate(hpPrefab);
                 hpBar.GetComponent<RectTransform>().parent = GameRoot.GetInstance().battleUI.GetComponent<RectTransform>();
                 hpBar.SetActive(false);
+                GameRoot.GetInstance().Camara.GetComponent<CamaraManager>().UpdateUI += UpdateHpBar;
             }
             hpBar.SetActive(true);
             hpBar.GetComponent<Slider>().value = hp / maxHp;
@@ -148,7 +149,7 @@ namespace Map
             }
             animator.SetTrigger("Die");
             GameRoot.GetInstance().MapField.RemoveEntity(this);
-            Destroy(hpBar, 2f);
+            Destroy(hpBar, 0.5f);
             Destroy(gameObject, 2f);
         }
 
@@ -170,6 +171,9 @@ namespace Map
             }else{
                 animator.speed = 1;
             }
+           
+        }
+        public void UpdateHpBar(){
             if (hpBar != null && hpBar.activeSelf == true)
             {
                 hpBarCacheTime += Time.deltaTime;
@@ -182,7 +186,8 @@ namespace Map
                 //hpBar.GetComponent<RectTransform>().position = new Vector3(0, 0, 0);
                 hpBar.transform.position = new Vector3(screenPos.x, screenPos.y, 0);
 
-                if(hpBarCacheTime > 3){
+                if (hpBarCacheTime > 3)
+                {
                     hpBar.SetActive(false);
                     hpBarCacheTime = 0;
                 }
