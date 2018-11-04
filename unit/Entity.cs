@@ -42,7 +42,9 @@ namespace Map
             Vector2 direct = new Vector2(toX - posX, toY - posY);
             float angle = Vector2.Angle(new Vector2(1, 0), direct);
             angle = direct.y<0? angle:-angle;
-            gameObject.transform.rotation = Quaternion.Euler(0,angle,0);
+            Quaternion start = gameObject.transform.rotation;
+            Quaternion end = Quaternion.Euler(0, angle, 0);
+            gameObject.transform.rotation = Quaternion.Lerp(start,end,0.1f);
         }
 
         public Vector3 GetSocketPos(string name){

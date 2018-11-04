@@ -4,7 +4,8 @@ local this = class("action_vo",base)
 this.ACTION = {
     MoveToPos = "MoveToPos",
     Attack = "Attack",
-    MoveToEnemy = "MoveToEnemy"
+    MoveToEnemy = "MoveToEnemy",
+    Caster = "Caster"
 }
 this.execute = "module.battle.unit.behavior_tree.action_node"
 

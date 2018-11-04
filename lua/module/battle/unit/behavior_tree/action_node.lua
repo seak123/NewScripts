@@ -110,6 +110,7 @@ end
 
 function this:enter_Attack(  )
     self.database.master.entity:AnimCasterAttack(self.database.master.property:get("attack_rate"))
+    self.database.master.entity:SetRotation(self.database.enemy.transform.grid_pos.X,self.database.enemy.transform.grid_pos.Y)
     self.database.master.attack_process = 0
     self.runtime = 0
     self.max_runtime = 5
@@ -129,6 +130,15 @@ function this:update_Attack( delta )
         self.running = false
         return "completed"
     end
+end
+
+function this:enter_Caster()
+    self.database.master.entity:AnimCasterAction(transform.AnimationState.Walk)
+end
+
+function this:update_Caster(delta)
+    local flag = self.database.master:do_skill(delta,self.database.enemy,self.database.enemy_pos,self.database.skill_index)
+    return "running"
 end
 
 return this

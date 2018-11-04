@@ -38,7 +38,10 @@ public class EffectManager : MonoBehaviour {
         GameObject  obj = Instantiate(data.effectPrefab,pos, Quaternion.identity);
         if (attach == true ){
             entity = mapField.FindEntity(unitUid);
-            obj.transform.SetParent(entity.gameObject.transform);
+            obj.transform.SetParent(entity.gameObject.transform.Find(data.effectSocket).gameObject.transform);
+            obj.transform.localPosition = Vector3.zero;
+            obj.transform.localRotation = Quaternion.Euler(0, 0, 0);
+            obj.transform.localScale = Vector3.one * entity.radius / 4;
         }
         EffectEntity effectEntity = obj.AddComponent<EffectEntity>();
         return effectEntity;

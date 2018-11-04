@@ -47,5 +47,41 @@ function this:check_EnemyInAttackRange(  )
     return false
 end
 
+function this:check_SkillAvaliable()
+    local master = self.database.master
+    for index=#master.skills_coold,1,-1 do
+        -- check skill coold is 0
+        if master.skills_coold[index].value == 0 then
+            local flag = true
+            for _,v in ipairs(master.skills[index].decorators) do
+                flag = flag and v(self.database)
+            end
+            if flag == true then
+                self.database.skill_index = index
+                return true
+            end
+        end
+    end
+    return false
+end
+
+
+----------------------------------skill check
+
+function this.check_skill_EnemyInRange(range)
+    return function (database)
+    local field = database.master.sess.field
+    local enemy = field:find_enemy(database.master)
+    if enemy ~= nil then
+        local dis = field:distance(enemy,database.master)
+        if dis < range then
+            database.enemy = enemy
+            return true
+        end
+    end
+    return false
+end
+end
+
 
 return this

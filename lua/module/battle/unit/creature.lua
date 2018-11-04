@@ -50,8 +50,14 @@ function this:init(  )
     
    -- attack cache
    self.attack_process = 0
+   self.skill_process = 0
    -- init skill
    self.attack_skill_vo = self.config.normal_attack
+   self.skills = self.config.skills
+   self.skills_coold = {}
+   for i,v in ipairs(self.skills) do
+       self.skills_coold[i] = {coold =v.coold,value = 0}
+   end
 
    self.hp = self.property:get("hp")
    self.max_hp = self.hp
@@ -67,6 +73,14 @@ function this:update( delta )
     self.betree:update(delta)
 
     self.transform:update(delta)
+
+    self:update_coold(delta)
+end
+
+function this:update_coold(delta)
+    for _,v in ipairs(self.skills_coold) do
+        v.value = math.max( 0,v.value - delta )
+    end
 end
 
 function this:dispatch( name,src )
@@ -92,6 +106,16 @@ function this:do_attack( delta ,enemy)
         return true
     end
     return false
+end
+
+function this:do_skill(delta,enemy,pos ,index )
+    local old_value = self.skill_process
+    self.skill_process = self.skill_process + delta
+    if old_value <0.5 and self.skill_process >= 0.5 then
+        local database = pack_data.pack_database(self,enemy,self.transform.grid_pos)
+        local skill = entire_skill.new(self.sess,self.skills[index])
+        skill:execute(database)
+    end
 end
 
 function this:damage( value,source )
