@@ -1,6 +1,6 @@
 local this = class("base_skill")
 
-function this:build_to_array(name, array)
+function this:build_to_array(name, array,database)
 	
 	if array == nil then 
 		return
@@ -14,7 +14,7 @@ function this:build_to_array(name, array)
 	for _, v in ipairs(array) do
 		local temp = require(v.execute)
 		if temp ~= nil then 
-			local exec = temp.new(v)
+			local exec = temp.new(v,database)
 			table.insert(target, exec)
 		end
 	end

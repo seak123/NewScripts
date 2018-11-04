@@ -34,6 +34,9 @@ public class GameRoot : MonoBehaviour {
     [Inject]
     public MapField MapField { get; set; }
 
+    [Inject]
+    public EffectManager EffectMng { get; set; }
+
 	// Use this for initialization
 	void Start () {
         Debug.Log("GameRoot Start");

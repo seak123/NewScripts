@@ -9,9 +9,10 @@ local entire_skill = require("module.battle.skill.entire_skill")
 local pack_data = require("module.battle.skill.utils.pack_database")
 local config_mng = require("config.config_manager")
 
-function this:ctor( sess,data )
+function this:ctor( sess,data,uid )
     self.sess = sess
     self.id = data.id
+    self.uid = uid
     self.config = require(config_mng.get_config_path(self.id))
     self.name = data.name
     self.data = data
@@ -45,12 +46,12 @@ function this:init(  )
     -- init data
     self.alive = 0
  
-    self.entity = self.sess.map:CreateEntity(self.data.id,self.side,self.data.init_x,self.data.init_y)
+    self.entity = self.sess.map:CreateEntity(self.data.id,self.uid,self.side,self.data.init_x,self.data.init_y)
     
    -- attack cache
    self.attack_process = 0
    -- init skill
-   self.attack_skill = entire_skill.new(self.sess,self.config.normal_attack)
+   self.attack_skill_vo = self.config.normal_attack
 
    self.hp = self.property:get("hp")
    self.max_hp = self.hp
@@ -83,6 +84,7 @@ function this:do_attack( delta ,enemy)
     self.attack_process = self.attack_process + delta
     if old_value < 0.5 and self.attack_process >= 0.5 then
         local database = pack_data.pack_database(self,enemy,self.transform.grid_pos)
+        self.attack_skill = entire_skill.new(self.sess,self.attack_skill_vo) 
         self.attack_skill:execute(database)
     end
     if self.attack_process >= 1 then

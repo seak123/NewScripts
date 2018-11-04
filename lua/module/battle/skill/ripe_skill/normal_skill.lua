@@ -4,9 +4,8 @@ local this = class("normal_skill",base)
 function this:ctor( vo,database )
     self.database = database
     self.targets = {}
-    self:build_to_array("raw_skills",vo.raw_skills)
-    self:build_to_array("childs",vo.childs)
-    self:build_to_array("brothers",vo.brothers)
+    self:build_to_array("raw_skills",vo.raw_skills,database)
+    self:build_to_array("childs",vo.childs,database)
 end
 
 function this:execute( sess,delta )

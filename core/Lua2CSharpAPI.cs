@@ -10,5 +10,9 @@ namespace Utils
         public static MapField GetMapField(){
             return GameRoot.GetInstance().MapField;
         }
+
+        public static EffectManager GetEffectManager(){
+            return GameRoot.GetInstance().EffectMng;
+        }
     }
 }

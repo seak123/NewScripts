@@ -13,31 +13,40 @@ namespace Map
         private readonly float Transfer2GridFactor = BattleDef.Transfer2GridFactor;
         private readonly float DiagoFactor = 1.4f;//(float)Math.Sqrt(2)
         //private float centerOffset = 0.365f;
+        private Dictionary<int,Entity> entityMap;
 
         private AssetManager mng;
 
         private void Start()
         {
-
+            entityMap = new Dictionary<int, Entity>();
         }
 
-        public Entity CreateEntity(int id,int side,int gridX,int gridY){
+        public Entity CreateEntity(int id,int uid,int side,int gridX,int gridY){
             float x, y;
             GetViewPos(gridX, gridY, out x, out y);
             GameObject obj = Instantiate(mng.GetCreatureData(id).prefab, new Vector3(x, 0, y), Quaternion.identity);
             var entity = obj.AddComponent<Entity>();
             //init entity
             entity.id = id;
+            entity.uid = uid;
             entity.side = side;
             entity.radius = mng.GetCreatureData(id).radius;
             entity.posX = gridX;
             entity.posY = gridY;
             entity.animator = obj.GetComponentInChildren<Animator>();
+
+            entityMap.Add(uid, entity);
             return entity;
         }
 
         public void RemoveEntity(Entity entity){
             MarkMovable(entity.posX, entity.posY, entity.radius, false);
+            entityMap.Remove(entity.uid);
+        }
+
+        public Entity FindEntity(int uid){
+            return entityMap[uid];
         }
 
         [OnInjected]

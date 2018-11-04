@@ -124,6 +124,7 @@ end
 
 function this:abort_by_sel(  )
     if self.running == true then
+        self.running = false
         self.active_node:abort()
     end
 end
@@ -156,6 +157,7 @@ end
 
 function this:abort_by_seq(  )
     if self.running == true then
+        self.running = false
         self.active_node:abort()
     end
 end

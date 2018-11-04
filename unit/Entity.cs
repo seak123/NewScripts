@@ -45,6 +45,9 @@ namespace Map
             gameObject.transform.rotation = Quaternion.Euler(0,angle,0);
         }
 
+        public Vector3 GetSocketPos(string name){
+            return gameObject.transform.Find(name).gameObject.transform.position;
+        }
      
         public void Move(int toX,int toY,float value,out int gridX,out int gridY,out float offset)
         {
@@ -178,7 +181,7 @@ namespace Map
             {
                 hpBarCacheTime += Time.deltaTime;
                 Canvas canvas = GameRoot.GetInstance().battleUI.GetComponent<Canvas>();
-                Vector2 screenPos = Camera.main.WorldToScreenPoint(gameObject.transform.Find("S_Hp").gameObject.transform.position);
+                Vector2 screenPos = Camera.main.WorldToScreenPoint(GetSocketPos("S_Hp"));
                 Vector2 uiPos = Vector2.zero;
                 //RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.transform as RectTransform, screenPos, canvas.worldCamera, out uiPos);
                 uiPos.x = screenPos.x - (Screen.width / 2);

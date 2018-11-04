@@ -16,8 +16,8 @@ end
 
 function this:add_unit( data)
     print("create new unit "..data.name)
-    local unit = creature.new(self.sess,data)
-    unit.uid = self.counter
+    local uid = self.counter
+    local unit = creature.new(self.sess,data,uid)
     self.counter = self.counter + 1
     table.insert( self.units[data.side],unit)
 end
