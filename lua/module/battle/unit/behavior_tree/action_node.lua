@@ -116,6 +116,11 @@ function this:enter_Attack(  )
     self.max_runtime = 5
 end
 
+function this:abort_Attack(  )
+    self.database.master.attack_process = 0
+    self.database.master.entity:AnimCasterBreak()
+end
+
 function this:update_Attack( delta )
     local flag = self.database.master:do_attack(delta*self.database.master.property:get("attack_rate"),self.database.enemy)
     if flag == false then
@@ -133,12 +138,36 @@ function this:update_Attack( delta )
 end
 
 function this:enter_Caster()
-    self.database.master.entity:AnimCasterAction(transform.AnimationState.Walk)
+    self.database.master.entity:AnimCasterAction(transform.AnimationState.Caster)
+end
+
+function this:abort_Caster(  )
+    self.database.master.skill_process = 0
+    self.database.master.entity:AnimCasterBreak()
 end
 
 function this:update_Caster(delta)
-    local flag = self.database.master:do_skill(delta,self.database.enemy,self.database.enemy_pos,self.database.skill_index)
-    return "running"
+    local target = {}
+    local target_pos = {X =0,Y =0}
+    if self.database.target ~= nil then
+        target = self.database.target
+    end
+    if self.database.target_pos ~= nil then
+        target_pos = self.database.target_pos
+    end
+    local flag = self.database.master:do_skill(delta,target,target_pos,self.database.skill_index)
+    if flag == false then
+        self.running = true
+        self.runtime = self.runtime + delta
+        if self.runtime > self.max_runtime then
+            self.running = false
+            return "failure"
+        end
+        return "running"
+    else
+        self.running = false
+        return "completed"
+    end
 end
 
 return this

@@ -98,8 +98,8 @@ function this:do_attack( delta ,enemy)
     self.attack_process = self.attack_process + delta
     if old_value < 0.5 and self.attack_process >= 0.5 then
         local database = pack_data.pack_database(self,enemy,self.transform.grid_pos)
-        self.attack_skill = entire_skill.new(self.sess,self.attack_skill_vo) 
-        self.attack_skill:execute(database)
+        local attack_skill = entire_skill.new(self.sess,self.attack_skill_vo) 
+        attack_skill:execute(database)
     end
     if self.attack_process >= 1 then
         self.attack_process = 0
@@ -108,14 +108,19 @@ function this:do_attack( delta ,enemy)
     return false
 end
 
-function this:do_skill(delta,enemy,pos ,index )
+function this:do_skill(delta,target,pos ,index )
     local old_value = self.skill_process
     self.skill_process = self.skill_process + delta
     if old_value <0.5 and self.skill_process >= 0.5 then
-        local database = pack_data.pack_database(self,enemy,self.transform.grid_pos)
+        local database = pack_data.pack_database(self,target,pos)
         local skill = entire_skill.new(self.sess,self.skills[index])
         skill:execute(database)
     end
+    if self.skill_process >= 1 then
+        self.skill_process = 0
+        return true
+    end
+    return false
 end
 
 function this:damage( value,source )

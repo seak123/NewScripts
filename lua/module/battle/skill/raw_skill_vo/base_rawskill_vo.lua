@@ -32,4 +32,4 @@ end
 
 this.checkers = {}
 
-this.buff_occasion = "on_buff_add"
+this.buff_occasion = "on_add"

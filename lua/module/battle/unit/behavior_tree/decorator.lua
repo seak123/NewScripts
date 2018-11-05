@@ -66,7 +66,7 @@ function this:check_SkillAvaliable()
 end
 
 
-----------------------------------skill check
+----------------------------------skill check (build database.target or database.target_pos)
 
 function this.check_skill_EnemyInRange(range)
     return function (database)
@@ -75,7 +75,7 @@ function this.check_skill_EnemyInRange(range)
     if enemy ~= nil then
         local dis = field:distance(enemy,database.master)
         if dis < range then
-            database.enemy = enemy
+            database.target = enemy
             return true
         end
     end

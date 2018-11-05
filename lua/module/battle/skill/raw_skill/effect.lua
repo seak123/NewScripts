@@ -11,6 +11,12 @@ function this:ctor( vo )
 end
 
 function this:execute(sess, delta ,database,target)
+
+    if target.alive ~= 0 then return end
+    if self:check(sess,database,target) == false then
+        return
+    end
+
     local pos = {X = 0, Y = 0}
     -- attach: means effect attach on gameobject
     local attach = false
@@ -18,7 +24,6 @@ function this:execute(sess, delta ,database,target)
     local effect = nil
     -- init pos
     if self.vo.execute_pos == effect_vo.ExecutePos.Caster then
-        print("@@ effecid:"..self.effect_id.."attach"..tostring(self.vo.attach).."uid"..database.caster.unit.uid)
         effect = sess.effect_mng:CreateEffect(self.effect_id,self.vo.attach,database.caster.unit.uid,0,0)
     elseif self.vo.execute_pos == effect_vo.ExecutePos.Target then
         effect = sess.effect_mng:CreateEffect(self.effect_id,self.vo.attach,database.target.uid,0,0)

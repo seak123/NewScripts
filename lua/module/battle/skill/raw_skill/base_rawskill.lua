@@ -20,12 +20,6 @@ function this:check(sess,caster, target)
 	return true
 end
 
-function this:execute_all(sess, caster, target)
-end
-
-function this:execute_one(sess, caster, target)
-end
-
 -- whether immune as simple effect
 function this:immune(sess, caster, target)
 	return false
@@ -56,25 +50,6 @@ function this:build_to_array(name, array)
 	end
 end
 
-function this:call_for_one(field, sess, caster, target)
-	local arr = self[field]
-
-	if arr ~= nil then 
-		for _, v in ipairs(arr) do 
-			v:execute_one(sess, caster, target,true)
-		end
-	end
-end
-
-function this:call_for_all(field, sess, caster, targets)
-	local arr = self[field]
-	
-	if arr ~= nil then 
-		for _, v in ipairs(arr) do 
-			v:execute_all(sess, caster, targets,true)
-		end
-	end
-end
 
 function this:attach(buff)
   if self.vo == nil then 
