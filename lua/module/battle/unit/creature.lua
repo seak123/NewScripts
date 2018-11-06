@@ -4,6 +4,7 @@ local this = class("creature",base)
 
 local transform = require("module.battle.unit.component.transform")
 local property = require("module.battle.unit.component.property")
+local buffcont = require("module.battle.unit.component.buff_container")
 local behavior_tree = require("module.battle.unit.behavior_tree.behavior_tree")
 local entire_skill = require("module.battle.skill.entire_skill")
 local pack_data = require("module.battle.skill.utils.pack_database")
@@ -18,6 +19,7 @@ function this:ctor( sess,data,uid )
     self.data = data
     self.side = data.side
     self.property = property.new(self,property.unpack_prop(data))
+    self.buffcont = buffcont.new(self)
     self.transform = transform.new(self,data)
     self.betree = behavior_tree:build(self,self.config.ai_vo)
     self:init()
@@ -74,6 +76,8 @@ function this:update( delta )
 
     self.transform:update(delta)
 
+    self.buffcont:update(delta)
+
     self:update_coold(delta)
 end
 
@@ -111,12 +115,13 @@ end
 function this:do_skill(delta,target,pos ,index )
     local old_value = self.skill_process
     self.skill_process = self.skill_process + delta
-    if old_value <0.5 and self.skill_process >= 0.5 then
+    if old_value <1 and self.skill_process >= 1 then
         local database = pack_data.pack_database(self,target,pos)
         local skill = entire_skill.new(self.sess,self.skills[index])
+        self.skills_coold[index].value = self.skills_coold[index].coold
         skill:execute(database)
     end
-    if self.skill_process >= 1 then
+    if self.skill_process >= 2 then
         self.skill_process = 0
         return true
     end

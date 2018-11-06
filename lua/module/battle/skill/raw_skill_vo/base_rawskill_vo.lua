@@ -33,3 +33,5 @@ end
 this.checkers = {}
 
 this.buff_occasion = "on_add"
+
+return this

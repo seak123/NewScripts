@@ -18,8 +18,9 @@ function this:ctor( vo,database )
 end
 
 function this:execute( sess,delta )
+    if self.targets[1].alive ~= 0 then return "completed" end
     if self.init == false then
-        self.effect_entity = self.effect[1]:execute(sess,delta,self.database,self.targets[1])
+        self.effect_entity = self.effect[1]:execute(sess,self.targets[1])
 
         local x,y,z = self.effect_entity:GetPos(x,y,z)
         self.start_pos.X = x

@@ -10,9 +10,13 @@ function this:ctor(  )
     self.trace = battle_trace.new(self)
     self.map = GetMapField()
     self.effect_mng = GetEffectManager()
+
+    -- record every frame deltatime
+    self.deltatime = 0
 end
 
 function this:update( delta )
+    self.deltatime = delta
     self.field:update(delta)
     self.skill_mng:update(delta)
 end

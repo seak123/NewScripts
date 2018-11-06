@@ -5,13 +5,15 @@ local trace = require("module.battle.battle_trace")
 local property_vo = require("module.battle.skill.raw_skill_vo.property_change_vo")
 
 
-function this:ctor(vo)
-	self.vo = vo
+function this:ctor(vo,database)
+    self.vo = vo
+    self.database = database
 	self:init_build(vo)
 	self.value = 0
 end
 
-function this:execute(sess, delta ,database,target)
+function this:execute(sess,target)
+    local database = self.database
     local prop_name = self.vo.prop_name
     local change_value = self.vo.calc(sess,database.caster,target)
 

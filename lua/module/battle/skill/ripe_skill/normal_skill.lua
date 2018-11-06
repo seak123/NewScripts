@@ -9,8 +9,9 @@ function this:ctor( vo,database )
 end
 
 function this:execute( sess,delta )
+    if self.targets[1].alive ~= 0 then return "completed" end
     for _, v in ipairs(self.raw_skills) do
-        v:execute(sess,delta,self.database,self.targets[1]) 
+        v:execute(sess,self.targets[1]) 
     end
     return "completed"
 end

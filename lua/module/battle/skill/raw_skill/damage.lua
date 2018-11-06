@@ -4,18 +4,20 @@ local calc = require("module.battle.skill.utils.caculate")
 local trace = require("module.battle.battle_trace")
 local damage_vo = require("module.battle.skill.raw_skill_vo.damage_vo")
 
-function this:ctor( vo )
+function this:ctor( vo,database )
     self.vo = vo
+    self.database = database
     self:init_build(vo)
 end
 
-function this:execute(sess, delta ,database,target)
+function this:execute(sess, target)
     -- base execute
     if target.alive ~= 0 then return end
     if self:check(sess,database,target) == false then
         return
     end
 
+    local database = self.database
     -- damage execute
     local value = self.vo.calc(sess,database.caster,target)
 
@@ -30,14 +32,14 @@ function this:execute(sess, delta ,database,target)
 
     --logic
     target:damage(trace_damage.damage_value, database.caster.unit)
-    self:life_steal(sess,delta,database,trace_damage)
+    self:life_steal(sess,database,trace_damage)
 
     database.caster.unit:post_damage()
     target:post_damaged()
 
 end
 
-function this:life_steal( sess,delta,database,trace_data )
+function this:life_steal( sess,database,trace_data )
     if database.caster.unit.alive ~= 0 then return end
     local rate = 0
     if self.vo.damage_type == damage_vo.DamageType.Physical then

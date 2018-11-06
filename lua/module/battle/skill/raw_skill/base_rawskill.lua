@@ -57,14 +57,14 @@ function this:attach(buff)
   end
 	local occasion = self.vo.buff_occasion
 	if occasion ~= nil then 
-		buff:append_callback(occasion, self.execute_one, self)
+		buff:append_callback(occasion, self.execute, self)
 	end 
 end
 
 function this:detach(buff)
 	local occasion = self.vo.buff_occasion
 	if occasion ~= nil then 
-		buff:remove_callback(occasion, self.execute_one, self)
+		buff:remove_callback(occasion, self.execute, self)
 	end 
 end
 
