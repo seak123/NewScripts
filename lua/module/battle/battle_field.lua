@@ -32,10 +32,20 @@ function this:unit_die( unit )
     end
 end
 
-function this:get_unit( side,uid)
-    for _, v in ipairs(self.units[side]) do
-        if v.uid == uid then
-            return v
+function this:get_unit( uid,side)
+    if side ~= nil then
+        for _, v in ipairs(self.units[side]) do
+            if v.uid == uid then
+                return v
+            end
+        end
+    else
+        for i=1,2 do
+            for _, v in ipairs(self.units[i]) do
+                if v.uid == uid then
+                    return v
+                end
+            end
         end
     end
     return nil
@@ -69,6 +79,30 @@ function this:find_enemy( unit )
         end
     end
     return enemy
+end
+
+function this:find_friend( unit,condition_func )
+    local side = unit.side
+    local min_dis = 999
+    local friend = nil
+    if condition_func == nil then
+        for _,u in ipairs(self.units[side]) do
+            local dis = self:distance(unit,u)
+            if dis < min_dis and unit.uid ~= u.uid then
+                min_dis = dis
+                friend = u
+            end
+        end
+    else
+        for _,u in ipairs(self.units[side]) do
+            local dis = self:distance(unit,u)
+            if dis < min_dis and condition_func(unit,u) then
+                min_dis = dis
+                friend = u
+            end
+        end
+    end
+    return friend
 end
 
 -- args can be unit or pos

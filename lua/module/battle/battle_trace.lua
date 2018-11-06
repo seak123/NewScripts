@@ -32,4 +32,13 @@ function this.trace_heal( value,caster,target )
     }
 end
 
+function this.trace_state( name,caster,target )
+    return {
+        type_name = "trace_state",
+        state_name = name,
+        caster_uid = caster.uid,
+        target_uid = target.uid
+    }
+end
+
 return this

@@ -28,15 +28,31 @@ end
 function this:check_EnemyAround(  )
     local field = self.database.master.sess.field
     local unit = field:find_enemy(self.database.master)
+    if self.database.master.statectrl:has_feature("confused") then
+        unit = field:find_friend(self.database.master)
+    end
     if unit == nil then
         return false
     end
     self.database.enemy = unit
+    if self.database.master.statectrl:has_feature("taunt") then
+        self.database.enemy = self.database.master.statectrl.taunt_target
+    end
     return true
 end
 
 function this:check_EnemyInAttackRange(  )
+
+    if self.database.master.statectrl:has_feature("confused") and self.database.enemy.side ~= self.database.master.side then
+        return false
+    end
+
+    if self.database.master.statectrl:has_feature("taunt") then
+        self.database.enemy = self.database.master.statectrl.taunt_target
+    end
+
     local enemy = self.database.enemy
+    
     local field = self.database.master.sess.field
     if enemy ~= nil then
         local dis = field:distance(enemy,self.database.master)

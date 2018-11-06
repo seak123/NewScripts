@@ -36,7 +36,9 @@ function this:update( delta )
             end
         end
         if self["enter_"..self.action_type] ~= nil then
-            self["enter_"..self.action_type](self)
+            if self["enter_"..self.action_type](self) == false then
+                return "failure"
+            end
         end
     end
 
@@ -50,9 +52,11 @@ function this:abort(  )
 end
 
 function this:enter_MoveToPos(  )
+    if self.database.master.statectrl:has_feature("de_move") then return false end
     self.database.master.entity:AnimCasterAction(transform.AnimationState.Walk)
     self.runtime = 0
     self.max_runtime = 2
+    return true
 end
 
 function this:update_MoveToPos( delta )
@@ -71,11 +75,14 @@ function this:update_MoveToPos( delta )
 end
 
 function this:enter_MoveToEnemy(  )
+    if self.database.master.statectrl:has_feature("de_move") then return false end
+
     self.database.master.entity:AnimCasterAction(transform.AnimationState.Walk)
     self.runtime = 0
     self.max_runtime = 1
     self.enter_pos = {X = self.database.master.transform.grid_pos.X,
                       Y = self.database.master.transform.grid_pos.Y }
+    return true
 end
 
 function this:abort_MoveToEnemy(  )
@@ -109,11 +116,14 @@ function this:update_MoveToEnemy( delta )
 end
 
 function this:enter_Attack(  )
+    if self.database.master.statectrl:has_feature("de_attack") then return false end
+
     self.database.master.entity:AnimCasterAttack(self.database.master.property:get("attack_rate"))
     self.database.master.entity:SetRotation(self.database.enemy.transform.grid_pos.X,self.database.enemy.transform.grid_pos.Y)
     self.database.master.attack_process = 0
     self.runtime = 0
     self.max_runtime = 5
+    return true
 end
 
 function this:abort_Attack(  )
@@ -138,7 +148,9 @@ function this:update_Attack( delta )
 end
 
 function this:enter_Caster()
+    if self.database.master.statectrl:has_feature("de_skill") then return false end
     self.database.master.entity:AnimCasterAction(transform.AnimationState.Caster)
+    return true
 end
 
 function this:abort_Caster(  )

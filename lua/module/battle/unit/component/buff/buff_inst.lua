@@ -36,7 +36,6 @@ end
 
 function this:update( delta )
     self.timepass = self.timepass + delta
-    print("@@update inst "..self.timepass.."/"..self.duration)
     if self.timepass > self.duration then
         self.is_expire = true
     end

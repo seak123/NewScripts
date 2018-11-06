@@ -15,7 +15,6 @@ function this:handle_stack (sess,inst)
 	local count = #self.stacks 
 	if count > self.limit then 
 		for n = 1, count - self.limit do
-			print("@@detach2")
 			self:remove_stack(1)
 		end
 	end
@@ -23,17 +22,14 @@ function this:handle_stack (sess,inst)
 end
 
 function this:remove_stack( index )
-	print("@@detach1")
 	 self.stacks[index]:detach(self.sess)
 	 table.remove( self.stacks, index)
 end
 
 function this:update(delta)
-	print("@@stack update")
 	for index=#self.stacks,1,-1 do
 		self.stacks[index]:update(delta)
 		if self.stacks[index].is_expire == true then
-			print("@@detach3")
 			self:remove_stack(index)
 		end
 	end
@@ -61,7 +57,6 @@ function this:remove(sess)
 
 	if #self.stacks > 0 then
 		for index =#self.stacks,1,-1 do
-			print("@@detach4")
 			self:remove_stack(index)
 		end
 	end

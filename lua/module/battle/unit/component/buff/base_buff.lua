@@ -1,4 +1,5 @@
 local this = class("base_buff")
+local bit = require("utils.bit_calc")
 
 function this:init( sess,buff_id,buff_vo )
 	self.sess = sess
@@ -58,17 +59,17 @@ function this:remove(sess)
 	self.is_remove = true
 end
 
--- function this:has_feature(value)
---   return bit.band(self.feature, value) == value
--- end
+function this:has_feature(value)
+  return bit._and(self.feature, value) == value
+end
 
--- function this:non_feature(value)
---   return bit.band(self.feature, value) == 0
--- end
+function this:non_feature(value)
+  return bit._and(self.feature, value) == 0
+end
 
--- function this:one_feature(value)
--- 	if value == 0 then return true end
---   return bit.band(self.feature, value) ~= 0
--- end
+function this:one_feature(value)
+	if value == 0 then return true end
+  return bit._and(self.feature, value) ~= 0
+end
 
 return this
