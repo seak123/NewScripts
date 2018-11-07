@@ -3,7 +3,7 @@ local damage_vo = require("module.battle.skill.raw_skill_vo.damage_vo")
 local battle_def = require("module.battle.battle_def")
 
 function this.make_common_attack(rate, add) 
-  return function(sess, caster, target) 
+  return function(sess, caster, target)
     return rate * caster.attack + add
   end
 end

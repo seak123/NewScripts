@@ -55,6 +55,7 @@ function this:init(  )
    -- attack cache
    self.attack_process = 0
    self.skill_process = 0
+   self.caster_channal = self.data.channal
    -- init skill
    self.attack_skill_vo = self.config.normal_attack
    self.skills = self.config.skills
@@ -117,13 +118,13 @@ end
 function this:do_skill(delta,target,pos ,index )
     local old_value = self.skill_process
     self.skill_process = self.skill_process + delta
-    if old_value <1 and self.skill_process >= 1 then
+    if old_value <self.caster_channal and self.skill_process >= self.caster_channal then
         local database = pack_data.pack_database(self,target,pos)
         local skill = entire_skill.new(self.sess,self.skills[index])
         self.skills_coold[index].value = self.skills_coold[index].coold
         skill:execute(database)
     end
-    if self.skill_process >= 2 then
+    if self.skill_process >= self.caster_channal*2 then
         self.skill_process = 0
         return true
     end

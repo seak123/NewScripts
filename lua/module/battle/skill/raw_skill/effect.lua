@@ -45,7 +45,9 @@ end
 
 function this:clean_up(  )
     -- if effect not auto_clean, nead clean manually
-    self.effect:CleanUp()
+    if self.effect ~= nil then
+        self.effect:CleanUp()
+    end
 end
 
 function this:attach( buff )

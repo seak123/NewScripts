@@ -18,8 +18,9 @@ function this:ctor( vo,database )
 end
 
 function this:execute( sess,delta )
-    if self.targets[1].alive ~= 0 then return "completed" end
+    
     if self.init == false then
+        if self.targets[1].alive ~= 0 then self:clean_up() return "completed" end
         self.effect_entity = self.effect[1]:execute(sess,self.targets[1])
 
         local x,y,z = self.effect_entity:GetPos(x,y,z)
@@ -30,12 +31,16 @@ function this:execute( sess,delta )
     end
 
     if self["update_by_"..self.vo.trace](self,sess,delta) == "completed" then
-        self.effect[1]:clean_up()
+        self:clean_up()
         return "completed"
     else
         return "running"
     end
 
+end
+
+function this:clean_up(  )
+    self.effect[1]:clean_up()
 end
 
 function this:update_by_straight(sess,delta )

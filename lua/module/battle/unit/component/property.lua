@@ -32,7 +32,7 @@ function this:get( name )
     if def.PROPERTY[name] == def.RATE then
         return self[name.."base"] + self[name.."add"]
     else
-        return self[name.."base"]*(1+self[name.."rate"] + self[name.."add"])
+        return self[name.."base"]*(1+self[name.."rate"]) + self[name.."add"]
     end 
 end
 
