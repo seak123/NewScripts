@@ -4,11 +4,13 @@ local battle_field = require("module.battle.battle_field")
 local battle_skill_mng = require("module.battle.battle_skill_manager")
 local battle_trace = require("module.battle.battle_trace")
 local battle_def = require("module.battle.battle_def")
+local battle_trig = require("module.battle.battle_trigger")
 
 function this:ctor( vo )
     self.field = battle_field.new(self)
     self.skill_mng = battle_skill_mng.new(self)
     self.trace = battle_trace.new(self)
+    self.trigger = battle_trig.new(self)
     self.map = GetMapField()
     self.effect_mng = GetEffectManager()
 

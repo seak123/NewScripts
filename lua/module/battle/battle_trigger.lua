@@ -1,4 +1,4 @@
-local this = quick_class("trigger_sys")
+local this =class("battle_trigger")
 
 
 -- for triggers -3:world, -2:side 2, -1:side 1, >= 0 : single target uid
@@ -6,9 +6,6 @@ local this = quick_class("trigger_sys")
 
 function this:ctor(sess)
 	self.sess = sess
-	self.queue_fore = {}
-	self.queue_back = {}
-
 	self.triggers = {}
 end
 
@@ -59,50 +56,12 @@ function this:intn_handle_ev(event_name, key, target)
   local arr_tr = self.triggers[key]
 	if arr_tr ~= nil then 
 		for _, v in ipairs(arr_tr) do 
-			print("handle ev "..event_name)
 			if v:check(self.sess, event_name, target) then
-				print(target.name.." dispatch ["..event_name.."] in trigger_sys") 
 				v:execute(self.sess, target)
 			end
 		end
 	end
 end
 
-function this:push_executor( exec )
-	print("push!!!!!!!!!!!")
-	table.insert(self.queue_back, exec)
-end
-
--- simulate the event queue and generate a perform timeline
-function this:simulate()
-	-- body
-	self:swap() 
-	
-	-- local timeline = self.sess:get_timeline()
-	--self.sess.timeline:push_queue()
-	
-	while #self.queue_fore > 0 do
-		local len = #self.queue_fore
-		for i=1,len do
-			local func = self.queue_fore[i]
-			self.queue_fore[i] = nil
-
-			if type(func) == "function" then 
-				func(self.sess)
-			else 
-				func:execute(self.sess)
-			end
-			self.sess.timeline:save_instance()
-		end
-		self:swap()
-	end
-	--self.sess.timeline:traceback()
-end
-
-function this:swap()
-	local temp = self.queue_fore
-	self.queue_fore = self.queue_back
-	self.queue_back = temp
-end
 
 return this
