@@ -14,8 +14,10 @@ local config_mng = require("config.config_manager")
 function this:ctor( sess,data,uid )
     self.sess = sess
     self.id = data.id
+    -- type: 1,creature;2,structure
+    self.type = data.type
     self.uid = uid
-    self.config = require(config_mng.get_config_path(self.id))
+    self.config = require(config_mng.get_unit_config(self.id))
     self.name = data.name
     self.data = data
     self.side = data.side

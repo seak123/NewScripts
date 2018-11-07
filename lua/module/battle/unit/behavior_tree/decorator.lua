@@ -27,9 +27,9 @@ end
 
 function this:check_EnemyAround(  )
     local field = self.database.master.sess.field
-    local unit = field:find_enemy(self.database.master)
+    local unit = field:find_enemy(true,self.database.master)
     if self.database.master.statectrl:has_feature("confused") then
-        unit = field:find_friend(self.database.master)
+        unit = field:find_friend(true,self.database.master)
     end
     if unit == nil then
         return false
@@ -87,7 +87,7 @@ end
 function this.check_skill_EnemyInRange(range)
     return function (database)
     local field = database.master.sess.field
-    local enemy = field:find_enemy(database.master)
+    local enemy = field:find_enemy(true,database.master)
     if enemy ~= nil then
         local dis = field:distance(enemy,database.master)
         if dis < range then

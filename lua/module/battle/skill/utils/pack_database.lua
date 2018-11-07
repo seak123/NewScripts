@@ -1,4 +1,5 @@
 local this = {}
+local battle_def = require("module.battle.battle_def")
 
 function this.pack_database( _caster,_target,pos )
     local database = {
@@ -32,6 +33,25 @@ function this.pack_database( _caster,_target,pos )
         }
     }
     return database
+end
+
+function this.pack_common_database( sess,side,pos )
+    local database = {
+        caster = {
+            unit = sess.players[side],
+            attack = sess.players[side].attack,
+            defence = sess.players[side].defence,
+            magic_resist = sess.players[side].magic_resist
+        },
+        caster_pos = {
+            X = battle_def["PLAYER"..side.."POS"].X,
+            Y = battle_def["PLAYER"..side.."POS"].Y    
+        },
+        target_pos = {
+            X = pos.X,
+            Y = pos.Y
+        }
+    }
 end
 
 return this

@@ -11,6 +11,7 @@ using Data;
 
         private LuaState luaState;
         private LuaFunction luaInit;
+        private LuaFunction startBattle;
         private LuaFunction luaUpdate;
 
         private LuaTable luaRoot;
@@ -28,6 +29,7 @@ using Data;
                 luaState.AddSearchPath(Application.dataPath + "\\Scripts/lua");
                 luaState.DoFile("lua_bridge.lua");
                 luaInit = luaState.GetFunction("lua_init");
+                startBattle = luaState.GetFunction("start_battle");
                 luaUpdate = luaState.GetFunction("lua_update");
 
                 int _ref = luaInit.BeginPCall();
@@ -56,6 +58,12 @@ using Data;
             luaUpdate.PCall();
             luaUpdate.EndPCall();
         }
+    public void StartBattle(BattleData data){
+        startBattle.BeginPCall();
+        startBattle.Push(data);
+        startBattle.PCall();
+        startBattle.EndPCall();
+    }
 
     public void AddUnit(UnitData data){
         LuaFunction func = luaState.GetFunction("add_unit");

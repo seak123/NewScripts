@@ -26,6 +26,23 @@ this.PROPERTY = {
     physic_suck = this.RATE,
     magic_suck = this.RATE
 }
+
+this.PLAYERPROP = {
+    hp = 0,
+    attack = 0,
+    defence = 0,
+    magic_resist = 0
+}
+
+this.PLAYER1POS = {
+    X = 2,
+    Y = 228
+}
+
+this.PLAYER2POS = {
+    X = 1150,
+    Y = 228
+}
 -----------------field 
 this.MAPMATRIX = {
     column = 1152,

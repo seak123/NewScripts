@@ -8,8 +8,16 @@ this.unit_config = {
     [4] = "config.unit.4_fire_apprentice.fire_apprentice_unit"
 }
 
-function this.get_config_path( id )
+this.skill_config = {
+    [1] = "config.skill_config.common_skill.1_test_aoe"
+}
+
+function this.get_unit_config( id )
     return this.unit_config[id]
+end
+
+function this.get_skill_config( id )
+    return this.skill_config[id]
 end
 
 return this

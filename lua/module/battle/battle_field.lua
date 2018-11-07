@@ -51,12 +51,16 @@ function this:get_unit( uid,side)
     return nil
 end
 
-function this:find_enemy( unit )
+function this:find_enemy( with_structure,unit )
     local enemy_side = 3 - unit.side
     local enemy = nil
     local max_threat = -999
+
+    local type_flag = 0
+    if with_structure == true then type_flag = 3 else type_flag =2 end
+
     for _,u in ipairs(self.units[enemy_side]) do
-        if self:distance(unit,u) < battle_def.MAPMATRIX.row/2 then
+        if self:distance(unit,u) < battle_def.MAPMATRIX.row/2 and u.type < type_flag then
             local threat = unit.threat_value[u.uid]
             if threat == nil then
                 -- set base threat_value
@@ -73,7 +77,7 @@ function this:find_enemy( unit )
     for _,u in ipairs(self.units[enemy_side]) do
         local threat = unit.threat_value[u.uid]
         local dis = self:distance(unit,u)
-        if threat == max_threat and dis < min_dis then
+        if threat == max_threat and dis < min_dis and u.type< type_flag then
             min_dis = dis
             enemy = u
         end
@@ -81,14 +85,18 @@ function this:find_enemy( unit )
     return enemy
 end
 
-function this:find_friend( unit,condition_func )
+function this:find_friend( with_structure,unit,condition_func )
     local side = unit.side
     local min_dis = 999
     local friend = nil
+
+    local type_flag = 0
+    if with_structure == true then type_flag = 3 else type_flag =2 end
+
     if condition_func == nil then
         for _,u in ipairs(self.units[side]) do
             local dis = self:distance(unit,u)
-            if dis < min_dis and unit.uid ~= u.uid then
+            if dis < min_dis and unit.uid ~= u.uid and u.type < type_flag then
                 min_dis = dis
                 friend = u
             end
@@ -96,7 +104,7 @@ function this:find_friend( unit,condition_func )
     else
         for _,u in ipairs(self.units[side]) do
             local dis = self:distance(unit,u)
-            if dis < min_dis and condition_func(unit,u) then
+            if dis < min_dis and condition_func(unit,u) and u.type < type_flag then
                 min_dis = dis
                 friend = u
             end
