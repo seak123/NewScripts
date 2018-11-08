@@ -5,7 +5,7 @@ using PowerInject;
 [Insert]
 public class GameStateManager : MonoBehaviour
 {
-    // Use this for initialization
+
     void Start()
     {
 
@@ -15,6 +15,10 @@ public class GameStateManager : MonoBehaviour
         GameRoot.init += Init;
     }
     public void Init(){
+
+    }
+    private void Update()
+    {
 
     }
 

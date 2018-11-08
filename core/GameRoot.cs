@@ -51,6 +51,10 @@ public class GameRoot : MonoBehaviour {
 
 	}
 
+    public void StartBattle(BattleData data){
+        Bridge.StartBattle(data);
+    }
+
     public static GameRoot GetInstance(){
         return instance ?? null;
     }

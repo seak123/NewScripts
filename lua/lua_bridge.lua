@@ -1,8 +1,9 @@
-root = {}
--- local sample = require("test.sample")
+
+require("utils.functions")
 local battle_mng = require("module.battle.battle_manager")
 local api = Utils.Lua2CSharpAPI
 
+root = {}
 local time = 0
 local flag = 0
 function lua_init(  )
