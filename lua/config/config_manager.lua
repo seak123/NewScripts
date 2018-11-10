@@ -9,7 +9,7 @@ this.unit_config = {
 }
 
 this.skill_config = {
-    [1] = "config.skill_config.common_skill.1_test_aoe"
+    [1] = "config.skill_config.common_skill.1_summon"
 }
 
 function this.get_unit_config( id )

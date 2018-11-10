@@ -22,12 +22,8 @@ function lua_update( delta )
     end
 end
 
-function add_unit( data)
-    battle_mng.session.field:add_unit(data)
-end
-
-function caster_skill( side,skill_id,pos_x,pos_y )
-    battle_mng.session.skill_mng:caster_skill(skill_id,pos_x,pos_y)
+function caster_skill( side,skill_id,pos_x,pos_y,arg1,arg2)
+    battle_mng.session.skill_mng:caster_skill(side,skill_id,pos_x,pos_y,arg1,arg2)
 end
 
 ---------------------------csharp functon

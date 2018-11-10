@@ -13,6 +13,8 @@ public class GameRoot : MonoBehaviour {
 
     public static Action init;
 
+    public static Action BattleStartAction;
+
     public GameObject battleUI;
 
     public GameObject Camara;
@@ -53,6 +55,7 @@ public class GameRoot : MonoBehaviour {
 
     public void StartBattle(BattleData data){
         Bridge.StartBattle(data);
+        BattleStartAction();
     }
 
     public static GameRoot GetInstance(){

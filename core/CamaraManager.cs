@@ -23,12 +23,12 @@ public class CamaraManager : MonoBehaviour {
     private Vector2 oldPosition2;
 
 
-    private Vector2 lastSingleTouchPosition;
+    public Vector2 lastSingleTouchPosition;
 
     private Vector3 m_CameraOffset;
-    private Camera m_Camera;
+    public Camera m_Camera;
 
-    public bool useMouse = true;
+    public bool useMouse = BattleDef.useMouse;
 
     //定义摄像机可以活动的范围
     public float xMin = -100;
@@ -51,55 +51,55 @@ public class CamaraManager : MonoBehaviour {
 
     void Update()
     {
-        //判断触摸数量为单点触摸
-        if (Input.touchCount == 1)
-        {
-            if (Input.GetTouch(0).phase == TouchPhase.Began || !m_IsSingleFinger)
-            {
-                //在开始触摸或者从两字手指放开回来的时候记录一下触摸的位置
-                lastSingleTouchPosition = Input.GetTouch(0).position;
-            }
-            if (Input.GetTouch(0).phase == TouchPhase.Moved)
-            {
-                MoveCamera(Input.GetTouch(0).position);
-            }
-            m_IsSingleFinger = true;
+        ////判断触摸数量为单点触摸
+        //if (Input.touchCount == 1)
+        //{
+        //    if (Input.GetTouch(0).phase == TouchPhase.Began || !m_IsSingleFinger)
+        //    {
+        //        //在开始触摸或者从两字手指放开回来的时候记录一下触摸的位置
+        //        lastSingleTouchPosition = Input.GetTouch(0).position;
+        //    }
+        //    if (Input.GetTouch(0).phase == TouchPhase.Moved)
+        //    {
+        //        MoveCamera(Input.GetTouch(0).position);
+        //    }
+        //    m_IsSingleFinger = true;
 
-        }
-        else if (Input.touchCount > 1)
-        {
-            //当从单指触摸进入多指触摸的时候,记录一下触摸的位置
-            //保证计算缩放都是从两指手指触碰开始的
-            if (m_IsSingleFinger)
-            {
-                oldPosition1 = Input.GetTouch(0).position;
-                oldPosition2 = Input.GetTouch(1).position;
-            }
+        //}
+        //else if (Input.touchCount > 1)
+        //{
+        //    //当从单指触摸进入多指触摸的时候,记录一下触摸的位置
+        //    //保证计算缩放都是从两指手指触碰开始的
+        //    if (m_IsSingleFinger)
+        //    {
+        //        oldPosition1 = Input.GetTouch(0).position;
+        //        oldPosition2 = Input.GetTouch(1).position;
+        //    }
 
-            if (Input.GetTouch(0).phase == TouchPhase.Moved || Input.GetTouch(1).phase == TouchPhase.Moved)
-            {
-                ScaleCamera();
-            }
+        //    if (Input.GetTouch(0).phase == TouchPhase.Moved || Input.GetTouch(1).phase == TouchPhase.Moved)
+        //    {
+        //        ScaleCamera();
+        //    }
 
-            m_IsSingleFinger = false;
-        }
+        //    m_IsSingleFinger = false;
+        //}
 
 
-        //用鼠标的
-        if (useMouse)
-        {
-            size -= Input.GetAxis("Mouse ScrollWheel") * scaleFactor;
-            size = Mathf.Clamp(size, minSize, maxSize);
-            if (Input.GetMouseButtonDown(0))
-            {
-                lastSingleTouchPosition = Input.mousePosition;
-                Debug.Log("GetMouseButtonDown:" + lastSingleTouchPosition);
-            }
-            if (Input.GetMouseButton(0))
-            {
-                MoveCamera(Input.mousePosition);
-            }
-        }
+        ////用鼠标的
+        //if (useMouse)
+        //{
+        //    size -= Input.GetAxis("Mouse ScrollWheel") * scaleFactor;
+        //    size = Mathf.Clamp(size, minSize, maxSize);
+        //    if (Input.GetMouseButtonDown(0))
+        //    {
+        //        lastSingleTouchPosition = Input.mousePosition;
+        //        Debug.Log("GetMouseButtonDown:" + lastSingleTouchPosition);
+        //    }
+        //    if (Input.GetMouseButton(0))
+        //    {
+        //        MoveCamera(Input.mousePosition);
+        //    }
+        //}
 
 
     }
@@ -107,15 +107,15 @@ public class CamaraManager : MonoBehaviour {
     /// <summary>
     /// 触摸缩放摄像头
     /// </summary>
-    private void ScaleCamera()
+    public void ScaleCamera(float currentTouchDistance, float lastTouchDistance)
     {
-        //计算出当前两点触摸点的位置
-        var tempPosition1 = Input.GetTouch(0).position;
-        var tempPosition2 = Input.GetTouch(1).position;
+        ////计算出当前两点触摸点的位置
+        //var tempPosition1 = Input.GetTouch(0).position;
+        //var tempPosition2 = Input.GetTouch(1).position;
 
 
-        float currentTouchDistance = Vector3.Distance(tempPosition1, tempPosition2);
-        float lastTouchDistance = Vector3.Distance(oldPosition1, oldPosition2);
+        //float currentTouchDistance = Vector3.Distance(tempPosition1, tempPosition2);
+        //float lastTouchDistance = Vector3.Distance(oldPosition1, oldPosition2);
 
         //计算上次和这次双指触摸之间的距离差距
         //然后去更改摄像机的距离
@@ -126,9 +126,9 @@ public class CamaraManager : MonoBehaviour {
         size = Mathf.Clamp(size, minSize, maxSize);
 
 
-        //备份上一次触摸点的位置，用于对比
-        oldPosition1 = tempPosition1;
-        oldPosition2 = tempPosition2;
+        ////备份上一次触摸点的位置，用于对比
+        //oldPosition1 = tempPosition1;
+        //oldPosition2 = tempPosition2;
     }
 
 
@@ -145,18 +145,18 @@ public class CamaraManager : MonoBehaviour {
     }
 
 
-    private void MoveCamera(Vector3 scenePos)
+    public void MoveCamera(Vector3 delta)
     {
-        Vector3 lastTouchPostion = m_Camera.ScreenToWorldPoint(new Vector3(lastSingleTouchPosition.x, lastSingleTouchPosition.y, -1));
-        Vector3 currentTouchPosition = m_Camera.ScreenToWorldPoint(new Vector3(scenePos.x, scenePos.y, -1));
+        //Vector3 lastTouchPostion = m_Camera.ScreenToWorldPoint(new Vector3(lastSingleTouchPosition.x, lastSingleTouchPosition.y, -1));
+        //Vector3 currentTouchPosition = m_Camera.ScreenToWorldPoint(new Vector3(scenePos.x, scenePos.y, -1));
 
-        Vector3 v = (lastTouchPostion - currentTouchPosition)*scrollFactor ;
+        Vector3 v = delta*scrollFactor ;
+       
         m_CameraOffset += new Vector3(v.x, 0, v.z) * m_Camera.transform.position.y;
-
-        //把摄像机的位置控制在范围内
+        //把摄像机的位置控制在范围内lastSingleTouchPosition
         m_CameraOffset = new Vector3(Mathf.Clamp(m_CameraOffset.x, xMin, xMax), m_CameraOffset.y, Mathf.Clamp(m_CameraOffset.z, zMin, zMax));
         //Debug.Log(lastTouchPostion + "|" + currentTouchPosition + "|" + v);
-        lastSingleTouchPosition = scenePos;
+        //lastSingleTouchPosition = scenePos;
     }
 
 }

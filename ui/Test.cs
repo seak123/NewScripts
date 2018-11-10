@@ -1,14 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Data;
 
 public class Test:MonoBehaviour  {
 
     public void CreateTopCreature(){
-        GameRoot.GetInstance().BattleField.AddCreature(4,1, 0, 150);
+        AssetManager mng = GameRoot.GetInstance().BattleField.assetManager;
+        UnitData data = AssetManager.PackCreatureData( mng.GetCreatureData(1));
+        GameRoot.GetInstance().Bridge.CasterSkill(1, 1, 0, 150,data,10);
+        //GameRoot.GetInstance().BattleField.AddCreature(4,1, 0, 150);
     }
     public void CreateMidCreature(){
-        GameRoot.GetInstance().BattleField.AddCreature(1, 2, 600, 350);
+       //GameRoot.GetInstance().BattleField.AddCreature(1, 2, 600, 350);
     }
     public void StartBattle()
     {

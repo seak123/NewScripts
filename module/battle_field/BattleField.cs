@@ -8,14 +8,14 @@ public class BattleField : MonoBehaviour {
 
     public AssetManager assetManager;
 
-    public void AddCreature(int id,int side ,int x,int y){
-        CreatureData data = assetManager.GetCreatureData(id);
-        var unitdata = AssetManager.PackCreatureData(data);
-        unitdata.side = side;
-        unitdata.init_x = x;
-        unitdata.init_y = y;
-        GameRoot.GetInstance().Bridge.AddUnit(unitdata);
-    }
+    //public void AddCreature(int id,int side ,int x,int y){
+    //    CreatureData data = assetManager.GetCreatureData(id);
+    //    var unitdata = AssetManager.PackCreatureData(data);
+    //    unitdata.side = side;
+    //    unitdata.init_x = x;
+    //    unitdata.init_y = y;
+    //    GameRoot.GetInstance().Bridge.AddUnit(unitdata);
+    //}
 
     [OnInjected]
     public void AddRootAction(){

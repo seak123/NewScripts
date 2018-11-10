@@ -13,7 +13,7 @@ end
 function this:execute(sess, target)
     -- base execute
     if target.alive ~= 0 then return end
-    if self:check(sess,database,target) == false then
+    if self:check(sess,self.database,target) == false then
         return
     end
 

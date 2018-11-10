@@ -65,10 +65,15 @@ using Data;
         startBattle.EndPCall();
     }
 
-    public void AddUnit(UnitData data){
-        LuaFunction func = luaState.GetFunction("add_unit");
+    public void CasterSkill(int side,int skill_id,int pos_x,int pos_y,UnitData data =null,int num = 0){
+        LuaFunction func = luaState.GetFunction("caster_skill");
         func.BeginPCall();
+        func.Push(side);
+        func.Push(skill_id);
+        func.Push(pos_x);
+        func.Push(pos_y);
         func.Push(data);
+        func.Push(num);
         func.PCall();
         func.EndPCall();
 

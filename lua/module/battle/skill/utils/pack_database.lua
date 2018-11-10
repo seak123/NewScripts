@@ -35,7 +35,7 @@ function this.pack_database( _caster,_target,pos )
     return database
 end
 
-function this.pack_common_database( sess,side,pos )
+function this.pack_common_database( sess,side,pos,arg1,arg2 )
     local database = {
         caster = {
             unit = sess.players[side],
@@ -47,11 +47,31 @@ function this.pack_common_database( sess,side,pos )
             X = battle_def["PLAYER"..side.."POS"].X,
             Y = battle_def["PLAYER"..side.."POS"].Y    
         },
+        target = {
+            unit = nil
+        },
         target_pos = {
             X = pos.X,
             Y = pos.Y
+        },
+        args = {
+            [1]=arg1,
+            [2]=arg2
         }
     }
+    return database
 end
 
+function this.get_arg( need_get,index )
+    return function (database  )
+        print("@@1")
+        print("@@arg??"..database.args[1].id)
+        if need_get == true then
+            print("@@2")
+            return database.args[index]
+        else
+            return index
+        end
+    end
+end
 return this

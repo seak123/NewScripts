@@ -15,4 +15,10 @@ public static class BattleDef  {
     public static int aStarUpdateFrame = 10;
 
     public static float Transfer2GridFactor = 25;
+
+
+    //utils
+    public static bool useMouse = true;
+
+    public static float cardPanalViewFactor = 1 / 4.8f;
 }

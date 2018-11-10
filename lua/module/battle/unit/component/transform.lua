@@ -1,5 +1,6 @@
 
 local this = class("transform")
+local def = require("module.battle.battle_def")
 
 this.AnimationState = {
     Idle = "Idle",
@@ -9,7 +10,7 @@ this.AnimationState = {
 
 function this:ctor( master,data )
     self.master = master
-    local grid_X = data.init_x
+    local grid_X =  data.init_x
     local grid_Y = data.init_y
     self.grid_pos = {X = grid_X, Y = grid_Y}
     self.offset = 0
@@ -25,5 +26,6 @@ function this:update( delta )
         self.des_pos = nil
     end
 end
+
 
 return this

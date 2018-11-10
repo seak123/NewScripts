@@ -22,9 +22,10 @@ end
 
 -- ex:arg1-unit_data,arg2-unit_num
 function this:caster_skill( side,skill_id,pos_x,pos_y,arg1,arg2)
-    local skill_vo = skill_config.get_skill_config(skill_id)
+    local skill_vo = require(skill_config.get_skill_config(skill_id))
+    print("@@arg1"..arg1.id)
     local skill = entire_skill.new(self.sess,skill_vo)
-    local database = pack.pack_common_database( self.sess,side,{X= pos_x,Y = pos_y} )
+    local database = pack.pack_common_database( self.sess,side,{X= pos_x,Y = pos_y} ,arg1,arg2)
     skill:execute(database)
 end
 

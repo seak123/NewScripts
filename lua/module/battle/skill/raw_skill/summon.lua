@@ -1,5 +1,6 @@
 local base = require("module.battle.skill.raw_skill.base_rawskill")
 local this = class("summon",base)
+local def = require("module.battle.battle_def")
 
 local factor = 8
 
@@ -10,13 +11,25 @@ function this:ctor(vo,database)
 end
 
 function this:execute(sess,target)
+    -- init
+    print("@@arg??"..self.database.args[1].id)
+    local data = self.vo.data(self.database)
+    print("@@arg????"..type(data))
+    if type(data) ~= "userdata" then
+        data = self:get_unit_data(data)
+    end
+    local num = self.vo.num(self.database)
+    print("@@num@@@@"..num)
+    data.side = self.database.caster.unit.side
+
     local field = sess.field
     local pos = self.database.target_pos
-    local pos_array = self:get_pos_array(pos,self.vo.num)
-    for i =1,self.vo.num do
-        self.vo.data.init_x = pos_array[i].X
-        self.vo.data.init_y = pos_array[i].Y
-        field:add_unit(self.vo.data)
+    local pos_array = self:get_pos_array(pos,num)
+    for i =1,num do
+
+        data.init_x = this.clamp(pos_array[i].X,0,def.MAPMATRIX.column)
+        data.init_y = this.clamp(pos_array[i].Y,0,def.MAPMATRIX.row)
+        field:add_unit(data)
     end
 end
 
@@ -30,5 +43,19 @@ function this:get_pos_array( pos,num )
     end
     return pos_array
 end
+
+function this:get_unit_data( id )
+    -- body
+end
+
+function this.clamp( num,min,max )
+    if num <min then
+        num = min
+    elseif num > max then
+        num = max
+    end
+    return num
+end
+
 
 return this
