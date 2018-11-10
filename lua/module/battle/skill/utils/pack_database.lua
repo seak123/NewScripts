@@ -64,10 +64,7 @@ end
 
 function this.get_arg( need_get,index )
     return function (database  )
-        print("@@1")
-        print("@@arg??"..database.args[1].id)
         if need_get == true then
-            print("@@2")
             return database.args[index]
         else
             return index

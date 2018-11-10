@@ -99,5 +99,15 @@ function this.check_skill_EnemyInRange(range)
 end
 end
 
+function this.check_summon(  )
+    return function ( database )
+    --    if database.master.sess.players[database.master.side]:has_feature("permit_summon") then
+    --     return false
+    --    end
+        database.target_pos = database.master.transform.grid_pos
+        return true
+    end
+end
+
 
 return this

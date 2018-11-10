@@ -24,7 +24,9 @@ namespace Map
 
         public Entity CreateEntity(int id,int uid,int side,int gridX,int gridY){
             float x, y;
-            GetViewPos(gridX, gridY, out x, out y);
+            Vector2 pos = FindInitPos(gridX,gridY);
+            GetViewPos(pos.x, pos.y, out x, out y);
+           
             GameObject obj = Instantiate(mng.GetCreatureData(id).prefab, new Vector3(x, 0, y), Quaternion.identity);
             var entity = obj.AddComponent<Entity>();
             //init entity
@@ -150,6 +152,30 @@ namespace Map
             float width = Math.Max(dis_x, dis_y);
             float height = Math.Min(dis_x, dis_y);
             return height * DiagoFactor + width - height;
+        }
+
+        public Vector2 FindInitPos(int initX,int initY,int radius){
+            if(IsCanMove(initX,initY,radius)){
+                return new Vector2(initX,initY);
+            }
+            Vector2 res = new Vector2(initX,initY)
+            Vector2[] direct = new Vector2[4];
+            direct[0] = new Vector2(0,1);
+            direct[1] = new Vector2(1,0);
+            direct[2] = new Vector2(0,-1);
+            direct[3] = new Vector2(-1,0);
+            int index = 0;
+            while(true){
+                int length = (int)(index/2)+1
+                for(int i = 1;i<= length;++i){
+                    res = res + direct[index%4]
+                    if(IsCanMove(res.x,res.y,radius)){
+                        return res;
+                    }
+                }
+                ++index;
+            }
+            return null;
         }
 
         public bool IsCanMove(int grid_x,int grid_y,int radius){

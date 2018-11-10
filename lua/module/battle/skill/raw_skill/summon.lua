@@ -12,14 +12,11 @@ end
 
 function this:execute(sess,target)
     -- init
-    print("@@arg??"..self.database.args[1].id)
     local data = self.vo.data(self.database)
-    print("@@arg????"..type(data))
     if type(data) ~= "userdata" then
         data = self:get_unit_data(data)
     end
     local num = self.vo.num(self.database)
-    print("@@num@@@@"..num)
     data.side = self.database.caster.unit.side
 
     local field = sess.field
