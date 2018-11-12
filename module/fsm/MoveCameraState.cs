@@ -89,17 +89,16 @@ public class MoveCameraState : FsmState
             camareMng.size = Mathf.Clamp(camareMng.size, camareMng.minSize, camareMng.maxSize);
             if (Input.GetMouseButtonDown(0))
             {
-                Debug.Log("Down");
+               
                 lastSingleTouchPosition = Input.mousePosition;
                 //Debug.Log("GetMouseButtonDown:" + lastSingleTouchPosition);
             }
             if (Input.GetMouseButton(0))
             {
-                Debug.Log("Press");
+               
                 Vector3 lastTouchPos = Camera.main.ScreenToWorldPoint(new Vector3(lastSingleTouchPosition.x, lastSingleTouchPosition.y, -1));
                 Vector3 currTouchPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -1));
-                Debug.Log(lastTouchPos);
-                Debug.Log(currTouchPos);
+               
                 Vector3 delta = lastTouchPos - currTouchPos;
                 camareMng.MoveCamera(delta);
                 lastSingleTouchPosition = Input.mousePosition;

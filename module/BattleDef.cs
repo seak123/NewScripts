@@ -7,7 +7,7 @@ public static class BattleDef  {
     //map data
     public static int rowGridNum = 448;
 
-    public static int columnGridNum = 1152;
+    public static int columnGridNum = 992;
 
 
     public static int maxSpeed = 64;
@@ -15,6 +15,8 @@ public static class BattleDef  {
     public static int aStarUpdateFrame = 10;
 
     public static float Transfer2GridFactor = 25;
+
+    public static int StructBound = 192;
 
 
     //utils

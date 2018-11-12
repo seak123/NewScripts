@@ -13,6 +13,7 @@ public class SelectPosState : FsmState {
 
     public override void OnEnter()
     {
+        Debug.Log("Enter Select State");
         cardEntity = GameRoot.GetInstance().StateManager.selectCard;
     }
 
@@ -25,7 +26,12 @@ public class SelectPosState : FsmState {
     {
         if(useMouse){
             if(Input.GetMouseButton(0)){
-                cardEntity.gameObject.transform.position = Input.mousePosition;
+                cardEntity.OnMove(Input.mousePosition);
+            }
+            if(Input.GetMouseButtonUp(0)){
+                cardEntity.OnRelease(Input.mousePosition);
+                GameRoot.GetInstance().StateManager.selectCard = null;
+                return GameState.IdleState;
             }
         }
         return GameState.KeepRunning;
