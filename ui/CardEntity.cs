@@ -107,7 +107,7 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
                         GameRoot.GetInstance().MapField.GetViewPos(gridX, gridY, out viewX, out viewY);
                         entityPrefab.transform.position = new Vector3(viewX, 0, viewY);
                         entityPrefab.SetActive(true);
-                        //falsePrefab.SetActive(false);
+                        SetPrefabActive(entityPrefab);
                     }
                     else
                     {
@@ -115,7 +115,7 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
                         GameRoot.GetInstance().MapField.GetViewPos(gridX, gridY, out viewX, out viewY);
                         entityPrefab.transform.position = new Vector3(viewX, 0, viewY);
                         entityPrefab.SetActive(true);
-                        //truePrefab.SetActive(false);
+                        SetPrefabDeActive(entityPrefab);
                     }
                     break;
             }
@@ -146,7 +146,8 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
         if (cardData == null) return;
         switch(cardData.cardType){
             case CardType.Creature:
-                if (!MapField.CheckPosValiable(posX, posY)||posX>BattleDef.StructBound) break;
+                if (!MapField.CheckPosValiable(posX, posY)||posX>(BattleDef.StructBound+64))break;
+                posX = Mathf.Clamp(posX, 0, BattleDef.StructBound);
                 GameRoot.GetInstance().Bridge.CasterSkill(1, cardData.skillId, posX, posY, AssetManager.PackCreatureData(creatureData), cardData.num);
                 CleanUp();
                 break;
@@ -168,5 +169,21 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
         Destroy(entityPrefab);
         //Destroy(truePrefab);
 
-}
+    }
+
+    private void SetPrefabActive(GameObject prefab){
+        foreach(var comp in prefab.GetComponentsInChildren<SkinnedMeshRenderer>()){
+            comp.material.SetFloat("_Alpha", 0.6f);
+            comp.material.SetColor("_LightTint", new Color(0.285f, 1, 0.226f));
+        }
+    }
+
+    private void SetPrefabDeActive(GameObject prefab)
+    {
+        foreach (var comp in prefab.GetComponentsInChildren<SkinnedMeshRenderer>())
+        {
+            comp.material.SetFloat("_Alpha", 0.6f);
+            comp.material.SetColor("_LightTint", new Color(1, 0.425f, 0.222f));
+        }
+    }
 }

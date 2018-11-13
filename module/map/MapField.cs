@@ -36,8 +36,8 @@ namespace Map
             entity.uid = uid;
             entity.side = side;
             entity.radius = mng.GetCreatureData(id).radius;
-            entity.posX = gridX;
-            entity.posY = gridY;
+            entity.posX = (int)pos.x;
+            entity.posY = (int)pos.y;
             entity.animator = obj.GetComponentInChildren<Animator>();
 
             entityMap.Add(uid, entity);
@@ -158,8 +158,10 @@ namespace Map
 
         public Vector2 FindInitPos(int initX,int initY,int radius){
             if(IsCanMove(initX,initY,radius)){
+                Debug.Log("canmove");
                 return new Vector2(initX,initY);
             }
+
             Vector2 res = new Vector2(initX, initY);
             Vector2[] direct = new Vector2[4];
             direct[0] = new Vector2(0,1);
@@ -172,6 +174,8 @@ namespace Map
                 for(int i = 1;i<= length;++i){
                     res = res + direct[index % 4];
                     if(IsCanMove((int)res.x,(int)res.y,radius)){
+                        Debug.Log(res.x);
+                        Debug.Log(res.y);
                         return res;
                     }
                 }
