@@ -30,6 +30,9 @@ function this.pack_database( _caster,_target,pos )
         target_pos = {
             X = pos.X,
             Y = pos.Y
+        },
+        target_trace= {
+
         }
     }
     return database
@@ -57,6 +60,9 @@ function this.pack_common_database( sess,side,pos,arg1,arg2 )
         args = {
             [1]=arg1,
             [2]=arg2
+        },
+        target_trace= {
+            
         }
     }
     return database

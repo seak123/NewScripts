@@ -91,12 +91,12 @@ end
 
 function this:update_MoveToEnemy( delta )
     local field = self.database.master.sess.field
-    if self.database.enemy ~= nil then
-        if field:distance(self.database.enemy,self.database.master) < 1.5*(self.database.master.data.radius + self.database.enemy.data.radius) then
+    if self.database.target ~= nil then
+        if field:distance(self.database.target,self.database.master) < 1.5*(self.database.master.data.radius + self.database.target.data.radius) then
             self.running = false
             return "completed"
         end
-        self.database.master.transform.des_pos =  self.database.enemy.transform.grid_pos
+        self.database.master.transform.des_pos =  self.database.target.transform.grid_pos
         self.running = true
         self.runtime = self.runtime + delta
     
@@ -104,7 +104,7 @@ function this:update_MoveToEnemy( delta )
             self.running = false
             -- move a bit means cannot move to this enemy, decrease the threat_value
             if field:distance(self.enter_pos,self.database.master) < self.max_runtime*battle_def.MinSpeed/2 then
-                self.database.master.threat_value[self.database.enemy.uid] = self.database.master.threat_value[self.database.enemy.uid] - 1
+                self.database.master.threat_value[self.database.target.uid] = self.database.master.threat_value[self.database.target.uid] - 1
             end
             return "failure" 
         end
@@ -119,7 +119,7 @@ function this:enter_Attack(  )
     if self.database.master.statectrl:has_feature("de_attack") then return false end
 
     self.database.master.entity:AnimCasterAttack(self.database.master.property:get("attack_rate"))
-    self.database.master.entity:SetRotation(self.database.enemy.transform.grid_pos.X,self.database.enemy.transform.grid_pos.Y)
+    self.database.master.entity:SetRotation(self.database.target.transform.grid_pos.X,self.database.target.transform.grid_pos.Y)
     self.database.master.attack_process = 0
     self.runtime = 0
     self.max_runtime = 5
@@ -132,7 +132,7 @@ function this:abort_Attack(  )
 end
 
 function this:update_Attack( delta )
-    local flag = self.database.master:do_attack(delta*self.database.master.property:get("attack_rate"),self.database.enemy)
+    local flag = self.database.master:do_attack(delta*self.database.master.property:get("attack_rate"),self.database.target)
     if flag == false then
         self.running = true
         self.runtime = self.runtime + delta

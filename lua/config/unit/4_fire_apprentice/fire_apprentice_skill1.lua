@@ -29,7 +29,7 @@ local normal = normal_skill.new()
 normal:append("raw_skills",buff0)
 
 this.root = {normal}
-this.decorators = {decorator.check_skill_EnemyInRange(150)}
+this.decorators = {decorator.check_skill_EnemyInRange(150,true)}
 this.coold = 20
 
 return this

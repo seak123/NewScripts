@@ -34,24 +34,24 @@ function this:check_EnemyAround(  )
     if unit == nil then
         return false
     end
-    self.database.enemy = unit
+    self.database.target = unit
     if self.database.master.statectrl:has_feature("taunt") then
-        self.database.enemy = self.database.master.statectrl.taunt_target
+        self.database.target = self.database.master.statectrl.taunt_target
     end
     return true
 end
 
 function this:check_EnemyInAttackRange(  )
 
-    if self.database.master.statectrl:has_feature("confused") and self.database.enemy.side ~= self.database.master.side then
+    if self.database.master.statectrl:has_feature("confused") and self.database.target.side ~= self.database.master.side then
         return false
     end
 
     if self.database.master.statectrl:has_feature("taunt") then
-        self.database.enemy = self.database.master.statectrl.taunt_target
+        self.database.target = self.database.master.statectrl.taunt_target
     end
 
-    local enemy = self.database.enemy
+    local enemy = self.database.target
     
     local field = self.database.master.sess.field
     if enemy ~= nil then
@@ -84,10 +84,10 @@ end
 
 ----------------------------------skill check (build database.target or database.target_pos)
 
-function this.check_skill_EnemyInRange(range)
+function this.check_skill_EnemyInRange(range,with_structure)
     return function (database)
     local field = database.master.sess.field
-    local enemy = field:find_enemy(true,database.master)
+    local enemy = field:find_enemy(with_structure,database.master)
     if enemy ~= nil then
         local dis = field:distance(enemy,database.master)
         if dis < range then
@@ -106,6 +106,18 @@ function this.check_summon(  )
     --    end
         database.target_pos = database.master.transform.grid_pos
         return true
+    end
+end
+
+function this.find_alive_friend(with_structure )
+    return function ( database )
+        local field = database.master.sess.field
+        local friend = field:find_friend(with_structure,database.master)
+        if friend ~= nil then
+            database.target = friend
+            return true
+        end
+        return false
     end
 end
 
