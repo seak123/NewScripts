@@ -1,0 +1,42 @@
+local throw_skill = require("module.battle.skill.ripe_skill_vo.throw_skill_vo")
+local normal_skill = require("module.battle.skill.ripe_skill_vo.normal_skill_vo")
+local retarget_skill = require("module.battle.skill.ripe_skill_vo.retarget_skill_vo")
+local damage = require("module.battle.skill.raw_skill_vo.damage_vo")
+local effect = require("module.battle.skill.raw_skill_vo.effect_vo")
+local calc = require("module.battle.skill.utils.caculate")
+local this = {}
+
+local throw1 = throw_skill.new()
+throw1.speed = 60
+throw1.trace = throw_skill.Trace.Curve
+
+
+local retarget0 = retarget_skill.new()
+retarget0.target_type = retarget_skill.TargetType.Distance
+retarget0.can_repeat = false
+retarget0.num = 2
+retarget0.append("childs",throw1)
+
+local damage0 = damage.new()
+damage0.calc = calc.make_common_attack(1, 0) 
+
+local normal = normal_skill.new()
+normal:append("raw_skills",damage0)
+
+local effect0 = effect.new()
+effect0.effect_id = 1
+
+local throw = throw_skill.new()
+throw.speed = 60
+throw.trace = throw_skill.Trace.Curve
+throw:append("effect",effect0)
+throw:append("childs",normal,retarget0)
+
+throw1:append("effect",effect0)
+throw1:append("childs",normal)
+
+
+
+this.root = {throw}
+
+return this

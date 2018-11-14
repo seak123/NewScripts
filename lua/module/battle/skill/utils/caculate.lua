@@ -97,4 +97,8 @@ function this.damage(caster,target,value,type )
 
 end
 
+function this.heal( caster,target,value )
+   return value
+end
+
 return this

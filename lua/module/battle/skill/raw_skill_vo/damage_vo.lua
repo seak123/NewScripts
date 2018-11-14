@@ -12,5 +12,6 @@ this.execute = "module.battle.skill.raw_skill.damage"
 
 --0,physical 1,magic 2,real
 this.damage_type = this.DamageType.Physical
+this.calc = nil
 
 return this
