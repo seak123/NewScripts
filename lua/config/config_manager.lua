@@ -7,7 +7,8 @@ this.unit_config = {
     [2] = "config.unit.2_slowknight.slowknight_unit",
     [3] = "config.unit.3_ent.ent_unit",
     [4] = "config.unit.4_fire_apprentice.fire_apprentice_unit",
-    [5] = "config.unit.5_ent_forest.ent_forest_unit"
+    [5] = "config.unit.5_ent_forest.ent_forest_unit",
+    [7] = "config.unit.7_natural_statue.natural_statue_unit"
 }
 
 this.skill_config = {

@@ -24,7 +24,7 @@ public class CardManager : MonoBehaviour {
         //temp info
         cardsId = new List<int>
         {
-            1,
+            7,
             2,
             2,
             2,

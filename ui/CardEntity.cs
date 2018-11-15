@@ -176,11 +176,21 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
             comp.material.SetFloat("_Alpha", 0.6f);
             comp.material.SetColor("_LightTint", new Color(0.285f, 1, 0.226f));
         }
+        foreach (var comp in prefab.GetComponentsInChildren<SpriteRenderer>())
+        {
+            comp.material.SetFloat("_Alpha", 0.6f);
+            comp.material.SetColor("_LightTint", new Color(0.285f, 1, 0.226f));
+        }
     }
 
     private void SetPrefabDeActive(GameObject prefab)
     {
         foreach (var comp in prefab.GetComponentsInChildren<SkinnedMeshRenderer>())
+        {
+            comp.material.SetFloat("_Alpha", 0.6f);
+            comp.material.SetColor("_LightTint", new Color(1, 0.425f, 0.222f));
+        }
+        foreach (var comp in prefab.GetComponentsInChildren<SpriteRenderer>())
         {
             comp.material.SetFloat("_Alpha", 0.6f);
             comp.material.SetColor("_LightTint", new Color(1, 0.425f, 0.222f));

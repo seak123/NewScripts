@@ -42,7 +42,7 @@ local retarget0 = retarget.new()
 retarget0.target_type = retarget.TargetType.Random
 retarget0.can_repeat = false
 retarget0.num = 2
-retarget0.append("childs",normal1)
+retarget0:append("childs",normal1)
 
 local delay0 = delay_skill.new()
 delay0.delay = 1
