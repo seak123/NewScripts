@@ -51,12 +51,15 @@ make_event("on_die")
 function this:init(  )
     -- init data
     self.alive = 0
+    -- wait for appear action
+    self.appeared = 0
  
     self.entity = self.sess.map:CreateEntity(self.data.id,self.uid,self.side,self.data.init_x,self.data.init_y)
     
    -- attack cache
    self.attack_process = 0
    self.skill_process = 0
+   self.appear_process = 0
    self.caster_channal = self.data.channal
    -- init skill
    self.attack_skill_vo = self.config.normal_attack
@@ -133,6 +136,15 @@ function this:do_skill(delta,target,pos ,index )
     return false
 end
 
+function this:do_appear( delta )
+    self.appear_process = self.appear_process +delta
+    if self.appear_process >= self.data.ready_time then
+        self.appeared = 1
+        return true
+    end
+    return false
+end
+
 function this:damage( value,source )
     self.hp = self.hp - value
     self.entity:SetHp(self.hp,self.max_hp)
@@ -145,6 +157,7 @@ end
 
 function this:heal(value,source  )
     self.hp = self.hp + value
+    self.hp = math.min( self.max_hp,self.hp )
 end
 
 function this:die(  )

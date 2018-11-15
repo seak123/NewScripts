@@ -25,6 +25,8 @@ function this:execute( sess,delta )
         if self.targets[1].alive ~= 0 then self:clean_up() return "completed" end
         self.effect_entity = self.effect[1]:execute(sess,self.targets[1])
 
+        self.timepass = 0
+
         local x,y,z = self.effect_entity:GetPos(x,y,z)
         self.start_pos.X = x
         self.start_pos.Y = y
@@ -59,7 +61,7 @@ function this:update_by_straight(sess,delta )
 
     local de_x = self.target_pos.X - self.curr_pos.X
     local de_y = self.target_pos.Y - self.curr_pos.Y
-    local de_z = 0.5 - self.curr_pos.Z
+    local de_z = 0.2 - self.curr_pos.Z
     local dis = math.sqrt( de_x*de_x,de_y*de_y )
     local time = dis/self.speed
 
@@ -91,6 +93,33 @@ function this:update_by_curve( sess,delta )
         self.target_pos.X = self.database.target_pos.X
         self.target_pos.Y = self.database.target_pos.Y
     end
+
+    
+    local de_x = self.target_pos.X - self.curr_pos.X
+    local de_y = self.target_pos.Y - self.curr_pos.Y
+    --local de_z = 0.2 - self.curr_pos.Z
+    local dis = math.sqrt( de_x*de_x,de_y*de_y )
+    local time = dis/self.speed
+    
+    if dis <= self.min_dis then self.min_dis = dis
+    else return "completed" end
+
+    de_x = de_x/time*delta
+    de_y = de_y/time*delta
+
+    local Dx = self.target_pos.X - self.start_pos.X
+    local Dy = self.target_pos.Y - self.start_pos.Y
+    local all_dis = math.sqrt( Dx*Dx,Dy*Dy )
+    local a = 1/all_dis/3
+
+
+    self.curr_pos.X = self.curr_pos.X + de_x
+    self.curr_pos.Y = self.curr_pos.Y + de_y
+    self.curr_pos.Z = a*(self.timepass)
+
+    self.effect_entity:SetPos(self.curr_pos.X,self.curr_pos.Y,self.curr_pos.Z)
+
+    return "running"
 end
 
 return this

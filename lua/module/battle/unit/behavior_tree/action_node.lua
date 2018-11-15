@@ -182,4 +182,25 @@ function this:update_Caster(delta)
     end
 end
 
+function this:enter_Appear(  )
+    if self.database.master.appeared == 1 then return false end
+    self.database.master.entity:AnimCasterAction(transform.AnimationState.Appear)
+    return true
+end
+
+function this:abort_Appear(  )
+    self.database.master.entity:AnimCasterBreak()
+end
+
+function this:update_Appear(delta  )
+    local flag = self.database.master:do_appear(delta)
+    if flag == false then
+        self.running = true
+        return "running"
+    else
+        self.running = false
+        return "completed"
+    end
+end
+
 return this

@@ -14,9 +14,13 @@ be_caster.priority = 1
 be_caster:append("subs",ac_caster)
 be_caster:append("decorators",de_skill)
 
+local ac_appear = action.new()
+ac_appear.action_type = action.ACTION.Appear
+ac_appear.priority = 2
+
 ------------------------------
 local be_root = behavior.new()
 be_root.controll_type = "sel"
-be_root:append("subs",be_caster)
+be_root:append("subs",ac_appear,be_caster)
 
 return be_root

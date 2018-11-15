@@ -28,6 +28,11 @@ ac_move.action_type = action.ACTION.MoveToEnemy
 
 local de_find = decorator.new()
 de_find.type = decorator.Type.EnemyAround
+-------------------------------------------
+local ac_appear = action.new()
+ac_appear.action_type = action.ACTION.Appear
+ac_appear.priority = 4
+----------------------------------------
 
 local be_attack = behavior.new()
 be_attack.controll_type = "sel"
@@ -49,6 +54,6 @@ be_forward:append("decorators",de_forward)
 ------------------------------
 local be_root = behavior.new()
 be_root.controll_type = "sel"
-be_root:append("subs",be_attack,be_forward,be_caster)
+be_root:append("subs",be_attack,be_forward,be_caster,ac_appear)
 
 return be_root

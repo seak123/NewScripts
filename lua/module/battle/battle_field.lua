@@ -15,6 +15,7 @@ function this:add_unit( data)
     local unit = creature.new(self.sess,data,uid)
     self.counter = self.counter + 1
     table.insert( self.units[data.side],unit)
+    return unit
 end
 
 function this:unit_die( unit )

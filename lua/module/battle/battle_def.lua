@@ -22,12 +22,12 @@ this.PROPERTY = {
     magic_suck = this.RATE
 }
 
-this.PLAYERPROP = {
-    hp = 0,
-    attack = 0,
-    defence = 0,
-    magic_resist = 0
-}
+-- this.PLAYERPROP = {
+--     hp = 0,
+--     attack = 0,
+--     defence = 0,
+--     magic_resist = 0
+-- }
 
 this.PLAYER1POS = {
     X = 2,

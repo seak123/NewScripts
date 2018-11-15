@@ -5,7 +5,8 @@ local def = require("module.battle.battle_def")
 this.AnimationState = {
     Idle = "Idle",
     Walk = "Walk",
-    Caster = "Caster"
+    Caster = "Caster",
+    Appear = "Appear"
 }
 
 function this:ctor( master,data )
