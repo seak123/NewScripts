@@ -45,10 +45,12 @@ end
 function this:check_result(  )
     if self.players[1].unit.alive == 2 then
         print("players 1 lose")
+        root.mng.battle_completed()
     elseif self.players[2].unit.alive == 2 then
         print("players 2 lose")
+        root.mng.battle_completed()
     end
-    root.mng.battle_completed()
+    
 end
 
 return this

@@ -27,7 +27,7 @@ function this:execute(sess, target)
     if self.vo.execute_pos == effect_vo.ExecutePos.Caster then
         effect = sess.effect_mng:CreateEffect(self.effect_id,self.vo.attach,database.caster.unit.uid,0,0)
     elseif self.vo.execute_pos == effect_vo.ExecutePos.Target then
-        effect = sess.effect_mng:CreateEffect(self.effect_id,self.vo.attach,database.target.uid,0,0)
+        effect = sess.effect_mng:CreateEffect(self.effect_id,self.vo.attach,target.uid,0,0)
     elseif self.vo.execute_pos == effect_vo.ExecutePos.CasterPos then
         pos.X = database.caster_pos.X
         pos.Y = database.caster_pos.Y

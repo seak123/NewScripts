@@ -26,7 +26,7 @@ prop1.calc = calc.make_common_calc(0.25)
 
 local effect0 = effect.new()
 effect0.effect_id = 2
-effect0.execute_pos = effect.ExecutePos.Caster
+effect0.execute_pos = effect.ExecutePos.Target
 effect0.attach = true
 
 local buff0 = buff.new()
@@ -36,7 +36,7 @@ buff0.execute_type = 0
 buff0:append("belongs",effect0,prop0,prop1)
 
 local normal1 = normal_skill.new()
-normal1:append("raw_skills",buff0,heal)
+normal1:append("raw_skills",buff0,heal0)
 
 local retarget0 = retarget.new()
 retarget0.target_type = retarget.TargetType.Random
@@ -48,15 +48,17 @@ local delay0 = delay_skill.new()
 delay0.delay = 1
 delay0:append("childs",retarget0)
 
-local effect0 = effect.new()
-effect0.effect_id = 1
+local _effect = effect.new()
+_effect.effect_id = 7
+_effect.execute_pos = effect.ExecutePos.Caster
+_effect.attach = true
 
 local normal0 = normal_skill.new()
-normal0:append("raw_skills",effect0)
+normal0:append("raw_skills",_effect)
 normal0:append("childs",delay0)
 
 
-this.root = {retarget0}
+this.root = {normal0}
 this.decorators = {decorator.find_alive_friend(false)}
 this.coold = 10
 

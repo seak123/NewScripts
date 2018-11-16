@@ -2,6 +2,7 @@ local base = require("module.battle.skill.ripe_skill.base_skill")
 local this = class("delay_skill",base)
 
 function this:ctor( vo,database )
+    self.vo = vo
     self.database = database
     self.time =0
     self.targets = {}

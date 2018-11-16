@@ -43,8 +43,8 @@ function this.pack_common_database( sess,side,pos,arg1,arg2 )
         caster = {
             unit = sess.players[side].unit,
             attack = sess.players[side].unit.property:get("attack"),
-            defence = sess.players[side].property:get("defence"),
-            magic_resist = sess.players[side].property:get("magic_resist")
+            defence = sess.players[side].unit.property:get("defence"),
+            magic_resist = sess.players[side].unit.property:get("magic_resist")
         },
         caster_pos = {
             X = battle_def["PLAYER"..side.."POS"].X,
