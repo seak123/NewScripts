@@ -35,6 +35,22 @@ function this:execute( sess,delta )
         self.curr_pos.Y = y
         self.curr_pos.Z = z
         self.init = true
+
+        if self.vo.trace == "curve" then
+            if self.vo.target_type == throw_vo.Target.Unit and self.targets[1].alive == 0 then
+                self.target_pos.X = self.targets[1].transform.grid_pos.X
+                self.target_pos.Y = self.targets[1].transform.grid_pos.Y
+            elseif self.vo.target_type == throw_vo.Target.Pos then
+                self.target_pos.X = self.database.target_pos.X
+                self.target_pos.Y = self.database.target_pos.Y
+            end
+            local Dx = self.target_pos.X - self.start_pos.X
+            local Dy = self.target_pos.Y - self.start_pos.Y
+            local all_dis = math.sqrt( Dx*Dx,Dy*Dy )
+            self.curve_factor = all_dis
+            self.curve_x = 0
+            self.curve_z = 0
+        end
     end
 
     if self["update_by_"..self.vo.trace](self,sess,delta) == "completed" then
@@ -97,7 +113,7 @@ function this:update_by_curve( sess,delta )
     
     local de_x = self.target_pos.X - self.curr_pos.X
     local de_y = self.target_pos.Y - self.curr_pos.Y
-    --local de_z = 0.2 - self.curr_pos.Z
+    
     local dis = math.sqrt( de_x*de_x,de_y*de_y )
     local time = dis/self.speed
     
@@ -107,19 +123,26 @@ function this:update_by_curve( sess,delta )
     de_x = de_x/time*delta
     de_y = de_y/time*delta
 
-    local Dx = self.target_pos.X - self.start_pos.X
-    local Dy = self.target_pos.Y - self.start_pos.Y
-    local all_dis = math.sqrt( Dx*Dx,Dy*Dy )
-    local a = 1/all_dis/3
-
+    local x,z = this.curve_z_calc(dis,self.curve_factor)
+    if self.curve_x <= x then
+        self.curve_z = z
+        self.curve_x = x
+    end
 
     self.curr_pos.X = self.curr_pos.X + de_x
     self.curr_pos.Y = self.curr_pos.Y + de_y
-    self.curr_pos.Z = a*(self.timepass)
+    self.curr_pos.Z = self.start_pos.Z + self.curve_z
 
     self.effect_entity:SetPos(self.curr_pos.X,self.curr_pos.Y,self.curr_pos.Z)
 
     return "running"
+end
+
+function this.curve_z_calc( rest_dis,all_dis )
+    local x = math.max( 0,(1- rest_dis/all_dis))*2/3
+    local z = -(x-1/3)*(x-1/3)+1/9
+    z = z*all_dis/(2/3)
+    return x,z
 end
 
 return this

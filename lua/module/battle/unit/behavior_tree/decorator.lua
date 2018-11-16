@@ -78,7 +78,6 @@ function this:check_SkillAvaliable()
             end
         end
     end
-    print("@@false")
     return false
 end
 
