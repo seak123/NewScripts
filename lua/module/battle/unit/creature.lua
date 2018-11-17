@@ -158,6 +158,7 @@ end
 function this:heal(value,source  )
     self.hp = self.hp + value
     self.hp = math.min( self.max_hp,self.hp )
+    self.entity:SetHp(self.hp,self.max_hp)
 end
 
 function this:die(  )

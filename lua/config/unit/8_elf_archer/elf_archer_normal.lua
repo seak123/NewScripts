@@ -14,6 +14,7 @@ throw1.trace = throw_skill.Trace.Curve
 local retarget0 = retarget_skill.new()
 retarget0.target_type = retarget_skill.TargetType.Distance
 retarget0.can_repeat = false
+retarget0.cantain_curr_target = false
 retarget0.num = 2
 retarget0.append("childs",throw1)
 

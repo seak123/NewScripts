@@ -90,7 +90,6 @@ function this:find_friend( with_structure,unit,condition_func )
 
     local type_flag = 0
     if with_structure == true then type_flag = 2 else type_flag =1 end
-    print("@@type flag"..type_flag)
     if condition_func == nil then
         for _,u in ipairs(self.units[side]) do
             local dis = self:distance(unit,u)
@@ -119,11 +118,10 @@ function this:find_random_unit(with_structure,side,condition_func )
 
     local units = {}
     for _,u in ipairs(self.units[side]) do
-       if u.type < type_flag and condition_func(u) then table.insert( units, u ) print("@@insert "..u.uid) end
+       if u.type < type_flag and condition_func(u) then table.insert( units, u ) end
     end
     if #units ==0 then return nil end
     local index = math.random( 1, #units )
-    print("@@return "..units[index].uid)
     return units[index]
 end
 

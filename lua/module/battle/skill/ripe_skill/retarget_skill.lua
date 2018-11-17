@@ -27,7 +27,6 @@ function this:random_select( sess )
     for i=1,self.vo.num do
         local unit = sess.field:find_random_unit(false,self.target_side,func)
         if unit ~= nil then
-            print("@@insert !!!!!"..unit.uid) 
             table.insert( self.targets, unit )
             table.insert( self.database.target_trace, unit.uid ) 
         end
@@ -37,7 +36,6 @@ end
 function this:check_repeat(  )
     return function ( unit )
         for _,u in ipairs(self.database.target_trace) do
-            print("@@check repeat "..u.." unituid"..unit.uid)
             if u == unit.uid then return false end
         end
         return true
