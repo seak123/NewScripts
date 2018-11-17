@@ -26,13 +26,19 @@ function this:update( delta )
             -- skill completed, then execute its child-node
             local targets = self.playing[index].targets
             if #targets > 0 then
+                if #targets >1 then print("@@targe1 "..targets[1].uid) print("@@target2 "..targets[2].uid) end
                 -- check targets, muti target means execute more times
                 for _,unit in ipairs(targets) do
-                    if self.playing[index].childs ~= nil then
-                        local subs = self.playing[index].childs
+                    if self.playing[index].vo.childs ~= nil then
+                        local subs = self.playing[index].vo.childs
                         for _, v in ipairs(subs) do
-                            table.insert( v.targets, unit)
-                            table.insert( self.playing, v)
+                            local temp = require(v.execute)
+                            if temp ~= nil then
+                                local exec = temp.new(v,self.playing[index].database)
+                                print("@@insert playing "..unit.uid)
+                                table.insert( self.playing, exec)
+                                table.insert( exec.targets, unit)
+                            end
                         end
                     end
                 end
@@ -44,5 +50,6 @@ function this:update( delta )
     end
     return false
 end
+
 
 return this

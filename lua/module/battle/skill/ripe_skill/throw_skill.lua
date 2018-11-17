@@ -6,7 +6,7 @@ function this:ctor( vo,database )
     self.vo = vo
     self.database = database
     self.targets = {}
-    self:build_to_array("childs",vo.childs,database)
+    --self:build_to_array("childs",vo.childs,database)
     self:build_to_array("effect",vo.effect,database)
 
     self.effect_entity = nil

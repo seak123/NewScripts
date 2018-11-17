@@ -5,12 +5,12 @@ function this:ctor( vo,database )
     self.database = database
     self.vo = vo
     self.targets = {}
-    self:build_to_array("childs",vo.childs,database)
+    --self:build_to_array("childs",vo.childs,database)
 end
 
 function this:execute( sess,delta )
     self.target_side = self.targets[1].side
-    table.insert( self.database.target_trace,self.targets[1])
+    if self.vo.cantain_curr_target == false then table.insert( self.database.target_trace,self.targets[1].uid) end
     self.targets = {}
     self[self.vo.target_type.."_select"](self,sess)
   
@@ -26,9 +26,10 @@ function this:random_select( sess )
     end
     for i=1,self.vo.num do
         local unit = sess.field:find_random_unit(false,self.target_side,func)
-        if unit ~= nil then 
+        if unit ~= nil then
+            print("@@insert !!!!!"..unit.uid) 
             table.insert( self.targets, unit )
-            table.insert( self.database.target_trace, unit ) 
+            table.insert( self.database.target_trace, unit.uid ) 
         end
     end
 end
@@ -36,7 +37,8 @@ end
 function this:check_repeat(  )
     return function ( unit )
         for _,u in ipairs(self.database.target_trace) do
-            if u.uid == unit.uid then return false end
+            print("@@check repeat "..u.." unituid"..unit.uid)
+            if u == unit.uid then return false end
         end
         return true
     end

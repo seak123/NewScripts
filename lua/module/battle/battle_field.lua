@@ -10,8 +10,10 @@ function this:ctor(sess )
 end
 
 function this:add_unit( data)
-    print("create new unit "..data.name)
     local uid = self.counter
+
+    print("create new unit "..data.name.." uid:"..uid)
+
     local unit = creature.new(self.sess,data,uid)
     self.counter = self.counter + 1
     table.insert( self.units[data.side],unit)
@@ -53,7 +55,7 @@ function this:find_enemy( with_structure,unit )
     local max_threat = -999
 
     local type_flag = 0
-    if with_structure == true then type_flag = 3 else type_flag =2 end
+    if with_structure == true then type_flag = 2 else type_flag =1 end
 
     for _,u in ipairs(self.units[enemy_side]) do
         if self:distance(unit,u) < battle_def.MAPMATRIX.row/2 and u.type < type_flag then
@@ -87,8 +89,8 @@ function this:find_friend( with_structure,unit,condition_func )
     local friend = nil
 
     local type_flag = 0
-    if with_structure == true then type_flag = 3 else type_flag =2 end
-
+    if with_structure == true then type_flag = 2 else type_flag =1 end
+    print("@@type flag"..type_flag)
     if condition_func == nil then
         for _,u in ipairs(self.units[side]) do
             local dis = self:distance(unit,u)
@@ -112,15 +114,16 @@ end
 function this:find_random_unit(with_structure,side,condition_func )
 
     local type_flag = 0
-    if with_structure == true then type_flag = 3 else type_flag =2 end
+    if with_structure == true then type_flag = 2 else type_flag =1 end
     if condition_func == nil then condition_func = function(a) return true end end
 
     local units = {}
     for _,u in ipairs(self.units[side]) do
-       if u.type < type_flag and condition_func(u) then table.insert( units, u ) end
+       if u.type < type_flag and condition_func(u) then table.insert( units, u ) print("@@insert "..u.uid) end
     end
     if #units ==0 then return nil end
     local index = math.random( 1, #units )
+    print("@@return "..units[index].uid)
     return units[index]
 end
 

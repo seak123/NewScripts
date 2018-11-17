@@ -178,6 +178,7 @@ function this:update_Caster(delta)
         return "running"
     else
         self.running = false
+        self:abort_Caster()
         return "completed"
     end
 end
@@ -199,6 +200,7 @@ function this:update_Appear(delta  )
         return "running"
     else
         self.running = false
+        self:abort_Appear()
         return "completed"
     end
 end

@@ -6,7 +6,7 @@ function this:ctor( vo,database )
     self.database = database
     self.time =0
     self.targets = {}
-    self:build_to_array("childs",vo.childs,database)
+    --self:build_to_array("childs",vo.childs,database)
 end
 
 function this:execute( sess,delta )
