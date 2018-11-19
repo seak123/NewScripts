@@ -42,6 +42,7 @@ namespace Map
         }
         // >>>>>>>>>>>>>>>>> Transform 
         public void SetRotation(int toX, int toY){
+            if(toX == posX && toY == posY)return;
             Vector2 direct = new Vector2(toX - posX, toY - posY);
             float angle = Vector2.Angle(new Vector2(1, 0), direct);
 
@@ -100,11 +101,12 @@ namespace Map
                 {
                     currMapNode = currMapNode.Next;
                 }
+                if(field.IsCanMove(currMapNode.X, currMapNode.Y, radius)){
                 offset = value - (currMapNode.G - startG);
                 gridX = currMapNode.X;
                 gridY = currMapNode.Y;
                 SetTransform(gridX, gridY);
-                forward = Quaternion.Euler(0, 90, 0);
+                SetRotation(gridX, gridY);
                 posX = gridX;
                 posY = gridY;
                 if(RouteUpdateFlag == BattleDef.aStarUpdateFrame){
@@ -112,6 +114,7 @@ namespace Map
                 }
                 field.MarkMovable(posX, posY, radius, true);
                 return;
+                }
             }
             gridX = 0;
             gridY = 0;
