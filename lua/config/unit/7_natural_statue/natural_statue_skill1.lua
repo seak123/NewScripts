@@ -60,6 +60,6 @@ normal0:append("childs",delay0)
 
 this.root = {normal0}
 this.decorators = {decorator.find_alive_friend(false)}
-this.coold = 10
+this.coold = 25
 
 return this

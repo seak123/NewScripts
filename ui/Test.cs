@@ -12,7 +12,9 @@ public class Test:MonoBehaviour  {
         //GameRoot.GetInstance().BattleField.AddCreature(4,1, 0, 150);
     }
     public void CreateMidCreature(){
-       //GameRoot.GetInstance().BattleField.AddCreature(1, 2, 600, 350);
+        //GameRoot.GetInstance().BattleField.AddCreature(1, 2, 600, 350);
+        CreatureData data = GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(3);
+        GameRoot.GetInstance().Bridge.CasterSkill(2, 1, 600, 350, AssetManager.PackCreatureData(data), 2);
     }
     public void StartBattle()
     {

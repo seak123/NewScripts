@@ -9,12 +9,12 @@ function this:ctor(sess )
     self.counter = 0
 end
 
-function this:add_unit( data)
+function this:add_unit( data,struct_uid)
     local uid = self.counter
 
     print("create new unit "..data.name.." uid:"..uid)
 
-    local unit = creature.new(self.sess,data,uid)
+    local unit = creature.new(self.sess,data,uid,struct_uid)
     self.counter = self.counter + 1
     table.insert( self.units[data.side],unit)
     return unit

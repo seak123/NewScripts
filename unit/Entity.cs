@@ -15,6 +15,7 @@ namespace Map
         public int id;
         public int side;
         public int uid;
+        public int structUid;
         public int radius;
         public int posX = 0;
         public int posY = 0;
@@ -25,6 +26,7 @@ namespace Map
         private GameObject hpPrefab;
         private GameObject hpBar;
         private float hpBarCacheTime = 0;
+        private Quaternion forward;
 
         HeapNode currMapNode;
 
@@ -32,6 +34,7 @@ namespace Map
         private TransformState state = TransformState.Straight;
 
         private void SetTransform(int gridX,int gridY){
+            Debug.Log("POS " + gridX + " " + gridY);
             float x = 0f;
             float y = 0f;
             GameRoot.GetInstance().MapField.GetViewPos(gridX,gridY,out x,out y);
@@ -41,10 +44,13 @@ namespace Map
         public void SetRotation(int toX, int toY){
             Vector2 direct = new Vector2(toX - posX, toY - posY);
             float angle = Vector2.Angle(new Vector2(1, 0), direct);
+
             angle = direct.y<0? angle:-angle;
-            Quaternion start = gameObject.transform.rotation;
-            Quaternion end = Quaternion.Euler(0, angle, 0);
-            gameObject.transform.rotation = Quaternion.Lerp(start,end,0.1f);
+
+            forward = Quaternion.Euler(0, angle, 0);
+            //Quaternion start = gameObject.transform.rotation;
+            //Quaternion end = Quaternion.Euler(0, angle, 0);
+            //gameObject.transform.rotation = Quaternion.Lerp(start,end,0.1f);
         }
 
         public Vector3 GetSocketPos(string name){
@@ -77,6 +83,7 @@ namespace Map
                     posX = gridX;
                     posY = gridY;
                     field.MarkMovable(posX, posY, radius, true);
+                    SetRotation(toX, toY);
                     return;
                 }else{
                     state = TransformState.AStar;
@@ -97,6 +104,7 @@ namespace Map
                 gridX = currMapNode.X;
                 gridY = currMapNode.Y;
                 SetTransform(gridX, gridY);
+                forward = Quaternion.Euler(0, 90, 0);
                 posX = gridX;
                 posY = gridY;
                 if(RouteUpdateFlag == BattleDef.aStarUpdateFrame){
@@ -116,6 +124,7 @@ namespace Map
             {
                 hpBar = Instantiate(hpPrefab);
                 hpBar.GetComponent<RectTransform>().parent = GameRoot.GetInstance().battleUI.GetComponent<RectTransform>();
+                hpBar.GetComponent<RectTransform>().sizeDelta = new Vector2(Mathf.Sqrt(radius)/2*80,22);
                 hpBar.SetActive(false);
                 GameRoot.GetInstance().Camara.GetComponent<CamaraManager>().UpdateUI += UpdateHpBar;
             }
@@ -153,7 +162,7 @@ namespace Map
                 animator.SetTrigger("Break");
             }
             animator.SetTrigger("Die");
-            GameRoot.GetInstance().MapField.RemoveEntity(this);
+            GameRoot.GetInstance().MapField.RemoveEntity(this,2f);
             Destroy(hpBar, 0.5f);
             Destroy(gameObject, 2f);
         }
@@ -164,8 +173,10 @@ namespace Map
             //init hp bar
             if(side == 1){
                 hpPrefab = GameRoot.GetInstance().BattleField.assetManager.GreenSlider;
+                gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
             }else{
                 hpPrefab = GameRoot.GetInstance().BattleField.assetManager.RedSlider;
+                gameObject.transform.rotation = Quaternion.Euler(0, 180, 0);
             }
         }
 
@@ -176,13 +187,23 @@ namespace Map
             }else{
                 animator.speed = 1;
             }
-           
+            //set rotation
+            Quaternion start = gameObject.transform.rotation;
+            gameObject.transform.rotation = Quaternion.Lerp(start, forward, 0.1f);
+
         }
         public void UpdateHpBar(){
             if (hpBar != null && hpBar.activeSelf == true)
             {
                 hpBarCacheTime += Time.deltaTime;
+                if (hpBarCacheTime > 3)
+                {
+                    hpBar.SetActive(false);
+                    hpBarCacheTime = 0;
+                    return;
+                }
                 Canvas canvas = GameRoot.GetInstance().battleUI.GetComponent<Canvas>();
+                CamaraManager camara = GameRoot.GetInstance().Camara.GetComponent<CamaraManager>();
                 Vector2 screenPos = Camera.main.WorldToScreenPoint(GetSocketPos("S_Hp"));
                 Vector2 uiPos = Vector2.zero;
                 //RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.transform as RectTransform, screenPos, canvas.worldCamera, out uiPos);
@@ -191,11 +212,9 @@ namespace Map
                 //hpBar.GetComponent<RectTransform>().position = new Vector3(0, 0, 0);
                 hpBar.transform.position = new Vector3(screenPos.x, screenPos.y, 0);
 
-                if (hpBarCacheTime > 3)
-                {
-                    hpBar.SetActive(false);
-                    hpBarCacheTime = 0;
-                }
+                float scale = camara.minSize / camara.size;
+                hpBar.transform.localScale = Vector3.one*scale;
+               
             }
         }
 

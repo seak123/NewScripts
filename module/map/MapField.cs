@@ -9,20 +9,67 @@ namespace Map
     [Insert]
     public class MapField : MonoBehaviour
     {
+        public GameObject assitField;
+        private bool assistActive=false;
+
         private bool[,] grids;
+        private bool[,] structureGrids;
+
         private readonly float Transfer2GridFactor = BattleDef.Transfer2GridFactor;
         private readonly float DiagoFactor = 1.4f;//(float)Math.Sqrt(2)
         //private float centerOffset = 0.365f;
         private Dictionary<int,Entity> entityMap;
+        private Dictionary<int, List<Vector2>> structureMap;
+        private List<Vector2> entityRemoveCache;
 
         private AssetManager mng;
+
+        private int structureUid = 0;
 
         private void Start()
         {
             entityMap = new Dictionary<int, Entity>();
+            structureMap = new Dictionary<int, List<Vector2>>();
+            entityRemoveCache = new List<Vector2>();
         }
 
-        public Entity CreateEntity(int id,int uid,int side,int gridX,int gridY){
+        private void Update()
+        {
+            float alpha = assitField.GetComponent<SpriteRenderer>().material.GetFloat("_Alpha");
+            if(assistActive){
+                assitField.GetComponent<SpriteRenderer>().material.SetFloat("_Alpha", Math.Max(alpha - 0.5f*Time.deltaTime,0.8f));
+            }else{
+                assitField.GetComponent<SpriteRenderer>().material.SetFloat("_Alpha", Math.Min(1,alpha + 0.5f*Time.deltaTime));
+            }
+
+            ///////remove entity
+            List<float> removeCache = new List<float>();
+            if(entityRemoveCache.Count!=0){
+                for (int i = entityRemoveCache.Count-1; i >= 0;--i){
+                    float restTime = entityRemoveCache[i].y - Time.deltaTime;
+                    if(restTime<=0){
+                        removeCache.Add(entityRemoveCache[i].x);
+                        entityRemoveCache.RemoveAt(i);
+                    }else{
+                        entityRemoveCache[i] = new Vector2(entityRemoveCache[i].x,restTime);
+                    }
+                }
+            }
+            foreach(var key in removeCache){
+                entityMap.Remove((int)key);
+            }
+
+        }
+        //>>>>>>>>>>>>>>>>>map effect>>>>>>>>>>>>>>>>>>>
+        public void SetAssitActive(bool active)
+        {
+            if (active) assistActive = true;
+            else assistActive = false;
+        }
+
+        //>>>>>>>>>>>>>>>>>map entity>>>>>>>>>>>>>>>>>>>
+
+        public Entity CreateEntity(int id,int uid,int side,int gridX,int gridY,int structUid){
             float x, y;
             Vector2 pos = FindInitPos(gridX,gridY, mng.GetCreatureData(id).radius);
             GetViewPos((int)pos.x, (int)pos.y, out x, out y);
@@ -34,6 +81,7 @@ namespace Map
             //init entity
             entity.id = id;
             entity.uid = uid;
+            entity.structUid = structUid;
             entity.side = side;
             entity.radius = mng.GetCreatureData(id).radius;
             entity.posX = (int)pos.x;
@@ -44,9 +92,18 @@ namespace Map
             return entity;
         }
 
-        public void RemoveEntity(Entity entity){
+        public void RemoveEntity(Entity entity,float delay){
+
             MarkMovable(entity.posX, entity.posY, entity.radius, false);
-            entityMap.Remove(entity.uid);
+            //entityMap.Remove(entity.uid);
+            if(entity.structUid != -1){
+                foreach (var point in structureMap[entity.structUid])
+                {
+                    structureGrids[(int)point.x, (int)point.y] = false;
+                }
+                structureMap.Remove(entity.structUid);
+            }
+            entityRemoveCache.Add(new Vector2(entity.uid,delay));
         }
 
         public Entity FindEntity(int uid){
@@ -67,6 +124,26 @@ namespace Map
                     grids[i,j] = false;
                 }
             }
+            structureGrids = new bool[BattleDef.columnGridNum/16,BattleDef.rowGridNum/16];
+            for (int i = 0; i < BattleDef.columnGridNum/16; ++i){
+                for (int j = 0; j < BattleDef.rowGridNum / 16;++j){
+                    grids[i, j] = false;
+                }
+            }
+            // remove main castle grids
+            for (int x = 0; x < 4;++x){
+                for (int y = BattleDef.rowGridNum / 32 - 2; y < BattleDef.rowGridNum / 32 + 2;++y){
+                    structureGrids[x, y] = true;
+                }
+            }
+            for (int x = BattleDef.columnGridNum/16-4; x < BattleDef.columnGridNum/16; ++x)
+            {
+                for (int y = BattleDef.rowGridNum / 32 - 2; y < BattleDef.rowGridNum / 32 + 2; ++y)
+                {
+                    structureGrids[x, y] = true;
+                }
+            }
+
             mng = GameRoot.GetInstance().BattleField.assetManager;
         }
 
@@ -78,6 +155,11 @@ namespace Map
         public void GetViewPos(int grid_x,int grid_y,out float pos_x,out float pos_y){
             pos_x = grid_x/Transfer2GridFactor;
             pos_y = grid_y/ Transfer2GridFactor;
+        }
+
+        public void GetLargeGridPos(int gridX,int gridY,out int lGridX,out int lGridY){
+            lGridX = (int)Mathf.Floor(gridX / 16);
+            lGridY = (int)Mathf.Floor(gridY / 16);
         }
 
         public HeapNode GetAStarRoute(int unit_id,int s_x,int s_y,int e_x,int e_y){
@@ -207,6 +289,65 @@ namespace Map
         public static bool CheckPosValiable(int gridX,int gridY){
             if (gridX >= 0 && gridX <= BattleDef.columnGridNum && gridY >= 0 && gridY <= BattleDef.rowGridNum) return true;
             return false;
+        }
+        
+
+        public bool CheckStructurePosValiable(int gridX,int gridY,int size,out int maxX,out int maxY){
+            maxX = 0;
+            maxY = 0;
+            if(size == 2){
+                int centerX = (int)Mathf.Floor((Mathf.Floor(gridX / 8) + 1) / 2)*16;
+                int centerY = (int)Mathf.Floor((Mathf.Floor(gridY / 8) + 1) / 2)*16;
+                maxX = (int)Mathf.Floor((Mathf.Floor(gridX / 8) + 1) / 2) + 1;
+                maxY = (int)Mathf.Floor((Mathf.Floor(gridY / 8) + 1) / 2) + 1;
+                if (centerX - 16 < 0 || centerX + 16 > BattleDef.columnGridNum || centerY - 16 < 0 || centerY - 16 > BattleDef.rowGridNum) return false;
+                for (int x = centerX - 16; x < centerX + 16;++x){
+                    for (int y = centerY - 16; y < centerY + 16;++y){
+                        if (grids[x, y] == true) return false;
+                    }
+                }
+                for (int x = maxX - size; x < maxX; ++x)
+                {
+                    for (int y = maxY - size; y < maxY; ++y)
+                    {
+                        if (structureGrids[x, y] == true) return false;
+                    }
+                }
+            }
+            else if(size == 3){
+                int startX = (int)(Mathf.Floor(gridX / 16) - 1) * 16;
+                int startY = (int)(Mathf.Floor(gridY / 16) - 1) * 16;
+                maxX = (int)(Mathf.Floor(gridX / 16) - 1) + 3;
+                maxY = (int)(Mathf.Floor(gridY / 16) - 1) + 3;
+                if (startX < 0 || startX + 48 > BattleDef.columnGridNum || startY < 0 || startY > BattleDef.rowGridNum) return false;
+                for (int x = startX; x < startX + 48;++x){
+                    for (int y = startY; y < startY + 48;++y){
+                        if (grids[x, y] == true) return false;
+                    }
+                }
+                for (int x = maxX - size; x < maxX; ++x)
+                {
+                    for (int y = maxY - size; y < maxY; ++y)
+                    {
+                        if (structureGrids[x, y] == true) return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public int CreateStructure(int maxX,int maxY,int size){
+            structureUid = structureUid + 1;
+            List<Vector2> structGrids = new List<Vector2>();
+            for (int x = maxX - size; x < maxX;++x){
+                for (int y = maxY - size; y < maxY;++y){
+                    structureGrids[x, y] = true;
+                    structGrids.Add(new Vector2(x,y));
+                }
+            }
+            structureMap.Add(structureUid, structGrids);
+            return structureUid;
         }
     }
 }

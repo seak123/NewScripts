@@ -10,13 +10,15 @@ public static class BattleDef  {
     public static int columnGridNum = 992;
 
 
-    public static int maxSpeed = 64;
+    public static int maxSpeed = 196;
 
     public static int aStarUpdateFrame = 10;
 
     public static float Transfer2GridFactor = 25;
 
-    public static int StructBound = 192;
+    public static int UnitBound = 144;
+
+    public static int StructBound = 9;
 
 
     //utils

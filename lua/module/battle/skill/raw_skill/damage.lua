@@ -47,6 +47,7 @@ function this:life_steal( sess,database,trace_data )
     elseif self.vo.damage_type == damage_vo.DamageType.Magic then
         rate = database.caster.unit.property:get("magic_suck")
     end
+    if rate == 0 then return end
     local heal_value = trace_data.damage_value*rate
     local trace_heal = trace.trace_heal(heal_value,database.caster.unit,database.target.unit)
     sess.trace:push(trace_heal)

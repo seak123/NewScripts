@@ -48,12 +48,21 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
         state = CardEntityState.Idle;
         cardData = data;
         button.GetComponent<Image>().sprite = cardData.icon;
-        if(cardData.cardType == CardType.Creature){
-            creatureData = GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(cardData.unitId);
-            baseData = CreatureData.Clone(creatureData);
-            entityPrefab = Instantiate(data.entityPrefab);
-            entityPrefab.SetActive(false);
+        switch (cardData.cardType){
+            case CardType.Creature:
+                creatureData = GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(cardData.unitId);
+                baseData = CreatureData.Clone(creatureData);
+                entityPrefab = Instantiate(data.entityPrefab);
+                entityPrefab.SetActive(false);
+                break;
+            case CardType.Structure:
+                creatureData = GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(cardData.unitId);
+                baseData = CreatureData.Clone(creatureData);
+                entityPrefab = Instantiate(data.entityPrefab);
+                entityPrefab.SetActive(false);
+                break;
         }
+
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -78,6 +87,8 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
         else
         {
             state = CardEntityState.Caster;
+            //assit field active
+            GameRoot.GetInstance().MapField.SetAssitActive(true);
 
             //camara move
             CamaraManager camareMng = GameRoot.GetInstance().Camara.GetComponent<CamaraManager>();
@@ -101,7 +112,7 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
             switch (cardData.cardType)
             {
                 case CardType.Creature:
-                    if (MapField.CheckPosValiable(gridX, gridY)&&gridX<=BattleDef.StructBound)
+                    if (MapField.CheckPosValiable(gridX, gridY)&&gridX<=BattleDef.UnitBound)
                     {
                         float viewX, viewY;
                         GameRoot.GetInstance().MapField.GetViewPos(gridX, gridY, out viewX, out viewY);
@@ -118,12 +129,37 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
                         SetPrefabDeActive(entityPrefab);
                     }
                     break;
+                case CardType.Structure:
+                    MapField map = GameRoot.GetInstance().MapField;
+                    int maxX;
+                    int maxY;
+                    bool posValiable = map.CheckStructurePosValiable(gridX, gridY, cardData.size, out maxX, out maxY);
+                    int centerX = maxX * 16 - (int)Mathf.Floor(cardData.size * 16 / 2);
+                    int centerY = maxY * 16 - (int)Mathf.Floor(cardData.size * 16 / 2);
+                    if (posValiable && maxX <= BattleDef.StructBound)
+                    {
+                        float viewX, viewY;
+                        GameRoot.GetInstance().MapField.GetViewPos(centerX, centerY, out viewX, out viewY);
+                        entityPrefab.transform.position = new Vector3(viewX, 0, viewY);
+                        entityPrefab.SetActive(true);
+                        SetPrefabActive(entityPrefab);
+                    }
+                    else
+                    {
+                        float viewX, viewY;
+                        GameRoot.GetInstance().MapField.GetViewPos(centerX, centerY, out viewX, out viewY);
+                        entityPrefab.transform.position = new Vector3(viewX, 0, viewY);
+                        entityPrefab.SetActive(true);
+                        SetPrefabDeActive(entityPrefab);
+                    }
+                    break;
             }
            
         }
     }
 
     public void OnRelease(Vector3 screenPos){
+        GameRoot.GetInstance().MapField.SetAssitActive(false);
         // get gird_pos on map
         Ray ray = Camera.main.ScreenPointToRay(screenPos);
         RaycastHit hit;
@@ -146,12 +182,23 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
         if (cardData == null) return;
         switch(cardData.cardType){
             case CardType.Creature:
-                if (!MapField.CheckPosValiable(posX, posY)||posX>(BattleDef.StructBound+64))break;
-                posX = Mathf.Clamp(posX, 0, BattleDef.StructBound);
+                if (!MapField.CheckPosValiable(posX, posY)||posX>(BattleDef.UnitBound+32))break;
+                posX = Mathf.Clamp(posX, 0, BattleDef.UnitBound);
                 GameRoot.GetInstance().Bridge.CasterSkill(1, cardData.skillId, posX, posY, AssetManager.PackCreatureData(creatureData), cardData.num);
                 CleanUp();
                 break;
-                
+            case CardType.Structure:
+                MapField map = GameRoot.GetInstance().MapField;
+                int maxX;
+                int maxY;
+                bool posValiable = map.CheckStructurePosValiable(posX, posY, cardData.size, out maxX, out maxY);
+                int centerX = maxX * 16 - (int)Mathf.Floor(cardData.size * 16 / 2);
+                int centerY = maxY * 16 - (int)Mathf.Floor(cardData.size * 16 / 2);
+                if (!posValiable || maxX > BattleDef.StructBound) break;
+                int structUid = map.CreateStructure(maxX,maxY,cardData.size);
+                GameRoot.GetInstance().Bridge.CasterSkill(1, cardData.skillId, centerX, centerY, AssetManager.PackCreatureData(creatureData), structUid);
+                CleanUp();
+                break;
         }
 
     }

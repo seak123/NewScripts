@@ -119,6 +119,7 @@ function this:enter_Attack(  )
     if self.database.master.statectrl:has_feature("de_attack") then return false end
 
     self.database.master.entity:AnimCasterAttack(self.database.master.property:get("attack_rate"))
+    print(self.database.master.uid.."@@set rotation "..self.database.target.transform.grid_pos.X.." "..self.database.target.transform.grid_pos.Y)
     self.database.master.entity:SetRotation(self.database.target.transform.grid_pos.X,self.database.target.transform.grid_pos.Y)
     self.database.master.attack_process = 0
     self.runtime = 0
@@ -150,6 +151,8 @@ end
 function this:enter_Caster()
     if self.database.master.statectrl:has_feature("de_skill") then return false end
     self.database.master.entity:AnimCasterAction(transform.AnimationState.Caster)
+    self.runtime = 0
+    self.max_runtime = 5
     return true
 end
 
@@ -186,6 +189,7 @@ end
 function this:enter_Appear(  )
     if self.database.master.appeared == 1 then return false end
     self.database.master.entity:AnimCasterAction(transform.AnimationState.Appear)
+    self.runtime = 0
     return true
 end
 

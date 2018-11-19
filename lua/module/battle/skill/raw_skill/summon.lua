@@ -16,18 +16,32 @@ function this:execute(sess,target)
     if type(data) ~= "userdata" then
         data = self:get_unit_data(data)
     end
-    local num = self.vo.num(self.database)
-    data.side = self.database.caster.unit.side
+    if data.type == 0 then
+        -- summon creature
+        local num = self.vo.num(self.database)
+        data.side = self.database.caster.unit.side
 
-    local field = sess.field
-    local pos = self.database.target_pos
-    local pos_array = self:get_pos_array(pos,num)
-    for i =1,num do
+        local field = sess.field
+        local pos = self.database.target_pos
+        local pos_array = self:get_pos_array(pos,num)
+        for i =1,num do
 
-        data.init_x = this.clamp(pos_array[i].X,0,def.MAPMATRIX.column)
-        data.init_y = this.clamp(pos_array[i].Y,0,def.MAPMATRIX.row)
-        field:add_unit(data)
+            data.init_x = this.clamp(pos_array[i].X,0,def.MAPMATRIX.column)
+            data.init_y = this.clamp(pos_array[i].Y,0,def.MAPMATRIX.row)
+            field:add_unit(data)
+        end
     end
+    if data.type == 1 then
+        -- summon structure
+        local field = sess.field
+        local struct_uid = self.vo.num(self.database)
+        data.side = self.database.caster.unit.side
+        local pos = self.database.target_pos
+        data.init_x = this.clamp(pos.X,0,def.MAPMATRIX.column)
+        data.init_y = this.clamp(pos.Y,0,def.MAPMATRIX.row)
+        field:add_unit(data,struct_uid)
+    end
+
 end
 
 function this:get_pos_array( pos,num )

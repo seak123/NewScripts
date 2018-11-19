@@ -11,12 +11,14 @@ local entire_skill = require("module.battle.skill.entire_skill")
 local pack_data = require("module.battle.skill.utils.pack_database")
 local config_mng = require("config.config_manager")
 
-function this:ctor( sess,data,uid )
+function this:ctor( sess,data,uid ,struct_uid)
     self.sess = sess
     self.id = data.id
     -- type: 1,creature;2,structure
     self.type = data.type
     self.uid = uid
+    -- only structure use
+    self.struct_uid = struct_uid
     self.config = require(config_mng.get_unit_config(self.id))
     self.name = data.name
     self.data = data
@@ -54,7 +56,11 @@ function this:init(  )
     -- wait for appear action
     self.appeared = 0
  
-    self.entity = self.sess.map:CreateEntity(self.data.id,self.uid,self.side,self.data.init_x,self.data.init_y)
+    if self.type == 0 then
+        self.entity = self.sess.map:CreateEntity(self.data.id,self.uid,self.side,self.data.init_x,self.data.init_y,-1)
+    else
+        self.entity = self.sess.map:CreateEntity(self.data.id,self.uid,self.side,self.data.init_x,self.data.init_y,self.struct_uid)
+    end
     
    -- attack cache
    self.attack_process = 0
