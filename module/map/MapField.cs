@@ -191,6 +191,7 @@ namespace Map
             HeapNode root = new HeapNode();
             HeapNode currNode = null;
             List<HeapNode> CloseList = new List<HeapNode>();
+            Dictionary<int,bool> IsCanMoveCache = new Dictionary<int,bool>();
             heap.Push(s_x, s_y, 0f,Distance(s_x, s_y, e_x, e_y),root);
             while (heap.Count()>0){
                 int count = heap.Count();
@@ -199,48 +200,76 @@ namespace Map
                 int roundX, roundY;
 
                 if (currNode.X == e_x && currNode.Y == e_y || currNode.G>maxG) break;
-
                 // execute 8-round grids
-                roundX = currNode.X - 1;
-                roundY = currNode.Y + 1;
-                if(CloseList.FindIndex(node=>node.X ==roundX&&node.Y==roundY)==-1 && IsCanMove(roundX,roundY,radius))
-                heap.Find(roundX, roundY, currNode.G + DiagoFactor, Distance(roundX, roundY, e_x, e_y), currNode);
+                Vector2[] direct = new Vector2[8];
+                direct[0] = new Vector2(-1,1);
+                direct[1] = new Vector2(0,1);
+                direct[2] = new Vector2(1,1);
+                direct[3] = new Vector2(-1,0);
+                direct[4] = new Vector2(1,0);
+                direct[5] = new Vector2(-1,-1);
+                direct[6] = new Vector2(0,-1);
+                direct[7] = new Vector2(1,-1);
 
-                roundX = currNode.X;
-                roundY = currNode.Y + 1;
-                if (CloseList.FindIndex(node => node.X == roundX && node.Y == roundY) == -1 && IsCanMove(roundX, roundY, radius))
-                    heap.Find(roundX, roundY, currNode.G + 1f, Distance(roundX, roundY, e_x, e_y), currNode);
+                for(int i = 0;i<8;++i){
+                    Vector2 roundPos = new Vector2(currNode.X,currNode.Y)+direct[i];
+                    if(CloseList.FindIndex(node=>node.X ==roundPos.X&&node.Y==roundPos.Y)==-1){
+                        int key = roundPos.X*1000 + roundPos.Y;
+                        bool flag = false;
+                        if(IsCanMoveCache.cantains(key)){
+                            flag = IsCanMoveCache[key];
+                        }else{
+                            flag = IsCanMove(roundPos.X,roundPos.Y,radius)
+                            IsCanMoveCache.Add(key,flag);
+                        }
+                        if(flag)
+                        heap.Find(roundX, roundY, currNode.G + DiagoFactor, Distance(roundX, roundY, e_x, e_y), currNode);
+                }
+                }
+            
 
-                roundX = currNode.X + 1;
-                roundY = currNode.Y + 1;
-                    if (CloseList.FindIndex(node => node.X == roundX && node.Y == roundY) == -1 && IsCanMove(roundX, roundY, radius))
-                    heap.Find(roundX, roundY, currNode.G + DiagoFactor, Distance(roundX, roundY, e_x, e_y), currNode);
+                
+            //     roundX = currNode.X - 1;
+            //     roundY = currNode.Y + 1;
+            //     if(CloseList.FindIndex(node=>node.X ==roundX&&node.Y==roundY)==-1 && IsCanMove(roundX,roundY,radius)){
+            //     heap.Find(roundX, roundY, currNode.G + DiagoFactor, Distance(roundX, roundY, e_x, e_y), currNode);
+            //     }
 
-                roundX = currNode.X - 1;
-                roundY = currNode.Y;
-                    if (CloseList.FindIndex(node => node.X == roundX && node.Y == roundY) == -1 && IsCanMove(roundX, roundY, radius))
-                    heap.Find(roundX, roundY, currNode.G + 1f, Distance(roundX, roundY, e_x, e_y), currNode);
+            //     roundX = currNode.X;
+            //     roundY = currNode.Y + 1;
+            //     if (CloseList.FindIndex(node => node.X == roundX && node.Y == roundY) == -1 && IsCanMove(roundX, roundY, radius))
+            //         heap.Find(roundX, roundY, currNode.G + 1f, Distance(roundX, roundY, e_x, e_y), currNode);
 
-                roundX = currNode.X + 1;
-                roundY = currNode.Y;
-                    if (CloseList.FindIndex(node => node.X == roundX && node.Y == roundY) == -1 && IsCanMove(roundX, roundY, radius))
-                    heap.Find(roundX, roundY, currNode.G + 1f, Distance(roundX, roundY, e_x, e_y), currNode);
+            //     roundX = currNode.X + 1;
+            //     roundY = currNode.Y + 1;
+            //         if (CloseList.FindIndex(node => node.X == roundX && node.Y == roundY) == -1 && IsCanMove(roundX, roundY, radius))
+            //         heap.Find(roundX, roundY, currNode.G + DiagoFactor, Distance(roundX, roundY, e_x, e_y), currNode);
 
-                roundX = currNode.X - 1;
-                roundY = currNode.Y - 1;
-                    if (CloseList.FindIndex(node => node.X == roundX && node.Y == roundY) == -1 && IsCanMove(roundX, roundY, radius))
-                    heap.Find(roundX, roundY, currNode.G + DiagoFactor, Distance(roundX, roundY, e_x, e_y), currNode);
+            //     roundX = currNode.X - 1;
+            //     roundY = currNode.Y;
+            //         if (CloseList.FindIndex(node => node.X == roundX && node.Y == roundY) == -1 && IsCanMove(roundX, roundY, radius))
+            //         heap.Find(roundX, roundY, currNode.G + 1f, Distance(roundX, roundY, e_x, e_y), currNode);
 
-                roundX = currNode.X;
-                roundY = currNode.Y - 1;
-                    if (CloseList.FindIndex(node => node.X == roundX && node.Y == roundY) == -1 && IsCanMove(roundX, roundY, radius))
-                    heap.Find(roundX, roundY, currNode.G + 1f, Distance(roundX, roundY, e_x, e_y), currNode);
+            //     roundX = currNode.X + 1;
+            //     roundY = currNode.Y;
+            //         if (CloseList.FindIndex(node => node.X == roundX && node.Y == roundY) == -1 && IsCanMove(roundX, roundY, radius))
+            //         heap.Find(roundX, roundY, currNode.G + 1f, Distance(roundX, roundY, e_x, e_y), currNode);
 
-                roundX = currNode.X + 1;
-                roundY = currNode.Y - 1;
-                    if (CloseList.FindIndex(node => node.X == roundX && node.Y == roundY) == -1 && IsCanMove(roundX, roundY, radius))
-                    heap.Find(roundX, roundY, currNode.G + DiagoFactor, Distance(roundX, roundY, e_x, e_y), currNode);
-            }
+            //     roundX = currNode.X - 1;
+            //     roundY = currNode.Y - 1;
+            //         if (CloseList.FindIndex(node => node.X == roundX && node.Y == roundY) == -1 && IsCanMove(roundX, roundY, radius))
+            //         heap.Find(roundX, roundY, currNode.G + DiagoFactor, Distance(roundX, roundY, e_x, e_y), currNode);
+
+            //     roundX = currNode.X;
+            //     roundY = currNode.Y - 1;
+            //         if (CloseList.FindIndex(node => node.X == roundX && node.Y == roundY) == -1 && IsCanMove(roundX, roundY, radius))
+            //         heap.Find(roundX, roundY, currNode.G + 1f, Distance(roundX, roundY, e_x, e_y), currNode);
+
+            //     roundX = currNode.X + 1;
+            //     roundY = currNode.Y - 1;
+            //         if (CloseList.FindIndex(node => node.X == roundX && node.Y == roundY) == -1 && IsCanMove(roundX, roundY, radius))
+            //         heap.Find(roundX, roundY, currNode.G + DiagoFactor, Distance(roundX, roundY, e_x, e_y), currNode);
+            // }
             while(currNode.Parent != null){
                 currNode.Parent.Next = currNode;
                 currNode = currNode.Parent;
@@ -277,8 +306,6 @@ namespace Map
                 for(int i = 1;i<= length;++i){
                     res = res + direct[index % 4];
                     if(IsCanMove((int)res.x,(int)res.y,radius)){
-                        Debug.Log(res.x);
-                        Debug.Log(res.y);
                         return res;
                     }
                 }

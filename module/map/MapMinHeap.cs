@@ -81,7 +81,7 @@ public class MapMinHeap {
 
     private void ShiftUp(int index){
         if (index <= 0 || index >= count) return;
-        int parentIndex = (index - 1) / 2;
+        int parentIndex = (index - 1)>>1;
         while(index > 0){
             if((heap[parentIndex].G+heap[parentIndex].H)<=(heap[index].G+heap[index].H)){
                 break;
@@ -91,13 +91,13 @@ public class MapMinHeap {
                 heap[index] = tem;
             }
             index = parentIndex;
-            parentIndex = (index - 1) / 2;
+            parentIndex = (index - 1) >> 1;
         }
     }
 
     private void ShiftDown(int index){
-        int lChild = index * 2 + 1;
-        int rChild = index * 2 + 2;
+        int lChild = index << 1 + 1;
+        int rChild = index << 1 + 2;
         while(lChild<count||rChild<count){
             int minIndex = index;
             if(lChild<count && (heap[lChild].G+heap[lChild].H)<(heap[minIndex].G+heap[minIndex].H)){
@@ -114,8 +114,8 @@ public class MapMinHeap {
                 heap[minIndex] = tem;
             }
             index = minIndex;
-            lChild = index * 2 + 1;
-            rChild = index * 2 + 2;
+            lChild = index << 1 + 1;
+            rChild = index << 1 + 2;
         }
     }
 }
