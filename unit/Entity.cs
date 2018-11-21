@@ -19,6 +19,9 @@ namespace Map
         public int radius;
         public int posX = 0;
         public int posY = 0;
+        private int desX = 0;
+        private int desY = 0;
+
         public Animator animator;
 
         private int RouteUpdateFlag = 0;
@@ -49,6 +52,7 @@ namespace Map
             angle = direct.y<0? angle:-angle;
 
             forward = Quaternion.Euler(0, angle, 0);
+            Debug.Log(forward);
             //Quaternion start = gameObject.transform.rotation;
             //Quaternion end = Quaternion.Euler(0, angle, 0);
             //gameObject.transform.rotation = Quaternion.Lerp(start,end,0.1f);
@@ -57,11 +61,19 @@ namespace Map
         public Vector3 GetSocketPos(string name){
             return gameObject.transform.Find(name).gameObject.transform.position;
         }
+
+        public void ResetMapNode(){
+            MapField field = GameRoot.GetInstance().MapField;
+            field.MarkMovable(posX, posY, radius, false);
+            currMapNode = field.GetAStarRoute(id, posX, posY, desX, desY);
+            field.MarkMovable(posX, posY, radius, true);
+        }
      
         public void Move(int toX,int toY,float value,out int gridX,out int gridY,out float offset)
         {
             //init data
-
+            desX = toX;
+            desY = toY;
             MapField field = GameRoot.GetInstance().MapField;
 
             float toViewX, toViewY;
@@ -71,6 +83,7 @@ namespace Map
 
             if (state == TransformState.Straight)
             {
+                RouteUpdateFlag += 1;
                 float nowViewX = gameObject.transform.position.x;
                 float nowViewY = gameObject.transform.position.z;
                 float factor = value/BattleDef.Transfer2GridFactor / Vector2.Distance(new Vector2(toViewX, toViewY), new Vector2(nowViewX, nowViewY));
@@ -81,10 +94,11 @@ namespace Map
                 {
                     offset = 0;
                     gameObject.transform.position = new Vector3(nextViewX, 0f, nextViewY);
+                    if(RouteUpdateFlag>5) SetRotation(toX, toY);
                     posX = gridX;
                     posY = gridY;
                     field.MarkMovable(posX, posY, radius, true);
-                    SetRotation(toX, toY);
+
                     return;
                 }else{
                     state = TransformState.AStar;
@@ -95,6 +109,15 @@ namespace Map
 
             if (state == TransformState.AStar)
             {
+                if(currMapNode == null){
+                    GameRoot.GetInstance().MapField.AddAStarRequestList(uid);
+                    gridX = posX;
+                    gridY = posY;
+                    offset = value;
+                    field.MarkMovable(posX, posY, radius, true);
+                    return;
+                }
+                Debug.Log("has map node");
                 RouteUpdateFlag += 1;
                 float startG = currMapNode.G;
                 while (currMapNode.Next != null && (currMapNode.Next.G - startG) <= value)
@@ -111,9 +134,19 @@ namespace Map
                 posY = gridY;
                 if(RouteUpdateFlag == BattleDef.aStarUpdateFrame){
                     state = TransformState.Straight;
+                        RouteUpdateFlag = 0;
                 }
                 field.MarkMovable(posX, posY, radius, true);
                 return;
+                }else{
+                    Debug.Log("cannot remove!!!!!!!"+currMapNode.X+" "+currMapNode.Y);
+                    currMapNode = null;
+                    gridX = posX;
+                    gridY = posY;
+                    offset = value;
+                    field.MarkMovable(posX, posY, radius, true);
+                    RouteUpdateFlag = 0;
+                    return;
                 }
             }
             gridX = 0;
