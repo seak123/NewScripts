@@ -55,7 +55,7 @@ function this:enter_MoveToPos(  )
     if self.database.master.statectrl:has_feature("de_move") then return false end
     self.database.master.entity:AnimCasterAction(transform.AnimationState.Walk)
     self.runtime = 0
-    self.max_runtime = 2
+    self.max_runtime = 1
     return true
 end
 

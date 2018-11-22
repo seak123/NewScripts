@@ -25,6 +25,7 @@ namespace Map
         public Animator animator;
 
         private int RouteUpdateFlag = 0;
+        private int RouteUpdateFactor = 1;
         private float animatorAttackSpeed = 1f;
         private GameObject hpPrefab;
         private GameObject hpBar;
@@ -37,7 +38,6 @@ namespace Map
         private TransformState state = TransformState.Straight;
 
         private void SetTransform(int gridX,int gridY){
-            Debug.Log("POS " + gridX + " " + gridY);
             float x = 0f;
             float y = 0f;
             GameRoot.GetInstance().MapField.GetViewPos(gridX,gridY,out x,out y);
@@ -52,7 +52,7 @@ namespace Map
             angle = direct.y<0? angle:-angle;
 
             forward = Quaternion.Euler(0, angle, 0);
-            Debug.Log(forward);
+           
             //Quaternion start = gameObject.transform.rotation;
             //Quaternion end = Quaternion.Euler(0, angle, 0);
             //gameObject.transform.rotation = Quaternion.Lerp(start,end,0.1f);
@@ -65,7 +65,7 @@ namespace Map
         public void ResetMapNode(){
             MapField field = GameRoot.GetInstance().MapField;
             field.MarkMovable(posX, posY, radius, false);
-            currMapNode = field.GetAStarRoute(id, posX, posY, desX, desY);
+            //currMapNode = field.GetAStarRoute(id, posX, posY, desX, desY);
             field.MarkMovable(posX, posY, radius, true);
         }
      
@@ -83,6 +83,7 @@ namespace Map
 
             if (state == TransformState.Straight)
             {
+                
                 RouteUpdateFlag += 1;
                 float nowViewX = gameObject.transform.position.x;
                 float nowViewY = gameObject.transform.position.z;
@@ -102,7 +103,7 @@ namespace Map
                     return;
                 }else{
                     state = TransformState.AStar;
-                    currMapNode = field.GetAStarRoute(id, posX, posY, toX, toY);
+                    currMapNode = field.GetAStarRoute(id, posX, posY, toX, toY,RouteUpdateFactor);
                     RouteUpdateFlag = 0;
                 }
             }
@@ -117,11 +118,12 @@ namespace Map
                     field.MarkMovable(posX, posY, radius, true);
                     return;
                 }
-                Debug.Log("has map node");
                 RouteUpdateFlag += 1;
+                Debug.Log("update"+RouteUpdateFlag);
                 float startG = currMapNode.G;
                 while (currMapNode.Next != null && (currMapNode.Next.G - startG) <= value)
                 {
+
                     currMapNode = currMapNode.Next;
                 }
                 if(field.IsCanMove(currMapNode.X, currMapNode.Y, radius)){
@@ -132,20 +134,22 @@ namespace Map
                 SetRotation(gridX, gridY);
                 posX = gridX;
                 posY = gridY;
-                if(RouteUpdateFlag == BattleDef.aStarUpdateFrame){
+                    if(RouteUpdateFlag == BattleDef.aStarUpdateFrame){
                     state = TransformState.Straight;
-                        RouteUpdateFlag = 0;
+                    RouteUpdateFlag = 0;
+                        RouteUpdateFactor = 1;
                 }
                 field.MarkMovable(posX, posY, radius, true);
                 return;
                 }else{
-                    Debug.Log("cannot remove!!!!!!!"+currMapNode.X+" "+currMapNode.Y);
                     currMapNode = null;
                     gridX = posX;
                     gridY = posY;
-                    offset = value;
+                    offset = 0;
                     field.MarkMovable(posX, posY, radius, true);
                     RouteUpdateFlag = 0;
+                    state = TransformState.Straight;
+                    RouteUpdateFactor += 1;
                     return;
                 }
             }

@@ -182,10 +182,10 @@ namespace Map
             }
         }
 
-        public HeapNode GetAStarRoute(int unit_id,int s_x,int s_y,int e_x,int e_y){
+        public HeapNode GetAStarRoute(int unit_id,int s_x,int s_y,int e_x,int e_y,int factor){
             Debug.Log("getroute!!!!!" + s_x + " " + s_y + " " + e_x + " " + e_y);
             int radius = mng.GetCreatureData(unit_id).radius;
-            int maxG = BattleDef.maxSpeed / 30 * BattleDef.aStarUpdateFrame;
+            int maxG = BattleDef.maxSpeed / 30 * BattleDef.aStarUpdateFrame*factor;
 
             MapMinHeap heap = new MapMinHeap();
             HeapNode root = new HeapNode();

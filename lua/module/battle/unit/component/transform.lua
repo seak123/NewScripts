@@ -23,9 +23,11 @@ function this:update( delta )
     if self.des_pos ~= nil then
         local value = delta * self.master.property:get("speed") + self.offset
         self.grid_pos.X,self.grid_pos.Y,self.offset= self.master.entity:Move(self.des_pos.X,self.des_pos.Y,value,nil,nil,nil)
+        --print("@@gridposY "..self.grid_pos.Y)
         --self.master.entity:SetRotation(self.des_pos.X,self.des_pos.Y)
         self.des_pos = nil
     end
+    
 end
 
 
