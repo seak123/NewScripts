@@ -25,9 +25,12 @@ public class CardManager : MonoBehaviour {
         cardsId = new List<int>
         {
             7,
-            2,
-            2,
-            2,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
             1
         };
     }

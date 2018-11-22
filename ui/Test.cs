@@ -28,7 +28,7 @@ public class Test:MonoBehaviour  {
             magic_resist = 0.5f,
             mainCastle = AssetManager.PackCreatureData(mng.GetCreatureData(0)),
             cardBoxNum = 3,
-            cardSpeed = 10
+            cardSpeed = 1
     };
         data.enemy = new PlayerData
         {
