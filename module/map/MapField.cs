@@ -22,7 +22,7 @@ namespace Map
         private Dictionary<int,Entity> entityMap;
         private Dictionary<int, List<Vector2>> structureMap;
         private List<Vector2> entityRemoveCache;
-        private List<int> aStarRequestList;
+        // private List<int> aStarRequestList;
 
         private AssetManager mng;
 
@@ -33,7 +33,7 @@ namespace Map
             entityMap = new Dictionary<int, Entity>();
             structureMap = new Dictionary<int, List<Vector2>>();
             entityRemoveCache = new List<Vector2>();
-            aStarRequestList = new List<int>();
+            // aStarRequestList = new List<int>();
         }
 
         private void Update()
@@ -61,17 +61,17 @@ namespace Map
             foreach(var key in removeCache){
                 entityMap.Remove((int)key);
             }
-            ///////calculate astar
-            for (int i = 0; i < AStarCalcFrame;++i){
-                if (aStarRequestList.Count == 0) break;
-                int uid = aStarRequestList[0];
-                Entity entity = entityMap[uid];
-                if(entity != null){
-                    Debug.Log("reset");
-                    entity.ResetMapNode();
-                }
-                aStarRequestList.RemoveAt(0);
-            }
+            // ///////calculate astar
+            // for (int i = 0; i < AStarCalcFrame;++i){
+            //     if (aStarRequestList.Count == 0) break;
+            //     int uid = aStarRequestList[0];
+            //     Entity entity = entityMap[uid];
+            //     if(entity != null){
+            //         Debug.Log("reset");
+            //         entity.ResetMapNode();
+            //     }
+            //     aStarRequestList.RemoveAt(0);
+            // }
 
         }
         //>>>>>>>>>>>>>>>>>map effect>>>>>>>>>>>>>>>>>>>
@@ -176,11 +176,11 @@ namespace Map
             lGridY = (int)Mathf.Floor(gridY / 16);
         }
 
-        public void AddAStarRequestList(int uid){
-            if(!aStarRequestList.Contains(uid)){
-                aStarRequestList.Add(uid);
-            }
-        }
+        // public void AddAStarRequestList(int uid){
+        //     if(!aStarRequestList.Contains(uid)){
+        //         aStarRequestList.Add(uid);
+        //     }
+        // }
 
         public HeapNode GetAStarRoute(int unit_id,int s_x,int s_y,int e_x,int e_y,int factor){
             Debug.Log("getroute!!!!!" + s_x + " " + s_y + " " + e_x + " " + e_y);

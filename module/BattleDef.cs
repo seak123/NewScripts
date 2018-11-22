@@ -12,7 +12,7 @@ public static class BattleDef  {
 
     public static int maxSpeed = 64;
 
-    public static int aStarUpdateFrame = 10;
+    public static int aStarUpdateFrame = 20;
 
     public static float Transfer2GridFactor = 25;
 

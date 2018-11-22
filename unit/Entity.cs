@@ -25,7 +25,6 @@ namespace Map
         public Animator animator;
 
         private int RouteUpdateFlag = 0;
-        private int RouteUpdateFactor = 1;
         private float animatorAttackSpeed = 1f;
         private GameObject hpPrefab;
         private GameObject hpBar;
@@ -69,7 +68,7 @@ namespace Map
             field.MarkMovable(posX, posY, radius, true);
         }
      
-        public void Move(int toX,int toY,float value,out int gridX,out int gridY,out float offset)
+        public void Move(int toX,int toY,int speed,float value,out int gridX,out int gridY,out float offset)
         {
             //init data
             desX = toX;
@@ -103,21 +102,13 @@ namespace Map
                     return;
                 }else{
                     state = TransformState.AStar;
-                    currMapNode = field.GetAStarRoute(id, posX, posY, toX, toY,RouteUpdateFactor);
+                    currMapNode = field.GetAStarRoute(id, posX, posY, toX, toY,speed*BattleDef.aStarUpdateFrame/30);
                     RouteUpdateFlag = 0;
                 }
             }
 
             if (state == TransformState.AStar)
             {
-                if(currMapNode == null){
-                    GameRoot.GetInstance().MapField.AddAStarRequestList(uid);
-                    gridX = posX;
-                    gridY = posY;
-                    offset = value;
-                    field.MarkMovable(posX, posY, radius, true);
-                    return;
-                }
                 RouteUpdateFlag += 1;
                 Debug.Log("update"+RouteUpdateFlag);
                 float startG = currMapNode.G;
@@ -127,29 +118,29 @@ namespace Map
                     currMapNode = currMapNode.Next;
                 }
                 if(field.IsCanMove(currMapNode.X, currMapNode.Y, radius)){
-                offset = value - (currMapNode.G - startG);
-                gridX = currMapNode.X;
-                gridY = currMapNode.Y;
-                SetTransform(gridX, gridY);
-                SetRotation(gridX, gridY);
-                posX = gridX;
-                posY = gridY;
+                    offset = value - (currMapNode.G - startG);
+                    gridX = currMapNode.X;
+                    gridY = currMapNode.Y;
+                    SetTransform(gridX, gridY);
+                    SetRotation(gridX, gridY);
+                    posX = gridX;
+                    posY = gridY;
                     if(RouteUpdateFlag == BattleDef.aStarUpdateFrame){
-                    state = TransformState.Straight;
-                    RouteUpdateFlag = 0;
-                        RouteUpdateFactor = 1;
-                }
-                field.MarkMovable(posX, posY, radius, true);
-                return;
+                        state = TransformState.Straight;
+                        RouteUpdateFlag = 0;
+                    }
+                     field.MarkMovable(posX, posY, radius, true);
+                    return;
                 }else{
-                    currMapNode = null;
+                    currMapNode.Next = null;
+                }
+                if(currMapNode.Next == null){
                     gridX = posX;
                     gridY = posY;
                     offset = 0;
                     field.MarkMovable(posX, posY, radius, true);
                     RouteUpdateFlag = 0;
                     state = TransformState.Straight;
-                    RouteUpdateFactor += 1;
                     return;
                 }
             }
