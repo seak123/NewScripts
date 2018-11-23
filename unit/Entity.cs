@@ -74,6 +74,8 @@ namespace Map
             desX = toX;
             desY = toY;
             MapField field = GameRoot.GetInstance().MapField;
+            bool debug = false;
+            if (uid == 20) debug = true;
 
             float toViewX, toViewY;
             field.GetViewPos(toX, toY, out toViewX, out toViewY);
@@ -93,6 +95,7 @@ namespace Map
                 if (field.IsCanMove(gridX, gridY, radius))
                 {
                     offset = 0;
+                    if (debug) Debug.Log("Straight:"+gridX+" "+gridY+"offset:"+offset);
                     gameObject.transform.position = new Vector3(nextViewX, 0f, nextViewY);
                     if(RouteUpdateFlag>5) SetRotation(toX, toY);
                     posX = gridX;
@@ -110,7 +113,6 @@ namespace Map
             if (state == TransformState.AStar)
             {
                 RouteUpdateFlag += 1;
-                Debug.Log("update"+RouteUpdateFlag);
                 float startG = currMapNode.G;
                 while (currMapNode.Next != null && (currMapNode.Next.G - startG) <= value)
                 {
@@ -121,6 +123,7 @@ namespace Map
                     offset = value - (currMapNode.G - startG);
                     gridX = currMapNode.X;
                     gridY = currMapNode.Y;
+                    if (debug) Debug.Log("AStar:" + gridX + " " + gridY+ "offset:"+offset);
                     SetTransform(gridX, gridY);
                     SetRotation(gridX, gridY);
                     posX = gridX;

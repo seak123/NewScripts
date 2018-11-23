@@ -2,6 +2,7 @@ local base = require("module.battle.unit.behavior_tree.base_node_vo")
 local this = class("action_vo",base)
 
 this.ACTION = {
+    MoveForward = "MoveForward",
     MoveToPos = "MoveToPos",
     Attack = "Attack",
     MoveToEnemy = "MoveToEnemy",

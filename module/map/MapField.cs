@@ -183,7 +183,6 @@ namespace Map
         // }
 
         public HeapNode GetAStarRoute(int unit_id,int s_x,int s_y,int e_x,int e_y,int factor){
-            Debug.Log("getroute!!!!!" + s_x + " " + s_y + " " + e_x + " " + e_y);
             int radius = mng.GetCreatureData(unit_id).radius;
             //int maxG = BattleDef.maxSpeed / 30 * BattleDef.aStarUpdateFrame*factor;
             int maxG = factor;
@@ -196,93 +195,53 @@ namespace Map
             heap.Push(s_x, s_y, 0f,Distance(s_x, s_y, e_x, e_y),root);
             while (heap.Count() > 0)
             {
-                int count = heap.Count();
-                currNode = heap.Pop();
-                CloseList.Add(currNode);
-                int roundX, roundY;
+                    int count = heap.Count();
+                    currNode = heap.Pop();
+                    CloseList.Add(currNode);
 
-            //    if (currNode.X == e_x && currNode.Y == e_y || currNode.G > maxG) break;
-            //    // execute 8-round grids
-            //    Vector2Int[] direct = new Vector2Int[8];
-            //    direct[0] = new Vector2Int(-1, 1);
-            //    direct[1] = new Vector2Int(0, 1);
-            //    direct[2] = new Vector2Int(1, 1);
-            //    direct[3] = new Vector2Int(-1, 0);
-            //    direct[4] = new Vector2Int(1, 0);
-            //    direct[5] = new Vector2Int(-1, -1);
-            //    direct[6] = new Vector2Int(0, -1);
-            //    direct[7] = new Vector2Int(1, -1);
+                    if (currNode.X == e_x && currNode.Y == e_y || currNode.G > maxG) break;
+                    // execute 8-round grids
+                    Vector2Int[] direct = new Vector2Int[8];
+                    direct[0] = new Vector2Int(-1, 1);
+                    direct[1] = new Vector2Int(0, 1);
+                    direct[2] = new Vector2Int(1, 1);
+                    direct[3] = new Vector2Int(-1, 0);
+                    direct[4] = new Vector2Int(1, 0);
+                    direct[5] = new Vector2Int(-1, -1);
+                    direct[6] = new Vector2Int(0, -1);
+                    direct[7] = new Vector2Int(1, -1);
 
-            //    for (int i = 0; i < 8; ++i)
-            //    {
-            //        Vector2Int roundPos = new Vector2Int(currNode.X, currNode.Y) + direct[i];
-            //        if (CloseList.FindIndex(node => node.X == roundPos.x && node.Y == roundPos.y) == -1)
-            //        {
-            //            int key = roundPos.x * 1000 + roundPos.y;
-            //            bool flag = false;
-            //            if (IsCanMoveCache.ContainsKey(key))
-            //            {
-            //                flag = IsCanMoveCache[key];
-            //            }
-            //            else
-            //            {
-            //                flag = IsCanMove(roundPos.x, roundPos.y, radius);
-            //                IsCanMoveCache.Add(key, flag);
-            //            }
-            //            if (flag)
-            //                heap.Find(roundPos.x, roundPos.y, currNode.G + DiagoFactor, Distance(roundPos.x, roundPos.y, e_x, e_y), currNode);
-            //        }
-            //    }
+                    for (int i = 0; i < 8; ++i)
+                    {
+                        Vector2Int roundPos = new Vector2Int(currNode.X, currNode.Y) + direct[i];
+                        if (CloseList.FindIndex(node => node.X == roundPos.x && node.Y == roundPos.y) == -1)
+                        {
+                            int key = roundPos.x * 1000 + roundPos.y;
+                            bool flag = false;
+                            if (IsCanMoveCache.ContainsKey(key))
+                            {
+                                flag = IsCanMoveCache[key];
+                            }
+                            else
+                            {
+                                flag = IsCanMove(roundPos.x, roundPos.y, radius);
+                                IsCanMoveCache.Add(key, flag);
+                            }
+                            if (flag)
+                                heap.Find(roundPos.x, roundPos.y, currNode.G + DiagoFactor, Distance(roundPos.x, roundPos.y, e_x, e_y), currNode);
+                        }
+                    }
 
 
-            //}   
-                 roundX = currNode.X - 1;
-                 roundY = currNode.Y + 1;
-                 if(CloseList.FindIndex(node=>node.X ==roundX&&node.Y==roundY)==-1 && IsCanMove(roundX,roundY,radius)){
-                 heap.Find(roundX, roundY, currNode.G + DiagoFactor, Distance(roundX, roundY, e_x, e_y), currNode);
-                 }
+                }   
 
-                 roundX = currNode.X;
-                 roundY = currNode.Y + 1;
-                 if (CloseList.FindIndex(node => node.X == roundX && node.Y == roundY) == -1 && IsCanMove(roundX, roundY, radius))
-                     heap.Find(roundX, roundY, currNode.G + 1f, Distance(roundX, roundY, e_x, e_y), currNode);
+                while(currNode.Parent != null){
+                    currNode.Parent.Next = currNode;
+                    currNode = currNode.Parent;
+                }
 
-                 roundX = currNode.X + 1;
-                 roundY = currNode.Y + 1;
-                     if (CloseList.FindIndex(node => node.X == roundX && node.Y == roundY) == -1 && IsCanMove(roundX, roundY, radius))
-                     heap.Find(roundX, roundY, currNode.G + DiagoFactor, Distance(roundX, roundY, e_x, e_y), currNode);
+                return currNode;
 
-                 roundX = currNode.X - 1;
-                 roundY = currNode.Y;
-                     if (CloseList.FindIndex(node => node.X == roundX && node.Y == roundY) == -1 && IsCanMove(roundX, roundY, radius))
-                     heap.Find(roundX, roundY, currNode.G + 1f, Distance(roundX, roundY, e_x, e_y), currNode);
-
-                 roundX = currNode.X + 1;
-                 roundY = currNode.Y;
-                     if (CloseList.FindIndex(node => node.X == roundX && node.Y == roundY) == -1 && IsCanMove(roundX, roundY, radius))
-                     heap.Find(roundX, roundY, currNode.G + 1f, Distance(roundX, roundY, e_x, e_y), currNode);
-
-                 roundX = currNode.X - 1;
-                 roundY = currNode.Y - 1;
-                     if (CloseList.FindIndex(node => node.X == roundX && node.Y == roundY) == -1 && IsCanMove(roundX, roundY, radius))
-                     heap.Find(roundX, roundY, currNode.G + DiagoFactor, Distance(roundX, roundY, e_x, e_y), currNode);
-
-                 roundX = currNode.X;
-                 roundY = currNode.Y - 1;
-                     if (CloseList.FindIndex(node => node.X == roundX && node.Y == roundY) == -1 && IsCanMove(roundX, roundY, radius))
-                     heap.Find(roundX, roundY, currNode.G + 1f, Distance(roundX, roundY, e_x, e_y), currNode);
-
-                 roundX = currNode.X + 1;
-                 roundY = currNode.Y - 1;
-                     if (CloseList.FindIndex(node => node.X == roundX && node.Y == roundY) == -1 && IsCanMove(roundX, roundY, radius))
-                     heap.Find(roundX, roundY, currNode.G + DiagoFactor, Distance(roundX, roundY, e_x, e_y), currNode);
-             }
-            while(currNode.Parent != null){
-                currNode.Parent.Next = currNode;
-                currNode = currNode.Parent;
-            }
-
-            return currNode;
         }
 
 
@@ -374,7 +333,7 @@ namespace Map
                 int startY = (int)(Mathf.Floor(gridY / 16) - 1) * 16;
                 maxX = (int)(Mathf.Floor(gridX / 16) - 1) + 3;
                 maxY = (int)(Mathf.Floor(gridY / 16) - 1) + 3;
-                if (startX < 0 || startX + 48 > BattleDef.columnGridNum || startY < 0 || startY > BattleDef.rowGridNum) return false;
+                if (startX < 0 || startX + 48 > BattleDef.columnGridNum || startY < 0 || startY + 48 > BattleDef.rowGridNum) return false;
                 for (int x = startX; x < startX + 48;++x){
                     for (int y = startY; y < startY + 48;++y){
                         if (grids[x, y] == true) return false;
