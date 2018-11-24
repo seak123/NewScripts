@@ -27,7 +27,7 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
     private CreatureData creatureData;
     private GameObject entityPrefab;
 
-    public int TestUnitId;
+    public Sprite defaultSprite;
 
 
     private void Start()
@@ -209,7 +209,7 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
         cardData = null;
 
         gameObject.transform.localPosition = defaultPos;
-        button.GetComponent<Image>().sprite = null;
+        button.GetComponent<Image>().sprite = defaultSprite;
 
         baseData = null;
         creatureData = null;

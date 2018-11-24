@@ -15,6 +15,8 @@ public class GameRoot : MonoBehaviour {
 
     public static Action BattleStartAction;
 
+    public static Action BattleStartDelayAction;
+
     public GameObject battleUI;
 
     public GameObject Camara;
@@ -22,6 +24,9 @@ public class GameRoot : MonoBehaviour {
     public BattleData battleData;
 
     private static GameRoot instance;
+
+    private bool battleStart = false;
+    private float battleEnterDelay = 3;
 
     [Inject]
     public GameStateManager StateManager { get; set; }
@@ -41,6 +46,9 @@ public class GameRoot : MonoBehaviour {
     [Inject]
     public EffectManager EffectMng { get; set; }
 
+    [Inject]
+    public PlayerManager PlayerMng { get; set; }
+
 	// Use this for initialization
 	void Start () {
         Debug.Log("GameRoot Start");
@@ -58,7 +66,9 @@ public class GameRoot : MonoBehaviour {
     public void StartBattle(BattleData data){
         battleData = data;
         Bridge.StartBattle(data);
-        BattleStartAction();
+        PlayerMng.InjectData(data);
+        battleStart = true;
+        if(BattleStartAction!=null) BattleStartAction();
     }
 
     public static GameRoot GetInstance(){
@@ -70,6 +80,13 @@ public class GameRoot : MonoBehaviour {
         if(init != null){
             init();
             init = null;
+        }
+        if(battleStart){
+            battleEnterDelay -= Time.deltaTime;
+            if(battleEnterDelay<0){
+                if(BattleStartDelayAction!=null) BattleStartDelayAction();
+                battleStart = false;
+            }
         }
     }
 }

@@ -13,17 +13,22 @@ public class EnterState : FsmState
 
     public override void OnEnter()
     {
-        GameRoot.BattleStartAction += BattleStart;
+        GameRoot.BattleStartAction += BattleEnter;
+        GameRoot.BattleStartDelayAction += BattleStart;
     }
 
     public override void OnLeave()
     {
-        GameRoot.GetInstance().battleUI.transform.Find("StartPanal").gameObject.SetActive(false);
+
     }
 
     public override GameState OnUpdate()
     {
         return battleIsStart == true ? GameState.IdleState : GameState.KeepRunning;
+    }
+
+    private void BattleEnter(){
+        GameRoot.GetInstance().battleUI.transform.Find("StartPanal").gameObject.SetActive(false);
     }
 
     private void BattleStart(){
