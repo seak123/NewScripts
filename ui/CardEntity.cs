@@ -12,10 +12,15 @@ public enum CardEntityState{
     Caster = 3
 }
 
+
+
 public class CardEntity : MonoBehaviour, IPointerDownHandler{
 
     public CardEntityState state;
-   
+    public CardManager cardManager;
+    public int index;
+
+
     private Button button;
     private CardData cardData;
     private Vector3 defaultPos;
@@ -27,7 +32,14 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
     private CreatureData creatureData;
     private GameObject entityPrefab;
 
+
     public Sprite defaultSprite;
+    public GameObject creatureObj;
+    public GameObject structureObj;
+    public GameObject MagicObj;
+
+
+   
 
 
     private void Start()
@@ -47,19 +59,28 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
         if (data == null) return;
         state = CardEntityState.Idle;
         cardData = data;
-        button.GetComponent<Image>().sprite = cardData.icon;
         switch (cardData.cardType){
             case CardType.Creature:
                 creatureData = GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(cardData.unitId);
                 baseData = CreatureData.Clone(creatureData);
                 entityPrefab = Instantiate(data.entityPrefab);
                 entityPrefab.SetActive(false);
+                CleanObj();
+                creatureObj.GetComponent<CreatureCardUI>().CleanUp();
+                creatureObj.GetComponent<CreatureCardUI>().InjectData(data, false);
+                creatureObj.transform.localPosition = Vector3.zero;
+                creatureObj.SetActive(true);
                 break;
             case CardType.Structure:
                 creatureData = GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(cardData.unitId);
                 baseData = CreatureData.Clone(creatureData);
                 entityPrefab = Instantiate(data.entityPrefab);
                 entityPrefab.SetActive(false);
+                CleanObj();
+                structureObj.GetComponent<StructureCardUI>().CleanUp();
+                structureObj.GetComponent<StructureCardUI>().InjectData(data, false);
+                structureObj.transform.localPosition = Vector3.zero;
+                structureObj.SetActive(true);
                 break;
         }
 
@@ -83,10 +104,24 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
             state = CardEntityState.Select;
             GetComponent<Image>().color = new Color(color.r, color.g, color.b, factor);
             entityPrefab.SetActive(false);
+            cardManager.SelectCard(index,cardData, creatureData);
+            switch(cardData.cardType){
+                case CardType.Creature:
+                    creatureObj.SetActive(true);
+                    creatureObj.GetComponent<CreatureCardUI>().SetAlpha(factor);
+                    break;
+                case CardType.Structure:
+                    structureObj.SetActive(true);
+                    structureObj.GetComponent<StructureCardUI>().SetAlpha(factor);
+                    break;
+            }
+
         }
         else
         {
             state = CardEntityState.Caster;
+            cardManager.HideCard();
+            CleanObj();
             //assit field active
             GameRoot.GetInstance().MapField.SetAssitActive(true);
 
@@ -160,6 +195,7 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
 
     public void OnRelease(Vector3 screenPos){
         GameRoot.GetInstance().MapField.SetAssitActive(false);
+        cardManager.HideCard();
         // get gird_pos on map
         Ray ray = Camera.main.ScreenPointToRay(screenPos);
         RaycastHit hit;
@@ -210,12 +246,19 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
 
         gameObject.transform.localPosition = defaultPos;
         button.GetComponent<Image>().sprite = defaultSprite;
+        CleanObj();
 
         baseData = null;
         creatureData = null;
         Destroy(entityPrefab);
         //Destroy(truePrefab);
 
+    }
+
+    private void CleanObj(){
+        creatureObj.SetActive(false);
+        structureObj.SetActive(false);
+        //magic
     }
 
     private void SetPrefabActive(GameObject prefab){

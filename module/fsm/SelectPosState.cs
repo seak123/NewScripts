@@ -24,6 +24,19 @@ public class SelectPosState : FsmState {
 
     public override GameState OnUpdate()
     {
+        if (Input.touchCount > 0)
+        {
+            if (Input.GetTouch(0).phase == TouchPhase.Moved)
+            {
+                cardEntity.OnMove(Input.GetTouch(0).position);
+            }
+            if (Input.GetTouch(0).phase == TouchPhase.Ended)
+            {
+                cardEntity.OnRelease(Input.GetTouch(0).position);
+                GameRoot.GetInstance().StateManager.selectCard = null;
+                return GameState.IdleState;
+            }
+        }
         if(useMouse){
             if(Input.GetMouseButton(0)){
                 cardEntity.OnMove(Input.mousePosition);

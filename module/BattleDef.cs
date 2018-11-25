@@ -22,7 +22,10 @@ public static class BattleDef  {
 
 
     //utils
-    public static bool useMouse = true;
+    public static bool useMouse = false;
 
     public static float cardPanalViewFactor = 1 / 4.8f;
+
+    //card background
+    public static Color[] backColor = new Color[5] { Color.grey, new Color(0, 255, 60), Color.blue, Color.red, Color.black };
 }

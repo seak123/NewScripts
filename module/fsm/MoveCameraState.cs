@@ -44,7 +44,11 @@ public class MoveCameraState : FsmState
             }
             if (Input.GetTouch(0).phase == TouchPhase.Moved)
             {
-                camareMng.MoveCamera(Input.GetTouch(0).position);
+                Vector3 lastTouchPos = Camera.main.ScreenToWorldPoint(new Vector3(lastSingleTouchPosition.x, lastSingleTouchPosition.y, -1));
+                Vector3 currTouchPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, -1));
+                Vector3 delta = lastTouchPos - currTouchPos;
+                camareMng.MoveCamera(delta);
+                lastSingleTouchPosition = Input.GetTouch(0).position;
             }
             m_IsSingleFinger = true;
 
