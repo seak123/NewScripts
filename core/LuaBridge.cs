@@ -6,28 +6,49 @@ using PowerInject;
 using Data;
 
 [Insert]
-    public class LuaBridge : MonoBehaviour
+public class LuaBridge : LuaClient
     {
 
-        private LuaState luaState;
+        //private LuaState luaState;
         private LuaFunction luaInit;
         private LuaFunction startBattle;
         private LuaFunction luaUpdate;
 
         private LuaTable luaRoot;
+        private LuaEngine luaEngine;
 
-        // Use this for initialization
-        void Start()
+    protected override LuaFileUtils InitLoader()
+    {
+        return new LuaResLoader();
+    }
+
+    protected override void CallMain()
+    {
+        //LuaFunction func = luaState.GetFunction("Test");
+        //func.Call();
+        //func.Dispose();
+    }
+
+    protected override void StartMain()
+    {
+        luaState.DoFile("lua_bridge.lua");
+        //CallMain();
+    }
+
+   
+    // Use this for initialization
+    void Start()
         {
-            if (luaState == null)
+
+        if (luaState != null)
             {
-                luaState = new LuaState();
-                luaState.Start();
+                //luaState = new LuaState();
+                //luaState.Start();
                 luaState.LuaCheckStack(200);
-                luaState.CheckTop();
-                LuaBinder.Bind(luaState);
-                luaState.AddSearchPath(Application.dataPath + "\\Scripts/lua");
-                luaState.DoFile("lua_bridge.lua");
+                //luaState.CheckTop();
+                //LuaBinder.Bind(luaState);
+                //luaState.AddSearchPath(Application.dataPath + "\\Scripts/lua");
+                //luaState.DoFile("lua_bridge.lua");
                 luaInit = luaState.GetFunction("lua_init");
                 startBattle = luaState.GetFunction("start_battle");
                 luaUpdate = luaState.GetFunction("lua_update");
@@ -44,10 +65,10 @@ using Data;
 
     [OnInjected]
     public void AddRootAction(){
-        GameRoot.init += Init;
+        GameRoot.init += OnInit;
     }
        
-        public void Init()
+        public void OnInit()
         {
             GameRoot.GetInstance().Schedular.onUpdate += OnUpdate;
         }

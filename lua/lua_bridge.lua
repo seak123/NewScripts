@@ -6,6 +6,9 @@ local api = Utils.Lua2CSharpAPI
 root = {mng = battle_mng}
 local time = 0
 local flag = 0
+
+print("lua_bridge start")
+
 function lua_init(  )
     print("lua init ...")
     return root

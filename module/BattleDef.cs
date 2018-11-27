@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class BattleDef  {
+public static class BattleDef
+{
 
     //map data
     public static int rowGridNum = 448;
@@ -22,7 +23,11 @@ public static class BattleDef  {
 
 
     //utils
+#if UNITY_EDITOR
+    public static bool useMouse = true;
+#else
     public static bool useMouse = false;
+#endif
 
     public static float cardPanalViewFactor = 1 / 4.8f;
 
