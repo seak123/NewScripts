@@ -21,6 +21,8 @@ public static class BattleDef
 
     public static int StructBound = 9;
 
+    //logic data
+    public static float MaxSaving = 20;
 
     //utils
 #if UNITY_EDITOR
