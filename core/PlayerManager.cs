@@ -4,9 +4,9 @@ using UnityEngine;
 using PowerInject;
 
 public struct PlayerBattleData{
-    public float saving =0;
-    public float income =0;
-    public float cost =0;
+    public float saving;
+    public float income;
+    public float cost;
 }
 
 [Insert]
@@ -57,7 +57,7 @@ public class PlayerManager : MonoBehaviour {
     }
 
     public bool RequestCost(int side,float cost){
-        Switch(side){
+        switch(side){
             case 1:
                 float rest = playerData.saving - cost;
                 if(rest>=0){
@@ -66,16 +66,14 @@ public class PlayerManager : MonoBehaviour {
                 }else{
                     return false;
                 }
-                break;
             case 2:
-                float rest = enemyData.saving - cost;
-                if(rest>=0){
-                    enemyData.saving = rest;
+                float rest2 = enemyData.saving - cost;
+                if(rest2>=0){
+                    enemyData.saving = rest2;
                     return true;
                 }else{
                     return false;
                 }
-                break;
         }
         return false;
     }
