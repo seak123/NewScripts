@@ -43,28 +43,7 @@ end
 --     return false
 -- end
 -- end
-
--- function this.check_summon(  )
---     return function ( database )
---     --    if database.master.sess.players[database.master.side]:has_feature("permit_summon") then
---     --     return false
---     --    end
---         database.target_pos = database.master.transform.grid_pos
---         return true
---     end
--- end
-
--- function this.find_alive_friend(with_structure )
---     return function ( database )
---         local field = database.master.sess.field
---         local friend = field:find_friend(with_structure,database.master)
---         if friend ~= nil then
---             database.target = friend
---             return true
---         end
---         return false
---     end
--- end
+----------------------------------priority check
 
 
 return this

@@ -2,7 +2,8 @@ local base = require("module.battle.battle_ai.data.base_vo")
 local this = class("action_vo",base)
 
 this.ACTION = {
-   
+   Caster = "Caster",
+   Wait = "Wait"
 }
 this.execute = "module.battle.unit.behavior_tree.action_node"
 
