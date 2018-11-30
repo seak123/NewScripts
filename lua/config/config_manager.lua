@@ -15,12 +15,20 @@ this.skill_config = {
     [1] = "config.skill_config.common_skill.1_summon"
 }
 
+this.card_config = {
+
+}
+
 function this.get_unit_config( id )
     return this.unit_config[id]
 end
 
 function this.get_skill_config( id )
     return this.skill_config[id]
+end
+
+function this.get_card_config( id )
+    return this.card_config[id]
 end
 
 return this

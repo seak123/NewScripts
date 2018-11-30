@@ -28,6 +28,11 @@ function this:build( player_data,vo )
 end
 
 function this:build_database( _data )
+    --test
+    -- _data.cards = {
+    --     [1] = {card_id = 1,}
+    -- }
+    --
     local data = {}
     data.player_data = _data
     return data

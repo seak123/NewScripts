@@ -6,8 +6,7 @@ function this:ctor( vo ,database)
       self.vo = vo
       self.action_type = vo.action_type
       self.decorators = {}
-      self.running = false
-      self.max_runtime = 5
+
       --init
       self:init_data(database)
       if self.vo.decorators ~= nil then
@@ -23,31 +22,22 @@ function this:init_data( database )
     self.database = database
 end
 
-function this:init(  )
-    self.runtime = 0
-end
-
-function this:update( delta )
-    if self.running == false then
-        for _,v in ipairs(self.decorators) do
-            if v:check() == false then
-                return "failure"
-            end
-        end
-        if self["enter_"..self.action_type] ~= nil then
-            if self["enter_"..self.action_type](self) == false then
-                return "failure"
-            end
+function this:execute( )
+    for _,v in ipairs(self.decorators) do
+        if v:check() == false then
+            return false
         end
     end
 
-    return self["update_"..self.action_type](self,delta)
+    return self["enter_"..self.action_type](self)
 end
 
-function this:abort(  )
-    if self["abort_"..self.action_type] ~= nil then
-        return self["abort_"..self.action_type](self)
-    end
+function this:enter_Wait(  )
+    return true
+end
+
+function this:enter_Caster(  )
+    return true
 end
 
 -- function this:enter_MoveForward(  )
