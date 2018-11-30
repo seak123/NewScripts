@@ -70,9 +70,9 @@ public class StructureCardUI : MonoBehaviour {
 
         CreatureData data = assetMng.GetCreatureData(cardData.unitId);
 
-        cost.text = data.cost_gold.ToString();
+        cost.text = cardData.cost.ToString();
 
-        lost.text = data.cost_income.ToString();
+        lost.text = "-"+cardData.lost.ToString();
 
         hp.text = data.hp.ToString();
 
@@ -115,13 +115,13 @@ public class StructureCardUI : MonoBehaviour {
             }
         }
 
-        back.color = BattleDef.backColor[data.race];
-        skillBack.color = BattleDef.backColor[data.race];
+        back.color = BattleDef.backColor[cardData.race];
+        skillBack.color = BattleDef.backColor[cardData.race];
         cardIcon.sprite = cardData.icon;
 
 
         //calc card Name Text
-        string name = data.CreatureName;
+        string name = cardData.cardName;
         int num = name.Length;
         if (num % 2 == 1)
         {

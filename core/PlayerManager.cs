@@ -18,6 +18,7 @@ public class PlayerManager : MonoBehaviour {
     private PlayerBattleData enemyData;
 
     private bool start = false;
+    private float updateIncomeDelta = 0;
 
     [OnInjected]
     public void AddRootAction()
@@ -38,21 +39,42 @@ public class PlayerManager : MonoBehaviour {
     private void Start()
     {
         GameRoot.BattleStartDelayAction += StartBattle;
-        playerData = new PlayerBattleData();
-        enemyData = new PlayerBattleData();
+        playerData = new PlayerBattleData
+        {
+            saving = 0,
+            income = 0,
+            cost = 0
+        };
+        enemyData = new PlayerBattleData
+        {
+            saving = 0,
+            income = 0,
+            cost = 0
+        };
     }
 
     public void StartBattle(){
         start = true;
     }
 
+    public float GetPlayerSaving(){
+        return playerData.saving;
+    }
+
     private void Update(){
         if(start){
+            if(updateIncomeDelta>=0){
+                playerData.income += 0.5f;
+                enemyData.income += 0.5f;
+                updateIncomeDelta = -BattleDef.UpdateIncomeDelta;
+            }
             float playerDelta = Mathf.Max(0,(playerData.income - playerData.cost)*Time.deltaTime);
             playerData.saving = Mathf.Clamp(playerData.saving+playerDelta,0,BattleDef.MaxSaving);
 
             float enemyDelta = Mathf.Max(0,(enemyData.income - enemyData.cost)*Time.deltaTime);
             enemyData.saving = Mathf.Clamp(enemyData.saving+enemyDelta,0,BattleDef.MaxSaving);
+
+            updateIncomeDelta += Time.deltaTime;
         }
     }
 

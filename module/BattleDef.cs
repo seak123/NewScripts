@@ -24,6 +24,8 @@ public static class BattleDef
     //logic data
     public static float MaxSaving = 20;
 
+    public static float UpdateIncomeDelta = 120;
+
     //utils
 #if UNITY_EDITOR
     public static bool useMouse = true;
@@ -34,5 +36,6 @@ public static class BattleDef
     public static float cardPanalViewFactor = 1 / 4.8f;
 
     //card background
-    public static Color[] backColor = new Color[5] { Color.grey, new Color(0, 255, 60), Color.blue, Color.red, Color.black };
+    //midcreatrue, natural, people, monster, demon
+    public static Color[] backColor = new Color[5] { new Color(0.492f,0.386f,0.207f,1), new Color(0.293f, 0.396f, 0.26f,1), new Color(0.333f,0.41f,0.547f,1), new Color(0.445f,0.308f,0.492f,1), new Color(0.445f,0.105f,0.06f,1) };
 }

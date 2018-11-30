@@ -78,7 +78,7 @@ public class CreatureCardUI : MonoBehaviour {
 
         CreatureData data = assetMng.GetCreatureData(cardData.unitId);
 
-        cost.text = data.cost_gold.ToString();
+        cost.text = cardData.cost.ToString();
 
         attack.text = data.attack.ToString();
 
@@ -127,14 +127,14 @@ public class CreatureCardUI : MonoBehaviour {
             }
         }
 
-        back.color = BattleDef.backColor[data.race];
-        skillBack.color = BattleDef.backColor[data.race];
+        back.color = BattleDef.backColor[cardData.race];
+        skillBack.color = BattleDef.backColor[cardData.race];
         cardIcon.sprite = cardData.icon;
         attackSprite.sprite = data.attack_range > 16 ? longRange : shortRange;
 
 
         //calc card Name Text
-        string name = data.CreatureName;
+        string name = cardData.cardName;
         int num = name.Length;
         if(num%2==1){
             cardName1.SetActive(true);
