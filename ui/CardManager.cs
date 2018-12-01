@@ -13,6 +13,7 @@ public enum CardViewState{
 public class CardManager : MonoBehaviour {
 
     public GameObject cardPrefab;
+    public GameObject cardBackPrefab;
     public GameObject creatureCardPrefab;
     public GameObject structureCardPrefab;
 
@@ -24,7 +25,7 @@ public class CardManager : MonoBehaviour {
 
     private List<int> cardsId;
     private readonly float cardWidth = 120f;
-    private readonly float cardInterl = 20f;
+    private readonly float cardInterl = 40f;
 
     private bool hasInited = false;
     private bool initCard = false;
@@ -84,6 +85,10 @@ public class CardManager : MonoBehaviour {
         float startX = -(num * cardWidth + (num - 1) * cardInterl) / 2;
         for (int i = 0; i < num;++i){
             float posX = i * (cardWidth + cardInterl) + cardWidth / 2 + startX;
+            GameObject cardBack = Instantiate(cardBackPrefab);
+            cardBack.transform.SetParent(transform);
+            cardBack.transform.localPosition = new Vector3(posX+4, 10, 0);
+            cardBack.transform.localScale = new Vector3(1,0.25f,1);
             GameObject card = Instantiate(cardPrefab);
             card.transform.SetParent(transform);
             card.transform.localPosition = new Vector3(posX, 10, 0);

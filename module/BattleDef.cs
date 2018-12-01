@@ -24,6 +24,8 @@ public static class BattleDef
     //logic data
     public static float MaxSaving = 20;
 
+    public static float MaxBaseIncome = 1;
+
     public static float UpdateIncomeDelta = 120;
 
     //utils

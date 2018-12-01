@@ -19,6 +19,7 @@ public class PlayerManager : MonoBehaviour {
 
     private bool start = false;
     private float updateIncomeDelta = 0;
+    private float baseIncome = 0;
 
     [OnInjected]
     public void AddRootAction()
@@ -63,9 +64,10 @@ public class PlayerManager : MonoBehaviour {
 
     private void Update(){
         if(start){
-            if(updateIncomeDelta>=0){
-                playerData.income += 0.5f;
-                enemyData.income += 0.5f;
+            if(updateIncomeDelta>=0 && baseIncome < BattleDef.MaxBaseIncome){
+                baseIncome += 0.25f;
+                playerData.income += 0.25f;
+                enemyData.income += 0.25f;
                 updateIncomeDelta = -BattleDef.UpdateIncomeDelta;
             }
             float playerDelta = Mathf.Max(0,(playerData.income - playerData.cost)*Time.deltaTime);

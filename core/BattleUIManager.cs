@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 using Data;
 
 public class BattleUIManager : MonoBehaviour {
 
     public Slider MagicSlider;
+    public GameObject MagicStone;
+    public Text MagicValue;
 
     private bool start = false;
+    private int oldMagicValue=0;
    
     public void StartBattle()
     {
@@ -41,6 +45,17 @@ public class BattleUIManager : MonoBehaviour {
     private void Update()
     {
         if (!start) return;
-        MagicSlider.value = GameRoot.GetInstance().PlayerMng.GetPlayerSaving()/BattleDef.MaxSaving;
+        float saving = GameRoot.GetInstance().PlayerMng.GetPlayerSaving();
+        MagicSlider.value = saving/BattleDef.MaxSaving;
+        MagicValue.text = ((int)saving).ToString();
+        if((int)saving != oldMagicValue){
+            ShakeMagicStone();
+            oldMagicValue = (int)saving;
+        }
+    }
+
+    private void ShakeMagicStone(){
+        MagicStone.transform.DOShakeScale(0.2f,new Vector3(0.4f,0.4f,0.4f),5,5);
+        MagicStone.transform.DOShakeRotation(0.2f, new Vector3(0, 0, 10f));
     }
 }

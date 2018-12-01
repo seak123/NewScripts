@@ -8,7 +8,7 @@ public class CamaraManager : MonoBehaviour {
     //摄像机View Size
     public float size = 6.4f;
     //缩放系数
-    public float scaleFactor = 0.01f;
+    public float scaleFactor = 0.005f;
 
     //滚动系数
     public float scrollFactor = 0.1f;

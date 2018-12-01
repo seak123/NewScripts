@@ -26,6 +26,8 @@ namespace Map
 
         private int RouteUpdateFlag = 0;
         private float animatorAttackSpeed = 1f;
+        private GameObject shadow;
+        private Vector3 shadowPos;
         private GameObject hpPrefab;
         private GameObject hpBar;
         private float hpBarCacheTime = 0;
@@ -51,6 +53,7 @@ namespace Map
             angle = direct.y<0? angle:-angle;
 
             forward = Quaternion.Euler(0, angle, 0);
+
            
             //Quaternion start = gameObject.transform.rotation;
             //Quaternion end = Quaternion.Euler(0, angle, 0);
@@ -204,13 +207,20 @@ namespace Map
         private void Start()
         {
             mng = GameRoot.GetInstance().BattleField.assetManager;
+            shadow = gameObject.transform.Find("Shadow").gameObject;
             //init hp bar
-            if(side == 1){
+            if (side == 1){
                 hpPrefab = GameRoot.GetInstance().BattleField.assetManager.GreenSlider;
                 gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
-            }else{
+                shadow.transform.rotation = Quaternion.Euler(90, 0, 0);
+                shadowPos = shadow.transform.localPosition;
+            }
+            else{
                 hpPrefab = GameRoot.GetInstance().BattleField.assetManager.RedSlider;
                 gameObject.transform.rotation = Quaternion.Euler(0, 180, 0);
+                shadow.transform.rotation = Quaternion.Euler(90, 0, 0);
+                shadowPos = -shadow.transform.localPosition;
+                shadowPos.y = 0.01f;
             }
         }
 
@@ -224,6 +234,8 @@ namespace Map
             //set rotation
             Quaternion start = gameObject.transform.rotation;
             gameObject.transform.rotation = Quaternion.Lerp(start, forward, 0.1f);
+            shadow.transform.rotation = Quaternion.Euler(90, 0, 0);
+            shadow.transform.localPosition = shadowPos;
 
         }
         public void UpdateHpBar(){
