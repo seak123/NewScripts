@@ -32,8 +32,19 @@ public class BattleUIManager : MonoBehaviour {
             magic_resist = 0.5f,
             mainCastle = AssetManager.PackCreatureData(mng.GetCreatureData(0)),
             cardBoxNum = 3,
-            cardSpeed = 1
-        };
+            cardSpeed = 1,
+            cards = new List<int>
+            {
+                7,
+                2,
+                1,
+                2,
+                1,
+                2,
+                7,
+                1
+            }
+    };
         data.enemy = new PlayerData
         {
             attack = 1,
@@ -42,7 +53,18 @@ public class BattleUIManager : MonoBehaviour {
             magic_resist = 0.5f,
             mainCastle = AssetManager.PackCreatureData(mng.GetCreatureData(0)),
             cardBoxNum = 3,
-            cardSpeed = 10
+            cardSpeed = 1,
+            cards = new List<int>
+            {
+                7,
+                2,
+                1,
+                2,
+                1,
+                2,
+                7,
+                1
+            }
         };
         data.beginDelay = 5f;
         InitPanelPosition();

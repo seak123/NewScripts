@@ -47,8 +47,8 @@ public class TalkUIManager : MonoBehaviour {
                 message.transform.DOScale(1f, 0.3f);
             }
             if(delta>0.4f&&(delta-Time.deltaTime)<0.4f){
-                character.transform.DOScale(Vector3.one * 0.9f, 0.2f).SetLoops(4, LoopType.Yoyo);
-                message.transform.DOScale(Vector3.one * 0.9f, 0.2f).SetLoops(4, LoopType.Yoyo);
+                character.transform.DOScale(Vector3.one * 0.9f, 0.1f).SetLoops(3, LoopType.Yoyo);
+                message.transform.DOScale(Vector3.one * 0.9f, 0.1f).SetLoops(3, LoopType.Yoyo);
             }
            
             if(delta>=2.5&&delta<3.5){

@@ -37,6 +37,13 @@ public class PlayerManager : MonoBehaviour {
         enemy = data.enemy;
     }
 
+    public PlayerData GetPlayerData(){
+        return player;
+    }
+    public PlayerData GetEnemyData(){
+        return enemy;
+    }
+
     private void Start()
     {
         GameRoot.BattleStartDelayAction += StartBattle;

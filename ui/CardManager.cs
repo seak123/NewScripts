@@ -19,11 +19,14 @@ public class CardManager : MonoBehaviour {
 
     private CardViewState state;
     private List<CardEntity> cardboxs;
+    private int[] enemyBoxs;
     private int cardIndex = 0;
+    private int enemyCardIndex = 0;
     private float pushWaitTime = 0f;
+    private float enemyPushWaitTime = 0f;
     private float enterBattleWaitTime = 0f;
 
-    private List<int> cardsId;
+    //private List<int> cardsId;
     private readonly float cardWidth = 120f;
     private readonly float cardInterl = 40f;
 
@@ -32,10 +35,15 @@ public class CardManager : MonoBehaviour {
 
     private GameObject creatureCardObj;
     private GameObject structureCardObj;
+
+    private List<int> playerCards;
+    private List<int> enemyCards;
     // Use this for initialization
     void Start () {
-        GameRoot.BattleStartAction += CreateCard;
+        //GameRoot.BattleStartAction += CreateCard;
         cardboxs = new List<CardEntity>();
+        playerCards = new List<int>();
+        enemyCards = new List<int>();
         creatureCardObj = Instantiate(creatureCardPrefab);
         creatureCardObj.transform.SetParent(transform);
         structureCardObj = Instantiate(structureCardPrefab);
@@ -44,18 +52,31 @@ public class CardManager : MonoBehaviour {
         creatureCardObj.SetActive(false);
         structureCardObj.SetActive(false);
 
-        //temp info
-        cardsId = new List<int>
+        GameRoot.BattleStartAction += InjectData;
+        
+
+    }
+
+    private void InjectData(){
+        List<int> playerData = GameRoot.GetInstance().PlayerMng.GetPlayerData().cards;
+        List<int> enemyData = GameRoot.GetInstance().PlayerMng.GetEnemyData().cards;
+        enemyBoxs = new int[GameRoot.GetInstance().PlayerMng.GetEnemyData().cardBoxNum];
+        for (int i = 0; i < enemyBoxs.Length; ++i)
         {
-            7,
-            2,
-            1,
-            2,
-            1,
-            2,
-            7,
-            1
-        };
+            enemyBoxs[i] = -1;
+        }
+        while (playerData.Count>0){
+            int index = Random.Range(0, playerData.Count - 1);
+            playerCards.Add(playerData[index]);
+            playerData.RemoveAt(index);
+        }
+        while (enemyData.Count > 0)
+        {
+            int index = Random.Range(0, enemyData.Count - 1);
+            enemyCards.Add(enemyData[index]);
+            enemyData.RemoveAt(index);
+        }
+        CreateCard();
     }
 	
 	// Update is called once per frame
@@ -69,12 +90,22 @@ public class CardManager : MonoBehaviour {
                 {
                     PushCard();
                 }
+                for (int i = 0; i < enemyBoxs.Length; ++i)
+                {
+                    PushEnemyCard();
+                }
             }
             pushWaitTime += Time.deltaTime;
+            enemyPushWaitTime += Time.deltaTime;
             if (pushWaitTime > GameRoot.GetInstance().battleData.player.cardSpeed)
             {
                 pushWaitTime = 0f;
                 PushCard();
+            }
+            if (enemyPushWaitTime > GameRoot.GetInstance().battleData.enemy.cardSpeed)
+            {
+                enemyPushWaitTime = 0f;
+                PushEnemyCard();
             }
         }
         else if (hasInited) enterBattleWaitTime -= Time.deltaTime;
@@ -106,10 +137,28 @@ public class CardManager : MonoBehaviour {
     public void PushCard(){
         int index = GetEmptyCardIndex();
         if (index < 0) return;
-        int cIndex = cardsId[cardIndex % cardsId.Count];
+        if (playerCards.Count == 0) return;
+        int cIndex = playerCards[0];
+        playerCards.RemoveAt(0);
         cardboxs[index].InjectData(GameRoot.GetInstance().BattleField.assetManager.GetCardData(cIndex));
         ++cardIndex;
         pushWaitTime = 0f;
+    }
+
+    public void PushEnemyCard(){
+        bool flag = true;
+        int index = 0;
+        for (int i = 0; i < enemyBoxs.Length;++i){
+            if (enemyBoxs[i] < 0) { flag = flag && false; index = i; }
+            else flag = flag && true;
+        }
+        if (flag) return;
+        if (enemyCards.Count == 0) return;
+        int cIndex = enemyCards[0];
+        enemyCards.RemoveAt(0);
+        enemyBoxs[index] = cIndex;
+        ++enemyCardIndex;
+        enemyPushWaitTime = 0f;
     }
 
     public void SelectCard(int index,CardData cardData,CreatureData creatureData){
