@@ -71,8 +71,29 @@ function this.check_alive_friend( value,with_structure,num )
 end
 
 ----------------------------------target pos check
-function this.check_pos_(  )
-    -- body
+function this.check_pos_creature(  )
+    return function ( database )
+        local field = database.sess
+        local close_unit = field:find_enemy(true,database.main_castle)
+        local data = self.database.card
+        local target_pos = {
+            X = clamp(close_unit.transform.grid_pos.X,0,battle_def.MAPMATRIX.column),
+            Y = clamp(close_unit.transform.grid_pos.Y,0,battle_def.MAPMATRIX.row)
+        }
+        if data.attack_range > 16 then
+            local shift = battle_def.MAPMATRIX.row/4
+            local x = math.random(target_pos.X-shift,target_pos.X+shift)
+            x= clamp(x,0,battle_def.MAPMATRIX.column)
+            local y = math.random( target_pos.Y-shift,target_pos.Y+shift )
+            y= clamp(y,0,battle_def.MAPMATRIX.row)
+            if math.abs( (x-close_unit.transform.grid_pos.X)<128 )then
+            end
+            if math.abs( (y-close_unit.transform.grid_pos.Y)<128 )then
+            end
+        else
+            -- short range
+        end
+    end
 end
 
 

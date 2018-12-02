@@ -1635,3 +1635,12 @@ function table.remove_if(table, func)
         table[i] = nil
     end
 end
+
+function clamp( num,min,max )
+    if num <min then
+        num = min
+    elseif num > max then
+        num = max
+    end
+    return num
+end

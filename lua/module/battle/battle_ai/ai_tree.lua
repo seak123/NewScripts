@@ -34,6 +34,8 @@ function this:build_database( _data )
     -- }
     --
     local data = {}
+    data.sess = battle_mng.session
+    data.main_castle = data.sess.players[2].unit
     data.player_data = _data
     return data
 end
