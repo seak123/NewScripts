@@ -8,7 +8,7 @@ public static class BattleDef
     //map data
     public static int rowGridNum = 448;
 
-    public static int columnGridNum = 992;
+    public static int columnGridNum = 800;
 
 
     public static int maxSpeed = 64;

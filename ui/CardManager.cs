@@ -21,7 +21,7 @@ public class CardManager : MonoBehaviour {
     private List<CardEntity> cardboxs;
     private int cardIndex = 0;
     private float pushWaitTime = 0f;
-    private float enterBattleWaitTime = 3f;
+    private float enterBattleWaitTime = 0f;
 
     private List<int> cardsId;
     private readonly float cardWidth = 120f;
@@ -99,6 +99,7 @@ public class CardManager : MonoBehaviour {
         }
         hasInited = true;
         initCard = true;
+        enterBattleWaitTime = GameRoot.GetInstance().GetBattleEnterDelay();
         //cards[0].InjectData(GameRoot.GetInstance().BattleField.assetManager.GetCardData(1));
     }
 

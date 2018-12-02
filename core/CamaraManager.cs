@@ -8,7 +8,7 @@ public class CamaraManager : MonoBehaviour {
     //摄像机View Size
     public float size = 6.4f;
     //缩放系数
-    public float scaleFactor = 0.005f;
+    public float scaleFactor = 0;
 
     //滚动系数
     public float scrollFactor = 0.1f;
@@ -35,12 +35,18 @@ public class CamaraManager : MonoBehaviour {
     public float xMax = 100;
     public float zMin = -100;
     public float zMax = 100;
+    public float topLevelValue = 30;
+    public float floorLevelValue = -30;
+    public float rightLevelValue = 30;
+    public float leftLevelValue = -30;
 
     //更新UI
     public Action UpdateUI;
 
     //这个变量用来记录单指双指的变换
     private bool m_IsSingleFinger;
+    private Vector3 speed;
+    public bool touchLeaving = false;
 
     //初始化游戏信息设置
     void Start()
@@ -135,6 +141,14 @@ public class CamaraManager : MonoBehaviour {
     //Update方法一旦调用结束以后进入这里算出重置摄像机的位置
     private void LateUpdate()
     {
+        if(touchLeaving==true&&speed.magnitude>=0.1f){
+            Debug.Log("touchleaving");
+            MoveCamera(speed * Time.deltaTime);
+            speed = speed / 1.25f;
+        }else{
+            touchLeaving = false;
+        }
+
         var position = m_CameraOffset;
         m_Camera.transform.position = position;
         m_Camera.orthographicSize = size;
@@ -144,6 +158,11 @@ public class CamaraManager : MonoBehaviour {
         }
     }
 
+    public void MoveCameraDirect(Vector3 delta){
+        Vector3 v = delta * scrollFactor;
+        m_CameraOffset += new Vector3(v.x, 0, v.z) * m_Camera.transform.position.y;
+    }
+
 
     public void MoveCamera(Vector3 delta)
     {
@@ -151,12 +170,43 @@ public class CamaraManager : MonoBehaviour {
         //Vector3 currentTouchPosition = m_Camera.ScreenToWorldPoint(new Vector3(scenePos.x, scenePos.y, -1));
         //Debug.Log(delta);
         Vector3 v = delta*scrollFactor ;
-       
+        speed = delta / Time.deltaTime;
         m_CameraOffset += new Vector3(v.x, 0, v.z) * m_Camera.transform.position.y;
-        //把摄像机的位置控制在范围内lastSingleTouchPosition
-        m_CameraOffset = new Vector3(Mathf.Clamp(m_CameraOffset.x, xMin, xMax), m_CameraOffset.y, Mathf.Clamp(m_CameraOffset.z, zMin, zMax));
+
         //Debug.Log(lastTouchPostion + "|" + currentTouchPosition + "|" + v);
         //lastSingleTouchPosition = scenePos;
+        float offset = (6.4f / size - 1) / Mathf.Sqrt(2) * 16;
+      
+        if ((m_CameraOffset.x + m_CameraOffset.z) > topLevelValue+offset)
+        {
+            float cut = m_CameraOffset.x + m_CameraOffset.z - topLevelValue-offset;
+            m_CameraOffset.x -= cut / 2;
+            m_CameraOffset.z -= cut / 2;
+        }
+
+        if ((m_CameraOffset.x + m_CameraOffset.z) < floorLevelValue - offset)
+        {
+            float cut = floorLevelValue - offset - (m_CameraOffset.x + m_CameraOffset.z) ;
+            m_CameraOffset.x += cut / 2;
+            m_CameraOffset.z += cut / 2;
+        }
+
+        if ((m_CameraOffset.x - m_CameraOffset.z) > rightLevelValue + offset)
+        {
+            float cut = (m_CameraOffset.x - m_CameraOffset.z)- rightLevelValue-offset;
+            m_CameraOffset.x -= cut / 2;
+            m_CameraOffset.z += cut / 2;
+        }
+
+        if ((m_CameraOffset.x - m_CameraOffset.z) < leftLevelValue - offset)
+        {
+            float cut = -(m_CameraOffset.x - m_CameraOffset.z) + leftLevelValue-offset;
+            m_CameraOffset.x += cut / 2;
+            m_CameraOffset.z -= cut / 2;
+        }
+
+        //把摄像机的位置控制在范围内lastSingleTouchPosition
+        m_CameraOffset = new Vector3(Mathf.Clamp(m_CameraOffset.x, xMin, xMax), m_CameraOffset.y, Mathf.Clamp(m_CameraOffset.z, zMin, zMax));
     }
 
 }

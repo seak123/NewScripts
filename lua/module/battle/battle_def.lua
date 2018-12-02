@@ -35,12 +35,12 @@ this.PLAYER1POS = {
 }
 
 this.PLAYER2POS = {
-    X = 990,
+    X = 798,
     Y = 228
 }
 -----------------field 
 this.MAPMATRIX = {
-    column = 992,
+    column = 800,
     row = 448
 }
 

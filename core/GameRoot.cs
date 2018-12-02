@@ -26,7 +26,8 @@ public class GameRoot : MonoBehaviour {
     private static GameRoot instance;
 
     private bool battleStart = false;
-    private float battleEnterDelay = 3;
+    private float constEnterDelay = 0;
+    private float battleEnterDelay = 0;
 
     [Inject]
     public GameStateManager StateManager { get; set; }
@@ -63,8 +64,14 @@ public class GameRoot : MonoBehaviour {
 
 	}
 
+    public float GetBattleEnterDelay(){
+        return constEnterDelay;
+    }
+
     public void StartBattle(BattleData data){
         battleData = data;
+        battleEnterDelay = 3 + data.beginDelay;
+        constEnterDelay = battleEnterDelay;
         Bridge.StartBattle(data);
         PlayerMng.InjectData(data);
         battleStart = true;

@@ -39,6 +39,7 @@ public class MoveCameraState : FsmState
         {
             if (Input.GetTouch(0).phase == TouchPhase.Began || !m_IsSingleFinger)
             {
+                camareMng.touchLeaving = false;
                 //在开始触摸或者从两字手指放开回来的时候记录一下触摸的位置
                 lastSingleTouchPosition = Input.GetTouch(0).position;
             }
@@ -82,6 +83,7 @@ public class MoveCameraState : FsmState
             m_IsSingleFinger = false;
         }
         else if(Input.touchCount == 0 && !useMouse){
+            camareMng.touchLeaving = true;
             return GameState.IdleState;
         }
 
@@ -93,7 +95,7 @@ public class MoveCameraState : FsmState
             camareMng.size = Mathf.Clamp(camareMng.size, camareMng.minSize, camareMng.maxSize);
             if (Input.GetMouseButtonDown(0))
             {
-               
+                camareMng.touchLeaving = false;
                 lastSingleTouchPosition = Input.mousePosition;
                 //Debug.Log("GetMouseButtonDown:" + lastSingleTouchPosition);
             }
@@ -108,6 +110,7 @@ public class MoveCameraState : FsmState
                 lastSingleTouchPosition = Input.mousePosition;
             }
             if (Input.GetMouseButtonUp(0)){
+                camareMng.touchLeaving = true;
                 return GameState.IdleState;
             }
         }

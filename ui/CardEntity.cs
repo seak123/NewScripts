@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using DG.Tweening;
 using Map;
 
 public enum CardEntityState{
@@ -25,6 +26,7 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
     public Image magic;
     public Text cost;
     public int index;
+    public GameObject hightlight;
 
     private PlayerManager playerMng;
 
@@ -54,12 +56,15 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
         defaultPos = gameObject.transform.localPosition;
         state = CardEntityState.Empty;
         playerMng = GameRoot.GetInstance().PlayerMng;
+        hightlight.SetActive(false);
+        CleanUp();
     }
     private void Update()
     {
         if(state == CardEntityState.Sleep){
             if (playerMng.GetPlayerSaving() >= cardData.cost)
-            { 
+            {
+                EnterIdleState();
                 state = CardEntityState.Idle;
                 cost.color = Color.white;
                 sprite.color = Color.white;
@@ -68,6 +73,7 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
         if(state == CardEntityState.Idle){
             if (playerMng.GetPlayerSaving() < cardData.cost)
             {
+                EnterSleepState();
                 state = CardEntityState.Sleep;
                 cost.color = defaultCostRed;
                 sprite.color = Color.gray;
@@ -82,8 +88,12 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
 
     public void InjectData(CardData data){
         if (data == null) return;
-        if (playerMng.GetPlayerSaving() >= data.cost) { state = CardEntityState.Idle; }
-        else { 
+        if (playerMng.GetPlayerSaving() >= data.cost) {
+            EnterIdleState();
+            state = CardEntityState.Idle; 
+        }
+        else {
+            EnterSleepState();
             state = CardEntityState.Sleep;
             cost.color = defaultCostRed;
             sprite.color = Color.gray;
@@ -130,6 +140,7 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
             state = CardEntityState.Select;
             //GetComponent<Image>().color = new Color(color.r, color.g, color.b, factor);
             SetAlpha(factor);
+            hightlight.SetActive(false);
             entityPrefab.SetActive(false);
             cardManager.SelectCard(index,cardData, creatureData);
             //switch(cardData.cardType){
@@ -162,6 +173,7 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
 
 
             //GetComponent<Image>().color = new Color(color.r, color.g, color.b, factor);
+            hightlight.SetActive(false);
             SetAlpha(factor);
 
             Ray ray = Camera.main.ScreenPointToRay(newPos);
@@ -283,6 +295,15 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
         Destroy(entityPrefab);
         //Destroy(truePrefab);
 
+    }
+
+    private void EnterIdleState(){
+        gameObject.transform.DOScale(Vector3.one * 1.15f, 0.2f).SetLoops(2, LoopType.Yoyo);
+        //gameObject.transform.DOShakeScale(0.4f, new Vector3(0.1f, 0.1f, 0.1f),0,90);
+        hightlight.SetActive(true);
+    }
+    private void EnterSleepState(){
+        hightlight.SetActive(false);
     }
 
     private void SetAlpha(float alpha){
