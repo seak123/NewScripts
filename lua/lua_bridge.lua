@@ -45,6 +45,10 @@ function GetEffectManager(  )
     return api.GetEffectManager()
 end
 
+function GetPlayerManager(  )
+    return api.GetPlayerManager()
+end
+
 function BattleCompleted(  )
     return api.BattleCompleted()
 end

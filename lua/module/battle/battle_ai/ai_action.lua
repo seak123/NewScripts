@@ -1,6 +1,7 @@
 
 local this = class("ai_action")
 local battle_def = require("module.battle.battle_def")
+local config_mng = require("config.config_manager")
 
 function this:ctor( vo ,database)
       self.vo = vo
@@ -37,6 +38,9 @@ function this:enter_Wait(  )
 end
 
 function this:enter_Caster(  )
+    local card_config = config_mng.get_card_config(self.database.play_id)
+    local target_pos = card_config.target(self.database)
+    GetPlayerManager().EnemyPlayCard(self.database.play_id)
     return true
 end
 

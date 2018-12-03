@@ -27,16 +27,11 @@ function this:build( player_data,vo )
     return root_node
 end
 
-function this:build_database( _data )
-    --test
-    -- _data.cards = {
-    --     [1] = {card_id = 1,}
-    -- }
-    --
+function this:build_database( )
     local data = {}
     data.sess = battle_mng.session
     data.main_castle = data.sess.players[2].unit
-    data.player_data = _data
+    data.cards = data.sess.players[2].cards
     return data
 end
 

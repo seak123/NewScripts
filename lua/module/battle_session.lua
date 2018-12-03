@@ -40,6 +40,7 @@ function this:init_player_data( vo )
     enemy_data.init_x = battle_def.MAPMATRIX.column - 32
     enemy_data.init_y = battle_def.MAPMATRIX.row/2
     self.players[2].unit = self.field:add_unit(enemy_data,-1)
+    self.players[2].cards = vo.enemy.cards
 end
 
 function this:check_result(  )

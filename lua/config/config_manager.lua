@@ -1,5 +1,6 @@
 
 local this = {}
+local decorator = require("module.battle.battle_ai.ai_decorator")
 
 this.unit_config = {
     [0] = "config.unit.0_castle.castle_unit",
@@ -16,7 +17,7 @@ this.skill_config = {
 }
 
 this.card_config = {
-
+    [1] = {weight = {decorator.check_alive_friend(1,false,2)},target=decorator.check_pos_creature()}
 }
 
 function this.get_unit_config( id )

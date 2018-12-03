@@ -4,10 +4,10 @@ local this = class("decorator_vo",base)
 this.execute ="module.battle.battle_ai.ai_decorator"
 
 this.Type = {
-    CalcPriority = "CalcPriority",
-    CardAvaliable = "CardAvaliable"
+    CalcPriority = "CalcPriority"
+    --CardAvaliable = "CardAvaliable"
 }
 
---this.type = this.Type.Foward
+this.type = this.Type.CalcPriority
 
 return this

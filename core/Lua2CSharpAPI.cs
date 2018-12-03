@@ -14,5 +14,9 @@ namespace Utils
         public static EffectManager GetEffectManager(){
             return GameRoot.GetInstance().EffectMng;
         }
+
+        public static PlayerManager GetPlayerManager(){
+            return GameRoot.GetInstance().PlayerMng;
+        }
     }
 }

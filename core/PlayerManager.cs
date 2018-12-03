@@ -87,6 +87,10 @@ public class PlayerManager : MonoBehaviour {
         }
     }
 
+    public void EnemyPlayCard(int id){
+        
+    }
+
     public bool RequestCost(int side,float cost){
         switch(side){
             case 1:

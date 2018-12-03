@@ -8,7 +8,7 @@ this.ACTION = {
 this.execute = "module.battle.unit.behavior_tree.action_node"
 
 
---this.action_type = this.ACTION.Move
+this.action_type = this.ACTION.Caster
 this.priority = 1
 
 
