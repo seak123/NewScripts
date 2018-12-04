@@ -1,6 +1,7 @@
 
 require("utils.functions")
 battle_mng = require("module.battle.battle_manager")
+config_mng = require("config.config_manager")
 local api = Utils.Lua2CSharpAPI
 
 root = {mng = battle_mng}

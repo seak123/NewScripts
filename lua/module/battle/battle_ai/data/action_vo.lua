@@ -5,7 +5,7 @@ this.ACTION = {
    Caster = "Caster",
    Wait = "Wait"
 }
-this.execute = "module.battle.unit.behavior_tree.action_node"
+this.execute = "module.battle.battle_ai.ai_action"
 
 
 this.action_type = this.ACTION.Caster

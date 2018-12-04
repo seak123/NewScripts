@@ -5,6 +5,8 @@ local battle_skill_mng = require("module.battle.battle_skill_manager")
 local battle_trace = require("module.battle.battle_trace")
 local battle_def = require("module.battle.battle_def")
 local battle_trig = require("module.battle.battle_trigger")
+local battle_ai = require("module.battle.battle_ai.ai_tree")
+local normal_ai = require("config.ai_config.normal_player_ai")
 
 function this:ctor( vo )
     self.field = battle_field.new(self)
@@ -25,6 +27,7 @@ function this:update( delta )
     self.deltatime = delta
     self.field:update(delta)
     self.skill_mng:update(delta)
+    self.ai:execute()
     self:check_result()
 end
 
@@ -40,7 +43,9 @@ function this:init_player_data( vo )
     enemy_data.init_x = battle_def.MAPMATRIX.column - 32
     enemy_data.init_y = battle_def.MAPMATRIX.row/2
     self.players[2].unit = self.field:add_unit(enemy_data,-1)
-    self.players[2].cards = vo.enemy.cards
+    self.players[2].cards = vo.enemy.card_box
+    self.ai = battle_ai:build(self,normal_ai)
+    print("@@@@"..self.ai.active_index)
 end
 
 function this:check_result(  )

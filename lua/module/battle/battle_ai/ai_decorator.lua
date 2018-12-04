@@ -1,6 +1,5 @@
 local this = class("ai_decorator")
 local battle_def = require("module.battle.battle_def")
-local config_mng = require("config.config_manager")
 
 function this:ctor( vo )
     self.type = vo.type
@@ -24,16 +23,18 @@ end
 function this:check_CalcPriority(  )
     local card_list = {}
     local cards = self.database.cards
-    for _,v in ipairs(cards) do
+    self.database.play_id = -1
+    for i=0,cards.Length-1 do
         local value = 0
-        local card_config = config_mng.get_card_config(v.id)
+        local card_config = config_mng.get_card_config(cards[i])
         for _,f in ipairs(card_config.weight) do
             value = value + f(self.database)
         end
-        table.insert(card_list, {id = v,value = value} )
+        table.insert(card_list, {id = cards[i],value = value} )
     end
-    local max =0
-    for _,c in ipairs(cards) do
+
+    local max =-1
+    for _,c in ipairs(card_list) do
         if c.value > max then
             max = c.value
             self.database.play_id = c.id
@@ -73,9 +74,9 @@ end
 ----------------------------------target pos check
 function this.check_pos_creature(  )
     return function ( database )
-        local field = database.sess
+        local field = database.sess.field
         local close_unit = field:find_enemy(true,database.main_castle)
-        local data = self.database.card
+        local data = database.card
         local target_pos = {
             X = clamp(close_unit.transform.grid_pos.X,0,battle_def.MAPMATRIX.column),
             Y = clamp(close_unit.transform.grid_pos.Y,0,battle_def.MAPMATRIX.row)

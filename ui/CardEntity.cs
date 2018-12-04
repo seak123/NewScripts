@@ -70,7 +70,8 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
                 sprite.color = Color.white;
             }
         }
-        if(state == CardEntityState.Idle){
+        if (cardData != null)
+        {
             if (playerMng.GetPlayerSaving() < cardData.cost)
             {
                 EnterSleepState();
@@ -79,6 +80,7 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
                 sprite.color = Color.gray;
             }
         }
+
     }
 
     public void NotifyGameState(){
@@ -298,7 +300,7 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
     }
 
     private void EnterIdleState(){
-        gameObject.transform.DOScale(Vector3.one * 1.15f, 0.2f).SetLoops(2, LoopType.Yoyo);
+        gameObject.transform.DOScale(Vector3.one * 1.2f, 0.2f).SetLoops(2, LoopType.Yoyo);
         //gameObject.transform.DOShakeScale(0.4f, new Vector3(0.1f, 0.1f, 0.1f),0,90);
         hightlight.SetActive(true);
     }

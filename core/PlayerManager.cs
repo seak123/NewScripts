@@ -88,7 +88,7 @@ public class PlayerManager : MonoBehaviour {
     }
 
     public void EnemyPlayCard(int id){
-        
+        Debug.Log("play" + id);
     }
 
     public bool RequestCost(int side,float cost){

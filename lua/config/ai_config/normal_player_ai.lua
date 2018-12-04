@@ -6,7 +6,7 @@ local ac_caster = action.new()
 ac_caster.action_type = action.ACTION.Caster
 
 local de_calc = decorator.new()
-de_calc = decorator.Type.CalcPriority
+de_calc.type = decorator.Type.CalcPriority
 
 local root = behavior.new()
 root.controll_type = "sel"

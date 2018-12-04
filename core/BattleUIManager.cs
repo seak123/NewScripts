@@ -9,7 +9,9 @@ public class BattleUIManager : MonoBehaviour {
 
     public Slider MagicSlider;
     public GameObject MagicStone;
+    public GameObject MagicFill;
     public Text MagicValue;
+    public Material hightlightMaterial;
 
     public GameObject topPanel;
     public GameObject rightPanel;
@@ -56,13 +58,13 @@ public class BattleUIManager : MonoBehaviour {
             cardSpeed = 1,
             cards = new List<int>
             {
-                7,
-                2,
                 1,
-                2,
                 1,
-                2,
-                7,
+                1,
+                1,
+                1,
+                1,
+                1,
                 1
             }
         };
@@ -81,6 +83,8 @@ public class BattleUIManager : MonoBehaviour {
         if((int)saving != oldMagicValue){
             resetCache = 0;
             ShakeMagicStone();
+            MagicStone.GetComponent<Image>().material=hightlightMaterial;
+            MagicFill.GetComponent<Image>().material = hightlightMaterial;
             oldMagicValue = (int)saving;
         }
         resetCache += Time.deltaTime;
@@ -91,7 +95,7 @@ public class BattleUIManager : MonoBehaviour {
     }
 
     private void ShakeMagicStone(){
-        MagicStone.transform.DOScale(Vector3.one * 1.2f, 0.1f).SetLoops(4, LoopType.Yoyo);
+        MagicStone.transform.DOScale(Vector3.one * 1.3f, 0.14f).SetLoops(2, LoopType.Yoyo).onComplete+=ResetMagicStone;
     //    MagicStone.transform.DOShakeScale(0.4f,new Vector3(0.4f,0.4f,0.4f),10,0);
     //    MagicStone.transform.DOShakeRotation(0.4f, new Vector3(0, 0, 10f));
     }
@@ -99,6 +103,8 @@ public class BattleUIManager : MonoBehaviour {
     private void ResetMagicStone(){
         MagicStone.transform.localScale = Vector3.one;
         MagicStone.transform.localRotation = Quaternion.Euler(0, 0, 0);
+        MagicStone.GetComponent<Image>().material = null;
+        MagicFill.GetComponent<Image>().material = null;
     }
 
     private void InitPanelPosition(){

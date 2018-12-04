@@ -9,7 +9,6 @@ local buffcont = require("module.battle.unit.component.buff_container")
 local behavior_tree = require("module.battle.unit.behavior_tree.behavior_tree")
 local entire_skill = require("module.battle.skill.entire_skill")
 local pack_data = require("module.battle.skill.utils.pack_database")
-local config_mng = require("config.config_manager")
 
 function this:ctor( sess,data,uid ,struct_uid)
     self.sess = sess

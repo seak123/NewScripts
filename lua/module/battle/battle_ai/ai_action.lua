@@ -1,7 +1,6 @@
 
 local this = class("ai_action")
 local battle_def = require("module.battle.battle_def")
-local config_mng = require("config.config_manager")
 
 function this:ctor( vo ,database)
       self.vo = vo
@@ -23,6 +22,10 @@ function this:init_data( database )
     self.database = database
 end
 
+function this:init(  )
+   
+end
+
 function this:execute( )
     for _,v in ipairs(self.decorators) do
         if v:check() == false then
@@ -38,7 +41,9 @@ function this:enter_Wait(  )
 end
 
 function this:enter_Caster(  )
+    print("@@play id"..self.database.play_id)
     local card_config = config_mng.get_card_config(self.database.play_id)
+    if card_config == nil then return true end
     local target_pos = card_config.target(self.database)
     GetPlayerManager().EnemyPlayCard(self.database.play_id)
     return true

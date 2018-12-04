@@ -16,6 +16,7 @@ function this:ctor( vo ,database)
     self:init_data(database)
     if self.vo.decorators ~= nil then
         for _,v in ipairs(self.vo.decorators) do
+            print("@@"..v.execute)
             local dec = require(v.execute).new(v)
             dec:init_data(database)
             table.insert( self.decorators, dec )

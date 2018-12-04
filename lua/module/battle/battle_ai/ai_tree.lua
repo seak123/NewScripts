@@ -3,12 +3,15 @@ local this = class("ai_tree")
 
 
 
-function this:build( player_data,vo )
+function this:build( sess,vo )
     -- init database
-    local database = self:build_database(player_data)
+    local database = self:build_database(sess)
     -- start build tree
     local queue = {}
+    print("@@@@"..vo.execute)
+    --print("@@@@"..root_node.active_index)
     local root_node = require(vo.execute).new(vo,database)
+   
 
     table.insert( queue,root_node)
     while #queue > 0 do
@@ -27,9 +30,9 @@ function this:build( player_data,vo )
     return root_node
 end
 
-function this:build_database( )
+function this:build_database( sess)
     local data = {}
-    data.sess = battle_mng.session
+    data.sess = sess
     data.main_castle = data.sess.players[2].unit
     data.cards = data.sess.players[2].cards
     return data

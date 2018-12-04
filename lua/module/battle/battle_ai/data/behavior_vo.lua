@@ -1,5 +1,5 @@
 
-local base = require("module.battle.battle_ai.ai_behavior")
+local base = require("module.battle.battle_ai.data.base_vo")
 local this = class("behavior_vo",base)
 
 this.execute = "module.battle.battle_ai.ai_behavior"

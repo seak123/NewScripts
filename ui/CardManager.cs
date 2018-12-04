@@ -61,6 +61,7 @@ public class CardManager : MonoBehaviour {
         List<int> playerData = GameRoot.GetInstance().PlayerMng.GetPlayerData().cards;
         List<int> enemyData = GameRoot.GetInstance().PlayerMng.GetEnemyData().cards;
         enemyBoxs = new int[GameRoot.GetInstance().PlayerMng.GetEnemyData().cardBoxNum];
+        GameRoot.GetInstance().PlayerMng.GetEnemyData().card_box = enemyBoxs;
         for (int i = 0; i < enemyBoxs.Length; ++i)
         {
             enemyBoxs[i] = -1;
