@@ -37,6 +37,7 @@ public class CardManager : MonoBehaviour {
     private GameObject structureCardObj;
 
     private List<int> playerCards;
+    private 
     private List<int> enemyCards;
     // Use this for initialization
     void Start () {
@@ -190,6 +191,14 @@ public class CardManager : MonoBehaviour {
                 state = CardViewState.Structure;
             }
         }
+    }
+
+    public int[] GetEnemyCardBox(){
+        return enemyBoxs;
+    }
+
+    public void PlayEnemyCard(int id,int gridX,int gridY){
+
     }
 
     public void HideCard(){

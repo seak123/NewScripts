@@ -41,11 +41,10 @@ function this:enter_Wait(  )
 end
 
 function this:enter_Caster(  )
-    print("@@play id"..self.database.play_id)
     local card_config = config_mng.get_card_config(self.database.play_id)
     if card_config == nil then return true end
     local target_pos = card_config.target(self.database)
-    GetPlayerManager().EnemyPlayCard(self.database.play_id)
+    GetPlayerManager().EnemyPlayCard(self.database.play_id,target_pos.X,target_pos.Y)
     return true
 end
 

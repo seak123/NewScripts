@@ -45,7 +45,6 @@ function this:init_player_data( vo )
     self.players[2].unit = self.field:add_unit(enemy_data,-1)
     self.players[2].cards = vo.enemy.card_box
     self.ai = battle_ai:build(self,normal_ai)
-    print("@@@@"..self.ai.active_index)
 end
 
 function this:check_result(  )

@@ -8,8 +8,7 @@ function this:build( sess,vo )
     local database = self:build_database(sess)
     -- start build tree
     local queue = {}
-    print("@@@@"..vo.execute)
-    --print("@@@@"..root_node.active_index)
+    
     local root_node = require(vo.execute).new(vo,database)
    
 
@@ -34,7 +33,6 @@ function this:build_database( sess)
     local data = {}
     data.sess = sess
     data.main_castle = data.sess.players[2].unit
-    data.cards = data.sess.players[2].cards
     return data
 end
 

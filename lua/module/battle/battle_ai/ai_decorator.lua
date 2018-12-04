@@ -22,8 +22,9 @@ end
 
 function this:check_CalcPriority(  )
     local card_list = {}
-    local cards = self.database.cards
+    local cards = GetPlayerManager().GetEnemyCards()
     self.database.play_id = -1
+    if cards == nil or cards.Length == 0 then return true end
     for i=0,cards.Length-1 do
         local value = 0
         local card_config = config_mng.get_card_config(cards[i])

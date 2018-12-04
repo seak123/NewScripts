@@ -17,6 +17,8 @@ public class PlayerManager : MonoBehaviour {
     private PlayerBattleData playerData;
     private PlayerBattleData enemyData;
 
+    private CardManager cardMng;
+
     private bool start = false;
     private float updateIncomeDelta = 0;
     private float baseIncome = 0;
@@ -42,6 +44,12 @@ public class PlayerManager : MonoBehaviour {
     }
     public PlayerData GetEnemyData(){
         return enemy;
+    }
+    public int[] GetEnemyCards(){
+        return cardMng.GetEnemyCardBox();
+    }
+    public void SetCardManager(CardManager mng){
+        cardMng = mng;
     }
 
     private void Start()
@@ -87,8 +95,9 @@ public class PlayerManager : MonoBehaviour {
         }
     }
 
-    public void EnemyPlayCard(int id){
-        Debug.Log("play" + id);
+    public void EnemyPlayCard(int id,int gridX,int gridY){
+        //Debug.Log("play" + id);
+        cardMng.PlayEnemyCard(id,gridX,gridY);
     }
 
     public bool RequestCost(int side,float cost){
