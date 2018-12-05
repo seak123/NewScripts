@@ -50,8 +50,14 @@ function GetPlayerManager(  )
     return api.GetPlayerManager()
 end
 
+function GetAssetManager()
+    return api.GetAssetManager()
+end
+
 function BattleCompleted(  )
     return api.BattleCompleted()
 end
+
+
 
 

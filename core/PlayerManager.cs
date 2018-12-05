@@ -23,6 +23,12 @@ public class PlayerManager : MonoBehaviour {
     private float updateIncomeDelta = 0;
     private float baseIncome = 0;
 
+    public int[] enemyCards;
+
+    private int playId;
+    private int playGridX;
+    private int playGridY;
+
     [OnInjected]
     public void AddRootAction()
     {
@@ -44,9 +50,6 @@ public class PlayerManager : MonoBehaviour {
     }
     public PlayerData GetEnemyData(){
         return enemy;
-    }
-    public int[] GetEnemyCards(){
-        return cardMng.GetEnemyCardBox();
     }
     public void SetCardManager(CardManager mng){
         cardMng = mng;
@@ -93,11 +96,15 @@ public class PlayerManager : MonoBehaviour {
 
             updateIncomeDelta += Time.deltaTime;
         }
+        if(cardMng!=null)cardMng.PlayEnemyCard(playId, playGridX, playGridY);
     }
 
     public void EnemyPlayCard(int id,int gridX,int gridY){
-        //Debug.Log("play" + id);
-        cardMng.PlayEnemyCard(id,gridX,gridY);
+        //Debug.Log("play" + id+"X"+gridX+"Y"+gridY);
+        //cardMng.PlayEnemyCard(id,gridX,gridY);
+        playId = id;
+        playGridX = gridX;
+        playGridY = gridY;
     }
 
     public bool RequestCost(int side,float cost){

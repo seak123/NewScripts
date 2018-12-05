@@ -35,9 +35,9 @@ public class CardManager : MonoBehaviour {
 
     private GameObject creatureCardObj;
     private GameObject structureCardObj;
+    private PlayerManager playerMng;
 
     private List<int> playerCards;
-    private 
     private List<int> enemyCards;
     // Use this for initialization
     void Start () {
@@ -61,8 +61,10 @@ public class CardManager : MonoBehaviour {
     private void InjectData(){
         List<int> playerData = GameRoot.GetInstance().PlayerMng.GetPlayerData().cards;
         List<int> enemyData = GameRoot.GetInstance().PlayerMng.GetEnemyData().cards;
+        playerMng = GameRoot.GetInstance().PlayerMng;
+        playerMng.SetCardManager(this);
         enemyBoxs = new int[GameRoot.GetInstance().PlayerMng.GetEnemyData().cardBoxNum];
-        GameRoot.GetInstance().PlayerMng.GetEnemyData().card_box = enemyBoxs;
+        GameRoot.GetInstance().PlayerMng.enemyCards = enemyBoxs;
         for (int i = 0; i < enemyBoxs.Length; ++i)
         {
             enemyBoxs[i] = -1;
@@ -198,7 +200,11 @@ public class CardManager : MonoBehaviour {
     }
 
     public void PlayEnemyCard(int id,int gridX,int gridY){
-
+        CardData data = GameRoot.GetInstance().BattleField.assetManager.GetCardData(id);
+        if (data == null) return;
+        if (!playerMng.RequestCost(2, data.cost)) return;
+        CreatureData creature = GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(data.unitId);
+        GameRoot.GetInstance().Bridge.CasterSkill(2, data.skillId, gridX, gridY, AssetManager.PackCreatureData(creature), data.num);
     }
 
     public void HideCard(){

@@ -44,7 +44,7 @@ function this:enter_Caster(  )
     local card_config = config_mng.get_card_config(self.database.play_id)
     if card_config == nil then return true end
     local target_pos = card_config.target(self.database)
-    GetPlayerManager().EnemyPlayCard(self.database.play_id,target_pos.X,target_pos.Y)
+    GetPlayerManager():EnemyPlayCard(self.database.play_id,target_pos.X,target_pos.Y)
     return true
 end
 

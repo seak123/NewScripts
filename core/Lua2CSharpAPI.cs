@@ -18,5 +18,9 @@ namespace Utils
         public static PlayerManager GetPlayerManager(){
             return GameRoot.GetInstance().PlayerMng;
         }
+
+        public static AssetManager GetAssetManager(){
+            return GameRoot.GetInstance().BattleField.assetManager;
+        }
     }
 }

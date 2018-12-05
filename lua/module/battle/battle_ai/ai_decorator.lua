@@ -22,16 +22,18 @@ end
 
 function this:check_CalcPriority(  )
     local card_list = {}
-    local cards = GetPlayerManager().GetEnemyCards()
+    local cards = GetPlayerManager().enemyCards
     self.database.play_id = -1
     if cards == nil or cards.Length == 0 then return true end
     for i=0,cards.Length-1 do
-        local value = 0
-        local card_config = config_mng.get_card_config(cards[i])
-        for _,f in ipairs(card_config.weight) do
-            value = value + f(self.database)
+        if cards[i] >= 0 then
+            local value = 0
+            local card_config = config_mng.get_card_config(cards[i])
+            for _,f in ipairs(card_config.weight) do
+                value = value + f(self.database)
+            end
+            table.insert(card_list, {id = cards[i],value = value} )
         end
-        table.insert(card_list, {id = cards[i],value = value} )
     end
 
     local max =-1
@@ -77,20 +79,21 @@ function this.check_pos_creature(  )
     return function ( database )
         local field = database.sess.field
         local close_unit = field:find_enemy(true,database.main_castle)
-        local data = database.card
+    if close_unit == nil then close_unit = database.sess.players[1].unit end
+        local data = GetAssetManager():GetUnitData(database.play_id)
         local target_pos = {
-            X = clamp(close_unit.transform.grid_pos.X,0,battle_def.MAPMATRIX.column),
+            X = clamp(close_unit.transform.grid_pos.X,battle_def.ENEMYBOUND.column,battle_def.MAPMATRIX.column),
             Y = clamp(close_unit.transform.grid_pos.Y,0,battle_def.MAPMATRIX.row)
         }
         if data.attack_range > 16 then
             local shift = battle_def.MAPMATRIX.row/4
             local x = math.random(target_pos.X-shift,target_pos.X+shift)
-            x= clamp(x,0,battle_def.MAPMATRIX.column)
+            x= clamp(x,battle_def.ENEMYBOUND.column,battle_def.MAPMATRIX.column)
             local y = math.random( target_pos.Y-shift,target_pos.Y+shift )
             y= clamp(y,0,battle_def.MAPMATRIX.row)
             if math.abs( (x-close_unit.transform.grid_pos.X)<128 )then
                 local tem =close_unit.transform.grid_pos.X +128
-                if tem>=0 and tem<=battle_def.MAPMATRIX.column then
+                if tem>=battle_def.ENEMYBOUND.column and tem<=battle_def.MAPMATRIX.column then
                     x = tem
                 else
                     x = close_unit.transform.grid_pos.X -128
@@ -101,7 +104,7 @@ function this.check_pos_creature(  )
                 if tem>=0 and tem<=battle_def.MAPMATRIX.row then
                     y = tem
                 else
-                    x = close_unit.transform.grid_pos.Y -128
+                    y = close_unit.transform.grid_pos.Y -128
                 end
             end
             target_pos.X = x
@@ -109,25 +112,27 @@ function this.check_pos_creature(  )
         else
             local shift = battle_def.MAPMATRIX.row/16
             local x = math.random(target_pos.X-shift,target_pos.X+shift)
-            x= clamp(x,0,battle_def.MAPMATRIX.column)
+            --print("min"..target_pos.X-shift.."max"..target_pos.X+shift.."v"..x)
+            x= clamp(x,battle_def.ENEMYBOUND.column,battle_def.MAPMATRIX.column)
             local y = math.random( target_pos.Y-shift,target_pos.Y+shift )
+            --print("min"..target_pos.Y-shift.."max"..target_pos.Y+shift.."v"..y)
             y= clamp(y,0,battle_def.MAPMATRIX.row)
-            if math.abs( (x-close_unit.transform.grid_pos.X)<32 )then
-                local tem =close_unit.transform.grid_pos.X +32
-                if tem>=0 and tem<=battle_def.MAPMATRIX.column then
-                    x = tem
-                else
-                    x = close_unit.transform.grid_pos.X -32
-                end
-            end
-            if math.abs( (y-close_unit.transform.grid_pos.Y)<32 )then
-                local tem =close_unit.transform.grid_pos.Y +32
-                if tem>=0 and tem<=battle_def.MAPMATRIX.row then
-                    y = tem
-                else
-                    x = close_unit.transform.grid_pos.Y -32
-                end
-            end
+            -- if math.abs(x-close_unit.transform.grid_pos.X)<32 then
+            --     local tem =close_unit.transform.grid_pos.X +32
+            --     if tem>=battle_def.ENEMYBOUND.column and tem<=battle_def.MAPMATRIX.column then
+            --         x = tem
+            --     else
+            --         x = close_unit.transform.grid_pos.X -32
+            --     end
+            -- end
+            -- if math.abs(y-close_unit.transform.grid_pos.Y)<32 then
+            --     local tem =close_unit.transform.grid_pos.Y +32
+            --     if tem>=0 and tem<=battle_def.MAPMATRIX.row then
+            --         y = tem
+            --     else
+            --         y = close_unit.transform.grid_pos.Y -32
+            --     end
+            -- end
             target_pos.X = x
             target_pos.Y = y
         end

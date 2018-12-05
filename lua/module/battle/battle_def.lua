@@ -44,6 +44,11 @@ this.MAPMATRIX = {
     row = 448
 }
 
+this.ENEMYBOUND = {
+    column = 656,
+    row = 448
+}
+
 this.MaxSpeed = 32
 this.MinSpeed = 4
 this.NormalSpeed = 16
