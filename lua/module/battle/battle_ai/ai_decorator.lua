@@ -78,7 +78,7 @@ end
 function this.check_pos_creature(  )
     return function ( database )
         local field = database.sess.field
-        local close_unit = field:find_enemy(true,database.main_castle)
+        local close_unit = field:get_units(true,false,database.main_castle,1)[1]
     if close_unit == nil then close_unit = database.sess.players[1].unit end
         local data = GetAssetManager():GetUnitData(database.play_id)
         local target_pos = {
