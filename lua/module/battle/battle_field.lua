@@ -58,7 +58,7 @@ function this:find_enemy( with_structure,unit )
     if with_structure == true then type_flag = 2 else type_flag =1 end
 
     for _,u in ipairs(self.units[enemy_side]) do
-        if self:distance(unit,u) < battle_def.MAPMATRIX.row/4 and u.type < type_flag then
+        if self:distance(unit,u) < battle_def.MAPMATRIX.row/2 and u.type < type_flag then
             local threat = unit.threat_value[u.uid]
             if threat == nil then
                 -- set base threat_value
@@ -107,7 +107,7 @@ function this:get_units(with_structure,is_friend,unit,num,condition_func  )
                 end
             end
             if index ~= -1 then
-                for i= num,index+1 do
+                for i= num,index+1,-1 do
                     enemy[i].unit = enemy[i-1].unit
                     enemy[i].dis = enemy[i-1].dis
                 end
