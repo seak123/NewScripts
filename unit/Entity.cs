@@ -25,6 +25,7 @@ namespace Map
         public Animator animator;
 
         private int RouteUpdateFlag = 0;
+        private int RouteUpdateFactor = 0;
         private float animatorAttackSpeed = 1f;
         private GameObject shadow;
         private Vector3 shadowPos;
@@ -97,6 +98,7 @@ namespace Map
                 field.GetGridPos(nextViewX, nextViewY, out gridX, out gridY);
                 if (field.IsCanMove(gridX, gridY, radius))
                 {
+                    RouteUpdateFactor = 0;
                     offset = 0;
                     if (debug) Debug.Log("Straight:"+gridX+" "+gridY+"offset:"+offset);
                     gameObject.transform.position = new Vector3(nextViewX, 0f, nextViewY);
@@ -107,8 +109,10 @@ namespace Map
 
                     return;
                 }else{
+                    RouteUpdateFactor += 1;
+                    if(RouteUpdateFactor > 4)RouteUpdateFactor = 4;
                     state = TransformState.AStar;
-                    currMapNode = field.GetAStarRoute(id, posX, posY, toX, toY,speed*BattleDef.aStarUpdateFrame/30);
+                    currMapNode = field.GetAStarRoute(id, posX, posY, toX, toY,speed*BattleDef.aStarUpdateFrame*RouteUpdateFactor/30);
                     RouteUpdateFlag = 0;
                 }
             }
@@ -123,7 +127,8 @@ namespace Map
                     currMapNode = currMapNode.Next;
                 }
                 if(field.IsCanMove(currMapNode.X, currMapNode.Y, radius)){
-                    offset = value - (currMapNode.G - startG);
+                    if(currMapNode.Next!= null)offset = value - (currMapNode.G - startG);
+                    else offset = 0;
                     gridX = currMapNode.X;
                     gridY = currMapNode.Y;
                     if (debug) Debug.Log("AStar:" + gridX + " " + gridY+ "offset:"+offset);
