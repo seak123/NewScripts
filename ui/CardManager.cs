@@ -11,9 +11,9 @@ public enum CardViewState{
 }
 
 public struct CardInform{
-    int uid;
-    int side;
-    int id;
+    public int uid;
+    public int side;
+    public int id;
 }
 
 public class CardManager : MonoBehaviour {
@@ -25,7 +25,7 @@ public class CardManager : MonoBehaviour {
 
     private CardViewState state;
     private List<CardEntity> cardboxs;
-    private List<CardInform> enemyboxs;
+    private CardInform[] enemyboxs;
     private int[] enemyHandCards;
     private int cardIndex = 0;
     private int cardUid = 0;
@@ -76,6 +76,7 @@ public class CardManager : MonoBehaviour {
         playerMng = GameRoot.GetInstance().PlayerMng;
         playerMng.SetCardManager(this);
         enemyHandCards = new int[GameRoot.GetInstance().PlayerMng.GetEnemyData().cardBoxNum];
+        enemyboxs = new CardInform[enemyHandCards.Length];
         GameRoot.GetInstance().PlayerMng.enemyCards = enemyHandCards;
         for (int i = 0; i < enemyHandCards.Length; ++i)
         {
@@ -94,10 +95,11 @@ public class CardManager : MonoBehaviour {
         while (enemyData.Count > 0)
         {
             int index = Random.Range(0, enemyData.Count - 1);
-            enemyCards.Add(new CardInform{
+            enemyCards.Add(new CardInform
+            {
                 uid = cardUid,
                 side = 2,
-                id = enemyCards[index]
+                id = enemyData[index]
             });
             enemyData.RemoveAt(index);
             ++cardUid;

@@ -88,7 +88,7 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
         //GameRoot.GetInstance().StateManager
     }
 
-    public void InjectData(CardData data){
+    public void InjectData(CardData data,int uid){
         if (data == null) return;
         if (playerMng.GetPlayerSaving() >= data.cost) {
             EnterIdleState();
