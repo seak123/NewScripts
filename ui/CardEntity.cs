@@ -267,7 +267,6 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
                 CleanUp();
                 break;
             case CardType.Structure:
-                if (!playerMng.RequestCost(1, cardData.cost)) break;
                 MapField map = GameRoot.GetInstance().MapField;
                 int maxX;
                 int maxY;
@@ -275,6 +274,7 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
                 int centerX = maxX * 16 - (int)Mathf.Floor(cardData.size * 16 / 2);
                 int centerY = maxY * 16 - (int)Mathf.Floor(cardData.size * 16 / 2);
                 if (!posValiable || maxX > BattleDef.StructBound) break;
+                if (!playerMng.RequestCost(1, cardData.cost)) break;
                 int structUid = map.CreateStructure(maxX,maxY,cardData.size);
                 GameRoot.GetInstance().Bridge.CasterSkill(1, cardData.skillId, centerX, centerY, AssetManager.PackCreatureData(creatureData), structUid);
                 CleanUp();

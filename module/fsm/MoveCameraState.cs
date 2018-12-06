@@ -58,7 +58,7 @@ public class MoveCameraState : FsmState
         {
             //当从单指触摸进入多指触摸的时候,记录一下触摸的位置
             //保证计算缩放都是从两指手指触碰开始的
-            if (m_IsSingleFinger)
+            if (m_IsSingleFinger||(Input.GetTouch(0).phase == TouchPhase.Began && Input.GetTouch(1).phase == TouchPhase.Began))
             {
                 oldPosition1 = Input.GetTouch(0).position;
                 oldPosition2 = Input.GetTouch(1).position;
@@ -79,7 +79,7 @@ public class MoveCameraState : FsmState
                 oldPosition1 = tempPosition1;
                 oldPosition2 = tempPosition2;
             }
-
+            camareMng.MoveCamera(Vector3.zero);
             m_IsSingleFinger = false;
         }
         else if(Input.touchCount == 0 && !useMouse){

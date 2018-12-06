@@ -27,6 +27,8 @@ namespace Map
         private int RouteUpdateFlag = 0;
         private int RouteUpdateFactor = 0;
         private float animatorAttackSpeed = 1f;
+        private float moveSpeed = 1;
+        private float baseSpeed = 1;
         private GameObject shadow;
         private Vector3 shadowPos;
         private GameObject hpPrefab;
@@ -77,6 +79,7 @@ namespace Map
             //init data
             desX = toX;
             desY = toY;
+            moveSpeed = speed;
             MapField field = GameRoot.GetInstance().MapField;
             bool debug = false;
             if (uid == 20) debug = true;
@@ -110,7 +113,7 @@ namespace Map
                     return;
                 }else{
                     RouteUpdateFactor += 1;
-                    if(RouteUpdateFactor > 4)RouteUpdateFactor = 4;
+                    if (RouteUpdateFactor > 4) RouteUpdateFactor = 4;
                     state = TransformState.AStar;
                     currMapNode = field.GetAStarRoute(id, posX, posY, toX, toY,speed*BattleDef.aStarUpdateFrame*RouteUpdateFactor/30);
                     RouteUpdateFlag = 0;
@@ -136,7 +139,7 @@ namespace Map
                     SetRotation(gridX, gridY);
                     posX = gridX;
                     posY = gridY;
-                    if(RouteUpdateFlag == BattleDef.aStarUpdateFrame){
+                    if(RouteUpdateFlag == BattleDef.aStarUpdateFrame*RouteUpdateFactor){
                         state = TransformState.Straight;
                         RouteUpdateFlag = 0;
                     }
@@ -213,6 +216,7 @@ namespace Map
         {
             mng = GameRoot.GetInstance().BattleField.assetManager;
             shadow = gameObject.transform.Find("Shadow").gameObject;
+            baseSpeed = GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(id).base_speed;
             //init hp bar
             if (side == 1){
                 hpPrefab = GameRoot.GetInstance().BattleField.assetManager.GreenSlider;
@@ -233,6 +237,8 @@ namespace Map
         {
             if(animator.GetCurrentAnimatorStateInfo(0).IsName("Attack")){
                 animator.speed = animatorAttackSpeed;
+            }else if(animator.GetCurrentAnimatorStateInfo(0).IsName("Walk")){
+                animator.speed = moveSpeed/baseSpeed;
             }else{
                 animator.speed = 1;
             }

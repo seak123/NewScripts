@@ -159,7 +159,7 @@ public class CamaraManager : MonoBehaviour {
     }
 
     public void MoveCameraDirect(Vector3 delta){
-        Vector3 v = delta * scrollFactor;
+        Vector3 v = delta * 0.1f;
         m_CameraOffset += new Vector3(v.x, 0, v.z) * m_Camera.transform.position.y;
     }
 

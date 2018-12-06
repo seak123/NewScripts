@@ -27,7 +27,9 @@ function lua_update( delta )
 end
 
 function caster_skill( side,skill_id,pos_x,pos_y,arg1,arg2)
-    battle_mng.session.skill_mng:caster_skill(side,skill_id,pos_x,pos_y,arg1,arg2)
+    if battle_mng.session ~= nil then
+        battle_mng.session.skill_mng:caster_skill(side,skill_id,pos_x,pos_y,arg1,arg2)
+    end
 end
 
 ---------------------------csharp functon
