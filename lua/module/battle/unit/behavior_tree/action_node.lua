@@ -1,6 +1,7 @@
 
 local this = class("action_node")
 local transform = require("module.battle.unit.component.transform")
+local decorator = require("module.battle.unit.behavior_tree.data.decorator_vo")
 local battle_def = require("module.battle.battle_def")
 
 function this:ctor( vo ,database)
@@ -152,6 +153,11 @@ function this:update_MoveToEnemy( delta )
                self.running = false
                return "failure"
             end
+            local de_find_enemy = decorator.new()
+            de_find_enemy.type = decorator.Type.EnemyAround
+            local dec = require(de_find_enemy.execute).new(de_find_enemy)
+            dec:init_data(self.database)
+            dec:check()
             self.runtime = 0
             self.enter_pos = {
                 X = self.database.master.transform.grid_pos.X,
