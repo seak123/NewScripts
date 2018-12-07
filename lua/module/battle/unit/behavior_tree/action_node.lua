@@ -78,10 +78,10 @@ function this:update_MoveForward( delta )
     end
     self.running = true
     self.runtime = self.runtime + delta
-    if self.runtime > self.max_runtime then
-        self.running = false
-         return "failure" 
-    end
+    -- if self.runtime > self.max_runtime then
+    --     self.running = false
+    --      return "failure" 
+    -- end
     return "running"
 end
 
@@ -105,10 +105,10 @@ function this:update_MoveToPos( delta )
     end
     self.running = true
     self.runtime = self.runtime + delta
-    if self.runtime > self.max_runtime then
-        self.running = false
-         return "failure" 
-    end
+    -- if self.runtime > self.max_runtime then
+    --     self.running = false
+    --      return "failure" 
+    -- end
     return "running"
 end
 
@@ -138,13 +138,25 @@ function this:update_MoveToEnemy( delta )
         self.running = true
         self.runtime = self.runtime + delta
     
-        if self.runtime > self.max_runtime then 
-            self.running = false
-            -- move a bit means cannot move to this enemy, decrease the threat_value
-            if field:distance(self.enter_pos,self.database.master) < self.max_runtime*battle_def.MinSpeed/2 then
-                self.database.master.threat_value[self.database.target.uid] = self.database.master.threat_value[self.database.target.uid] - 1
+        -- if self.runtime > self.max_runtime then 
+        --     self.running = false
+        --     -- move a bit means cannot move to this enemy, decrease the threat_value
+        --     if field:distance(self.enter_pos,self.database.master) < self.max_runtime*battle_def.MinSpeed/2 then
+        --         self.database.master.threat_value[self.database.target.uid] = self.database.master.threat_value[self.database.target.uid] - 1
+        --     end
+        --     return "failure" 
+        -- end
+        if self.runtime > 2 then
+            if field:distance(self.enter_pos,self.database.master) < battle_def.MinSpeed then
+               self.database.master.threat_value[self.database.target.uid] = self.database.master.threat_value[self.database.target.uid] - 1
+               self.running = false
+               return "failure"
             end
-            return "failure" 
+            self.runtime = 0
+            self.enter_pos = {
+                X = self.database.master.transform.grid_pos.X,
+                Y = self.database.master.transform.grid_pos.Y
+            }
         end
         
         return "running"

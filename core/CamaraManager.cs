@@ -169,9 +169,10 @@ public class CamaraManager : MonoBehaviour {
         //Vector3 lastTouchPostion = m_Camera.ScreenToWorldPoint(new Vector3(lastSingleTouchPosition.x, lastSingleTouchPosition.y, -1));
         //Vector3 currentTouchPosition = m_Camera.ScreenToWorldPoint(new Vector3(scenePos.x, scenePos.y, -1));
         //Debug.Log(delta);
-        Vector3 v = delta*scrollFactor ;
+        Vector3 v = delta*scrollFactor;
+        //if(v!=Vector3.zero) Debug.Log(v);
         speed = delta / Time.deltaTime;
-        m_CameraOffset += new Vector3(v.x, 0, v.z) * m_Camera.transform.position.y;
+        m_CameraOffset += new Vector3(v.x, 0, v.z*1.4f) * m_Camera.transform.position.y;
 
         //Debug.Log(lastTouchPostion + "|" + currentTouchPosition + "|" + v);
         //lastSingleTouchPosition = scenePos;

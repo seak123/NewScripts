@@ -227,8 +227,11 @@ namespace Map
                                 flag = IsCanMove(roundPos.x, roundPos.y, radius);
                                 IsCanMoveCache.Add(key, flag);
                             }
-                            if (flag)
-                                heap.Find(roundPos.x, roundPos.y, currNode.G + DiagoFactor, Distance(roundPos.x, roundPos.y, e_x, e_y), currNode);
+                        if (flag)
+                        {
+                            if(direct[i].x*direct[i].y!=0)heap.Find(roundPos.x, roundPos.y, currNode.G + DiagoFactor, Distance(roundPos.x, roundPos.y, e_x, e_y), currNode);
+                            else heap.Find(roundPos.x, roundPos.y, currNode.G + 1, Distance(roundPos.x, roundPos.y, e_x, e_y), currNode);
+                        }
                         }
                     }
 
