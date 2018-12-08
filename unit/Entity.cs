@@ -201,7 +201,7 @@ namespace Map
 
         }
 
-        public void Die(){
+        public void Die(int cardUid){
             if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
             {
                 animator.SetTrigger("Break");

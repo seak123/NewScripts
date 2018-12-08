@@ -16,6 +16,7 @@ function this:ctor( sess,data,uid ,struct_uid)
     -- type: 1,creature;2,structure
     self.type = data.type
     self.uid = uid
+    self.card_uid = data.card_uid
     -- only structure use
     self.struct_uid = struct_uid
     self.config = require(config_mng.get_unit_config(self.id))
@@ -170,7 +171,7 @@ function this:die(  )
     self.alive = 2
     self:on_die()
     self.sess.field:unit_die(self)
-    self.entity:Die()
+    self.entity:Die(self.card_uid)
 end
 
 

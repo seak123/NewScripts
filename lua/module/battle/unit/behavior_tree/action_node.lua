@@ -61,7 +61,7 @@ function this:enter_MoveForward(  )
 end
 
 function this:abort_MoveForward(  )
-    --self.database.master.entity:AnimCasterBreak()
+    self.database.master.entity:AnimCasterBreak()
 end
 
 function this:update_MoveForward( delta )
@@ -95,7 +95,7 @@ function this:enter_MoveToPos(  )
 end
 
 function this:abort_MoveToPos(  )
-    --self.database.master.entity:AnimCasterBreak()
+    self.database.master.entity:AnimCasterBreak()
 end
 
 function this:update_MoveToPos( delta )
@@ -125,7 +125,7 @@ function this:enter_MoveToEnemy(  )
 end
 
 function this:abort_MoveToEnemy(  )
-    --self.database.master.entity:AnimCasterBreak()
+    self.database.master.entity:AnimCasterBreak()
 end
 
 function this:update_MoveToEnemy( delta )
@@ -213,7 +213,7 @@ end
 
 function this:abort_Caster(  )
     self.database.master.skill_process = 0
-    --self.database.master.entity:AnimCasterBreak()
+    self.database.master.entity:AnimCasterBreak()
 end
 
 function this:update_Caster(delta)

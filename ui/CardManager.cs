@@ -45,6 +45,7 @@ public class CardManager : MonoBehaviour {
     private GameObject structureCardObj;
     private PlayerManager playerMng;
 
+    private Dictionary<int,int> cardReviveMap;
     private List<CardInform> playerCards;
     private List<CardInform> playerCardGrave;
     private List<CardInform> enemyCards;
@@ -57,6 +58,7 @@ public class CardManager : MonoBehaviour {
         playerCardGrave = new List<CardInform>();
         enemyCards = new List<CardInform>();
         enemyCardGrave = new List<CardInform>();
+        cardReviveMap = new Dictionary<int,int>();
         creatureCardObj = Instantiate(creatureCardPrefab);
         creatureCardObj.transform.SetParent(transform);
         structureCardObj = Instantiate(structureCardPrefab);
@@ -168,6 +170,7 @@ public class CardManager : MonoBehaviour {
         if (playerCards.Count == 0) return;
         int cIndex = playerCards[0].id;
         playerCardGrave.Add(playerCards[0]);
+        cardReviveMap.Add(playerCards[0].uid,GameRoot.GetInstance().BattleField.assetManager.GetCardData(cIndex).num);
         cardboxs[index].InjectData(GameRoot.GetInstance().BattleField.assetManager.GetCardData(cIndex),playerCards[0].uid);
         playerCards.RemoveAt(0);
         ++cardIndex;
@@ -184,12 +187,17 @@ public class CardManager : MonoBehaviour {
         if (flag) return;
         if (enemyCards.Count == 0) return;
         int cIndex = enemyCards[0].id;
+        cardReviveMap.Add(playerCards[0].uid,GameRoot.GetInstance().BattleField.assetManager.GetCardData(cIndex).num);
         enemyCardGrave.Add(enemyCards[0]);
         enemyHandCards[index] = cIndex;
         enemyboxs[index] = enemyCards[0];
         enemyCards.RemoveAt(0);
         ++enemyCardIndex;
         enemyPushWaitTime = 0f;
+    }
+
+    public void RecoverCard(int cardUid){
+        //cardReviveMap
     }
 
     public void SelectCard(int index,CardData cardData,CreatureData creatureData){

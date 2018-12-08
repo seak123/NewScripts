@@ -31,6 +31,7 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
     private PlayerManager playerMng;
 
 
+    private int cardUid;
     //private Button button;
     private CardData cardData;
     private Vector3 defaultPos;
@@ -90,6 +91,7 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
 
     public void InjectData(CardData data,int uid){
         if (data == null) return;
+        cardUid = uid
         if (playerMng.GetPlayerSaving() >= data.cost) {
             EnterIdleState();
             state = CardEntityState.Idle; 
