@@ -46,7 +46,8 @@ public class MoveCameraState : FsmState
             if (Input.GetTouch(0).phase == TouchPhase.Moved)
             {
                 Vector3 lastTouchPos = Camera.main.ScreenToWorldPoint(new Vector3(lastSingleTouchPosition.x, lastSingleTouchPosition.y, -1));
-                Vector3 currTouchPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, -1));
+                float deltaY = Input.GetTouch(0).position.y - lastSingleTouchPosition.y;
+                Vector3 currTouchPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.GetTouch(0).position.x, lastSingleTouchPosition.y+deltaY*1.41f, -1));
                 Vector3 delta = lastTouchPos - currTouchPos;
                 camareMng.MoveCamera(delta);
                 lastSingleTouchPosition = Input.GetTouch(0).position;
@@ -103,10 +104,12 @@ public class MoveCameraState : FsmState
             {
                
                 Vector3 lastTouchPos = Camera.main.ScreenToWorldPoint(new Vector3(lastSingleTouchPosition.x, lastSingleTouchPosition.y, -1));
-                Vector3 currTouchPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -1));
-               
+                float deltaY = Input.mousePosition.y - lastSingleTouchPosition.y;
+                Vector3 currTouchPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, lastSingleTouchPosition.y+deltaY*1.4f, -1));
+
                 Vector3 delta = lastTouchPos - currTouchPos;
                 camareMng.MoveCamera(delta);
+                Debug.Log("Move  " + delta.x + "  " + delta.z);
                 lastSingleTouchPosition = Input.mousePosition;
             }
             if (Input.GetMouseButtonUp(0)){

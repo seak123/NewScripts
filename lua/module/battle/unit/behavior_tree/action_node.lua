@@ -61,7 +61,7 @@ function this:enter_MoveForward(  )
 end
 
 function this:abort_MoveForward(  )
-    self.database.master.entity:AnimCasterBreak()
+    --self.database.master.entity:AnimCasterBreak()
 end
 
 function this:update_MoveForward( delta )
@@ -95,7 +95,7 @@ function this:enter_MoveToPos(  )
 end
 
 function this:abort_MoveToPos(  )
-    self.database.master.entity:AnimCasterBreak()
+    --self.database.master.entity:AnimCasterBreak()
 end
 
 function this:update_MoveToPos( delta )
@@ -118,14 +118,14 @@ function this:enter_MoveToEnemy(  )
 
     self.database.master.entity:AnimCasterAction(transform.AnimationState.Walk)
     self.runtime = 0
-    self.max_runtime = 1
+    self.max_runtime = 2
     self.enter_pos = {X = self.database.master.transform.grid_pos.X,
                       Y = self.database.master.transform.grid_pos.Y }
     return true
 end
 
 function this:abort_MoveToEnemy(  )
-    self.database.master.entity:AnimCasterBreak()
+    --self.database.master.entity:AnimCasterBreak()
 end
 
 function this:update_MoveToEnemy( delta )
@@ -213,7 +213,7 @@ end
 
 function this:abort_Caster(  )
     self.database.master.skill_process = 0
-    self.database.master.entity:AnimCasterBreak()
+    --self.database.master.entity:AnimCasterBreak()
 end
 
 function this:update_Caster(delta)

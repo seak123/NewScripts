@@ -142,7 +142,6 @@ public class CamaraManager : MonoBehaviour {
     private void LateUpdate()
     {
         if(touchLeaving==true&&speed.magnitude>=0.1f){
-            Debug.Log("touchleaving");
             MoveCamera(speed * Time.deltaTime);
             speed = speed / 1.25f;
         }else{
@@ -172,7 +171,7 @@ public class CamaraManager : MonoBehaviour {
         Vector3 v = delta*scrollFactor;
         //if(v!=Vector3.zero) Debug.Log(v);
         speed = delta / Time.deltaTime;
-        m_CameraOffset += new Vector3(v.x, 0, v.z*1.4f) * m_Camera.transform.position.y;
+        m_CameraOffset += new Vector3(v.x, 0, v.z) * m_Camera.transform.position.y;
 
         //Debug.Log(lastTouchPostion + "|" + currentTouchPosition + "|" + v);
         //lastSingleTouchPosition = scenePos;
