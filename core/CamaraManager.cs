@@ -143,7 +143,7 @@ public class CamaraManager : MonoBehaviour {
     {
         if(touchLeaving==true&&speed.magnitude>=0.1f){
             MoveCamera(speed * Time.deltaTime);
-            speed = speed / 1.25f;
+            speed = speed / 1.3f;
         }else{
             touchLeaving = false;
         }

@@ -48,12 +48,14 @@ end
 
 function this:abort(  )
     if self["abort_"..self.action_type] ~= nil then
+        self.running = false
         return self["abort_"..self.action_type](self)
     end
 end
 
 function this:enter_MoveForward(  )
     if self.database.master.statectrl:has_feature("de_move") then return false end
+    -- print("uid:"..self.database.master.uid.." enter forward state")
     self.database.master.entity:AnimCasterAction(transform.AnimationState.Walk)
     self.runtime = 0
     self.max_runtime = 2
@@ -88,6 +90,7 @@ end
 
 function this:enter_MoveToPos(  )
     if self.database.master.statectrl:has_feature("de_move") then return false end
+    -- print("uid:"..self.database.master.uid.." enter movetopos state")
     self.database.master.entity:AnimCasterAction(transform.AnimationState.Walk)
     self.runtime = 0
     self.max_runtime = 2
@@ -99,6 +102,7 @@ function this:abort_MoveToPos(  )
 end
 
 function this:update_MoveToPos( delta )
+    -- print("uid:"..self.database.master.uid.." update movetopos state")
     self.database.master.transform.des_pos = self.database.des_pos
     if self.database.master.transform.grid_pos.X == self.database.des_pos.X and self.database.master.transform.grid_pos.Y == self.database.des_pos.Y then
         self.running = false
@@ -115,7 +119,7 @@ end
 
 function this:enter_MoveToEnemy(  )
     if self.database.master.statectrl:has_feature("de_move") then return false end
-
+    -- print("uid:"..self.database.master.uid.." enter movetoenemy state")
     self.database.master.entity:AnimCasterAction(transform.AnimationState.Walk)
     self.runtime = 0
     self.max_runtime = 2
@@ -129,8 +133,9 @@ function this:abort_MoveToEnemy(  )
 end
 
 function this:update_MoveToEnemy( delta )
+    -- print("uid:"..self.database.master.uid.." update movetoenemy state")
     local field = self.database.master.sess.field
-    if self.database.target ~= nil then
+    if self.database.target ~= nil and self.database.target.alive== 0 then
         if field:distance(self.database.target,self.database.master) < 1.5*(self.database.master.data.radius + self.database.target.data.radius) then
             self.running = false
             return "completed"
@@ -173,7 +178,7 @@ end
 
 function this:enter_Attack(  )
     if self.database.master.statectrl:has_feature("de_attack") then return false end
-
+    -- print("uid:"..self.database.master.uid.." enter attack state")
     self.database.master.entity:AnimCasterAttack(self.database.master.property:get("attack_rate"))
     self.database.master.entity:SetRotation(self.database.target.transform.grid_pos.X,self.database.target.transform.grid_pos.Y)
     self.database.master.attack_process = 0
@@ -188,6 +193,7 @@ function this:abort_Attack(  )
 end
 
 function this:update_Attack( delta )
+    -- print("uid:"..self.database.master.uid.." update attack state")
     local flag = self.database.master:do_attack(delta*self.database.master.property:get("attack_rate"),self.database.target)
     if flag == false then
         self.running = true

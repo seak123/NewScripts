@@ -14,9 +14,9 @@ public class BattleUIManager : MonoBehaviour {
     public Material hightlightMaterial;
 
     public GameObject topPanel;
-    public GameObject rightPanel;
     public GameObject bottomPanel;
     public GameObject talkPanel;
+    public GameObject goldSlider;
 
     private bool start = false;
     private int oldMagicValue=0;
@@ -60,12 +60,6 @@ public class BattleUIManager : MonoBehaviour {
             {
                 1,
                 1,
-                1,
-                1,
-                1,
-                1,
-                1,
-                1
             }
         };
         data.beginDelay = 5f;
@@ -109,7 +103,8 @@ public class BattleUIManager : MonoBehaviour {
 
     private void InitPanelPosition(){
         topPanel.transform.DOLocalMove(new Vector3(0, 425, 0), 0.8f);
-        rightPanel.transform.DOLocalMove(new Vector3(860.4f, 108.77f, 0), 0.8f);
+        //rightPanel.transform.DOLocalMove(new Vector3(860.4f, 108.77f, 0), 0.8f);
         bottomPanel.transform.DOLocalMove(new Vector3(0, -356, 0), 0.8f);
+        goldSlider.transform.DOLocalMove(new Vector3(27, -162, 0), 0.8f);
     }
 }

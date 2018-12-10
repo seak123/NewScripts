@@ -210,6 +210,7 @@ namespace Map
             GameRoot.GetInstance().MapField.RemoveEntity(this,2f);
             Destroy(hpBar, 0.5f);
             Destroy(gameObject, 2f);
+            GameRoot.GetInstance().PlayerMng.GetCardManager().RecoverCard(cardUid);
         }
 
         private void Start()

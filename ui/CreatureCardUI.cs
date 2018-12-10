@@ -31,6 +31,9 @@ public class CreatureCardUI : MonoBehaviour {
     public Image skill1Icon;
     public Image skill2Icon;
     public Image skill3Icon;
+    public Image star1Icon;
+    public Image star2Icon;
+    public Image star3Icon;
 
     public GameObject skillContent;
 

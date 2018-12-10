@@ -31,7 +31,7 @@ function this:check_EnemyAround(  )
     if self.database.master.statectrl:has_feature("confused") then
         unit = field:find_friend(true,self.database.master)
     end
-    if unit == nil then
+    if unit == nil or unit.alive ~= 0 then
         return false
     end
     self.database.target = unit
@@ -54,7 +54,7 @@ function this:check_EnemyInAttackRange(  )
     local enemy = self.database.target
     
     local field = self.database.master.sess.field
-    if enemy ~= nil then
+    if enemy ~= nil and enemy.alive == 0 then
         local dis = field:distance(enemy,self.database.master)
         if dis < (1.5*(self.database.master.data.radius + enemy.data.radius)+self.database.master.data.attack_range )then
             return true

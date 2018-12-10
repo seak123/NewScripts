@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using DG.Tweening;
 using Map;
+using Data;
 
 public enum CardEntityState{
     Empty = 0,
@@ -91,7 +92,7 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
 
     public void InjectData(CardData data,int uid){
         if (data == null) return;
-        cardUid = uid
+        cardUid = uid;
         if (playerMng.GetPlayerSaving() >= data.cost) {
             EnterIdleState();
             state = CardEntityState.Idle; 
@@ -265,7 +266,9 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
                 if (!MapField.CheckPosValiable(posX, posY)||posX>(BattleDef.UnitBound+32))break;
                 if (!playerMng.RequestCost(1, cardData.cost)) break;
                 posX = Mathf.Clamp(posX, 0, BattleDef.UnitBound);
-                GameRoot.GetInstance().Bridge.CasterSkill(1, cardData.skillId, posX, posY, AssetManager.PackCreatureData(creatureData), cardData.num);
+                UnitData unitData = AssetManager.PackCreatureData(creatureData);
+                unitData.card_uid = cardUid;
+                GameRoot.GetInstance().Bridge.CasterSkill(1, cardData.skillId, posX, posY, unitData, cardData.num);
                 CleanUp();
                 break;
             case CardType.Structure:
@@ -278,7 +281,9 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
                 if (!posValiable || maxX > BattleDef.StructBound) break;
                 if (!playerMng.RequestCost(1, cardData.cost)) break;
                 int structUid = map.CreateStructure(maxX,maxY,cardData.size);
-                GameRoot.GetInstance().Bridge.CasterSkill(1, cardData.skillId, centerX, centerY, AssetManager.PackCreatureData(creatureData), structUid);
+                UnitData unitData2 = AssetManager.PackCreatureData(creatureData);
+                unitData2.card_uid = cardUid;
+                GameRoot.GetInstance().Bridge.CasterSkill(1, cardData.skillId, centerX, centerY, unitData2, structUid);
                 CleanUp();
                 break;
         }

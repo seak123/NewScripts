@@ -6,6 +6,7 @@ public class SelectPosState : FsmState {
 
     private CardEntity cardEntity;
     private readonly bool useMouse = BattleDef.useMouse;
+    private Vector2 offset;
 
     public SelectPosState(){
         stateType = GameState.SelectPosState;
@@ -28,18 +29,18 @@ public class SelectPosState : FsmState {
         {
             if (Input.GetTouch(0).phase == TouchPhase.Moved)
             {
-                cardEntity.OnMove(Input.GetTouch(0).position);
+                cardEntity.OnMove(Input.GetTouch(0).position+offset);
             }
             if (Input.GetTouch(0).phase == TouchPhase.Ended)
             {
-                cardEntity.OnRelease(Input.GetTouch(0).position);
+                cardEntity.OnRelease(Input.GetTouch(0).position+offset);
                 GameRoot.GetInstance().StateManager.selectCard = null;
                 return GameState.IdleState;
             }
         }
         if(useMouse){
             if(Input.GetMouseButton(0)){
-                cardEntity.OnMove(Input.mousePosition);
+                cardEntity.OnMove(Input.mousePosition+new Vector3(offset.x,offset.y,0));
             }
             if(Input.GetMouseButtonUp(0)){
                 cardEntity.OnRelease(Input.mousePosition);
@@ -52,7 +53,7 @@ public class SelectPosState : FsmState {
 
     // Use this for initialization
     void Start () {
-		
+        offset = new Vector2(0, Screen.height / 4);
 	}
 	
 	// Update is called once per frame

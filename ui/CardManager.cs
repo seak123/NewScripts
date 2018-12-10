@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Data;
 
 public enum CardViewState{
     Idle = 1,
@@ -181,13 +182,13 @@ public class CardManager : MonoBehaviour {
         bool flag = true;
         int index = 0;
         for (int i = 0; i < enemyHandCards.Length;++i){
-            if (enemyHandCards[i] < 0) { flag = flag && false; index = i; }
+            if (enemyHandCards[i] < 0) { flag = flag && false; index = i;break; }
             else flag = flag && true;
         }
         if (flag) return;
         if (enemyCards.Count == 0) return;
         int cIndex = enemyCards[0].id;
-        cardReviveMap.Add(playerCards[0].uid,GameRoot.GetInstance().BattleField.assetManager.GetCardData(cIndex).num);
+        cardReviveMap.Add(enemyCards[0].uid,GameRoot.GetInstance().BattleField.assetManager.GetCardData(cIndex).num);
         enemyCardGrave.Add(enemyCards[0]);
         enemyHandCards[index] = cIndex;
         enemyboxs[index] = enemyCards[0];
@@ -198,6 +199,29 @@ public class CardManager : MonoBehaviour {
 
     public void RecoverCard(int cardUid){
         //cardReviveMap
+        if(cardReviveMap.ContainsKey(cardUid)){
+            cardReviveMap[cardUid] = cardReviveMap[cardUid] - 1;
+            if(cardReviveMap[cardUid]==0){
+                for (int i = 0; i < playerCardGrave.Count;++i){
+                    if(playerCardGrave[i].uid == cardUid){
+                        playerCards.Add(playerCardGrave[i]);
+                        playerCardGrave.RemoveAt(i);
+                        cardReviveMap.Remove(cardUid);
+                        return;
+                    }
+                }
+                for (int i = 0; i < enemyCardGrave.Count; ++i)
+                {
+                    if (enemyCardGrave[i].uid == cardUid)
+                    {
+                        enemyCards.Add(enemyCardGrave[i]);
+                        enemyCardGrave.RemoveAt(i);
+                        cardReviveMap.Remove(cardUid);
+                        return;
+                    }
+                }
+            }
+        }
     }
 
     public void SelectCard(int index,CardData cardData,CreatureData creatureData){
@@ -237,10 +261,20 @@ public class CardManager : MonoBehaviour {
     public void PlayEnemyCard(int id,int gridX,int gridY){
         CardData data = GameRoot.GetInstance().BattleField.assetManager.GetCardData(id);
         if (data == null) return;
+        //find id and delete then
+        int index = -1;
+        for (int i = 0; i < enemyHandCards.Length; ++i)
+        {
+            if (enemyHandCards[i] == id) {index = i; break; }
+        }
+        if (index == -1) return;
         if (!playerMng.RequestCost(2, data.cost)) return;
         CreatureData creature = GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(data.unitId);
-        GameRoot.GetInstance().Bridge.CasterSkill(2, data.skillId, gridX, gridY, AssetManager.PackCreatureData(creature), data.num);
-        //find id and delete
+        UnitData unitData = AssetManager.PackCreatureData(creature);
+        unitData.card_uid = enemyboxs[index].uid;
+        GameRoot.GetInstance().Bridge.CasterSkill(2, data.skillId, gridX, gridY, unitData, data.num);
+
+        enemyHandCards[index] = -1;
     }
 
     public void HideCard(){

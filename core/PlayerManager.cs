@@ -54,6 +54,9 @@ public class PlayerManager : MonoBehaviour {
     public void SetCardManager(CardManager mng){
         cardMng = mng;
     }
+    public CardManager GetCardManager(){
+        return cardMng;
+    }
 
     private void Start()
     {
