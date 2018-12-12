@@ -37,14 +37,9 @@ public class BattleUIManager : MonoBehaviour {
             cardSpeed = 1,
             cards = new List<int>
             {
-                7,
                 2,
-                1,
                 2,
-                1,
-                2,
-                7,
-                1
+                2
             }
     };
         data.enemy = new PlayerData
@@ -60,6 +55,13 @@ public class BattleUIManager : MonoBehaviour {
             {
                 1,
                 1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1
             }
         };
         data.beginDelay = 5f;

@@ -10,13 +10,27 @@ local throw1 = throw_skill.new()
 throw1.speed = 60
 throw1.trace = throw_skill.Trace.Curve
 
+local effect1 = effect.new()
+effect1.effect_id = 1
 
-local retarget0 = retarget_skill.new()
-retarget0.target_type = retarget_skill.TargetType.Distance
-retarget0.can_repeat = false
-retarget0.cantain_curr_target = false
-retarget0.num = 2
-retarget0.append("childs",throw1)
+
+local damage1 = damage.new()
+damage1.calc = calc.make_common_attack(1, 0) 
+
+local normal1 = normal_skill.new()
+normal1:append("raw_skills",damage1)
+
+throw1:append("effect",effect1)
+throw1:append("childs",normal1)
+
+
+-- local retarget0 = retarget_skill.new()
+-- retarget0.target_type = retarget_skill.TargetType.Distance
+-- retarget0.can_repeat = false
+-- retarget0.cantain_curr_target = false
+-- retarget0.num = 2
+-- retarget0.distance = 100
+-- retarget0.append("childs",throw1)
 
 local damage0 = damage.new()
 damage0.calc = calc.make_common_attack(1, 0) 
@@ -31,10 +45,7 @@ local throw = throw_skill.new()
 throw.speed = 60
 throw.trace = throw_skill.Trace.Curve
 throw:append("effect",effect0)
-throw:append("childs",normal,retarget0)
-
-throw1:append("effect",effect0)
-throw1:append("childs",normal)
+throw:append("childs",normal)
 
 
 

@@ -135,6 +135,12 @@ public class CreatureCardUI : MonoBehaviour {
         cardIcon.sprite = cardData.icon;
         attackSprite.sprite = data.attack_range > 16 ? longRange : shortRange;
 
+        //stars
+        int starNum = cardData.cardId % 10;
+        star1Icon.color = starNum >= 1 ? Color.white : new Color(0.6f, 0.6f, 0.6f);
+        star2Icon.color = starNum >= 2 ? Color.white : new Color(0.6f, 0.6f, 0.6f);
+        star3Icon.color = starNum >= 3 ? Color.white : new Color(0.6f, 0.6f, 0.6f);
+
 
         //calc card Name Text
         string name = cardData.cardName;

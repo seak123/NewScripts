@@ -25,6 +25,9 @@ public class StructureCardUI : MonoBehaviour {
     public Image skill1Icon;
     public Image skill2Icon;
     public Image skill3Icon;
+    public Image star1Icon;
+    public Image star2Icon;
+    public Image star3Icon;
 
     public GameObject cardName1;
     public Text[] Name1Texts;
@@ -35,6 +38,8 @@ public class StructureCardUI : MonoBehaviour {
     public GameObject skill1;
     public GameObject skill2;
     public GameObject skill3;
+
+
 
     public void CleanUp()
     {
@@ -118,6 +123,12 @@ public class StructureCardUI : MonoBehaviour {
         back.color = BattleDef.backColor[cardData.race];
         skillBack.color = BattleDef.backColor[cardData.race];
         cardIcon.sprite = cardData.icon;
+        //stars
+        int starNum = cardData.cardId % 10;
+        star1Icon.color = starNum >= 1 ? Color.white : new Color(0.6f, 0.6f, 0.6f);
+        star2Icon.color = starNum >= 2 ? Color.white : new Color(0.6f, 0.6f, 0.6f);
+        star3Icon.color = starNum >= 3 ? Color.white : new Color(0.6f, 0.6f, 0.6f);
+
 
 
         //calc card Name Text

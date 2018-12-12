@@ -33,6 +33,26 @@ function this:random_select( sess )
     end
 end
 
+function this:distance_select( sess )
+    local func
+    if self.vo.can_repeat == true then
+        func = nil
+    else
+        func = self:check_repeat()
+    end
+    --for i=1,self.vo.num do
+        local unit = sess.field:get_units(false,false,self.database.caster.unit,self.vo.num,func)
+        if unit ~= nil then
+            for _,u in ipairs(unit) do
+                if sess.field:distance(u,self.database.caster.unit) <= self.vo.distance then
+                    table.insert( self.targets, u )
+                    table.insert( self.database.target_trace, unit.uid )
+                end
+            end 
+        end
+    --end
+end
+
 function this:check_repeat(  )
     return function ( unit )
         for _,u in ipairs(self.database.target_trace) do

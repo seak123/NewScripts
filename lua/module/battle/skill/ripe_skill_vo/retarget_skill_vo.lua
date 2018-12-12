@@ -13,4 +13,6 @@ this.can_repeat = true
 this.cantain_curr_target = false
 this.num = 1
 
+this.distance = 80
+
 return this
