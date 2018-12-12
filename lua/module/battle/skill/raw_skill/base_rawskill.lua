@@ -30,6 +30,12 @@ function this:init_build( vo )
 	self.checkers = vo.checkers
 end
 
+function this:execute_subs( sess,target )
+	for _, v in ipairs(self.subs) do
+		v:execute(sess,target)
+	end
+end
+
 function this:build_to_array(name, array)
 	
 	if array == nil then 
@@ -44,7 +50,7 @@ function this:build_to_array(name, array)
 	for _, v in ipairs(array) do 
 		local temp = require(v.execute)
 		if temp ~= nil then 
-			local exec = temp.new(v)
+			local exec = temp.new(v,self.database)
 			table.insert(target, exec)
 		end
 	end

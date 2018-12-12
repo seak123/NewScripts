@@ -45,7 +45,7 @@ retarget0.num = 2
 retarget0:append("childs",normal1)
 
 local delay0 = delay_skill.new()
-delay0.delay = 1
+delay0.delay = 0.5
 delay0:append("childs",retarget0)
 
 local _effect = effect.new()

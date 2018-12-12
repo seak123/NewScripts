@@ -118,7 +118,7 @@ function this:get_units(with_structure,is_friend,unit,num,condition_func  )
     end
     local res = {}
     for i=1,num do
-        res[i] = enemy[i].unit
+        if enemy[i].unit ~= nil then table.insert( res, enemy[i].unit ) end
     end
     return res
 end

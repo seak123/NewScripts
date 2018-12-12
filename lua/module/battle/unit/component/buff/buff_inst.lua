@@ -35,6 +35,7 @@ function this:detach(sess)
 end
 
 function this:update( delta )
+    if self.duration <0 then return end
     self.timepass = self.timepass + delta
     if self.timepass > self.duration then
         self.is_expire = true

@@ -112,7 +112,9 @@ function this:update_by_curve( sess,delta )
         self.target_pos.Y = self.database.target_pos.Y
     end
 
-    
+    local Dx = self.target_pos.X - self.start_pos.X
+    local Dy = self.target_pos.Y - self.start_pos.Y
+    self.curve_factor = math.sqrt( Dx*Dx+Dy*Dy )
     local de_x = self.target_pos.X - self.curr_pos.X
     local de_y = self.target_pos.Y - self.curr_pos.Y
     
@@ -143,7 +145,7 @@ end
 function this.curve_z_calc( rest_dis,all_dis )
     local x = math.max( 0,(1- rest_dis/all_dis))*2/3
     local z = -(x-1/3)*(x-1/3)+1/9
-    z = z*all_dis/(2/3)/20
+    z = z*all_dis/(2/3)/25
     return x,z
 end
 

@@ -9,6 +9,7 @@ local buffcont = require("module.battle.unit.component.buff_container")
 local behavior_tree = require("module.battle.unit.behavior_tree.behavior_tree")
 local entire_skill = require("module.battle.skill.entire_skill")
 local pack_data = require("module.battle.skill.utils.pack_database")
+local buff = require("module.battle.skill.raw_skill.buff")
 
 function this:ctor( sess,data,uid ,struct_uid)
     self.sess = sess
@@ -49,6 +50,7 @@ make_event("post_heal")
 make_event("post_healed")
 make_event("on_kill")
 make_event("on_die")
+make_event("on_attack")
 
 function this:init(  )
     -- init data
@@ -73,6 +75,13 @@ function this:init(  )
    self.skills_coold = {}
    for i,v in ipairs(self.skills) do
        self.skills_coold[i] = {coold =v.coold,value = 0}
+   end
+   -- init passive
+   self.passives = self.config.passives
+   for i,v in ipairs(self.passives) do
+    local database = pack_data.pack_database(self,self,self.transform.grid_pos)
+    local buff = buff.new(v,database)
+    buff:execute(self.sess,self)
    end
 
    self.hp = self.property:get("hp")
@@ -102,12 +111,12 @@ function this:update_coold(delta)
 end
 
 function this:dispatch( name,src )
-    -- if self.alive > 2 and name ~= "on_die" and name ~= "on_undying" and name ~= "post_die" then 
-    --     return 
-    -- end
-    -- local systr = self.sess.systr
-    -- self.buffcont:handle(self.sess, name)
-    -- systr:handle_ev(name, self)
+    if self.alive > 0 and name ~= "on_die" and name ~= "on_undying" and name ~= "post_die" then 
+        return 
+    end
+    local trigger = self.sess.trigger
+    self.buffcont:handle(self.sess, name)
+    --trigger:handle_ev(name, self)
 end
 
 function this:do_attack( delta ,enemy)

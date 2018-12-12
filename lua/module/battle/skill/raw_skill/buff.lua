@@ -24,6 +24,7 @@ function this:execute(sess, target)
 
     local buffcont = _target.buffcont
     self:add_buff(sess,database,_target)
+    self:execute_subs(sess,target)
 end
 
 function this:add_buff( sess,database,target )
