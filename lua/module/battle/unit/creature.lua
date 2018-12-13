@@ -14,7 +14,7 @@ local buff = require("module.battle.skill.raw_skill.buff")
 function this:ctor( sess,data,uid ,struct_uid)
     self.sess = sess
     self.id = data.id
-    -- type: 1,creature;2,structure
+    -- type: 0,creature;1,structure
     self.type = data.type
     self.uid = uid
     self.card_uid = data.card_uid
@@ -125,7 +125,8 @@ function this:do_attack( delta ,enemy)
     self.attack_process = self.attack_process + delta
     if old_value < 0.5 and self.attack_process >= 0.5 then
         local database = pack_data.pack_database(self,enemy,self.transform.grid_pos)
-        local attack_skill = entire_skill.new(self.sess,self.attack_skill_vo) 
+        local attack_skill = entire_skill.new(self.sess,self.attack_skill_vo)
+        self:on_attack() 
         attack_skill:execute(database)
     end
     if self.attack_process >= 1 then

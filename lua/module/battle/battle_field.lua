@@ -97,7 +97,7 @@ function this:get_units(with_structure,side,unit,num,condition_func  )
         if condition_func(u) and u.type < type_flag then
             local dis = self:distance(unit,u)
             local index = -1
-            for i=num,1 do
+            for i=num,1,-1 do
                 if dis < enemy[i].dis then
                     index = i
                 else

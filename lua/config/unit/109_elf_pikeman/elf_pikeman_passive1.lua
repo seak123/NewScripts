@@ -4,6 +4,7 @@ local property = require("module.battle.skill.raw_skill_vo.property_change_vo")
 local buff = require("module.battle.skill.raw_skill_vo.buff_vo")
 local calc = require("module.battle.skill.utils.caculate")
 local decorator = require("module.battle.unit.behavior_tree.decorator")
+local check = require("module.battle.skill.utils.checkers")
 local this = {}
 
 
@@ -22,14 +23,17 @@ sp_buff.buff_id = 1091
 sp_buff.duration = 2
 sp_buff.execute_type = 0
 sp_buff.max_stack = 1
-sp_buff.checkers = {}
+-- 2bit: 11
+sp_buff.feature = 3
+sp_buff.checkers = {check.check_chance(0.25)}
 sp_buff.buff_occasion = "on_attack"
-sp_buff:append("subs",effect0)
-sp_buff:append("belongs",prop0)
+sp_buff:append("belongs",prop0,effect0)
 
 local buff0 = buff.new()
 buff0.buff_id = 1090
 buff0.duration = -1
+-- 2bit: 01
+buff0.feature = 1
 buff0.execute_type = 0
 buff0:append("belongs",sp_buff)
 
