@@ -41,9 +41,12 @@ function this:distance_select( sess )
         func = self:check_repeat()
     end
     --for i=1,self.vo.num do
-        local unit = sess.field:get_units(false,false,self.database.caster.unit,self.vo.num,func)
+        print("@@distance select")
+        local unit = sess.field:get_units(true,self.target_side,self.database.caster.unit,3,nil)
         if unit ~= nil then
+            print("@@unit is not nil "..#unit)
             for _,u in ipairs(unit) do
+                print("@@targets "..u.uid)
                 if sess.field:distance(u,self.database.caster.unit) <= self.vo.distance then
                     table.insert( self.targets, u )
                     table.insert( self.database.target_trace, unit.uid )

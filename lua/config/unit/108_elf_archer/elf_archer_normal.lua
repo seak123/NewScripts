@@ -1,6 +1,6 @@
 local throw_skill = require("module.battle.skill.ripe_skill_vo.throw_skill_vo")
 local normal_skill = require("module.battle.skill.ripe_skill_vo.normal_skill_vo")
-local retarget_skill = require("module.battle.skill.ripe_skill_vo.retarget_skill_vo")
+local retarget = require("module.battle.skill.ripe_skill_vo.retarget_skill_vo")
 local damage = require("module.battle.skill.raw_skill_vo.damage_vo")
 local effect = require("module.battle.skill.raw_skill_vo.effect_vo")
 local calc = require("module.battle.skill.utils.caculate")
@@ -22,13 +22,21 @@ throw1:append("effect",effect1)
 throw1:append("childs",normal1)
 
 
-local retarget0 = retarget_skill.new()
-retarget0.target_type = retarget_skill.TargetType.Distance
+-- local retarget0 = retarget.new()
+-- retarget0.target_type = retarget.TargetType.Distance
+-- retarget0.can_repeat = false
+-- retarget0.cantain_curr_target = false
+-- retarget0.num = 2
+-- retarget0.distance = 100
+-- retarget0.append("childs",normal1)
+
+local retarget0 = retarget.new()
+retarget0.target_type = retarget.TargetType.Random
 retarget0.can_repeat = false
 retarget0.cantain_curr_target = false
 retarget0.num = 2
-retarget0.distance = 100
-retarget0.append("childs",throw1)
+retarget0.distance = 200
+retarget0:append("childs",throw1)
 
 local damage0 = damage.new()
 damage0.calc = calc.make_common_attack(1, 0) 

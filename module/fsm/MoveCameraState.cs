@@ -109,7 +109,6 @@ public class MoveCameraState : FsmState
 
                 Vector3 delta = lastTouchPos - currTouchPos;
                 camareMng.MoveCamera(delta);
-                Debug.Log("Move  " + delta.x + "  " + delta.z);
                 lastSingleTouchPosition = Input.mousePosition;
             }
             if (Input.GetMouseButtonUp(0)){

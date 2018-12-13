@@ -31,8 +31,10 @@ function this:init_build( vo )
 end
 
 function this:execute_subs( sess,target )
-	for _, v in ipairs(self.subs) do
-		v:execute(sess,target)
+	if self.subs ~= nil then
+		for _, v in ipairs(self.subs) do
+			v:execute(sess,target)
+		end
 	end
 end
 

@@ -83,9 +83,7 @@ function this:find_enemy( with_structure,unit )
     return enemy
 end
 
-function this:get_units(with_structure,is_friend,unit,num,condition_func  )
-    local side
-    if is_friend then side = unit.side else side = 3-unit.side end
+function this:get_units(with_structure,side,unit,num,condition_func  )
     local min_dis = 9999
     local enemy = {}
     for i=1,num do
