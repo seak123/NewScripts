@@ -22,6 +22,7 @@ public class PlayerManager : MonoBehaviour {
     private bool start = false;
     private float updateIncomeDelta = 0;
     private float baseIncome = 0;
+    private float incomeAdd = 1;
 
     public int[] enemyCards;
 
@@ -86,9 +87,9 @@ public class PlayerManager : MonoBehaviour {
     private void Update(){
         if(start){
             if(updateIncomeDelta>=0 && baseIncome < BattleDef.MaxBaseIncome){
-                baseIncome += 0.25f;
-                playerData.income += 0.25f;
-                enemyData.income += 0.25f;
+                baseIncome += incomeAdd;
+                playerData.income += incomeAdd;
+                enemyData.income += incomeAdd;
                 updateIncomeDelta = -BattleDef.UpdateIncomeDelta;
             }
             float playerDelta = Mathf.Max(0,(playerData.income - playerData.cost)*Time.deltaTime);

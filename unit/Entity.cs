@@ -239,7 +239,7 @@ namespace Map
             if(animator.GetCurrentAnimatorStateInfo(0).IsName("Attack")){
                 animator.speed = animatorAttackSpeed;
             }else if(animator.GetCurrentAnimatorStateInfo(0).IsName("Walk")){
-                animator.speed = moveSpeed/baseSpeed*2;
+                animator.speed = moveSpeed/baseSpeed;
             }else{
                 animator.speed = 1;
             }

@@ -37,9 +37,9 @@ public class BattleUIManager : MonoBehaviour {
             cardSpeed = 1,
             cards = new List<int>
             {
-                2,
-                2,
-                2
+                1081,
+                1081,
+                1081
             }
     };
         data.enemy = new PlayerData
@@ -50,7 +50,7 @@ public class BattleUIManager : MonoBehaviour {
             magic_resist = 0.5f,
             mainCastle = AssetManager.PackCreatureData(mng.GetCreatureData(0)),
             cardBoxNum = 3,
-            cardSpeed = 1,
+            cardSpeed = 5,
             cards = new List<int>
             {
                 1,
