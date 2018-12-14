@@ -18,7 +18,7 @@ this.skill_config = {
 }
 
 this.card_config = {
-    [1] = {weight = {decorator.check_alive_friend(1,false,2)},target=decorator.check_pos_creature()}
+    [1] = {target=decorator.check_pos_creature()}
 }
 
 function this.get_unit_config( id )

@@ -46,23 +46,22 @@ function this:check_CalcPriority(  )
     return true
 end
 
--- function this:check_CardAvaliable(  )
---     local cost = self.database.card.cost
---     if self.database.data.saving >= cost then
---         return true
---     end
---     return false
--- end
--- function this:check_Forward(  )
---     local transform = self.database.master.transform
---     local grid_pos = transform.grid_pos
---     if self.database.master.side == 1 then
---         self.database.des_pos = {X = battle_def.MAPMATRIX.column,Y = grid_pos.Y}
---     else
---         self.database.des_pos = {X = 0,Y = grid_pos.Y}
---     end
---     return true
--- end
+function this:check_CardRandom(  )
+    local card_list = {}
+    local cards = GetPlayerManager().enemyCards
+    self.database.play_id = -1
+    if cards == nil or cards.Length == 0 then return true end
+    local card_list = {}
+    for i=0,cards.Length-1 do
+        if cards[i] >= 0 then
+            table.insert( card_list, cards[i] )
+        end
+    end
+    if #card_list == 0 then return true end
+    local index = math.random( 1,#card_list )
+    self.database.play_id = card_list[index]
+    return true
+end
 
 
 
