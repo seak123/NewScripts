@@ -7,7 +7,8 @@ local calc = require("module.battle.skill.utils.caculate")
 local this = {}
 
 local effect1 = effect.new()
-effect1.effect_id = 1
+effect1.effect_id = 1081
+effect1.clean_delay = 0.2
 
 local damage1 = damage.new()
 damage1.calc = calc.make_common_attack(1, 0) 
@@ -16,7 +17,7 @@ local normal1 = normal_skill.new()
 normal1:append("raw_skills",damage1)
 
 local throw1 = throw_skill.new()
-throw1.speed = 60
+throw1.speed = 320
 throw1.trace = throw_skill.Trace.Curve
 throw1:append("effect",effect1)
 throw1:append("childs",normal1)
@@ -45,10 +46,11 @@ local normal = normal_skill.new()
 normal:append("raw_skills",damage0)
 
 local effect0 = effect.new()
-effect0.effect_id = 1
+effect0.effect_id = 1081
+effect0.clean_delay = 0.2
 
 local throw = throw_skill.new()
-throw.speed = 60
+throw.speed = 320
 throw.trace = throw_skill.Trace.Curve
 throw:append("effect",effect0)
 throw:append("childs",normal)

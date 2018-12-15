@@ -163,7 +163,7 @@ end
 
 function this:damage( value,source )
     self.hp = self.hp - value
-    self.entity:SetHp(self.hp,self.max_hp)
+    self.entity:SetHp(self.hp,self.max_hp,0)
     if self.hp <= 0 then
         self.hp = 0
         source:on_kill()
@@ -173,8 +173,8 @@ end
 
 function this:heal(value,source  )
     self.hp = self.hp + value
-    self.hp = math.min( self.max_hp,self.hp )
-    self.entity:SetHp(self.hp,self.max_hp)
+    self.hp = math.min( self.max_hp,self.hp)
+    self.entity:SetHp(self.hp,self.max_hp,1)
 end
 
 function this:die(  )

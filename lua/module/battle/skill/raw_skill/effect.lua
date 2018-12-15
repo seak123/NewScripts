@@ -46,7 +46,7 @@ end
 function this:clean_up(  )
     -- if effect not auto_clean, nead clean manually
     if self.effect ~= nil then
-        self.effect:CleanUp()
+        self.effect:CleanUp(self.vo.clean_delay)
     end
 end
 

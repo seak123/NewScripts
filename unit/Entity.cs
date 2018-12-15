@@ -34,6 +34,8 @@ namespace Map
         private GameObject hpPrefab;
         private GameObject hpBar;
         private float hpBarCacheTime = 0;
+		private float damageCacheTime = 0;
+		private float healCacheTime = 0;
         private Quaternion forward;
 
         HeapNode currMapNode;
@@ -163,7 +165,7 @@ namespace Map
             offset = 0;
         }
         // >>>>>>>>>>>>>>>>>>>> UI
-        public void SetHp(float hp, float maxHp)
+        public void SetHp(float hp, float maxHp,int isHeal)
         {
             if (hpBar == null)
             {
@@ -176,6 +178,14 @@ namespace Map
             hpBar.SetActive(true);
             hpBar.GetComponent<Slider>().value = hp / maxHp;
             hpBarCacheTime = 0;
+
+			if(isHeal==0){
+                //damage
+				damageCacheTime = 0.4f;
+			}else{
+                //heal
+				healCacheTime = 0.4f;
+			}
         }
 
         // >>>>>>>>>>>>>>>>>>>> Animator
@@ -248,6 +258,19 @@ namespace Map
             gameObject.transform.rotation = Quaternion.Lerp(start, forward, 0.1f);
             shadow.transform.rotation = Quaternion.Euler(90, 0, 0);
             shadow.transform.localPosition = shadowPos;
+
+            //set damage or heal
+			if(damageCacheTime>0){
+                 foreach (var comp in gameObject.GetComponentsInChildren<SkinnedMeshRenderer>())
+                {
+                    float delta = Mathf.Abs(damageCacheTime - 0.2f);
+                    Debug.Log("set color" + 0.75f + 0.25f * delta / 0.2f);
+                    comp.material.SetColor("_LightTint", new Color(1, 0.65f+0.35f*delta/0.2f, 0.65f + 0.35f * delta / 0.2f));
+                 }
+				damageCacheTime -= Time.deltaTime; 
+			}else{
+				damageCacheTime = 0;
+            }
 
         }
         public void UpdateHpBar(){

@@ -14,6 +14,7 @@ this.execute = "module.battle.skill.raw_skill.effect"
 this.effect_id = 0
 this.execute_pos = this.ExecutePos.Caster
 this.attach = false
+this.clean_delay = 0
 
 
 

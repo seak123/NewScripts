@@ -21,7 +21,7 @@ public class EffectEntity : MonoBehaviour {
         z = gameObject.transform.position.y;
     }
 
-    public void CleanUp(){
-        Destroy(gameObject);
+    public void CleanUp(float delay){
+        Destroy(gameObject,delay);
     }
 }
