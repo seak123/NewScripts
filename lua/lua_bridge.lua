@@ -17,6 +17,7 @@ end
 
 ---------------------------lua function
 function start_battle( battle_vo )
+    math.randomseed(os.time())
     battle_mng.battle_begin(battle_vo)
 end
 
