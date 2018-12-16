@@ -23,6 +23,7 @@ public class CreatureCardUI : MonoBehaviour {
     public Text skill3Name;
     public Text skill3CD;
     public Text skill3Des;
+    public Text englishName;
 
     public Image back;
     public Image skillBack;
@@ -99,9 +100,9 @@ public class CreatureCardUI : MonoBehaviour {
             SkillData skillData = assetMng.GetSkillData(data.skills[0]);
             if(skillData != null){
                 skill1.SetActive(true);
-                skill1Name.text = skillData.skill_name;
-                skill1CD.text = skillData.skill_coold > 0 ? skillData.skill_coold.ToString() + "s" : "被动";
-                skill1Des.text = skillData.skill_des;
+                skill1Name.text = StrUtil.GetText(skillData.skill_name);
+                skill1CD.text = skillData.skill_coold > 0 ? skillData.skill_coold.ToString() + "s" : StrUtil.GetText("被动");
+                skill1Des.text = StrUtil.GetText(skillData.skill_des);
                 skill1Icon.sprite = skillData.skill_icon;
             }
         }
@@ -111,9 +112,9 @@ public class CreatureCardUI : MonoBehaviour {
             if (skillData != null)
             {
                 skill2.SetActive(true);
-                skill2Name.text = skillData.skill_name;
-                skill2CD.text = skillData.skill_coold > 0 ? skillData.skill_coold.ToString() + "s" : "被动";
-                skill2Des.text = skillData.skill_des;
+                skill2Name.text = StrUtil.GetText(skillData.skill_name);
+                skill2CD.text = skillData.skill_coold > 0 ? skillData.skill_coold.ToString() + "s" : StrUtil.GetText("被动");
+                skill2Des.text = StrUtil.GetText(skillData.skill_des);
                 skill2Icon.sprite = skillData.skill_icon;
             }
         }
@@ -123,9 +124,9 @@ public class CreatureCardUI : MonoBehaviour {
             if (skillData != null)
             {
                 skill3.SetActive(true);
-                skill3Name.text = skillData.skill_name;
-                skill3CD.text = skillData.skill_coold > 0 ? skillData.skill_coold.ToString() + "s" : "被动";
-                skill3Des.text = skillData.skill_des;
+                skill3Name.text = StrUtil.GetText(skillData.skill_name);
+                skill3CD.text = skillData.skill_coold > 0 ? skillData.skill_coold.ToString() + "s" : StrUtil.GetText("被动");
+                skill3Des.text = StrUtil.GetText(skillData.skill_des);
                 skill3Icon.sprite = skillData.skill_icon;
             }
         }
@@ -143,22 +144,36 @@ public class CreatureCardUI : MonoBehaviour {
 
 
         //calc card Name Text
-        string name = cardData.cardName;
+        string name = StrUtil.GetText(cardData.cardName);
         int num = name.Length;
-        if(num%2==1){
-            cardName1.SetActive(true);
-            cardName2.SetActive(false);
-            int index = (7 - num) / 2;
-            for (int i = 0; i < num;++i){
-                Name1Texts[index + i].text = name[i].ToString();
-            }
-        }else{
+        if (BattleDef.language != "chinese")
+        {
             cardName1.SetActive(false);
-            cardName2.SetActive(true);
-            int index = (8 - num) / 2;
-            for (int i = 0; i < num; ++i)
+            cardName2.SetActive(false);
+            englishName.text = name;
+        }
+        else
+        {
+            englishName.text = "";
+            if (num % 2 == 1)
             {
-                Name2Texts[index + i].text = name[i].ToString();
+                cardName1.SetActive(true);
+                cardName2.SetActive(false);
+                int index = (7 - num) / 2;
+                for (int i = 0; i < num; ++i)
+                {
+                    Name1Texts[index + i].text = name[i].ToString();
+                }
+            }
+            else
+            {
+                cardName1.SetActive(false);
+                cardName2.SetActive(true);
+                int index = (8 - num) / 2;
+                for (int i = 0; i < num; ++i)
+                {
+                    Name2Texts[index + i].text = name[i].ToString();
+                }
             }
         }
         if (openSkill == false) skillContent.SetActive(false);

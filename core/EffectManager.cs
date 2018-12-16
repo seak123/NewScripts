@@ -44,6 +44,19 @@ public class EffectManager : MonoBehaviour {
             obj.transform.localScale = Vector3.one * entity.radius / 4;
         }
         EffectEntity effectEntity = obj.AddComponent<EffectEntity>();
+
+        //clean effect
+        if(data.isAutoClean){
+            ParticleSystem[] array = obj.GetComponentsInChildren<ParticleSystem>();
+            float time = 0;
+            foreach(var par in array){
+                float temp = par.main.duration;
+                if(temp>time){
+                    time = temp;
+                }
+            }
+            Destroy(obj, time);
+        }
         return effectEntity;
     }
 }

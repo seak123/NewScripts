@@ -61,7 +61,7 @@ public class GameRoot : MonoBehaviour {
             }
         }
         instance = this;
-
+        StrUtil.Init();
 	}
 
     public float GetBattleEnterDelay(){

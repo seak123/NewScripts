@@ -123,7 +123,7 @@ function this:do_attack( delta ,enemy)
 
     local old_value = self.attack_process
     self.attack_process = self.attack_process + delta
-    if old_value < 0.5 and self.attack_process >= 0.5 then
+    if old_value < 0.45 and self.attack_process >= 0.45 then
         local database = pack_data.pack_database(self,enemy,self.transform.grid_pos)
         local attack_skill = entire_skill.new(self.sess,self.attack_skill_vo)
         self:on_attack() 

@@ -22,5 +22,9 @@ namespace Utils
         public static AssetManager GetAssetManager(){
             return GameRoot.GetInstance().BattleField.assetManager;
         }
+
+        public static void BattleCompleted(){
+            Debug.Log("Game is Over");
+        }
     }
 }

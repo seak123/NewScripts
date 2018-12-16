@@ -261,15 +261,21 @@ namespace Map
 
             //set damage or heal
 			if(damageCacheTime>0){
-                 foreach (var comp in gameObject.GetComponentsInChildren<SkinnedMeshRenderer>())
+                float delta = Mathf.Abs(damageCacheTime - 0.2f);
+                foreach (var comp in gameObject.GetComponentsInChildren<SkinnedMeshRenderer>())
                 {
-                    float delta = Mathf.Abs(damageCacheTime - 0.2f);
-                    Debug.Log("set color" + 0.75f + 0.25f * delta / 0.2f);
                     comp.material.SetColor("_LightTint", new Color(1, 0.65f+0.35f*delta/0.2f, 0.65f + 0.35f * delta / 0.2f));
                  }
+                if(hpBar != null)
+                    hpBar.transform.Find("Fill Area").Find("Fill").GetComponent<Image>().color = new Color(1,0.8f-0.55f*delta/0.2f,0.8f-0.55f*delta/0.2f);
 				damageCacheTime -= Time.deltaTime; 
-			}else{
+            }else if(damageCacheTime<0){
 				damageCacheTime = 0;
+                foreach (var comp in gameObject.GetComponentsInChildren<SkinnedMeshRenderer>())
+                {
+                    comp.material.SetColor("_LightTint", new Color(1, 1, 1));
+                }
+                if (hpBar != null)hpBar.transform.Find("Fill Area").Find("Fill").GetComponent<Image>().color = new Color(1, 0.25f, 0.25f);
             }
 
         }

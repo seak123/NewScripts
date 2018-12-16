@@ -123,20 +123,29 @@ function this:update_by_curve( sess,delta )
     
     if dis <= self.min_dis then self.min_dis = dis
     else return "completed" end
+    if time <= delta then
+        self.effect_entity:SetPos(self.target_pos.X,self.target_pos.Y,self.start_pos.Z)
+        return "completed"
+    end
 
     de_x = de_x/time*delta
     de_y = de_y/time*delta
 
+    self.curr_pos.X = self.curr_pos.X + de_x
+    self.curr_pos.Y = self.curr_pos.Y + de_y
+    local new_de_x = self.target_pos.X - self.curr_pos.X
+    local new_de_y = self.target_pos.Y - self.curr_pos.Y
+    dis = math.sqrt( new_de_x*new_de_x+new_de_y*new_de_y )
     local x,z = this.curve_z_calc(dis,self.curve_factor)
     if self.curve_x <= x then
         self.curve_z = z
         self.curve_x = x
     end
 
-    self.curr_pos.X = self.curr_pos.X + de_x
-    self.curr_pos.Y = self.curr_pos.Y + de_y
+
     self.curr_pos.Z = self.start_pos.Z + self.curve_z
 
+    
     self.effect_entity:SetPos(self.curr_pos.X,self.curr_pos.Y,self.curr_pos.Z)
 
     return "running"
