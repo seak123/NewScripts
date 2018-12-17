@@ -5,7 +5,7 @@ using UnityEngine;
 public static class BattleDef
 {
     //sys data
-    public static string language = "english";
+    public static string language = "chinese";
 
     //map data
     public static int rowGridNum = 448;
