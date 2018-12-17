@@ -258,23 +258,24 @@ public class CardManager : MonoBehaviour {
         return enemyHandCards;
     }
 
-    public void PlayEnemyCard(int id,int gridX,int gridY){
+    public bool PlayEnemyCard(int id,int gridX,int gridY){
         CardData data = GameRoot.GetInstance().BattleField.assetManager.GetCardData(id);
-        if (data == null) return;
+        if (data == null) return false;
         //find id and delete then
         int index = -1;
         for (int i = 0; i < enemyHandCards.Length; ++i)
         {
             if (enemyHandCards[i] == id) {index = i; break; }
         }
-        if (index == -1) return;
-        if (!playerMng.RequestCost(2, data.cost)) return;
+        if (index == -1) return false;
+        if (!playerMng.RequestCost(2, data.cost)) return false;
         CreatureData creature = GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(data.unitId);
         UnitData unitData = AssetManager.PackCreatureData(creature);
         unitData.card_uid = enemyboxs[index].uid;
         GameRoot.GetInstance().Bridge.CasterSkill(2, data.skillId, gridX, gridY, unitData, data.num);
 
         enemyHandCards[index] = -1;
+        return true;
     }
 
     public void HideCard(){

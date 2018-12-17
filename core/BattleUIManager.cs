@@ -38,9 +38,9 @@ public class BattleUIManager : MonoBehaviour {
             cards = new List<int>
             {
                 1081,
+                1091,
                 1081,
-                1081,
-                1081
+                1091
             }
     };
         data.enemy = new PlayerData

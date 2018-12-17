@@ -266,8 +266,12 @@ namespace Map
                 {
                     comp.material.SetColor("_LightTint", new Color(1, 0.65f+0.35f*delta/0.2f, 0.65f + 0.35f * delta / 0.2f));
                  }
-                if(hpBar != null)
-                    hpBar.transform.Find("Fill Area").Find("Fill").GetComponent<Image>().color = new Color(1,0.8f-0.55f*delta/0.2f,0.8f-0.55f*delta/0.2f);
+                if (hpBar != null)
+                {
+                    if(side==2)
+                    hpBar.transform.Find("Fill Area").Find("Fill").GetComponent<Image>().color = new Color(1, 0.8f - 0.55f * delta / 0.2f, 0.8f - 0.55f * delta / 0.2f);
+                    else hpBar.transform.Find("Fill Area").Find("Fill").GetComponent<Image>().color = new Color(0.8f - 0.55f * delta / 0.2f,1, 0.8f - 0.55f * delta / 0.2f);
+                }
 				damageCacheTime -= Time.deltaTime; 
             }else if(damageCacheTime<0){
 				damageCacheTime = 0;
@@ -275,7 +279,11 @@ namespace Map
                 {
                     comp.material.SetColor("_LightTint", new Color(1, 1, 1));
                 }
-                if (hpBar != null)hpBar.transform.Find("Fill Area").Find("Fill").GetComponent<Image>().color = new Color(1, 0.25f, 0.25f);
+                if (hpBar != null) { 
+                    if(side == 2)
+                    hpBar.transform.Find("Fill Area").Find("Fill").GetComponent<Image>().color = new Color(1, 0.25f, 0.25f);
+                    else hpBar.transform.Find("Fill Area").Find("Fill").GetComponent<Image>().color = new Color(0.25f,1, 0.25f);
+                }
             }
 
         }

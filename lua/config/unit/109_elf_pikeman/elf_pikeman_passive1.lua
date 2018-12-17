@@ -14,7 +14,7 @@ prop0.prop_name = "attack_rateadd"
 prop0.calc = calc.make_common_calc(2)
 
 local effect0 = effect.new()
-effect0.effect_id = 2
+effect0.effect_id = 8
 effect0.execute_pos = effect.ExecutePos.Caster
 effect0.attach = true
 

@@ -7,6 +7,7 @@ end
 
 function this:init_data( database )
     self.database = database
+    self.database.play_id = -1
 end
 
 -- this.Type = {
@@ -47,6 +48,7 @@ function this:check_CalcPriority(  )
 end
 
 function this:check_CardRandom(  )
+    if self.database.play_id ~= -1 then return true end
     local card_list = {}
     local cards = GetPlayerManager().enemyCards
     self.database.play_id = -1

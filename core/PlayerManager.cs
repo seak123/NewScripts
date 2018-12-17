@@ -22,7 +22,7 @@ public class PlayerManager : MonoBehaviour {
     private bool start = false;
     private float updateIncomeDelta = 0;
     private float baseIncome = 0;
-    private float incomeAdd = 1;
+    private float incomeAdd = 0.5f;
 
     public int[] enemyCards;
 
@@ -100,15 +100,15 @@ public class PlayerManager : MonoBehaviour {
 
             updateIncomeDelta += Time.deltaTime;
         }
-        if(cardMng!=null)cardMng.PlayEnemyCard(playId, playGridX, playGridY);
+        //if(cardMng!=null)cardMng.PlayEnemyCard(playId, playGridX, playGridY);
     }
 
-    public void EnemyPlayCard(int id,int gridX,int gridY){
+    public bool EnemyPlayCard(int id,int gridX,int gridY){
         //Debug.Log("play" + id+"X"+gridX+"Y"+gridY);
-        //cardMng.PlayEnemyCard(id,gridX,gridY);
-        playId = id;
-        playGridX = gridX;
-        playGridY = gridY;
+        return cardMng.PlayEnemyCard(id,gridX,gridY);
+        //playId = id;
+        //playGridX = gridX;
+        //playGridY = gridY;
     }
 
     public bool RequestCost(int side,float cost){
