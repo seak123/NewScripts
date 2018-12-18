@@ -40,7 +40,18 @@ public class BattleUIManager : MonoBehaviour {
                 1081,
                 1091,
                 1081,
-                1091
+                1091,
+                1091,
+                1091,
+                1081,
+                1081,
+                1081,
+                1091,
+                1081,
+                1091,
+                7,
+                7,
+                7,
             }
     };
         data.enemy = new PlayerData

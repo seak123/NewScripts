@@ -134,7 +134,7 @@ public class CreatureCardUI : MonoBehaviour {
         back.color = BattleDef.backColor[cardData.race];
         skillBack.color = BattleDef.backColor[cardData.race];
         cardIcon.sprite = cardData.icon;
-        attackSprite.sprite = data.attack_range > 16 ? longRange : shortRange;
+        attackSprite.sprite = data.attack_range > 40 ? longRange : shortRange;
 
         //stars
         int starNum = cardData.cardId % 10;
