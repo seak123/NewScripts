@@ -205,6 +205,7 @@ function this:update_Attack( delta )
         return "running"
     else
         self.running = false
+        self.database.pre_attack_target = self.database.target
         return "completed"
     end
 end

@@ -27,17 +27,23 @@ end
 
 function this:check_EnemyAround(  )
     local field = self.database.master.sess.field
-    local unit = field:find_enemy(true,self.database.master)
+    local unit
+    if self.database.pre_attack_target ~= nil and self.database.pre_attack_target.alive ~=0 then
+        unit = self.database.pre_attack_target
+    else
+        unit = field:find_enemy(true,self.database.master)
+    end
     if self.database.master.statectrl:has_feature("confused") then
         unit = field:find_friend(true,self.database.master)
+    end
+    if self.database.master.statectrl:has_feature("taunt") then
+        unit = self.database.master.statectrl.taunt_target
     end
     if unit == nil or unit.alive ~= 0 then
         return false
     end
     self.database.target = unit
-    if self.database.master.statectrl:has_feature("taunt") then
-        self.database.target = self.database.master.statectrl.taunt_target
-    end
+    
     return true
 end
 
