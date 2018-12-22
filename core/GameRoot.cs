@@ -19,6 +19,10 @@ public class GameRoot : MonoBehaviour {
 
     public GameObject battleUI;
 
+    public GameObject battleGroundUI;
+
+    public GameObject battleTextUI;
+
     public GameObject Camara;
 
     public BattleData battleData;

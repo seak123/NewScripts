@@ -170,7 +170,7 @@ namespace Map
             if (hpBar == null)
             {
                 hpBar = Instantiate(hpPrefab);
-                hpBar.GetComponent<RectTransform>().parent = GameRoot.GetInstance().battleUI.GetComponent<RectTransform>();
+                hpBar.GetComponent<RectTransform>().parent = GameRoot.GetInstance().battleGroundUI.GetComponent<RectTransform>();
                 hpBar.GetComponent<RectTransform>().sizeDelta = new Vector2(Mathf.Sqrt(radius)/2*80,22);
                 hpBar.SetActive(false);
                 GameRoot.GetInstance().Camara.GetComponent<CamaraManager>().UpdateUI += UpdateHpBar;
@@ -300,10 +300,10 @@ namespace Map
                 Canvas canvas = GameRoot.GetInstance().battleUI.GetComponent<Canvas>();
                 CamaraManager camara = GameRoot.GetInstance().Camara.GetComponent<CamaraManager>();
                 Vector2 screenPos = Camera.main.WorldToScreenPoint(GetSocketPos("S_Hp"));
-                Vector2 uiPos = Vector2.zero;
+                //Vector2 uiPos = Vector2.zero;
                 //RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.transform as RectTransform, screenPos, canvas.worldCamera, out uiPos);
-                uiPos.x = screenPos.x - (Screen.width / 2);
-                uiPos.y = screenPos.y - (Screen.height / 2);
+                //uiPos.x = screenPos.x - (Screen.width / 2);
+                //uiPos.y = screenPos.y - (Screen.height / 2);
                 //hpBar.GetComponent<RectTransform>().position = new Vector3(0, 0, 0);
                 hpBar.transform.position = new Vector3(screenPos.x, screenPos.y, 0);
 

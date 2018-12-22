@@ -46,7 +46,8 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
 
 
     public Sprite defaultSprite;
-    private Color defaultCostRed = new Color(0.8301887f, 0.23f, 0.23f, 1);
+    private Color defaultReadyWhite = new Color(1, 1, 0.825f);    
+    private Color defaultCostRed = new Color(1, 0.53f, 0.24f);
 
    
 
@@ -68,8 +69,9 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
             {
                 EnterIdleState();
                 state = CardEntityState.Idle;
-                cost.color = Color.white;
+                cost.color = defaultReadyWhite;
                 sprite.color = Color.white;
+                magic.color = Color.white;
             }
         }
         if (cardData != null)
@@ -80,6 +82,7 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
                 state = CardEntityState.Sleep;
                 cost.color = defaultCostRed;
                 sprite.color = Color.gray;
+                magic.color = Color.gray;
             }
         }
 

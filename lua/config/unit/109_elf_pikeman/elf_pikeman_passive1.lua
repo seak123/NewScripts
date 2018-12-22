@@ -5,6 +5,7 @@ local buff = require("module.battle.skill.raw_skill_vo.buff_vo")
 local calc = require("module.battle.skill.utils.caculate")
 local decorator = require("module.battle.unit.behavior_tree.decorator")
 local check = require("module.battle.skill.utils.checkers")
+local message = require("module.battle.skill.raw_skill_vo.message_vo")
 local this = {}
 
 
@@ -18,6 +19,9 @@ effect0.effect_id = 1091
 effect0.execute_pos = effect.ExecutePos.Caster
 effect0.attach = true
 
+local message0 = message.new()
+message0.text = "风怒潜能"
+
 local sp_buff = buff.new()
 sp_buff.buff_id = 1091
 sp_buff.duration = 2
@@ -27,7 +31,7 @@ sp_buff.max_stack = 1
 sp_buff.feature = 3
 sp_buff.checkers = {check.check_chance(0.1)}
 sp_buff.buff_occasion = "on_attack"
-sp_buff:append("belongs",prop0,effect0)
+sp_buff:append("belongs",prop0,effect0,message0)
 
 local buff0 = buff.new()
 buff0.buff_id = 1090

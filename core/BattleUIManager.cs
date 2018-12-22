@@ -33,7 +33,7 @@ public class BattleUIManager : MonoBehaviour {
             denfence = 100,
             magic_resist = 0.5f,
             mainCastle = AssetManager.PackCreatureData(mng.GetCreatureData(101)),
-            cardBoxNum = 3,
+            cardBoxNum = 4,
             cardSpeed = 1,
             cards = new List<int>
             {
@@ -61,7 +61,7 @@ public class BattleUIManager : MonoBehaviour {
             denfence = 100,
             magic_resist = 0.5f,
             mainCastle = AssetManager.PackCreatureData(mng.GetCreatureData(0)),
-            cardBoxNum = 3,
+            cardBoxNum = 4,
             cardSpeed = 5,
             cards = new List<int>
             {

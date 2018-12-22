@@ -150,7 +150,7 @@ public class CardManager : MonoBehaviour {
             GameObject cardBack = Instantiate(cardBackPrefab);
             cardBack.transform.SetParent(transform);
             cardBack.transform.localPosition = new Vector3(posX+4, 10, 0);
-            cardBack.transform.localScale = new Vector3(1,0.25f,1);
+            cardBack.transform.localScale = new Vector3(1,1,1);
             GameObject card = Instantiate(cardPrefab);
             card.transform.SetParent(transform);
             card.transform.localPosition = new Vector3(posX, 10, 0);
