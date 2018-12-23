@@ -17,6 +17,7 @@ namespace Map
         public int uid;
         public int structUid;
         public int radius;
+        public int cost;
         public int posX = 0;
         public int posY = 0;
         private int desX = 0;
@@ -83,8 +84,7 @@ namespace Map
             desY = toY;
             moveSpeed = speed;
             MapField field = GameRoot.GetInstance().MapField;
-            bool debug = false;
-            if (uid == 20) debug = true;
+
 
             float toViewX, toViewY;
             field.GetViewPos(toX, toY, out toViewX, out toViewY);
@@ -105,7 +105,7 @@ namespace Map
                 {
                     RouteUpdateFactor = 0;
                     offset = 0;
-                    if (debug) Debug.Log("Straight:"+gridX+" "+gridY+"offset:"+offset);
+                    //if (debug) Debug.Log("Straight:"+gridX+" "+gridY+"offset:"+offset);
                     gameObject.transform.position = new Vector3(nextViewX, 0f, nextViewY);
                     if(RouteUpdateFlag>5) SetRotation(toX, toY);
                     posX = gridX;
@@ -136,7 +136,7 @@ namespace Map
                     else offset = 0;
                     gridX = currMapNode.X;
                     gridY = currMapNode.Y;
-                    if (debug) Debug.Log("AStar:" + gridX + " " + gridY+ "offset:"+offset);
+                    //if (debug) Debug.Log("AStar:" + gridX + " " + gridY+ "offset:"+offset);
                     SetTransform(gridX, gridY);
                     SetRotation(gridX, gridY);
                     posX = gridX;
@@ -217,6 +217,8 @@ namespace Map
                 animator.SetTrigger("Break");
             }
             animator.SetTrigger("Die");
+
+            GameRoot.GetInstance().PlayerMng.AddSaving(GetSocketPos("S_Center"), 3 - side, cost);
             GameRoot.GetInstance().MapField.RemoveEntity(this,2f);
             Destroy(hpBar, 0.5f);
             Destroy(gameObject, 2f);

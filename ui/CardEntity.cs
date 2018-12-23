@@ -17,7 +17,7 @@ public enum CardEntityState{
 
 
 
-public class CardEntity : MonoBehaviour, IPointerDownHandler{
+public class CardEntity : MonoBehaviour, IPointerDownHandler,IPointerUpHandler{
 
     public CardEntityState state;
     public CardManager cardManager;
@@ -98,7 +98,10 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
         cardUid = uid;
         if (playerMng.GetPlayerSaving() >= data.cost) {
             EnterIdleState();
-            state = CardEntityState.Idle; 
+            state = CardEntityState.Idle;
+            cost.color = defaultReadyWhite;
+            sprite.color = Color.white;
+            magic.color = Color.white;
         }
         else {
             EnterSleepState();
@@ -132,9 +135,19 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler{
     public void OnPointerDown(PointerEventData eventData)
     {
 
-        if (state == CardEntityState.Empty || state == CardEntityState.Sleep) return;
+        if (state == CardEntityState.Empty) return;
+        if (state == CardEntityState.Sleep){
+            cardManager.SelectCard(index, cardData, creatureData);
+            return;
+        }
         state = CardEntityState.Select;
         GameRoot.GetInstance().StateManager.selectCard = this;
+    }
+
+    public void OnPointerUp(PointerEventData eventData){
+        if (state == CardEntityState.Empty) return;
+        cardManager.HideCard();
+        return;
     }
 
     public void OnMove(Vector3 newPos)

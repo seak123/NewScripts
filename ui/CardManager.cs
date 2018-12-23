@@ -37,7 +37,7 @@ public class CardManager : MonoBehaviour {
 
     //private List<int> cardsId;
     private readonly float cardWidth = 120f;
-    private readonly float cardInterl = 40f;
+    private readonly float cardInterl = 45f;
 
     private bool hasInited = false;
     private bool initCard = false;
@@ -149,11 +149,11 @@ public class CardManager : MonoBehaviour {
             float posX = i * (cardWidth + cardInterl) + cardWidth / 2 + startX;
             GameObject cardBack = Instantiate(cardBackPrefab);
             cardBack.transform.SetParent(transform);
-            cardBack.transform.localPosition = new Vector3(posX+4, 10, 0);
+            cardBack.transform.localPosition = new Vector3(posX, 0, 0);
             cardBack.transform.localScale = new Vector3(1,1,1);
             GameObject card = Instantiate(cardPrefab);
             card.transform.SetParent(transform);
-            card.transform.localPosition = new Vector3(posX, 10, 0);
+            card.transform.localPosition = new Vector3(posX, 0, 0);
             card.transform.localScale = Vector3.one;
             card.GetComponent<CardEntity>().cardManager = this;
             card.GetComponent<CardEntity>().index = i;

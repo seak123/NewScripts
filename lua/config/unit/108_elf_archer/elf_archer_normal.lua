@@ -36,7 +36,7 @@ retarget0.target_type = retarget.TargetType.Distance
 retarget0.can_repeat = false
 retarget0.cantain_curr_target = false
 retarget0.num = 2
-retarget0.distance = 200
+retarget0.distance = 110
 retarget0:append("childs",throw1)
 
 local damage0 = damage.new()

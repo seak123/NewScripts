@@ -6,7 +6,7 @@ using DG.Tweening;
 using UnityEngine.UI;
 using Map;
 
-public struct MessageEffect{
+public class MessageEffect{
     public GameObject effect;
     public int uid;
     public float duration;
@@ -94,6 +94,11 @@ public class EffectManager : MonoBehaviour {
         //hpBar.GetComponent<RectTransform>().sizeDelta = new Vector2(Mathf.Sqrt(radius) / 2 * 80, 22);
         message.SetActive(true);
         message.GetComponent<Text>().text = StrUtil.GetText(text);
+        if(entity.side == 1){
+            message.GetComponent<Text>().color = new Color(0.6f, 1f, 0.26f);
+        }else{
+            message.GetComponent<Text>().color = new Color(1f, 0.51f, 0.259f);
+        }
         message.transform.position = new Vector3(screenPos.x, screenPos.y, 0);
 
         //init message struct
@@ -113,13 +118,35 @@ public class EffectManager : MonoBehaviour {
 
     }
 
+    public void PrintGoldTips(Vector3 pos,int value){
+        GameObject tips = Instantiate(GameRoot.GetInstance().BattleField.assetManager.GoldTips);
+        tips.GetComponent<RectTransform>().parent = GameRoot.GetInstance().battleTextUI.GetComponent<RectTransform>();
+        tips.SetActive(true);
+        tips.GetComponent<Text>().text = "+"+value.ToString();
+        Canvas canvas = GameRoot.GetInstance().battleTextUI.GetComponent<Canvas>();
+        CamaraManager camara = GameRoot.GetInstance().Camara.GetComponent<CamaraManager>();
+        Vector2 screenPos = Camera.main.WorldToScreenPoint(pos);
+        tips.transform.position = new Vector3(screenPos.x, screenPos.y, 0);
+
+        MessageEffect effect = new MessageEffect
+        {
+            effect = tips,
+            uid = -1,
+            duration = 2,
+            pos = pos
+        };
+        messageCantainer.Add(effect);
+        float scale = camara.minSize / camara.size;
+        tips.transform.localScale = Vector3.one * scale;
+    }
+
     private void Update()
     {
         if(hasInited){
             for (int index = messageCantainer.Count - 1; index >= 0;--index){
                 MessageEffect effect = messageCantainer[index];
                 MapField mapField = GameRoot.GetInstance().MapField;
-                Debug.Log("duration " + effect.duration);
+                //Debug.Log("duration " + effect.duration);
                 if(effect.duration<=0){
                     Debug.Log("destroy");
                     messageCantainer.RemoveAt(index);
@@ -133,12 +160,12 @@ public class EffectManager : MonoBehaviour {
                 Vector2 screenPos = Camera.main.WorldToScreenPoint(effect.pos);
 
                 float scale = camara.minSize / camara.size;
-                
+                float hight = Screen.height / 10 * scale;
 
-                effect.effect.transform.position = new Vector3(screenPos.x, screenPos.y+Mathf.Clamp(2-effect.duration,0,0.2f)*100, 0);
+                effect.effect.transform.position = new Vector3(screenPos.x, screenPos.y+Mathf.Clamp(2-effect.duration,0,0.8f)*hight, 0);
                 effect.effect.transform.localScale = Vector3.one * scale;
 
-                effect.duration = effect.duration - Time.deltaTime;
+                messageCantainer[index].duration = effect.duration - Time.deltaTime;
             }
         }
     }

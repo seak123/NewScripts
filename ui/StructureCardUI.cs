@@ -78,7 +78,7 @@ public class StructureCardUI : MonoBehaviour {
 
         cost.text = cardData.cost.ToString();
 
-        lost.text = "-"+cardData.lost.ToString();
+        //lost.text = "-"+cardData.lost.ToString();
 
         hp.text = data.hp.ToString();
 

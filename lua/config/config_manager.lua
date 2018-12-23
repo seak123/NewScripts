@@ -20,7 +20,10 @@ this.skill_config = {
 }
 
 this.card_config = {
-    [1] = {target=decorator.check_pos_creature()}
+    [1] = {target=decorator.check_pos_creature()},
+    [1081] = {target=decorator.check_pos_creature()},
+    [1091] = {target=decorator.check_pos_creature()}
+    
 }
 
 function this.get_unit_config( id )

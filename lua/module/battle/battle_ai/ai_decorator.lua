@@ -52,14 +52,14 @@ function this:check_CardRandom(  )
     local card_list = {}
     local cards = GetPlayerManager().enemyCards
     self.database.play_id = -1
-    if cards == nil or cards.Length == 0 then return true end
+    if cards == nil or cards.Length == 0 then return false end
     local card_list = {}
     for i=0,cards.Length-1 do
         if cards[i] >= 0 then
             table.insert( card_list, cards[i] )
         end
     end
-    if #card_list == 0 then return true end
+    if #card_list == 0 then return false end
     local index = math.random( 1,#card_list )
     self.database.play_id = card_list[index]
     return true
@@ -86,26 +86,28 @@ function this.check_pos_creature(  )
             X = clamp(close_unit.transform.grid_pos.X,battle_def.ENEMYBOUND.column,battle_def.MAPMATRIX.column),
             Y = clamp(close_unit.transform.grid_pos.Y,0,battle_def.MAPMATRIX.row)
         }
-        if data.attack_range > 16 then
+        if data.attack_range > 40 then
             local shift = battle_def.MAPMATRIX.row/4
             local x = math.random(target_pos.X-shift,target_pos.X+shift)
+            
             x= clamp(x,battle_def.ENEMYBOUND.column,battle_def.MAPMATRIX.column)
             local y = math.random( target_pos.Y-shift,target_pos.Y+shift )
+            
             y= clamp(y,0,battle_def.MAPMATRIX.row)
-            if math.abs( (x-close_unit.transform.grid_pos.X)<128 )then
-                local tem =close_unit.transform.grid_pos.X +128
+            if math.abs(x-close_unit.transform.grid_pos.X)<64 then
+                local tem =close_unit.transform.grid_pos.X +64
                 if tem>=battle_def.ENEMYBOUND.column and tem<=battle_def.MAPMATRIX.column then
                     x = tem
                 else
-                    x = close_unit.transform.grid_pos.X -128
+                    x = close_unit.transform.grid_pos.X -64
                 end
             end
-            if math.abs( (y-close_unit.transform.grid_pos.Y)<128 )then
-                local tem =close_unit.transform.grid_pos.Y +128
+            if math.abs(y-close_unit.transform.grid_pos.Y)<64 then
+                local tem =close_unit.transform.grid_pos.Y +64
                 if tem>=0 and tem<=battle_def.MAPMATRIX.row then
                     y = tem
                 else
-                    y = close_unit.transform.grid_pos.Y -128
+                    y = close_unit.transform.grid_pos.Y -64
                 end
             end
             target_pos.X = x

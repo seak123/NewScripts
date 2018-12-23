@@ -55,6 +55,8 @@ make_event("on_attack")
 function this:init(  )
     -- init data
     self.alive = 0
+    -- threat value
+    self.threat_value = {}
     -- wait for appear action
     self.appeared = 0
  
@@ -163,6 +165,10 @@ end
 
 function this:damage( value,source )
     self.hp = self.hp - value
+    if self.threat_value[source.uid] == nil then
+        self.threat_value[source.uid] = 10
+    end
+    self.threat_value[source.uid] = self.threat_value[source.uid] + 1
     self.entity:SetHp(self.hp,self.max_hp,0)
     if self.hp <= 0 then
         self.hp = 0

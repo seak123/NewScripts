@@ -4,9 +4,8 @@ using UnityEngine;
 using PowerInject;
 
 public struct PlayerBattleData{
-    public float saving;
-    public float income;
-    public float cost;
+    public int saving;
+    public int income;
 }
 
 [Insert]
@@ -18,11 +17,13 @@ public class PlayerManager : MonoBehaviour {
     private PlayerBattleData enemyData;
 
     private CardManager cardMng;
+    private BattleUIManager uIManager;
+    private EffectManager effectManager;
 
     private bool start = false;
     private float updateIncomeDelta = 0;
-    private float baseIncome = 0;
-    private float incomeAdd = 0.5f;
+    private int baseIncome = 5;
+    //private float incomeAdd = 0.5f;
 
     public int[] enemyCards;
 
@@ -39,6 +40,8 @@ public class PlayerManager : MonoBehaviour {
     public void Init()
     {
         Debug.Log("PlayerManager Init");
+        uIManager = GameRoot.GetInstance().battleUI.GetComponent<BattleUIManager>();
+        effectManager = GameRoot.GetInstance().EffectMng;
     }
 
     public void InjectData(BattleData data){
@@ -64,39 +67,39 @@ public class PlayerManager : MonoBehaviour {
         GameRoot.BattleStartDelayAction += StartBattle;
         playerData = new PlayerBattleData
         {
-            saving = 0,
-            income = 0,
-            cost = 0
+            saving = 50,
+            income = baseIncome,
         };
         enemyData = new PlayerBattleData
         {
-            saving = 0,
-            income = 0,
-            cost = 0
+            saving = 50,
+            income = baseIncome,
         };
     }
 
     public void StartBattle(){
         start = true;
+        uIManager.UpdatePlayerSaving(playerData.saving);
+        uIManager.UpdatePlayerIncome(playerData.income);
     }
 
-    public float GetPlayerSaving(){
+    public int GetPlayerSaving(){
         return playerData.saving;
     }
 
     private void Update(){
         if(start){
-            if(updateIncomeDelta>=0 && baseIncome < BattleDef.MaxBaseIncome){
-                baseIncome += incomeAdd;
-                playerData.income += incomeAdd;
-                enemyData.income += incomeAdd;
+            if(updateIncomeDelta>=BattleDef.UpdateIncomeDelta){
+                playerData.saving = playerData.saving + playerData.income;
+                enemyData.saving = enemyData.saving + enemyData.income;
                 updateIncomeDelta = -BattleDef.UpdateIncomeDelta;
+                uIManager.UpdatePlayerSaving(playerData.saving);
             }
-            float playerDelta = Mathf.Max(0,(playerData.income - playerData.cost)*Time.deltaTime);
-            playerData.saving = Mathf.Clamp(playerData.saving+playerDelta,0,BattleDef.MaxSaving);
+            //float playerDelta = Mathf.Max(0,(playerData.income - playerData.cost)*Time.deltaTime);
+            //playerData.saving = Mathf.Clamp(playerData.saving+playerDelta,0,BattleDef.MaxSaving);
 
-            float enemyDelta = Mathf.Max(0,(enemyData.income - enemyData.cost)*Time.deltaTime);
-            enemyData.saving = Mathf.Clamp(enemyData.saving+enemyDelta,0,BattleDef.MaxSaving);
+            //float enemyDelta = Mathf.Max(0,(enemyData.income - enemyData.cost)*Time.deltaTime);
+            //enemyData.saving = Mathf.Clamp(enemyData.saving+enemyDelta,0,BattleDef.MaxSaving);
 
             updateIncomeDelta += Time.deltaTime;
         }
@@ -111,18 +114,19 @@ public class PlayerManager : MonoBehaviour {
         //playGridY = gridY;
     }
 
-    public bool RequestCost(int side,float cost){
+    public bool RequestCost(int side,int cost){
         switch(side){
             case 1:
-                float rest = playerData.saving - cost;
+                int rest = playerData.saving - cost;
                 if(rest>=0){
                     playerData.saving = rest;
+                    uIManager.UpdatePlayerSaving(playerData.saving);
                     return true;
                 }else{
                     return false;
                 }
             case 2:
-                float rest2 = enemyData.saving - cost;
+                int rest2 = enemyData.saving - cost;
                 if(rest2>=0){
                     enemyData.saving = rest2;
                     return true;
@@ -132,4 +136,46 @@ public class PlayerManager : MonoBehaviour {
         }
         return false;
     }
+
+    public void ChangeIncome(int side,int value){
+        switch (side)
+        {
+            case 1:
+                playerData.income = playerData.income+value;
+                uIManager.UpdatePlayerIncome(playerData.income);
+                break;
+            case 2:
+                enemyData.income = enemyData.income+value;
+                break;
+        }
+    }
+
+    public void ChangeSaving(int side, int value)
+    {
+        switch (side)
+        {
+            case 1:
+                playerData.saving = playerData.saving + value;
+                uIManager.UpdatePlayerSaving(playerData.saving);
+                break;
+            case 2:
+                enemyData.saving = enemyData.saving + value;
+                break;
+        }
+    }
+
+    public void AddSaving(Vector3 pos,int side,int value){
+        switch(side)
+        {
+            case 1:
+                ChangeSaving(side, value);
+                effectManager.PrintGoldTips(pos, value);
+                break;
+            case 2:
+                ChangeSaving(side, value);
+                break;
+        }
+    }
+
+
 }

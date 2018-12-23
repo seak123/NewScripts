@@ -86,21 +86,27 @@ namespace Map
         public Entity CreateEntity(int id,int uid,int side,int gridX,int gridY,int structUid){
             float x, y;
             Vector2 pos = FindInitPos(gridX,gridY, mng.GetCreatureData(id).radius);
+            CreatureData data = mng.GetCreatureData(id);
             GetViewPos((int)pos.x, (int)pos.y, out x, out y);
 
-            MarkMovable((int)pos.x, (int)pos.y, mng.GetCreatureData(id).radius, true);
+            MarkMovable((int)pos.x, (int)pos.y, data.radius, true);
            
-            GameObject obj = Instantiate(mng.GetCreatureData(id).prefab, new Vector3(x, 0, y), Quaternion.identity);
+            GameObject obj = Instantiate(data.prefab, new Vector3(x, 0, y), Quaternion.identity);
             var entity = obj.AddComponent<Entity>();
             //init entity
             entity.id = id;
             entity.uid = uid;
             entity.structUid = structUid;
             entity.side = side;
-            entity.radius = mng.GetCreatureData(id).radius;
+            entity.radius = data.radius;
+            entity.cost = data.cost;
             entity.posX = (int)pos.x;
             entity.posY = (int)pos.y;
             entity.animator = obj.GetComponentInChildren<Animator>();
+            //structure
+            if(entity.structUid>0){
+                GameRoot.GetInstance().PlayerMng.ChangeIncome(side, (int)(entity.cost * 2/100));
+            }
 
             entityMap.Add(uid, entity);
             return entity;
@@ -111,6 +117,7 @@ namespace Map
             MarkMovable(entity.posX, entity.posY, entity.radius, false);
             //entityMap.Remove(entity.uid);
             if(entity.structUid != -1){
+                GameRoot.GetInstance().PlayerMng.ChangeIncome(entity.side, -(int)entity.cost * 2 / 100);
                 foreach (var point in structureMap[entity.structUid])
                 {
                     structureGrids[(int)point.x, (int)point.y] = false;
@@ -354,7 +361,7 @@ namespace Map
             return true;
         }
 
-        public int CreateStructure(int maxX,int maxY,int size){
+        public int CreateStructure(int maxX,int maxY,int size,int radius=-1){
             structureUid = structureUid + 1;
             List<Vector2> structGrids = new List<Vector2>();
             for (int x = maxX - size; x < maxX;++x){
@@ -364,6 +371,14 @@ namespace Map
                 }
             }
             structureMap.Add(structureUid, structGrids);
+            //mark cannot move
+            if (radius != -1)
+            {
+                int centerX = maxX * 16 - (int)Mathf.Floor(size * 16 / 2);
+                int centerY = maxY * 16 - (int)Mathf.Floor(size * 16 / 2);
+                MarkMovable(centerX, centerY, radius, true);
+            }
+
             return structureUid;
         }
     }

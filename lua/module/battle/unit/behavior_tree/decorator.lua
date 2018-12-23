@@ -28,7 +28,7 @@ end
 function this:check_EnemyAround(  )
     local field = self.database.master.sess.field
     local unit
-    if self.database.pre_attack_target ~= nil and self.database.pre_attack_target.alive ==0 then
+    if self.database.pre_attack_target ~= nil and self.database.pre_attack_target.alive ==0 and self.database.pre_attack_target.type == 0 then
         unit = self.database.pre_attack_target
     else
         unit = field:find_enemy(true,self.database.master)

@@ -52,12 +52,15 @@ end
 function this:find_enemy( with_structure,unit )
     local enemy_side = 3 - unit.side
     local enemy = nil
+    local threat_enemy = nil
     local max_threat = -9999
+    local min_dis = 9999
 
     local type_flag = 0
     if with_structure == true then type_flag = 2 else type_flag =1 end
 
     for _,u in ipairs(self.units[enemy_side]) do
+        local dis = self:distance(unit,u)
         if self:distance(unit,u) < battle_def.MAPMATRIX.row/2 and u.type < type_flag then
             local threat = unit.threat_value[u.uid]
             if threat == nil then
@@ -67,18 +70,25 @@ function this:find_enemy( with_structure,unit )
             end
             if  threat > max_threat then
                 max_threat = threat
+                threat_enemy = u
+            end
+            if threat >= 10 and dis < min_dis then
+                min_dis = dis
                 enemy = u
             end
         end
     end
-    local min_dis = 9999
-    for _,u in ipairs(self.units[enemy_side]) do
-        local threat = unit.threat_value[u.uid]
-        local dis = self:distance(unit,u)
-        if threat == max_threat and dis < min_dis and u.type< type_flag then
-            min_dis = dis
-            enemy = u
-        end
+    
+    -- for _,u in ipairs(self.units[enemy_side]) do
+    --     local threat = unit.threat_value[u.uid]
+    --     local dis = self:distance(unit,u)
+    --     if threat >= 10 and dis < min_dis and u.type< type_flag then
+    --         min_dis = dis
+    --         enemy = u
+    --     end
+    -- end
+    if enemy~=nil and enemy.type == 1 and threat_enemy ~= nil and threat_enemy.alive == 0 then
+        return threat_enemy
     end
     return enemy
 end
