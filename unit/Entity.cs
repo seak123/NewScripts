@@ -50,6 +50,10 @@ namespace Map
             GameRoot.GetInstance().MapField.GetViewPos(gridX,gridY,out x,out y);
             gameObject.transform.position = new Vector3(x, 0, y);
         }
+
+        public void Appear(){
+            gameObject.SetActive(true);
+        }
         // >>>>>>>>>>>>>>>>> Transform 
         public void SetRotation(int toX, int toY){
             if(toX == posX && toY == posY)return;
@@ -171,7 +175,8 @@ namespace Map
             {
                 hpBar = Instantiate(hpPrefab);
                 hpBar.GetComponent<RectTransform>().parent = GameRoot.GetInstance().battleGroundUI.GetComponent<RectTransform>();
-                hpBar.GetComponent<RectTransform>().sizeDelta = new Vector2(Mathf.Sqrt(radius)/2*80,22);
+                //hpBar.GetComponent<RectTransform>().sizeDelta = new Vector2(Mathf.Sqrt(radius)/2*80,22);
+                hpBar.transform.localScale = new Vector3(Mathf.Sqrt(radius) / 2, 1, 1)*1.2f;
                 hpBar.SetActive(false);
                 GameRoot.GetInstance().Camara.GetComponent<CamaraManager>().UpdateUI += UpdateHpBar;
             }
@@ -218,7 +223,7 @@ namespace Map
             }
             animator.SetTrigger("Die");
 
-            GameRoot.GetInstance().PlayerMng.AddSaving(GetSocketPos("S_Center"), 3 - side, cost);
+            GameRoot.GetInstance().PlayerMng.AddSaving(GetSocketPos("S_Center"), 3 - side, (int)(cost*BattleDef.KillEarnFactor));
             GameRoot.GetInstance().MapField.RemoveEntity(this,2f);
             Destroy(hpBar, 0.5f);
             Destroy(gameObject, 2f);
@@ -268,12 +273,12 @@ namespace Map
                 {
                     comp.material.SetColor("_LightTint", new Color(1, 0.65f+0.35f*delta/0.2f, 0.65f + 0.35f * delta / 0.2f));
                  }
-                if (hpBar != null)
-                {
-                    if(side==2)
-                    hpBar.transform.Find("Fill Area").Find("Fill").GetComponent<Image>().color = new Color(1, 0.8f - 0.55f * delta / 0.2f, 0.8f - 0.55f * delta / 0.2f);
-                    else hpBar.transform.Find("Fill Area").Find("Fill").GetComponent<Image>().color = new Color(0.8f - 0.55f * delta / 0.2f,1, 0.8f - 0.55f * delta / 0.2f);
-                }
+                //if (hpBar != null)
+                //{
+                //    if(side==2)
+                //    hpBar.transform.Find("Mask").Find("Fill Area").Find("Fill").GetComponent<Image>().color = new Color(1, 0.8f - 0.24f * delta / 0.2f, 0.8f + 0.14f * delta / 0.2f);
+                //    else hpBar.transform.Find("Mask").Find("Fill Area").Find("Fill").GetComponent<Image>().color = new Color(0.8f - 0.4f * delta / 0.2f,1, 0.8f - 0.4f * delta / 0.2f);
+                //}
 				damageCacheTime -= Time.deltaTime; 
             }else if(damageCacheTime<0){
 				damageCacheTime = 0;
@@ -281,11 +286,11 @@ namespace Map
                 {
                     comp.material.SetColor("_LightTint", new Color(1, 1, 1));
                 }
-                if (hpBar != null) { 
-                    if(side == 2)
-                    hpBar.transform.Find("Fill Area").Find("Fill").GetComponent<Image>().color = new Color(1, 0.25f, 0.25f);
-                    else hpBar.transform.Find("Fill Area").Find("Fill").GetComponent<Image>().color = new Color(0.25f,1, 0.25f);
-                }
+                //if (hpBar != null) { 
+                //    if(side == 2)
+                //    hpBar.transform.Find("Fill Area").Find("Fill").GetComponent<Image>().color = new Color(1, 0.56f, 0.94f);
+                //    else hpBar.transform.Find("Fill Area").Find("Fill").GetComponent<Image>().color = new Color(0.4f,1, 0.4f);
+                //}
             }
 
         }
@@ -310,7 +315,7 @@ namespace Map
                 hpBar.transform.position = new Vector3(screenPos.x, screenPos.y, 0);
 
                 float scale = camara.minSize / camara.size;
-                hpBar.transform.localScale = Vector3.one*scale;
+                hpBar.transform.localScale = new Vector3(Mathf.Sqrt(radius) / 2, 1, 1)*scale*1.2f; ;
                
             }
         }

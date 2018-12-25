@@ -95,9 +95,9 @@ public class EffectManager : MonoBehaviour {
         message.SetActive(true);
         message.GetComponent<Text>().text = StrUtil.GetText(text);
         if(entity.side == 1){
-            message.GetComponent<Text>().color = new Color(0.6f, 1f, 0.26f);
+            message.GetComponent<Text>().color = new Color(0.34f, 0.87f, 0.34f);
         }else{
-            message.GetComponent<Text>().color = new Color(1f, 0.51f, 0.259f);
+            message.GetComponent<Text>().color = new Color(0.88f, 0.49f, 0.83f);
         }
         message.transform.position = new Vector3(screenPos.x, screenPos.y, 0);
 

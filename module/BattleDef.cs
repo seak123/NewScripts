@@ -28,7 +28,11 @@ public static class BattleDef
 
     public static float MaxBaseIncome = 1;
 
-    public static float UpdateIncomeDelta = 10;
+    public static float KillEarnFactor = 1.2f;
+
+    public static float StructureEarnFactor = 0.04f;
+
+    public static float UpdateIncomeDelta = 5;
 
     //utils
 #if UNITY_EDITOR

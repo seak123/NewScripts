@@ -54,6 +54,36 @@ function this:distance_select( sess )
     --end
 end
 
+function this:random_hurted_select( sess )
+    local func,func2
+    if self.vo.can_repeat == true then
+        func = function(unit)
+            return unit.hp<unit.max_hp
+        end
+        func2 = nil
+    else
+        func = function ( unit )
+            return self:check_repeat()(unit) and unit.hp<unit.max_hp
+        end
+        func2 = self:check_repeat()
+    end
+    for i=1,self.vo.num do
+        local unit = sess.field:find_random_unit(false,self.target_side,func)
+        if unit == nil then
+            break
+        end
+        table.insert( self.targets,unit)
+        table.insert( self.database.target_trace,unit.uid )
+    end
+    for i=#self.targets,self.vo.num do
+        local unit = sess.field:find_random_unit(false,self.target_side,func2)
+        if unit ~= nil then
+            table.insert( self.targets,unit )
+            table.insert( self.database.target_trace,unit.uid )
+        end
+    end
+end
+
 function this:check_repeat(  )
     return function ( unit )
         for _,u in ipairs(self.database.target_trace) do

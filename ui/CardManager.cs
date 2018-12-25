@@ -229,11 +229,11 @@ public class CardManager : MonoBehaviour {
             if(state == CardViewState.Idle){
                 creatureCardObj.SetActive(true);
                 creatureCardObj.transform.localPosition = cardboxs[index].transform.localPosition;
-                creatureCardObj.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+                creatureCardObj.transform.localScale = new Vector3(0f, 0f, 0f);
                 if (creatureData.skills.Length == 0)
-                    creatureCardObj.transform.DOLocalMove(new Vector3(600, 400, 0), 0.5f);
-                else creatureCardObj.transform.DOLocalMove(new Vector3(350, 400, 0), 0.5f);
-                creatureCardObj.transform.DOScale(Vector3.one, 0.5f);
+                    creatureCardObj.transform.DOLocalMove(new Vector3(500, 400, 0), 0.5f).SetDelay(0.3f);
+                else creatureCardObj.transform.DOLocalMove(new Vector3(250, 400, 0), 0.5f).SetDelay(0.3f);
+                creatureCardObj.transform.DOScale(Vector3.one*1.2f, 0.5f).SetDelay(0.3f);
                 CreatureCardUI ui = creatureCardObj.GetComponent<CreatureCardUI>();
                 ui.CleanUp();
                 ui.InjectData(cardData);
@@ -243,9 +243,9 @@ public class CardManager : MonoBehaviour {
             if(state == CardViewState.Idle){
                 structureCardObj.SetActive(true);
                 structureCardObj.transform.localPosition = cardboxs[index].transform.localPosition;
-                structureCardObj.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
-                structureCardObj.transform.DOLocalMove(new Vector3(350, 400, 0), 0.5f);
-                structureCardObj.transform.DOScale(Vector3.one, 0.5f);
+                structureCardObj.transform.localScale = new Vector3(0f, 0f, 0f);
+                structureCardObj.transform.DOLocalMove(new Vector3(250, 400, 0), 0.5f).SetDelay(0.3f);
+                structureCardObj.transform.DOScale(Vector3.one*1.2f, 0.5f).SetDelay(0.3f);
                 StructureCardUI ui = structureCardObj.GetComponent<StructureCardUI>();
                 ui.CleanUp();
                 ui.InjectData(cardData);

@@ -105,10 +105,11 @@ namespace Map
             entity.animator = obj.GetComponentInChildren<Animator>();
             //structure
             if(entity.structUid>0){
-                GameRoot.GetInstance().PlayerMng.ChangeIncome(side, (int)(entity.cost * 2/100));
+                GameRoot.GetInstance().PlayerMng.ChangeIncome(side, (int)(entity.cost * BattleDef.StructureEarnFactor));
             }
 
             entityMap.Add(uid, entity);
+            entity.gameObject.SetActive(false);
             return entity;
         }
 

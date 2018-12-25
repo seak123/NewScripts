@@ -3,7 +3,8 @@ local this = class("retarget_skill_vo",base)
 
 this.TargetType = {
     Random = "random",
-    Distance = "distance"
+    Distance = "distance",
+    RandomHurted = "random_hurted"
 }
 
 this.execute = "module.battle.skill.ripe_skill.retarget_skill"

@@ -250,6 +250,7 @@ end
 
 function this:enter_Appear(  )
     if self.database.master.appeared == 1 then return false end
+    self.database.master.entity:Appear()
     self.database.master.entity:AnimCasterAction(transform.AnimationState.Appear)
     self.runtime = 0
     return true

@@ -38,7 +38,7 @@ local normal1 = normal_skill.new()
 normal1:append("raw_skills",buff0,heal0)
 
 local retarget0 = retarget.new()
-retarget0.target_type = retarget.TargetType.Random
+retarget0.target_type = retarget.TargetType.RandomHurted
 retarget0.can_repeat = false
 retarget0.cantain_curr_target = true
 retarget0.num = 2
