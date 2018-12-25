@@ -52,6 +52,8 @@ this.ENEMYBOUND = {
 this.MaxSpeed = 32
 this.MinSpeed = 4
 this.NormalSpeed = 16
+this.DefaultSkyHurtZ = 1.5
+this.DefaultGroundHurtZ = 0.5
 
 -----------------damage
 this.DefenceFactor = 20

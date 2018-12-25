@@ -2,6 +2,7 @@
 local this = class("battle_field")
 local creature = require("module.battle.unit.creature")
 local battle_def = require("module.battle.battle_def")
+local bit = require("utils.bit_calc")
 
 function this:ctor(sess )
     self.sess = sess
@@ -48,9 +49,13 @@ function this:get_unit( uid,side)
     end
     return nil
 end
-
-function this:find_enemy( with_structure,unit )
+--opposite_type: attack ground or sky
+function this:find_enemy( with_structure,unit,is_find_friend )
     local enemy_side = 3 - unit.side
+    if is_find_friend ~= nil and is_find_friend == true then
+        enemy_side = unit.side
+    end
+    local opposite_type = unit.opposite_type
     local enemy = nil
     local threat_enemy = nil
     local max_threat = -9999
@@ -61,7 +66,7 @@ function this:find_enemy( with_structure,unit )
 
     for _,u in ipairs(self.units[enemy_side]) do
         local dis = self:distance(unit,u)
-        if self:distance(unit,u) < battle_def.MAPMATRIX.row/2 and u.type < type_flag then
+        if self:distance(unit,u) < battle_def.MAPMATRIX.row/2 and u.type < type_flag and bit._and(opposite_type,u.genus)==u.genus then
             local threat = unit.threat_value[u.uid]
             if threat == nil then
                 -- set base threat_value
@@ -94,6 +99,7 @@ function this:find_enemy( with_structure,unit )
 end
 
 function this:get_units(with_structure,side,unit,num,condition_func  )
+    local opposite_type = unit.opposite_type
     local min_dis = 9999
     local enemy = {}
     for i=1,num do
@@ -104,7 +110,7 @@ function this:get_units(with_structure,side,unit,num,condition_func  )
     if with_structure == true then type_flag = 2 else type_flag = 1 end
     if condition_func == nil then condition_func = function(a) return true end end
     for _,u in ipairs(self.units[side]) do
-        if condition_func(u) and u.type < type_flag then
+        if condition_func(u) and u.type < type_flag and bit._and(opposite_type,u.genus)==u.genus then
             local dis = self:distance(unit,u)
             local index = -1
             for i=num,1,-1 do

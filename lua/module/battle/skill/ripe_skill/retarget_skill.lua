@@ -75,7 +75,7 @@ function this:random_hurted_select( sess )
         table.insert( self.targets,unit)
         table.insert( self.database.target_trace,unit.uid )
     end
-    for i=#self.targets,self.vo.num do
+    for i=#self.targets+1,self.vo.num do
         local unit = sess.field:find_random_unit(false,self.target_side,func2)
         if unit ~= nil then
             table.insert( self.targets,unit )

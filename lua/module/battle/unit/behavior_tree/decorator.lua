@@ -34,7 +34,7 @@ function this:check_EnemyAround(  )
         unit = field:find_enemy(true,self.database.master)
     end
     if self.database.master.statectrl:has_feature("confused") then
-        unit = field:find_friend(true,self.database.master)
+        unit = field:find_enemy(true,self.database.master,true)
     end
     if self.database.master.statectrl:has_feature("taunt") then
         unit = self.database.master.statectrl.taunt_target
