@@ -4,21 +4,38 @@ local this = class("aoe_skill_vo",base)
 this.execute = "module.battle.skill.ripe_skill.aoe_skill"
 
 this.Shape = {
-    Circle = 1
+    Circle = "circle"
 }
 
 this.Track = {
-    Fixed = 1
+    Fixed = "fixed",
+    Straight = "straight",
+
 }
 
 this.Target = {
-    Unit = 1,
-    Pos = 2
+    Unit = "unit",
+    Pos = "pos"
 }
 
+this.shape = this.Shape.Circle
+this.track = this.Track.Fixed
+this.target = this.Target.Unit
+
 this.can_repeat = true
+this.cantain_curr_target = false
+-- tick = -1 means update every frame
 this.tick = 1
+-- duration = -1 means forever ; duration = 0 then means once
 this.duration = 1
+
+-- opposite_type: 1,ground 2,fly 3,ground and fly 4,refer to main target
+this.opposite_type = 1
+
+this.with_structure = false
+
+-- side: 0, friend 1,enemy
+this.side = 1
 
 --circle
 this.radius = 1

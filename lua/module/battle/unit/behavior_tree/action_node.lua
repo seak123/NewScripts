@@ -194,6 +194,8 @@ end
 
 function this:update_Attack( delta )
     -- print("uid:"..self.database.master.uid.." update attack state")
+    local attack_rate = self.database.master.property:get("attack_rate")
+    if attack_rate < battle_def.MinAttackRate then attack_rate = battle_def.MinAttackRate end
     local flag = self.database.master:do_attack(delta*self.database.master.property:get("attack_rate"),self.database.target)
     if flag == false then
         self.running = true

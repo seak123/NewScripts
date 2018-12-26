@@ -49,11 +49,13 @@ this.ENEMYBOUND = {
     row = 448
 }
 
-this.MaxSpeed = 32
+this.MaxSpeed = 64
 this.MinSpeed = 4
 this.NormalSpeed = 16
 this.DefaultSkyHurtZ = 1.5
 this.DefaultGroundHurtZ = 0.5
+
+this.MinAttackRate = 0.1
 
 -----------------damage
 this.DefenceFactor = 20

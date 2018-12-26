@@ -179,6 +179,45 @@ function this:find_random_unit(with_structure,side,condition_func )
     return units[index]
 end
 
+function this:get_targets(opposite_type,with_structure,side,unit,num,condition_func  )
+    local min_dis = 9999
+    local enemy = {}
+    if num == -1 then num = 99 end
+    for i=1,num do
+        enemy[i] = {unit = nil,dis = 999}
+    end
+
+    local type_flag = 0
+    if with_structure == true then type_flag = 2 else type_flag = 1 end
+    if condition_func == nil then condition_func = function(a) return true end end
+    for _,u in ipairs(self.units[side]) do
+        if condition_func(u) and u.type < type_flag and bit._and(opposite_type,u.genus)==u.genus then
+            local dis = self:distance(unit,u)
+            local index = -1
+            for i=num,1,-1 do
+                if dis < enemy[i].dis then
+                    index = i
+                else
+                    break
+                end
+            end
+            if index ~= -1 then
+                for i= num,index+1,-1 do
+                    enemy[i].unit = enemy[i-1].unit
+                    enemy[i].dis = enemy[i-1].dis
+                end
+                enemy[index].unit = u
+                enemy[index].dis = dis
+            end
+        end
+    end
+    local res = {}
+    for i=1,num do
+        if enemy[i].unit ~= nil then table.insert( res, enemy[i].unit ) end
+    end
+    return res
+end
+
 -- args can be unit or pos
 function this:distance(a_unit,b_unit  )
     local a_pos = a_unit

@@ -21,8 +21,10 @@ end
 
 function this:update( delta )
     if self.des_pos ~= nil then
-        local value = delta * self.master.property:get("speed") + self.offset
-        self.grid_pos.X,self.grid_pos.Y,self.offset= self.master.entity:Move(self.des_pos.X,self.des_pos.Y,self.master.property:get("speed"),value,nil,nil,nil)
+        local speed = self.master.property:get("speed")
+        if speed < def.MinSpeed then speed = def.MinSpeed end
+        local value = delta * speed + self.offset
+        self.grid_pos.X,self.grid_pos.Y,self.offset= self.master.entity:Move(self.des_pos.X,self.des_pos.Y,speed,value,nil,nil,nil)
         --self.master.entity:SetRotation(self.des_pos.X,self.des_pos.Y)
         self.des_pos = nil
     end
