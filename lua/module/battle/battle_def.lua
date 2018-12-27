@@ -19,7 +19,8 @@ this.PROPERTY = {
     dodge = this.RATE,
     speed = this.VALUE,
     physic_suck = this.RATE,
-    magic_suck = this.RATE
+    magic_suck = this.RATE,
+    coold_reduce = this.RATE
 }
 
 -- this.PLAYERPROP = {

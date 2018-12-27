@@ -89,7 +89,7 @@ namespace Map
             CreatureData data = mng.GetCreatureData(id);
             GetViewPos((int)pos.x, (int)pos.y, out x, out y);
 
-            MarkMovable((int)pos.x, (int)pos.y, data.radius, true);
+            MarkMovable(data.genus,(int)pos.x, (int)pos.y, data.radius, true);
            
             GameObject obj = Instantiate(data.prefab, new Vector3(x, 0, y), Quaternion.identity);
             var entity = obj.AddComponent<Entity>();
@@ -98,6 +98,7 @@ namespace Map
             entity.uid = uid;
             entity.structUid = structUid;
             entity.side = side;
+            entity.genus = data.genus;
             entity.radius = data.radius;
             entity.cost = data.cost;
             entity.posX = (int)pos.x;
@@ -115,7 +116,7 @@ namespace Map
 
         public void RemoveEntity(Entity entity,float delay){
 
-            MarkMovable(entity.posX, entity.posY, entity.radius, false);
+            MarkMovable(entity.genus,entity.posX, entity.posY, entity.radius, false);
             //entityMap.Remove(entity.uid);
             if(entity.structUid != -1){
                 GameRoot.GetInstance().PlayerMng.ChangeIncome(entity.side, -(int)entity.cost * 2 / 100);
@@ -301,7 +302,8 @@ namespace Map
             return true;
         }
 
-        public void MarkMovable(int grid_x,int grid_y,int radius,bool cannotMove){
+        public void MarkMovable(int genus,int grid_x,int grid_y,int radius,bool cannotMove){
+            if(genus==2)return;
             for (int x = Math.Max(0, grid_x - radius); x < Math.Min(BattleDef.columnGridNum, grid_x + radius); ++x)
             {
                 for (int y = Math.Max(0, grid_y - radius); y < Math.Min(BattleDef.rowGridNum, grid_y + radius); ++y)
@@ -377,7 +379,7 @@ namespace Map
             {
                 int centerX = maxX * 16 - (int)Mathf.Floor(size * 16 / 2);
                 int centerY = maxY * 16 - (int)Mathf.Floor(size * 16 / 2);
-                MarkMovable(centerX, centerY, radius, true);
+                MarkMovable(1,centerX, centerY, radius, true);
             }
 
             return structureUid;

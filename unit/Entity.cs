@@ -17,6 +17,7 @@ namespace Map
         public int uid;
         public int structUid;
         public int radius;
+        public int genus;
         public int cost;
         public int posX = 0;
         public int posY = 0;
@@ -76,9 +77,9 @@ namespace Map
 
         public void ResetMapNode(){
             MapField field = GameRoot.GetInstance().MapField;
-            field.MarkMovable(posX, posY, radius, false);
+            field.MarkMovable(genus,posX, posY, radius, false);
             //currMapNode = field.GetAStarRoute(id, posX, posY, desX, desY);
-            field.MarkMovable(posX, posY, radius, true);
+            field.MarkMovable(genus,posX, posY, radius, true);
         }
      
         public void Move(int toX,int toY,int speed,float value,out int gridX,out int gridY,out float offset)
@@ -93,7 +94,7 @@ namespace Map
             float toViewX, toViewY;
             field.GetViewPos(toX, toY, out toViewX, out toViewY);
 
-            field.MarkMovable(posX, posY, radius, false);
+            field.MarkMovable(genus,posX, posY, radius, false);
 
             if (state == TransformState.Straight)
             {
@@ -114,7 +115,7 @@ namespace Map
                     if(RouteUpdateFlag>5) SetRotation(toX, toY);
                     posX = gridX;
                     posY = gridY;
-                    field.MarkMovable(posX, posY, radius, true);
+                    field.MarkMovable(genus,posX, posY, radius, true);
 
                     return;
                 }else{
@@ -149,7 +150,7 @@ namespace Map
                         state = TransformState.Straight;
                         RouteUpdateFlag = 0;
                     }
-                     field.MarkMovable(posX, posY, radius, true);
+                     field.MarkMovable(genus,posX, posY, radius, true);
                     return;
                 }else{
                     currMapNode.Next = null;
@@ -158,7 +159,7 @@ namespace Map
                     gridX = posX;
                     gridY = posY;
                     offset = 0;
-                    field.MarkMovable(posX, posY, radius, true);
+                    field.MarkMovable(genus,posX, posY, radius, true);
                     RouteUpdateFlag = 0;
                     state = TransformState.Straight;
                     return;

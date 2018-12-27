@@ -111,8 +111,9 @@ function this:update( delta )
 end
 
 function this:update_coold(delta)
+    local factor =1/ (1-self.property:get("coold_reduce"))
     for _,v in ipairs(self.skills_coold) do
-        v.value = math.max( 0,v.value - delta )
+        v.value = math.max( 0,v.value - delta*factor )
     end
 end
 
