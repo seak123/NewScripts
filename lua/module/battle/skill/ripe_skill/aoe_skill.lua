@@ -1,6 +1,6 @@
 local base = require("module.battle.skill.ripe_skill.base_skill")
 local this = class("aoe_skill",base)
-local aoe_vo = require("lua.module.battle.skill.ripe_skill_vo.aoe_skill_vo")
+local aoe_vo = require("module.battle.skill.ripe_skill_vo.aoe_skill_vo")
 
 function this:ctor( vo,database )
     self.vo = vo
@@ -11,6 +11,7 @@ function this:ctor( vo,database )
     self.inited = false
     self.timepass = 0
     self.process = 0
+    self.target_pos = {}
 end
 
 
@@ -101,10 +102,10 @@ end
 ------------shape
 
 function this:update_shape_by_circle( sess,delta )
-    local caster = self.database.caster.unit
+    local target = self.targets[1]
     local func = function(unit)
         local flag = false
-        if sess.field:distance(caster,unit) <= self.vo.radius then
+        if sess.field:distance(target,unit) <= self.vo.radius then
             flag = true
         end
         return self:check_repeat()(unit) and flag

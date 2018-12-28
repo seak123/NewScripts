@@ -18,6 +18,7 @@ function this:ctor( vo,database )
     self.start_pos = {X =0,Y =0,Z=0}
     self.curr_pos = {X =0,Y=0,Z=0}
     self.target_pos = {X = 0,Y = 0}
+    self.target_pos_z = 0
 end
 
 function this:execute( sess,delta )
@@ -49,10 +50,13 @@ function this:execute( sess,delta )
             -- curve_type: 0,ground to ground or fly to fly 1,fly to ground 2,ground to fly
             if self.targets[1].genus == 1 and self.database.caster.unit.genus == 2 then
                 self.curve_type = 1
+                self.target_pos_z = battle_def.DefaultGroundHurtZ
             elseif self.targets[1].genus == 2 and self.database.caster.unit.genus == 1 then
                 self.curve_type = 2
+                self.target_pos_z = battle_def.DefaultSkyHurtZ
             else
                 self.curve_type = 0
+                self.target_pos_z = self.start_pos.Z
             end
 
             local Dx = self.target_pos.X - self.start_pos.X
@@ -65,6 +69,7 @@ function this:execute( sess,delta )
     end
 
     if self["update_by_"..self.vo.trace](self,sess,delta) == "completed" then
+        print("@@clean up")
         self:clean_up()
         return "completed"
     else
@@ -139,7 +144,7 @@ function this:update_by_curve( sess,delta )
     if dis <= self.min_dis then self.min_dis = dis
     else return "completed" end
     if time <= delta then
-        self.effect_entity:SetPos(self.target_pos.X,self.target_pos.Y,self.start_pos.Z)
+        self.effect_entity:SetPos(self.target_pos.X,self.target_pos.Y,self.target_pos_z)
         return "completed"
     end
 
@@ -181,9 +186,10 @@ function this.curve_z_calc( rest_dis,all_dis ,curve_type)
         local z = a*x*x + h
         return x,z
     else
-        local a = battle_def.DefaultSkyHurtZ-battle_def.DefaultGroundHurtZ
+        local a = -(battle_def.DefaultSkyHurtZ-battle_def.DefaultGroundHurtZ)
+        local h = battle_def.DefaultSkyHurtZ - battle_def.DefaultGroundHurtZ
         local x = math.max(0,(1-rest_dis/all_dis))
-        local z = a*x*x
+        local z = a*(x-1)*(x-1) + h
         return x,z
     end
 end

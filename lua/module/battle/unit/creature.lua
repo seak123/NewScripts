@@ -189,6 +189,7 @@ function this:heal(value,source  )
 end
 
 function this:die(  )
+    if self.alive ~= 0 then return end
     self.alive = 2
     self:on_die()
     self.sess.field:unit_die(self)

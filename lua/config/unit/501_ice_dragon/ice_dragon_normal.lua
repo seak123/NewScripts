@@ -25,11 +25,11 @@ local normal = normal_skill.new()
 normal:append("raw_skills",damage0)
 
 local effect0 = effect.new()
-effect0.effect_id = 1
+effect0.effect_id = 5011
 effect0.clean_delay = 0.2
 
 local throw = throw_skill.new()
-throw.speed = 320
+throw.speed = 120
 throw.trace = throw_skill.Trace.Curve
 throw:append("effect",effect0)
 throw:append("childs",normal,aoe0)
