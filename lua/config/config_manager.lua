@@ -12,7 +12,8 @@ this.unit_config = {
     [101] = "config.unit.101_natural_main_castle.natural_main_castle_unit",
     [107] = "config.unit.107_natural_statue.natural_statue_unit",
     [108] = "config.unit.108_elf_archer.elf_archer_unit",
-    [109] = "config.unit.109_elf_pikeman.elf_pikeman_unit"
+    [109] = "config.unit.109_elf_pikeman.elf_pikeman_unit",
+    [501] = "config.unit.501_ice_dragon.ice_dragon_unit"
 }
 
 this.skill_config = {

@@ -25,7 +25,7 @@ local normal = normal_skill.new()
 normal:append("raw_skills",damage0)
 
 local effect0 = effect.new()
-effect0.effect_id = 1081
+effect0.effect_id = 1
 effect0.clean_delay = 0.2
 
 local throw = throw_skill.new()

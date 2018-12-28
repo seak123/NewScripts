@@ -58,7 +58,7 @@ public class EnterState : FsmState
         if(enterTime<=wholeDelay-2f){
             float startDelta = enterTime - wholeDelay + 3f;
             float delta = (startDelta - 0.2f) / 0.6f * 6f;
-            cameraMng.size = Mathf.Clamp(2f + delta,2f,cameraMng.maxSize);
+            cameraMng.size = Mathf.Clamp(2f + delta,2f,8);
         }else if(enterTime<=wholeDelay - 1f){
             cameraMng.MoveCameraDirect(new Vector3(-Time.deltaTime*(BattleDef.columnGridNum-BattleDef.StructBound*16*1.5f)/25, 0, -Time.deltaTime * BattleDef.rowGridNum / 4 / 25));
         }else{
