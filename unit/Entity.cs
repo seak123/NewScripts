@@ -106,7 +106,7 @@ namespace Map
                 float nextViewX = Mathf.Max(0,Mathf.Min(BattleDef.columnGridNum-1,nowViewX + (toViewX - nowViewX) * factor));
                 float nextViewY = Mathf.Max(0, Mathf.Min(BattleDef.rowGridNum - 1,nowViewY + (toViewY - nowViewY) * factor));
                 field.GetGridPos(nextViewX, nextViewY, out gridX, out gridY);
-                if (field.IsCanMove(gridX, gridY, radius))
+                if (field.IsCanMove(gridX, gridY, radius)||genus == 2)
                 {
                     RouteUpdateFactor = 0;
                     offset = 0;
