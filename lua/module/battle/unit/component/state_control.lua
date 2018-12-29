@@ -2,7 +2,8 @@ local this = class("state_control")
 
 -- feature: de_move,de_attack,de_skill,taunt,confused,immune
 this.state_feature = {
-	frozen = {"de_move","de_attack"},
+    frozen = {"de_move","de_attack"},
+    cold = {"de_speed","de_attack_rate"},
 	stun = {"de_move","de_attack","de_skill"},
 	taunt = {"taunt"},
     confused = {"confused"},
@@ -232,6 +233,14 @@ function this:immune_get(  )
 end
 
 function this:immune_lose(  )
+    -- body
+end
+
+function this:de_speed_get(  )
+    -- body
+end
+
+function this:de_speed_lose(  )
     -- body
 end
 
