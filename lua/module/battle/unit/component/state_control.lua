@@ -244,4 +244,12 @@ function this:de_speed_lose(  )
     -- body
 end
 
+function this:de_attack_rate_get(  )
+    -- body
+end
+
+function this:de_attack_rate_lose(  )
+    -- body
+end
+
 return this

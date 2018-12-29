@@ -7,6 +7,7 @@ local calc = require("module.battle.skill.utils.caculate")
 local aoe = require("module.battle.skill.ripe_skill_vo.aoe_skill_vo")
 local buff = require("module.battle.skill.raw_skill_vo.buff_vo")
 local prop = require("module.battle.skill.raw_skill_vo.property_change_vo")
+local state = require("module.battle.skill.raw_skill_vo.state_vo")
 local this = {}
 
 local aoe_dam = damage.new()
@@ -20,13 +21,16 @@ local prop1 = prop.new()
 prop1.prop_name = "speedrate"
 prop1.calc = calc.make_common_calc(-0.5)
 
+local state0 = state.new()
+state0.state = state.State.Cold
+
 local buff0 = buff.new()
 buff0.buff_id = 5011
 buff0.duration = 2
 -- 2bit: 10
 buff0.feature = 2
 buff0.execute_type = 1
-buff0:append("belongs",prop0,prop1)
+buff0:append("belongs",prop0,prop1,state0)
 
 local aoe0 = aoe.new()
 aoe0.can_repeat = false

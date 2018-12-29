@@ -15,7 +15,9 @@ function this:execute(sess, target)
     if self:check(sess,database,target) == false then
         return
     end
-
+    self.target = target
+    self.sess = sess
+    target.statectrl:state_get(sess,self.vo.state)
    
 end
 
@@ -33,7 +35,8 @@ end
 
 function this:detach( buff )
     self.super.detach(self,buff)
-    self:clean_up()
+    self.target.statectrl:state_lose(self.sess,self.vo.state)
+    --self:clean_up()
 end
 
 return this
