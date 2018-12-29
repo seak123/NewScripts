@@ -214,6 +214,7 @@ namespace Map
             }
             animatorAttackSpeed = attack_rate;
             animator.SetTrigger("Attack");
+            animator.speed = animatorAttackSpeed;
 
         }
 
