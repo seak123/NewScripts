@@ -127,7 +127,6 @@ function this:dispatch( name,src )
 end
 
 function this:do_attack( delta ,enemy)
-
     local old_value = self.attack_process
     self.attack_process = self.attack_process + delta
     if old_value < 0.45 and self.attack_process >= 0.45 then

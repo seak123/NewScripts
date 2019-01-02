@@ -16,7 +16,6 @@ function this:attach_buff(sess, unit)
 end
 
 function this:detach_buff(sess, unit)
-
 	self.carrier = nil
 end
 

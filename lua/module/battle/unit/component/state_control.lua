@@ -29,6 +29,7 @@ function this:ctor(master)
 	self.master = master
 
     -- state name
+    self.cold = 0
     self.frozen = 0
     self.stun = 0
     self.taunt = 0
@@ -73,7 +74,7 @@ function this:state_get(sess, state_name)
 			if self[fname] == nil then self[fname] = 0 end 
             self[fname] = self[fname] + 1
             if self[fname] == 1 then
-                self[v.."get"](self,sess)
+                self[v.."_get"](self,sess)
             end
 		end
 	end
@@ -105,7 +106,7 @@ function this:state_lose(sess, state_name)
                 self[fname] = self[fname] - 1
             end
             if self[fname] == 0 then
-                self[v.."lose"](self,sess)
+                self[v.."_lose"](self,sess)
             end
 		end
 	end
@@ -119,6 +120,14 @@ end
 
 -- frozen,stun,taunt,confused,silence,immune,unarm,demove
 ------------------------------state control
+function this:notify_cold_get(  )
+    self.master.entity:SetColor("blue");
+end
+
+function this:notify_cold_lose(  )
+    self.master.entity:RemoveColor("blue");
+end
+
 function this:notify_frozen_get(  )
     -- body
 end
@@ -238,18 +247,23 @@ end
 
 function this:de_speed_get(  )
     -- body
+    self.master.property:change_prop("speedrate",-0.5)
 end
 
 function this:de_speed_lose(  )
     -- body
+    self.master.property:change_prop("speedrate",0.5)
 end
 
 function this:de_attack_rate_get(  )
-    -- body
+
+    self.master.property:change_prop("attack_rateadd",-1)
+
 end
 
 function this:de_attack_rate_lose(  )
     -- body
+    self.master.property:change_prop("attack_rateadd",1)
 end
 
 return this

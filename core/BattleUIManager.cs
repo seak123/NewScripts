@@ -39,7 +39,7 @@ public class BattleUIManager : MonoBehaviour {
             magic_resist = 0.5f,
             mainCastle = AssetManager.PackCreatureData(mng.GetCreatureData(101)),
             cardBoxNum = 4,
-            cardSpeed = 10,
+            cardSpeed = 2,
             cards = new List<int>
             {
                 1081,
@@ -59,16 +59,18 @@ public class BattleUIManager : MonoBehaviour {
             magic_resist = 0.5f,
             mainCastle = AssetManager.PackCreatureData(mng.GetCreatureData(0)),
             cardBoxNum = 4,
-            cardSpeed = 10,
+            cardSpeed = 2,
             cards = new List<int>
             {
-                1091,
-                1091,
-                1091,
-                1091,
+                1081,
                 1091,
                 1081,
-                1081
+                1091,
+                1081,
+                1091,
+                5011,
+                5011,
+                5011
             }
         };
         data.beginDelay = 5f;

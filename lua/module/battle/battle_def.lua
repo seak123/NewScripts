@@ -56,7 +56,7 @@ this.NormalSpeed = 16
 this.DefaultSkyHurtZ = 3.5
 this.DefaultGroundHurtZ = 0.75
 
-this.MinAttackRate = 0.1
+this.MinAttackRate = 0.2
 
 -----------------damage
 this.DefenceFactor = 20

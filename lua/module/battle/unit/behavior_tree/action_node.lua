@@ -179,7 +179,10 @@ end
 function this:enter_Attack(  )
     if self.database.master.statectrl:has_feature("de_attack") then return false end
     -- print("uid:"..self.database.master.uid.." enter attack state")
-    self.database.master.entity:AnimCasterAttack(self.database.master.property:get("attack_rate"))
+    local attack_rate = self.database.master.property:get("attack_rate")
+    if attack_rate < battle_def.MinAttackRate then attack_rate = battle_def.MinAttackRate end
+
+    self.database.master.entity:AnimCasterAttack(attack_rate)
     self.database.master.entity:SetRotation(self.database.target.transform.grid_pos.X,self.database.target.transform.grid_pos.Y)
     self.database.master.attack_process = 0
     self.runtime = 0
@@ -196,7 +199,7 @@ function this:update_Attack( delta )
     -- print("uid:"..self.database.master.uid.." update attack state")
     local attack_rate = self.database.master.property:get("attack_rate")
     if attack_rate < battle_def.MinAttackRate then attack_rate = battle_def.MinAttackRate end
-    local flag = self.database.master:do_attack(delta*self.database.master.property:get("attack_rate"),self.database.target)
+    local flag = self.database.master:do_attack(delta*attack_rate,self.database.target)
     if flag == false then
         self.running = true
         self.runtime = self.runtime + delta

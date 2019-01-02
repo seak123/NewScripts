@@ -7,7 +7,7 @@ this.State = {
     Frozen = "frozen"
 }
 
-this.execute = "module.battle.skill.raw_skill_vo.view_state_vo"
+this.execute = "module.battle.skill.raw_skill.state"
 
 this.state = this.State.Cold
 

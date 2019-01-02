@@ -43,10 +43,11 @@ function this:execute(sess, target)
     return effect
 end
 
-function this:clean_up(  )
+function this:clean_up( uid )
     -- if effect not auto_clean, nead clean manually
+    if uid == nil then uid = -1 end
     if self.effect ~= nil then
-        self.effect:CleanUp(self.vo.clean_delay)
+        self.effect:CleanUp(self.vo.clean_delay,uid)
     end
 end
 

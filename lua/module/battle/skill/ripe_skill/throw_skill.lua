@@ -19,6 +19,7 @@ function this:ctor( vo,database )
     self.curr_pos = {X =0,Y=0,Z=0}
     self.target_pos = {X = 0,Y = 0}
     self.target_pos_z = 0
+    self.target_uid = -1
 end
 
 function this:execute( sess,delta )
@@ -43,6 +44,7 @@ function this:execute( sess,delta )
             if self.vo.target_type == throw_vo.Target.Unit and self.targets[1].alive == 0 then
                 self.target_pos.X = self.targets[1].transform.grid_pos.X
                 self.target_pos.Y = self.targets[1].transform.grid_pos.Y
+                self.target_uid = self.targets[1].uid
             elseif self.vo.target_type == throw_vo.Target.Pos then
                 self.target_pos.X = self.database.target_pos.X
                 self.target_pos.Y = self.database.target_pos.Y
@@ -69,7 +71,6 @@ function this:execute( sess,delta )
     end
 
     if self["update_by_"..self.vo.trace](self,sess,delta) == "completed" then
-        print("@@clean up")
         self:clean_up()
         return "completed"
     else
@@ -79,7 +80,7 @@ function this:execute( sess,delta )
 end
 
 function this:clean_up(  )
-    self.effect[1]:clean_up()
+    self.effect[1]:clean_up(self.target_uid)
 end
 
 function this:update_by_straight(sess,delta )

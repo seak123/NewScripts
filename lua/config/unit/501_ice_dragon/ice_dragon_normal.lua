@@ -13,24 +13,24 @@ local this = {}
 local aoe_dam = damage.new()
 aoe_dam.calc = calc.make_common_attack(0.5,0)
 
-local prop0 = prop.new()
-prop0.prop_name = "attack_rateadd"
-prop0.calc = calc.make_common_calc(-1)
+-- local prop0 = prop.new()
+-- prop0.prop_name = "attack_rateadd"
+-- prop0.calc = calc.make_common_calc(-1)
 
-local prop1 = prop.new()
-prop1.prop_name = "speedrate"
-prop1.calc = calc.make_common_calc(-0.5)
+-- local prop1 = prop.new()
+-- prop1.prop_name = "speedrate"
+-- prop1.calc = calc.make_common_calc(-0.5)
 
 local state0 = state.new()
 state0.state = state.State.Cold
 
 local buff0 = buff.new()
 buff0.buff_id = 5011
-buff0.duration = 2
+buff0.duration = 4
 -- 2bit: 10
 buff0.feature = 2
 buff0.execute_type = 1
-buff0:append("belongs",prop0,prop1,state0)
+buff0:append("belongs",state0)
 
 local aoe0 = aoe.new()
 aoe0.can_repeat = false
@@ -48,11 +48,11 @@ local effect1 = effect.new()
 effect1.effect_id = 5012
 
 local normal = normal_skill.new()
-normal:append("raw_skills",damage0,effect1)
+normal:append("raw_skills",damage0,buff0)
 
 local effect0 = effect.new()
 effect0.effect_id = 5011
-effect0.clean_delay = 0.8
+effect0.clean_delay = 0.5
 
 local throw = throw_skill.new()
 throw.speed = 120
