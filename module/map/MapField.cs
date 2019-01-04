@@ -192,6 +192,15 @@ namespace Map
         // }
 
         public HeapNode GetAStarRoute(int unit_id,int s_x,int s_y,int e_x,int e_y,int factor){
+
+            bool[,] prioGrids = new bool[BattleDef.columnGridNum,BattleDef.rowGridNum];
+            for(int x=0;x<BattleDef.columnGridNum;++x){
+                for(int y=0;y<BattleDef.rowGridNum;++y){
+                    prioGrids = false;
+                }
+            }
+            GetPrioAStarRoute(int s_x,int s_y,int e_x,int e_y,int factor,out prioGrids);
+
             int radius = mng.GetCreatureData(unit_id).radius;
             //int maxG = BattleDef.maxSpeed / 30 * BattleDef.aStarUpdateFrame*factor;
             int maxG = factor;
@@ -384,5 +393,10 @@ namespace Map
 
             return structureUid;
         }
+
+        private void GetPrioAStarRoute(int s_x,int s_y,int e_x,int e_y,int factor,out prioGrids){
+            int value = factor/16;
+            int s_X=s_x%16;
+        };
     }
 }
