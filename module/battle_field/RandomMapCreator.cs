@@ -5,8 +5,9 @@ using System;
 using Map;
 
 public class RandomMapCreator : MonoBehaviour {
-    public Vector2Int[] backObstacle;
+    public Vector3Int[] backObstacle;
     public float basePercent;
+    public int opTimes;
     public GameObject[] baseObstacle;
     public GameObject[] decorator;
 
@@ -40,32 +41,24 @@ public class RandomMapCreator : MonoBehaviour {
         //remove and register backObstacle
         foreach (var b in backObstacle)
         {
-            mapGrids[b.x - 1, b.y - 1] = -1;
+            mapGrids[b.x - 1, b.y - 1] = b.z > 0 ? -1 : -2;
         }
 
         InitBaseObstacle();
 
-        OptimizeObstacle(3);
+        OptimizeObstacle(opTimes);
 
         CreateDecorator();
+
+        InstantiateObstacle();
        
-        for (int i = 0; i < col; ++i)
-        {
-            for (int j = 0; j < row; ++j)
-            {
-                if(mapGrids[i,j]==1){
-                    GameObject obj = Instantiate(tree);
-                    obj.transform.position = new Vector3((i+1) * 0.64f - 0.32f, 0, (j+1) * 0.64f - 0.32f);
-                }
-            }
-        }
 
         GameRoot.BattleStartAction += RegisterObstacle;
     }
 
     private void InitBaseObstacle(){
-        int count = baseObstacle.Count;
-        int curr_type = UnityEngine.Random.Range(1,count);
+        int count = baseObstacle.Length;
+        int curr_type = UnityEngine.Random.Range(1,count+1);
         for (int i = 0; i < col; ++i)
         {
             for (int j = 0; j < row; ++j)
@@ -76,7 +69,7 @@ public class RandomMapCreator : MonoBehaviour {
                     if (flag < basePercent)
                     {
                         if(flag<0.1f){
-                            curr_type = UnityEngine.Random.Range(1,count);
+                            curr_type = UnityEngine.Random.Range(1,count+1);
                         }
                         mapGrids[i, j] = 10+curr_type-1;
                     }
@@ -95,14 +88,14 @@ public class RandomMapCreator : MonoBehaviour {
                     int type = 0;
                     if (mapGrids[i, j] == 0)
                     {
-                        if (FindRoundGrids(i, j, 1,out type) > 4)
+                        if (FindRoundGrids(i, j, false,out type) > 4)
                         {
                             mapGrids[i, j] = 10+type;
                         }
                     }
                     else if (mapGrids[i, j] > 0)
                     {
-                        if (FindRoundGrids(i, j, 1) <4)
+                        if (FindRoundGrids(i, j, false,out type) <4)
                         {
                             mapGrids[i, j] = 0;
                         }
@@ -113,23 +106,48 @@ public class RandomMapCreator : MonoBehaviour {
     }
 
     private void CreateDecorator(){
+        int count = decorator.Length;
         for (int i = 0; i < col; ++i)
         {
             for (int j = 0; j < row; ++j)
             {
                 int type = 0;
-                int num = FindRoundGrids(i,j,out type);
+                int num = FindRoundGrids(i,j,false,out type);
                 if(num<4 && num>0){
-                    if(UnityEngine.Random.Range(0f,1f)<0.05){
-                        //decorator
+                    if(UnityEngine.Random.Range(0f,1f)<0.1){
+                        mapGrids[i,j] =20+ UnityEngine.Random.Range(1, count+1)-1;
                     }
-                }else if(num == 0)
+                }else if(num == 0){
+                    if (UnityEngine.Random.Range(0f, 1f) < 0.008)
+                    {
+                        mapGrids[i, j] = 20 + UnityEngine.Random.Range(1, count+1) - 1;
+                    }
+                }
             }
         }
-    };
+    }
 
-    int FindRoundGrids(int centerX,int centerY,int attr,out type){
+    private void InstantiateObstacle(){
+        for (int i = 0; i < col; ++i)
+        {
+            for (int j = 0; j < row; ++j)
+            {
+                int value = mapGrids[i, j];
+                if(value>0&&value<20 ){
+                    GameObject obj = Instantiate(baseObstacle[value%10]);
+                    obj.transform.position = new Vector3((i+1) * 0.64f - 0.32f, 0, (j+1) * 0.64f - 0.32f);
+                }else if(value>=20){
+                    //Debug.Log("index:" +value%10);
+                    GameObject obj = Instantiate(decorator[value % 10]);
+                    obj.transform.position = new Vector3((i + 1) * 0.64f - 0.32f, 0, (j + 1) * 0.64f - 0.32f);
+                }
+            }
+        }
+    }
+
+    int FindRoundGrids(int centerX,int centerY,bool Empty,out int type){
         int num = 0;
+        
         Vector2Int[] direct = new Vector2Int[8];
         direct[0] = new Vector2Int(-1, 1);
         direct[1] = new Vector2Int(0, 1);
@@ -144,9 +162,10 @@ public class RandomMapCreator : MonoBehaviour {
         {
             Vector2Int roundPos = new Vector2Int(centerX, centerY) + direct[i];
             if(roundPos.x>=0&&roundPos.x<col&&roundPos.y>=0&&roundPos.y<row){
-                if (mapGrids[roundPos.x, roundPos.y]>>1 =attr) {++num;type = mapGrids[roundPos.x, roundPos.y]%10}
+                if ((mapGrids[roundPos.x, roundPos.y] >0)!=Empty) { ++num; type = mapGrids[roundPos.x, roundPos.y] % 10; }
             }
         }
+        type = 0;
         return num;
     }
 
@@ -156,9 +175,12 @@ public class RandomMapCreator : MonoBehaviour {
         {
             for (int j = 0; j < row; ++j)
             {
-                if (mapGrids[i, j] == 1)
+                int value = mapGrids[i, j];
+                if (value== -1)
                 {
                     mapField.CreateStructure(i+1, j+1, 1, 6);
+                }else if(value>0 && value <20){
+                    mapField.CreateStructure(i + 1, j + 1, 1, 6);
                 }
             }
         }
