@@ -18,9 +18,16 @@ public class MapMinHeap {
 
     private List<HeapNode> heap;
     private int count;
+    private int xBound;
+    private int yBound;
 
     public int Count(){
         return count;
+    }
+
+    public void SetBound(int _x,int _y){
+        xBound = _x;
+        yBound = _y;
     }
 
 
@@ -42,7 +49,7 @@ public class MapMinHeap {
     
 
     public void Push(int x,int y,float g,float h,HeapNode curr){
-        if (x < 0 || x >= BattleDef.columnGridNum || y < 0 || y >= BattleDef.rowGridNum) return;
+        if (x < 0 || x >= xBound || y < 0 || y >= yBound) return;
         count = count + 1;
         HeapNode node = new HeapNode
         {

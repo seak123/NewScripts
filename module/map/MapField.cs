@@ -206,6 +206,7 @@ namespace Map
             int maxG = factor;
 
             MapMinHeap heap = new MapMinHeap();
+            heap.SetBound(BattleDef.columnGridNum,BattleDef.rowGridNum);
             HeapNode root = new HeapNode();
             HeapNode currNode = null;
             List<HeapNode> CloseList = new List<HeapNode>();
@@ -247,8 +248,10 @@ namespace Map
                             }
                         if (flag)
                         {
-                            if(direct[i].x*direct[i].y!=0)heap.Find(roundPos.x, roundPos.y, currNode.G + DiagoFactor, Distance(roundPos.x, roundPos.y, e_x, e_y), currNode);
-                            else heap.Find(roundPos.x, roundPos.y, currNode.G + 1, Distance(roundPos.x, roundPos.y, e_x, e_y), currNode);
+                            float prioFactor = 1;
+                            if(prioGrids[roundPos.x,roundPos.y]==true)prioFactor=0.5;
+                            if(direct[i].x*direct[i].y!=0)heap.Find(roundPos.x, roundPos.y, currNode.G + DiagoFactor*prioFactor, Distance(roundPos.x, roundPos.y, e_x, e_y), currNode);
+                            else heap.Find(roundPos.x, roundPos.y, currNode.G + 1*prioFactor, Distance(roundPos.x, roundPos.y, e_x, e_y), currNode);
                         }
                         }
                     }
@@ -395,8 +398,78 @@ namespace Map
         }
 
         private void GetPrioAStarRoute(int s_x,int s_y,int e_x,int e_y,int factor,out prioGrids){
-            int value = factor/16;
-            int s_X=s_x%16;
+            int value = 50;
+            int s_X=(int)(s_x/16);
+            int s_Y=(int)(s_y/16);
+            int e_X=(int)(e_x/16);
+            int e_Y=(int)(e_y/16);
+            MapMinHeap heap = new MapMinHeap();
+            heap.SetBound(BattleDef.columnGridNum/16,BattleDef.rowGridNum/16);
+            HeapNode root = new HeapNode();
+            HeapNode currNode = null;
+            List<HeapNode> CloseList = new List<HeapNode>();
+            Dictionary<int,bool> IsCanMoveCache = new Dictionary<int,bool>();
+            heap.Push(s_X, s_Y, 0f,Distance(s_X, s_Y, e_X, e_Y),root);
+            while (heap.Count() > 0)
+            {
+                    int count = heap.Count();
+                    currNode = heap.Pop();
+                    CloseList.Add(currNode);
+
+                    if (currNode.X == e_X && currNode.Y == e_Y || currNode.G > value) break;
+                    // execute 8-round grids
+                    Vector2Int[] direct = new Vector2Int[8];
+                    direct[0] = new Vector2Int(-1, 1);
+                    direct[1] = new Vector2Int(0, 1);
+                    direct[2] = new Vector2Int(1, 1);
+                    direct[3] = new Vector2Int(-1, 0);
+                    direct[4] = new Vector2Int(1, 0);
+                    direct[5] = new Vector2Int(-1, -1);
+                    direct[6] = new Vector2Int(0, -1);
+                    direct[7] = new Vector2Int(1, -1);
+
+                    for (int i = 0; i < 8; ++i)
+                    {
+                        Vector2Int roundPos = new Vector2Int(currNode.X, currNode.Y) + direct[i];
+                        if (CloseList.FindIndex(node => node.X == roundPos.x && node.Y == roundPos.y) == -1)
+                        {
+                            int key = roundPos.x * 1000 + roundPos.y;
+                            // bool flag = false;
+                            // if (IsCanMoveCache.ContainsKey(key))
+                            // {
+                            //     flag = IsCanMoveCache[key];
+                            // }
+                            // else
+                            // {
+                            //     flag = IsCanMove(roundPos.x, roundPos.y, radius);
+                            //     IsCanMoveCache.Add(key, flag);
+                            // }
+                            if (structureGrids[roundPos.x,roundPos.y]==false)
+                            {
+                                if(direct[i].x*direct[i].y!=0)heap.Find(roundPos.x, roundPos.y, currNode.G + DiagoFactor, Distance(roundPos.x, roundPos.y, e_x, e_y), currNode);
+                                else heap.Find(roundPos.x, roundPos.y, currNode.G + 1, Distance(roundPos.x, roundPos.y, e_x, e_y), currNode);
+                            }
+                        }
+                    }
+
+
+                }   
+
+                while(currNode.Parent != null){
+                    currNode.Parent.Next = currNode;
+                    currNode = currNode.Parent;
+                }
+
+                while(currNode!=null){
+                    for(int x=currNode.X*16;x<currNode.X*16+16;++x){
+                        for(int y=currNode.Y*16;y<currNode.Y*16+16;++y){
+                            prioGrids[x,y]==true;
+                        }
+                    }
+                    currNode=currNode.Next;
+                }
+
+        }
         };
     }
 }
