@@ -68,9 +68,10 @@ public class BattleUIManager : MonoBehaviour {
                 1091,
                 1081,
                 1091,
-                5011,
-                5011,
-                5011
+                1091,
+                1081,
+                1091,
+                1081
             }
         };
         data.beginDelay = 5f;

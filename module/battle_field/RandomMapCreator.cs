@@ -95,7 +95,28 @@ public class RandomMapCreator : MonoBehaviour {
                     }
                     else if (mapGrids[i, j] > 0)
                     {
-                        if (FindRoundGrids(i, j, false,out type) <4)
+                        if (FindRoundGrids(i, j, false,out type) <2)
+                        {
+                            mapGrids[i, j] = 0;
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < col; ++i)
+            {
+                for (int j = 0; j < row; ++j)
+                {
+                    int type = 0;
+                    if (mapGrids[i, j] == 0)
+                    {
+                        if (FindRoundGrids(i, j, false, out type) > 4)
+                        {
+                            mapGrids[i, j] = 10 + type;
+                        }
+                    }
+                    else if (mapGrids[i, j] > 0)
+                    {
+                        if (FindRoundGrids(i, j, false, out type) > 2)
                         {
                             mapGrids[i, j] = 0;
                         }

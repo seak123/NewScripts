@@ -17,6 +17,8 @@ public class GameRoot : MonoBehaviour {
 
     public static Action BattleStartDelayAction;
 
+    public GameObject MainUI;
+
     public GameObject battleUI;
 
     public GameObject battleGroundUI;
@@ -54,6 +56,11 @@ public class GameRoot : MonoBehaviour {
     [Inject]
     public PlayerManager PlayerMng { get; set; }
 
+    [Inject]
+    public DungeonManager DungeonMng { get; set; }
+
+    public MainUIManager mainUIMng;
+
 	// Use this for initialization
 	void Start () {
         Debug.Log("GameRoot Start");
@@ -66,6 +73,8 @@ public class GameRoot : MonoBehaviour {
         }
         instance = this;
         StrUtil.Init();
+        mainUIMng = MainUI.GetComponent<MainUIManager>();
+        mainUIMng.OpenUI(0);
 	}
 
     public float GetBattleEnterDelay(){

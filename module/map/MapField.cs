@@ -14,6 +14,7 @@ namespace Map
 
         private bool[,] grids;
         private bool[,] structureGrids;
+        //private bool[,] naviGrids;
 
         private readonly float Transfer2GridFactor = BattleDef.Transfer2GridFactor;
         private readonly float DiagoFactor = 1.4f;//(float)Math.Sqrt(2)
@@ -150,7 +151,7 @@ namespace Map
             structureGrids = new bool[BattleDef.columnGridNum/16,BattleDef.rowGridNum/16];
             for (int i = 0; i < BattleDef.columnGridNum/16; ++i){
                 for (int j = 0; j < BattleDef.rowGridNum / 16;++j){
-                    grids[i, j] = false;
+                    structureGrids[i, j] = false;
                 }
             }
             // remove main castle grids
@@ -166,9 +167,31 @@ namespace Map
                     structureGrids[x, y] = true;
                 }
             }
+            //init navi grids
+            //naviGrids = new bool[BattleDef.columnGridNum / 32, BattleDef.rowGridNum / 32];
+            //for (int i = 0; i < BattleDef.columnGridNum / 32; ++i)
+            //{
+            //    for (int j = 0; j < BattleDef.rowGridNum / 32; ++j)
+            //    {
+            //        naviGrids[i, j] = false;
+            //    }
+            //}
 
             mng = GameRoot.GetInstance().BattleField.assetManager;
+            //GameRoot.BattleStartAction += InitNaviGrids;
         }
+
+        //public void InitNaviGrids(){
+        //    for (int i = 0; i < BattleDef.columnGridNum / 16; ++i)
+        //    {
+        //        for (int j = 0; j < BattleDef.rowGridNum / 16; ++j)
+        //        {
+        //            if(structureGrids[i, j] == true){
+        //                naviGrids[(int)(i / 2), (int)(j / 2)] = true;
+        //            };
+        //        }
+        //    }
+        //}
 
         public void GetGridPos(float x,float y,out int grid_x,out int grid_y){
             grid_x = (int)Math.Floor(x * Transfer2GridFactor);
@@ -193,17 +216,17 @@ namespace Map
 
         public HeapNode GetAStarRoute(int unit_id,int s_x,int s_y,int e_x,int e_y,int factor){
 
-            bool[,] prioGrids = new bool[BattleDef.columnGridNum,BattleDef.rowGridNum];
-            for(int x=0;x<BattleDef.columnGridNum;++x){
-                for(int y=0;y<BattleDef.rowGridNum;++y){
-                    prioGrids = false;
-                }
-            }
-            GetPrioAStarRoute(int s_x,int s_y,int e_x,int e_y,int factor,out prioGrids);
+            //bool[,] prioGrids = new bool[BattleDef.columnGridNum,BattleDef.rowGridNum];
+            //for(int x=0;x<BattleDef.columnGridNum;++x){
+            //    for(int y=0;y<BattleDef.rowGridNum;++y){
+            //        prioGrids[x,y] = false;
+            //    }
+            //}
+            //GetPrioAStarRoute(s_x,s_y,e_x,e_y,factor,ref prioGrids);
 
             int radius = mng.GetCreatureData(unit_id).radius;
             //int maxG = BattleDef.maxSpeed / 30 * BattleDef.aStarUpdateFrame*factor;
-            int maxG = factor;
+            int maxG = (int)(factor*1.4);
 
             MapMinHeap heap = new MapMinHeap();
             heap.SetBound(BattleDef.columnGridNum,BattleDef.rowGridNum);
@@ -248,10 +271,8 @@ namespace Map
                             }
                         if (flag)
                         {
-                            float prioFactor = 1;
-                            if(prioGrids[roundPos.x,roundPos.y]==true)prioFactor=0.5;
-                            if(direct[i].x*direct[i].y!=0)heap.Find(roundPos.x, roundPos.y, currNode.G + DiagoFactor*prioFactor, Distance(roundPos.x, roundPos.y, e_x, e_y), currNode);
-                            else heap.Find(roundPos.x, roundPos.y, currNode.G + 1*prioFactor, Distance(roundPos.x, roundPos.y, e_x, e_y), currNode);
+                            if(direct[i].x*direct[i].y!=0)heap.Find(roundPos.x, roundPos.y, currNode.G + DiagoFactor, Distance(roundPos.x, roundPos.y, e_x, e_y), currNode);
+                            else heap.Find(roundPos.x, roundPos.y, currNode.G + 1, Distance(roundPos.x, roundPos.y, e_x, e_y), currNode);
                         }
                         }
                     }
@@ -397,79 +418,80 @@ namespace Map
             return structureUid;
         }
 
-        private void GetPrioAStarRoute(int s_x,int s_y,int e_x,int e_y,int factor,out prioGrids){
-            int value = 50;
-            int s_X=(int)(s_x/16);
-            int s_Y=(int)(s_y/16);
-            int e_X=(int)(e_x/16);
-            int e_Y=(int)(e_y/16);
-            MapMinHeap heap = new MapMinHeap();
-            heap.SetBound(BattleDef.columnGridNum/16,BattleDef.rowGridNum/16);
-            HeapNode root = new HeapNode();
-            HeapNode currNode = null;
-            List<HeapNode> CloseList = new List<HeapNode>();
-            Dictionary<int,bool> IsCanMoveCache = new Dictionary<int,bool>();
-            heap.Push(s_X, s_Y, 0f,Distance(s_X, s_Y, e_X, e_Y),root);
-            while (heap.Count() > 0)
-            {
-                    int count = heap.Count();
-                    currNode = heap.Pop();
-                    CloseList.Add(currNode);
+        //private void GetPrioAStarRoute(int s_x,int s_y,int e_x,int e_y,int factor,ref bool[,] prioGrids){
+        //    Debug.Log("Factor:" + factor);
+        //    int value = 25;
+        //    int s_X=(int)(s_x/32);
+        //    int s_Y=(int)(s_y/32);
+        //    int e_X=(int)(e_x/32);
+        //    int e_Y=(int)(e_y/32);
+        //    MapMinHeap heap = new MapMinHeap();
+        //    heap.SetBound(BattleDef.columnGridNum/32,BattleDef.rowGridNum/32);
+        //    HeapNode root = new HeapNode();
+        //    HeapNode currNode = null;
+        //    List<HeapNode> CloseList = new List<HeapNode>();
+        //    Dictionary<int,bool> IsCanMoveCache = new Dictionary<int,bool>();
+        //    heap.Push(s_X, s_Y, 0f,Distance(s_X, s_Y, e_X, e_Y),root);
+        //    while (heap.Count() > 0)
+        //    {
+        //            int count = heap.Count();
+        //            currNode = heap.Pop();
+        //            CloseList.Add(currNode);
 
-                    if (currNode.X == e_X && currNode.Y == e_Y || currNode.G > value) break;
-                    // execute 8-round grids
-                    Vector2Int[] direct = new Vector2Int[8];
-                    direct[0] = new Vector2Int(-1, 1);
-                    direct[1] = new Vector2Int(0, 1);
-                    direct[2] = new Vector2Int(1, 1);
-                    direct[3] = new Vector2Int(-1, 0);
-                    direct[4] = new Vector2Int(1, 0);
-                    direct[5] = new Vector2Int(-1, -1);
-                    direct[6] = new Vector2Int(0, -1);
-                    direct[7] = new Vector2Int(1, -1);
+        //            if (currNode.X == e_X && currNode.Y == e_Y || currNode.G > value) break;
+        //            // execute 8-round grids
+        //            Vector2Int[] direct = new Vector2Int[8];
+        //            direct[0] = new Vector2Int(-1, 1);
+        //            direct[1] = new Vector2Int(0, 1);
+        //            direct[2] = new Vector2Int(1, 1);
+        //            direct[3] = new Vector2Int(-1, 0);
+        //            direct[4] = new Vector2Int(1, 0);
+        //            direct[5] = new Vector2Int(-1, -1);
+        //            direct[6] = new Vector2Int(0, -1);
+        //            direct[7] = new Vector2Int(1, -1);
 
-                    for (int i = 0; i < 8; ++i)
-                    {
-                        Vector2Int roundPos = new Vector2Int(currNode.X, currNode.Y) + direct[i];
-                        if (CloseList.FindIndex(node => node.X == roundPos.x && node.Y == roundPos.y) == -1)
-                        {
-                            int key = roundPos.x * 1000 + roundPos.y;
-                            // bool flag = false;
-                            // if (IsCanMoveCache.ContainsKey(key))
-                            // {
-                            //     flag = IsCanMoveCache[key];
-                            // }
-                            // else
-                            // {
-                            //     flag = IsCanMove(roundPos.x, roundPos.y, radius);
-                            //     IsCanMoveCache.Add(key, flag);
-                            // }
-                            if (structureGrids[roundPos.x,roundPos.y]==false)
-                            {
-                                if(direct[i].x*direct[i].y!=0)heap.Find(roundPos.x, roundPos.y, currNode.G + DiagoFactor, Distance(roundPos.x, roundPos.y, e_x, e_y), currNode);
-                                else heap.Find(roundPos.x, roundPos.y, currNode.G + 1, Distance(roundPos.x, roundPos.y, e_x, e_y), currNode);
-                            }
-                        }
-                    }
+        //            for (int i = 0; i < 8; ++i)
+        //            {
+        //                Vector2Int roundPos = new Vector2Int(currNode.X, currNode.Y) + direct[i];
+        //                if (CloseList.FindIndex(node => node.X == roundPos.x && node.Y == roundPos.y) == -1)
+        //                {
+        //                //int key = roundPos.x * 1000 + roundPos.y;
+        //                // bool flag = false;
+        //                // if (IsCanMoveCache.ContainsKey(key))
+        //                // {
+        //                //     flag = IsCanMoveCache[key];
+        //                // }
+        //                // else
+        //                // {
+        //                //     flag = IsCanMove(roundPos.x, roundPos.y, radius);
+        //                //     IsCanMoveCache.Add(key, flag);
+        //                // }
+        //                if (roundPos.x < 0 || roundPos.x >= BattleDef.columnGridNum / 32 || roundPos.y < 0 || roundPos.y >= BattleDef.rowGridNum / 32) continue;
+        //                if (naviGrids[roundPos.x,roundPos.y]==false)
+        //                    {
+        //                        if(direct[i].x*direct[i].y!=0)heap.Find(roundPos.x, roundPos.y, currNode.G + DiagoFactor, Distance(roundPos.x, roundPos.y, e_x, e_y), currNode);
+        //                        else heap.Find(roundPos.x, roundPos.y, currNode.G + 1, Distance(roundPos.x, roundPos.y, e_x, e_y), currNode);
+        //                    }
+        //                }
+        //            }
 
 
-                }   
+        //        }   
 
-                while(currNode.Parent != null){
-                    currNode.Parent.Next = currNode;
-                    currNode = currNode.Parent;
-                }
+        //        while(currNode.Parent != null){
+        //            currNode.Parent.Next = currNode;
+        //            currNode = currNode.Parent;
+        //        }
 
-                while(currNode!=null){
-                    for(int x=currNode.X*16;x<currNode.X*16+16;++x){
-                        for(int y=currNode.Y*16;y<currNode.Y*16+16;++y){
-                            prioGrids[x,y]==true;
-                        }
-                    }
-                    currNode=currNode.Next;
-                }
+        //        while(currNode!=null){
+        //            for(int x=currNode.X*32;x<currNode.X*32+32;++x){
+        //                for(int y=currNode.Y*32;y<currNode.Y*32+32;++y){
+        //                    prioGrids[x,y]=true;
+        //                }
+        //            }
+        //            currNode=currNode.Next;
+        //        }
 
-        }
+        //}
         };
     }
-}
