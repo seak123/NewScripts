@@ -10,7 +10,7 @@ public class FightDungeon : IDungeonUnit {
         dungeonIcon = data.icon;
     }
 
-    public void OpenDungeon()
+    public void OpenDungeon(DungeonState state)
     {
         GameRoot.GetInstance().mainUIMng.EnterBattle();
     }

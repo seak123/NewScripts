@@ -5,5 +5,6 @@ using UnityEngine.UI;
 
 public interface IDungeonUnit {
     Sprite GetDungeonSprite();
-    void OpenDungeon();
+    void OpenDungeon(DungeonState state);
+    void LeaveDungeon();
 }
