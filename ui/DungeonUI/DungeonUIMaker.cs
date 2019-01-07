@@ -5,6 +5,7 @@ using UnityEngine;
 public class DungeonUIMaker : MonoBehaviour {
 
     public GameObject dungeonUnit;
+    public GameObject dungeonHero;
     public GameObject map;
 
     public Vector2 startPos;
@@ -12,9 +13,13 @@ public class DungeonUIMaker : MonoBehaviour {
     public int sideNum;
 
     private Dictionary<int, DungeonUnit> dungeonUnits;
+    private Dictionary<int, GameObject> dungeonViews;
+    private GameObject hero;
 	// Use this for initialization
 	void Start () {
         dungeonUnits = new Dictionary<int, DungeonUnit>();
+        dungeonViews = new Dictionary<int, GameObject>();
+
         //init map
         int line = 4 * sideNum - 3;
         for (int index = 1; index <= line;++index){
@@ -38,10 +43,25 @@ public class DungeonUIMaker : MonoBehaviour {
                 obj.transform.SetParent(map.transform);
                 obj.transform.localPosition = new Vector3(lineStartPos.x+(i-1)*sideLength*3,lineStartPos.y, 0);
                 obj.transform.localScale = Vector3.one * 0.5f;
+                dungeonViews.Add(index * 100 + i, obj);
             }
         }
-		
-	}
+
+        //init hero view
+        hero = Instantiate(dungeonHero);
+        hero.transform.SetParent(map.transform);
+        SetHeroPos();
+
+    }
+
+    void SetHeroPos(){
+        Vector2Int pos = GameRoot.GetInstance().DungeonMng.GetCurrPos();
+        if(pos.x>0&&pos.y>0){
+            hero.transform.position = dungeonViews[pos.x * 100 + pos.y].transform.position;
+        }else{
+            hero.transform.position = dungeonViews[101].transform.position + new Vector3(0, -80f, 0);
+        }
+    }
 	
 	// Update is called once per frame
 	void Update () {

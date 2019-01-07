@@ -5,17 +5,43 @@ using UnityEngine;
 public class FightDungeon : IDungeonUnit {
 
     Sprite dungeonIcon;
-   
-    public void Init(DungeonData data){
-        dungeonIcon = data.icon;
+    DungeonState state;
+
+    public FightDungeon()
+    {
     }
 
-    public void OpenDungeon(DungeonState state)
+    public void Init(DungeonData data){
+        dungeonIcon = data.icon;
+        state = DungeonState.Hide;
+    }
+
+    public void OpenDungeon()
     {
-        GameRoot.GetInstance().mainUIMng.EnterBattle();
+        //GameRoot.GetInstance().mainUIMng.EnterBattle();
+        switch(state){
+            case DungeonState.Ready:
+                GameRoot.GetInstance().mainUIMng.OpenUI(10);
+                break;
+        }
     }
 
     public Sprite GetDungeonSprite(){
         return dungeonIcon;
+    }
+
+    public void LeaveDungeon()
+    {
+
+    }
+
+    public DungeonState GetState()
+    {
+        return state;
+    }
+
+    public void SetState(DungeonState _state)
+    {
+        state = _state;
     }
 }

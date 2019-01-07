@@ -15,7 +15,7 @@ public class DungeonUnit : MonoBehaviour {
     public Button button;
 
     //private DungeonData data;
-    private IDungeonUnit unit;
+    private IDungeonUnit unitData;
     private DungeonState state;
 
 
@@ -27,9 +27,9 @@ public class DungeonUnit : MonoBehaviour {
     public void Init(IDungeonUnit _unit)
     {
         if (_unit == null) return;
-        unit = _unit;
+        unitData = _unit;
         button.image.sprite = _unit.GetDungeonSprite();
-        ChangeState(DungeonState.Hide);
+        ChangeState(unitData.GetState());
     }
 
     public void ChangeState(DungeonState newState){
@@ -38,7 +38,7 @@ public class DungeonUnit : MonoBehaviour {
             case DungeonState.Active:
                 break;
             case DungeonState.Hide:
-                gameobject.SetActive(false);
+                gameObject.SetActive(false);
                 break;
             case DungeonState.Ready:
                 break;
@@ -48,7 +48,7 @@ public class DungeonUnit : MonoBehaviour {
     }
 
     public void ClickUnit(){
-        if (unit == null) return;
-        unit.OpenDungeon(state);
+        if (unitData == null) return;
+        unitData.OpenDungeon();
     }
 }

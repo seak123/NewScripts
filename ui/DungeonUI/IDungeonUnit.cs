@@ -4,7 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public interface IDungeonUnit {
+    DungeonState GetState();
     Sprite GetDungeonSprite();
-    void OpenDungeon(DungeonState state);
+    void SetState(DungeonState _state);
+    void OpenDungeon();
     void LeaveDungeon();
 }

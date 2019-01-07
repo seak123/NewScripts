@@ -11,11 +11,17 @@ public class DungeonManager : MonoBehaviour {
     private Dictionary<int, IDungeonUnit> dungeonUnits;
     private int dungeonSize;
 
+    private Vector2Int currPos;
+
     public DungeonCreaterData[] initData;
 
 
     public int GetSize(){
         return dungeonSize;
+    }
+
+    public Vector2Int GetCurrPos(){
+        return currPos;
     }
 
 
@@ -44,6 +50,7 @@ public class DungeonManager : MonoBehaviour {
 	}
 
     void InitDungeon(){
+        currPos = new Vector2Int(0, 0);
         for (int i = 0; i < initData.Length;++i){
             DungeonCreaterData data = initData[i];
             Vector2Int pos = data.pos;
@@ -58,6 +65,9 @@ public class DungeonManager : MonoBehaviour {
                     break;
             }
         }
+
+        dungeonUnits[101].SetState(DungeonState.Ready);
+
     }
 
     public IDungeonUnit GetDungeonData(int key){
