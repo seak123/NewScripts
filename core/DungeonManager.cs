@@ -12,6 +12,7 @@ public class DungeonManager : MonoBehaviour {
     private int dungeonSize;
 
     private Vector2Int currPos;
+    private List<Vector2Int> nextPos;
 
     public DungeonCreaterData[] initData;
 
@@ -42,6 +43,7 @@ public class DungeonManager : MonoBehaviour {
     // Use this for initialization
     void Start () {
         dungeonUnits = new Dictionary<int, IDungeonUnit>();
+        nextPos = new List<Vector2Int>();
 	}
 	
 	// Update is called once per frame

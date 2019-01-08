@@ -4,10 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public enum DungeonState{
-    Hide = 1,
-    Active = 2,
-    Ready = 3,
-    Disable = 4
+    Sleeping = 1,
+    Ready = 2,
+    Running = 3,
+    Completed = 4,
+    Disabled = 5
 }
 
 public class DungeonUnit : MonoBehaviour {
@@ -18,10 +19,12 @@ public class DungeonUnit : MonoBehaviour {
     private IDungeonUnit unitData;
     private DungeonState state;
 
+    private bool isVisiable;
+
 
     private void Start()
     {
-
+        isVisiable = false;
     }
 
     public void Init(IDungeonUnit _unit)
@@ -35,14 +38,15 @@ public class DungeonUnit : MonoBehaviour {
     public void ChangeState(DungeonState newState){
         state = newState;
         switch(state){
-            case DungeonState.Active:
-                break;
-            case DungeonState.Hide:
-                gameObject.SetActive(false);
+            case DungeonState.Sleeping:
                 break;
             case DungeonState.Ready:
                 break;
-            case DungeonState.Disable:
+            case DungeonState.Running:
+                break;
+            case DungeonState.Completed:
+                break;
+            case DungeonState.Disabled:
                 break;
         }
     }
@@ -50,5 +54,13 @@ public class DungeonUnit : MonoBehaviour {
     public void ClickUnit(){
         if (unitData == null) return;
         unitData.OpenDungeon();
+    }
+
+    public void SetVisiable(bool _isVisiable){
+        if(isVisiable){
+
+        }else{
+
+        }
     }
 }
