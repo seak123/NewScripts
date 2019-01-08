@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class DungeonUIMaker : MonoBehaviour {
 
@@ -11,6 +12,9 @@ public class DungeonUIMaker : MonoBehaviour {
     public Vector2 startPos;
     public float sideLength;
     public int sideNum;
+
+    private Vector2Int currPos;
+    private Vector2Int selectPos;
 
     private Dictionary<int, DungeonUnit> dungeonUnits;
     private Dictionary<int, GameObject> dungeonViews;
@@ -52,6 +56,9 @@ public class DungeonUIMaker : MonoBehaviour {
         hero.transform.SetParent(map.transform);
         SetHeroPos();
 
+
+        GameRoot.GetInstance().DungeonMng.SetMaker(this);
+
     }
 
     void SetHeroPos(){
@@ -61,6 +68,19 @@ public class DungeonUIMaker : MonoBehaviour {
         }else{
             hero.transform.position = dungeonViews[101].transform.position + new Vector3(0, -80f, 0);
         }
+    }
+
+    public void SetSelectPos(Vector2Int _pos){
+        selectPos = _pos;
+    }
+
+    public void ForwardUnit(){
+        currPos = selectPos;
+        hero.transform.DOMove(dungeonViews[selectPos.x * 100 + selectPos.y].transform.position, 1f).onComplete +=UpdateDungenInfo;
+    }
+
+    private void UpdateDungenInfo(){
+        GameRoot.GetInstance().DungeonMng.SetCurrPos(currPos);
     }
 	
 	// Update is called once per frame

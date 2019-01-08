@@ -11,6 +11,7 @@ public class DungeonManager : MonoBehaviour {
     private Dictionary<int, IDungeonUnit> dungeonUnits;
     private int dungeonSize;
 
+    private DungeonUIMaker uiMaker;
     private Vector2Int currPos;
     private List<Vector2Int> nextPos;
 
@@ -19,6 +20,14 @@ public class DungeonManager : MonoBehaviour {
 
     public int GetSize(){
         return dungeonSize;
+    }
+
+    public void SetMaker(DungeonUIMaker maker){
+        uiMaker = maker;
+    }
+
+    public DungeonUIMaker GetMaker(){
+        return uiMaker;
     }
 
     public Vector2Int GetCurrPos(){
@@ -62,6 +71,9 @@ public class DungeonManager : MonoBehaviour {
                 case DungeonUnitType.Fight:
                     DungeonData dunData = GameRoot.GetInstance().BattleField.assetManager.GetDungeonData(data.fieldType, data.dungeonLevel);
                     FightDungeon dungeon = new FightDungeon();
+                    dungeon.SetState(DungeonState.Sleeping);
+                    dungeon.SetVisiable(false);
+                    dungeon.SetPos(pos);
                     dungeon.Init(dunData);
                     dungeonUnits.Add(pos.x * 100 + pos.y, dungeon);
                     break;
@@ -69,11 +81,17 @@ public class DungeonManager : MonoBehaviour {
         }
 
         dungeonUnits[101].SetState(DungeonState.Ready);
+        dungeonUnits[101].SetVisiable(true);
 
     }
 
     public IDungeonUnit GetDungeonData(int key){
         return dungeonUnits.ContainsKey(key) ? dungeonUnits[key] : null;
+    }
+
+    public void SetCurrPos(Vector2Int _pos){
+        currPos = _pos;
+        dungeonUnits[currPos.x * 100 + currPos.y].SetState(DungeonState.Running);
     }
 
 

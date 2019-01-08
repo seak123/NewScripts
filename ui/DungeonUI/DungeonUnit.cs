@@ -33,6 +33,7 @@ public class DungeonUnit : MonoBehaviour {
         unitData = _unit;
         button.image.sprite = _unit.GetDungeonSprite();
         ChangeState(unitData.GetState());
+        SetVisiable(unitData.GetVisiable());
     }
 
     public void ChangeState(DungeonState newState){
@@ -57,10 +58,12 @@ public class DungeonUnit : MonoBehaviour {
     }
 
     public void SetVisiable(bool _isVisiable){
-        if(isVisiable){
-
-        }else{
-
+        if(_isVisiable==true){
+            isVisiable = true;
+            gameObject.SetActive(true);
+        }else if(_isVisiable==false){
+            isVisiable = false;
+            gameObject.SetActive(false);
         }
     }
 }

@@ -6,6 +6,8 @@ public class FightDungeon : IDungeonUnit {
 
     Sprite dungeonIcon;
     DungeonState state;
+    bool isVisiable=false;
+    Vector2Int pos;
 
     public FightDungeon()
     {
@@ -13,7 +15,6 @@ public class FightDungeon : IDungeonUnit {
 
     public void Init(DungeonData data){
         dungeonIcon = data.icon;
-        state = DungeonState.Hide;
     }
 
     public void OpenDungeon()
@@ -21,6 +22,7 @@ public class FightDungeon : IDungeonUnit {
         //GameRoot.GetInstance().mainUIMng.EnterBattle();
         switch(state){
             case DungeonState.Ready:
+                GameRoot.GetInstance().DungeonMng.GetMaker().SetSelectPos(pos);
                 GameRoot.GetInstance().mainUIMng.OpenUI(10);
                 break;
         }
@@ -43,5 +45,25 @@ public class FightDungeon : IDungeonUnit {
     public void SetState(DungeonState _state)
     {
         state = _state;
+    }
+
+    public bool GetVisiable()
+    {
+        return isVisiable;
+    }
+
+    public void SetVisiable(bool flag)
+    {
+        isVisiable = flag;
+    }
+
+    public Vector2Int GetPos()
+    {
+        return pos;
+    }
+
+    public void SetPos(Vector2Int _pos)
+    {
+        pos = _pos;
     }
 }
