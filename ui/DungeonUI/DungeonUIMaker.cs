@@ -11,7 +11,7 @@ public class DungeonUIMaker : MonoBehaviour {
 
     public Vector2 startPos;
     public float sideLength;
-    public int sideNum;
+    private int sideNum;
 
     private Vector2Int currPos;
     private Vector2Int selectPos;
@@ -23,6 +23,7 @@ public class DungeonUIMaker : MonoBehaviour {
 	void Start () {
         dungeonUnits = new Dictionary<int, DungeonUnit>();
         dungeonViews = new Dictionary<int, GameObject>();
+        sideNum = GameRoot.GetInstance().DungeonMng.GetSize();
 
         //init map
         int line = 4 * sideNum - 3;

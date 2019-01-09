@@ -9,7 +9,7 @@ using PowerInject;
 public class DungeonManager : MonoBehaviour {
 
     private Dictionary<int, IDungeonUnit> dungeonUnits;
-    private int dungeonSize;
+    private const int dungeonSize=8;
 
     private DungeonUIMaker uiMaker;
     private Vector2Int currPos;
@@ -92,6 +92,27 @@ public class DungeonManager : MonoBehaviour {
     public void SetCurrPos(Vector2Int _pos){
         currPos = _pos;
         dungeonUnits[currPos.x * 100 + currPos.y].SetState(DungeonState.Running);
+        if(currPos.x<=dungeonSize){
+            int key = (currPos.x+1) * 100 + currPos.y;
+            if(dungeonUnits.ContainsKey(key)){
+                dungeonUnits[key].SetVisiable(true);
+            }
+            key = (currPos.x + 1) * 100 + currPos.y + 1;
+            if (dungeonUnits.ContainsKey(key))
+            {
+                dungeonUnits[key].SetVisiable(true);
+            }
+            key = (currPos.x + 2) * 100 + currPos.y+1;
+            if (dungeonUnits.ContainsKey(key))
+            {
+                dungeonUnits[key].SetVisiable(true);
+            }
+        }
+        else if(currPos.x> 3 * dungeonSize - 3){
+
+        }else{
+
+        }
     }
 
 

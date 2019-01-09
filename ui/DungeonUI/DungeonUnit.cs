@@ -34,6 +34,7 @@ public class DungeonUnit : MonoBehaviour {
         button.image.sprite = _unit.GetDungeonSprite();
         ChangeState(unitData.GetState());
         SetVisiable(unitData.GetVisiable());
+        _unit.SetViewUnit(this);
     }
 
     public void ChangeState(DungeonState newState){
