@@ -30,6 +30,7 @@ public class GameRoot : MonoBehaviour {
     public BattleData battleData;
 
     private static GameRoot instance;
+    private GameDataManager dataManager;
 
     private bool battleStart = false;
     private float constEnterDelay = 0;
@@ -81,14 +82,20 @@ public class GameRoot : MonoBehaviour {
         return constEnterDelay;
     }
 
-    public void StartBattle(BattleData data){
-        battleData = data;
-        battleEnterDelay = 3 + data.beginDelay;
-        constEnterDelay = battleEnterDelay;
-        Bridge.StartBattle(data);
-        PlayerMng.InjectData(data);
-        battleStart = true;
-        if(BattleStartAction!=null) BattleStartAction();
+    public void StartBattle(){
+        //battleData = data;
+        //battleEnterDelay = 3 + data.beginDelay;
+        //constEnterDelay = battleEnterDelay;
+        //Bridge.StartBattle(data);
+        //PlayerMng.InjectData(data);
+        //battleStart = true;
+        //if(BattleStartAction!=null) BattleStartAction();
+        mainUIMng.HideUI(true);
+        battleGroundUI = mainUIMng.OpenUI(4);
+        battleTextUI = mainUIMng.OpenUI(5);
+        battleUI = mainUIMng.OpenUI(6);
+        PlayerData playerData = dataManager.GetPlayerData();
+        PlayerData enemyData = dataManager.GetEnemyData();
     }
 
     public static GameRoot GetInstance(){

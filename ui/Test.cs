@@ -40,6 +40,6 @@ public class Test:MonoBehaviour  {
             cardBoxNum = 3,
             cardSpeed = 10
         };
-        GameRoot.GetInstance().StartBattle(data);
+        GameRoot.GetInstance().StartBattle();
     }
 }

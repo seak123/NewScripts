@@ -15,13 +15,21 @@ public class MainUIManager : MonoBehaviour {
         currSort = 10;
         uiQueue = new List<GameObject>();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
-    public void OpenUI(int id){
+    public void HideUI(bool flag){
+        if(flag){
+            foreach(var obj in uiQueue){
+                obj.SetActive(false);
+            }
+        }else{
+            foreach (var obj in uiQueue)
+            {
+                obj.SetActive(true);
+            }
+        }
+    }
+	
+    public GameObject OpenUI(int id){
         GameObject ui = Instantiate(UIPrefab[id]);
         ui.transform.SetParent(gameObject.transform);
         Canvas canvas = ui.GetComponent<Canvas>();
@@ -29,7 +37,7 @@ public class MainUIManager : MonoBehaviour {
         ++currSort;
 
         uiQueue.Add(ui);
-
+        return ui;
     }
 
     public void CloseUI(){

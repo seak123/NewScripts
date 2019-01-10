@@ -76,7 +76,7 @@ public class BattleUIManager : MonoBehaviour {
         };
         data.beginDelay = 5f;
         InitPanelPosition();
-        GameRoot.GetInstance().StartBattle(data);
+        GameRoot.GetInstance().StartBattle();
         start = true;
     }
 
