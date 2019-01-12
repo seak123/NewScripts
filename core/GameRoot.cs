@@ -30,7 +30,6 @@ public class GameRoot : MonoBehaviour {
     public BattleData battleData;
 
     private static GameRoot instance;
-    private GameDataManager dataManager;
 
     private bool battleStart = false;
     private float constEnterDelay = 0;
@@ -62,6 +61,8 @@ public class GameRoot : MonoBehaviour {
 
     public MainUIManager mainUIMng;
 
+    public GameDataManager gameDataManager;
+
 	// Use this for initialization
 	void Start () {
         Debug.Log("GameRoot Start");
@@ -74,6 +75,7 @@ public class GameRoot : MonoBehaviour {
         }
         instance = this;
         StrUtil.Init();
+        gameDataManager = new GameDataManager();
         mainUIMng = MainUI.GetComponent<MainUIManager>();
         mainUIMng.OpenUI(0);
 	}
@@ -82,20 +84,36 @@ public class GameRoot : MonoBehaviour {
         return constEnterDelay;
     }
 
+    public void StartNewGame(){
+        gameDataManager.InitData();
+        init();
+    }
+
     public void StartBattle(){
-        //battleData = data;
-        //battleEnterDelay = 3 + data.beginDelay;
-        //constEnterDelay = battleEnterDelay;
-        //Bridge.StartBattle(data);
-        //PlayerMng.InjectData(data);
-        //battleStart = true;
-        //if(BattleStartAction!=null) BattleStartAction();
+
         mainUIMng.HideUI(true);
         battleGroundUI = mainUIMng.OpenUI(4);
         battleTextUI = mainUIMng.OpenUI(5);
         battleUI = mainUIMng.OpenUI(6);
-        PlayerData playerData = dataManager.GetPlayerData();
-        PlayerData enemyData = dataManager.GetEnemyData();
+        PlayerData playerData = gameDataManager.GetPlayerData();
+        PlayerData enemyData = gameDataManager.GetEnemyData();
+        BattleData data = new BattleData
+        {
+            player = playerData,
+            enemy = enemyData,
+            beginDelay = 5f
+        };
+        battleData = data;
+    }
+
+    public void BeginBattle(){
+        battleEnterDelay = 3 + battleData.beginDelay;
+        constEnterDelay = battleEnterDelay;
+        battleUI.GetComponent<BattleUIManager>().InitBattleUI();
+        Bridge.StartBattle(battleData);
+        PlayerMng.InjectData(battleData);
+        battleStart = true;
+        if (BattleStartAction != null) BattleStartAction();
     }
 
     public static GameRoot GetInstance(){
@@ -104,10 +122,6 @@ public class GameRoot : MonoBehaviour {
 
     private void Update()
     {
-        if(init != null){
-            init();
-            init = null;
-        }
         if(battleStart){
             battleEnterDelay -= Time.deltaTime;
             if(battleEnterDelay<0){

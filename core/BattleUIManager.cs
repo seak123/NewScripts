@@ -27,57 +27,8 @@ public class BattleUIManager : MonoBehaviour {
     //private int oldMagicValue=0;
     //private float resetCache = 0;
    
-    public void StartBattle()
-    {
-        AssetManager mng = GameRoot.GetInstance().BattleField.assetManager;
-        BattleData data = new BattleData();
-        data.player = new PlayerData
-        {
-            attack = 1,
-            hp = 3000,
-            denfence = 100,
-            magic_resist = 0.5f,
-            mainCastle = AssetManager.PackCreatureData(mng.GetCreatureData(101)),
-            cardBoxNum = 4,
-            cardSpeed = 2,
-            cards = new List<int>
-            {
-                1081,
-                1091,
-                1081,
-                1091,
-                5011,
-                5011,
-                7,
-            }
-    };
-        data.enemy = new PlayerData
-        {
-            attack = 1,
-            hp = 3000,
-            denfence = 100,
-            magic_resist = 0.5f,
-            mainCastle = AssetManager.PackCreatureData(mng.GetCreatureData(0)),
-            cardBoxNum = 4,
-            cardSpeed = 2,
-            cards = new List<int>
-            {
-                1081,
-                1091,
-                1081,
-                1091,
-                1081,
-                1091,
-                1091,
-                1081,
-                1091,
-                1081
-            }
-        };
-        data.beginDelay = 5f;
+    public void InitBattleUI(){
         InitPanelPosition();
-        GameRoot.GetInstance().StartBattle();
-        start = true;
     }
 
     private void Update()
@@ -141,6 +92,10 @@ public class BattleUIManager : MonoBehaviour {
 
     public void UpdatePlayerIncome(int income){
         nowIncome = income;
+    }
+
+    public void BeginBattle(){
+        GameRoot.GetInstance().BeginBattle();
     }
     
 }

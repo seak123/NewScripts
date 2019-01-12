@@ -2,26 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FightDungeon : IDungeonUnit {
+public class FightDungeon : IDungeonUnit
+{
 
     Sprite dungeonIcon;
     DungeonState state;
-    bool isVisiable=false;
+    bool isVisiable = false;
     Vector2Int pos;
     DungeonUnit viewUnit;
+    FightDungeonData data;
 
     public FightDungeon()
     {
     }
 
-    public void Init(DungeonData data){
-        dungeonIcon = data.icon;
+    public void Init(FightDungeonData _data)
+    {
+        dungeonIcon = _data.icon;
+        data = _data;
     }
 
     public void OpenDungeon()
     {
         //GameRoot.GetInstance().mainUIMng.EnterBattle();
-        switch(state){
+        switch (state)
+        {
             case DungeonState.Sleeping:
                 Debug.Log("sleeping now");
                 GameRoot.GetInstance().mainUIMng.OpenUI(9);
@@ -36,7 +41,12 @@ public class FightDungeon : IDungeonUnit {
         }
     }
 
-    public Sprite GetDungeonSprite(){
+    public FightDungeonData GetFightData(){
+        return data;
+    }
+
+    public Sprite GetDungeonSprite()
+    {
         return dungeonIcon;
     }
 
@@ -63,7 +73,8 @@ public class FightDungeon : IDungeonUnit {
     public void SetVisiable(bool flag)
     {
         isVisiable = flag;
-        if(viewUnit!=null){
+        if (viewUnit != null)
+        {
             viewUnit.SetVisiable(flag);
         }
     }
@@ -82,4 +93,5 @@ public class FightDungeon : IDungeonUnit {
     {
         viewUnit = view;
     }
+
 }

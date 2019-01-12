@@ -78,7 +78,7 @@ public class CardManager : MonoBehaviour {
         List<int> enemyData = GameRoot.GetInstance().PlayerMng.GetEnemyData().cards;
         playerMng = GameRoot.GetInstance().PlayerMng;
         playerMng.SetCardManager(this);
-        enemyHandCards = new int[GameRoot.GetInstance().PlayerMng.GetEnemyData().cardBoxNum];
+        enemyHandCards = new int[BattleDef.CardBoxNum];
         enemyboxs = new CardInform[enemyHandCards.Length];
         GameRoot.GetInstance().PlayerMng.enemyCards = enemyHandCards;
         for (int i = 0; i < enemyHandCards.Length; ++i)
@@ -128,12 +128,12 @@ public class CardManager : MonoBehaviour {
             }
             pushWaitTime += Time.deltaTime;
             enemyPushWaitTime += Time.deltaTime;
-            if (pushWaitTime > GameRoot.GetInstance().battleData.player.cardSpeed)
+            if (pushWaitTime > BattleDef.CardPushSpeed)
             {
                 pushWaitTime = 0f;
                 PushCard();
             }
-            if (enemyPushWaitTime > GameRoot.GetInstance().battleData.enemy.cardSpeed)
+            if (enemyPushWaitTime > BattleDef.CardPushSpeed)
             {
                 enemyPushWaitTime = 0f;
                 PushEnemyCard();
@@ -143,7 +143,7 @@ public class CardManager : MonoBehaviour {
 	}
 
     public void CreateCard(){
-        int num = GameRoot.GetInstance().battleData.player.cardBoxNum;
+        int num = BattleDef.CardBoxNum;
         float startX = -(num * cardWidth + (num - 1) * cardInterl) / 2;
         for (int i = 0; i < num;++i){
             float posX = i * (cardWidth + cardInterl) + cardWidth / 2 + startX;

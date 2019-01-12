@@ -69,7 +69,7 @@ public class DungeonManager : MonoBehaviour {
             //dungeonDatas.Add(pos.x*100+pos.y, dunData);
             switch(data.unitType){
                 case DungeonUnitType.Fight:
-                    DungeonData dunData = GameRoot.GetInstance().BattleField.assetManager.GetDungeonData(data.fieldType, data.dungeonLevel);
+                    FightDungeonData dunData = GameRoot.GetInstance().BattleField.assetManager.GetDungeonData(data.fieldType, data.dungeonLevel);
                     FightDungeon dungeon = new FightDungeon();
                     dungeon.SetState(DungeonState.Sleeping);
                     dungeon.SetVisiable(false);
@@ -87,6 +87,10 @@ public class DungeonManager : MonoBehaviour {
 
     public IDungeonUnit GetDungeonData(int key){
         return dungeonUnits.ContainsKey(key) ? dungeonUnits[key] : null;
+    }
+
+    public IDungeonUnit GetCurrDungeonData(){
+        return dungeonUnits[currPos.x * 100 + currPos.y];
     }
 
     public void SetCurrPos(Vector2Int _pos){

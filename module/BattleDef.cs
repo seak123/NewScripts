@@ -34,6 +34,10 @@ public static class BattleDef
 
     public static float UpdateIncomeDelta = 5;
 
+    public static int CardBoxNum = 4;
+
+    public static float CardPushSpeed = 2f;
+
     //utils
 #if UNITY_EDITOR
     public static bool useMouse = true;
