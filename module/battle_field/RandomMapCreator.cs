@@ -9,6 +9,8 @@ public class RandomMapCreator : MonoBehaviour {
     public float basePercent;
     public int opTimes;
     public GameObject[] baseObstacle;
+    public float transferPercent;
+    public float appearPercent;
     public GameObject[] decorator;
 
     // -2:buildArea,-1:backObstacle,0:empty,1-x:base&x_type,2-x:decorator&x_type
@@ -135,11 +137,11 @@ public class RandomMapCreator : MonoBehaviour {
                 int type = 0;
                 int num = FindRoundGrids(i,j,false,out type);
                 if(num<4 && num>0){
-                    if(UnityEngine.Random.Range(0f,1f)<0.1){
+                    if(UnityEngine.Random.Range(0f,1f)<transferPercent){
                         mapGrids[i,j] =20+ UnityEngine.Random.Range(1, count+1)-1;
                     }
                 }else if(num == 0){
-                    if (UnityEngine.Random.Range(0f, 1f) < 0.008)
+                    if (UnityEngine.Random.Range(0f, 1f) < appearPercent)
                     {
                         mapGrids[i, j] = 20 + UnityEngine.Random.Range(1, count+1) - 1;
                     }

@@ -32,7 +32,7 @@ public class GameDataManager
                 1091,
                 5011,
                 5011,
-                7,
+                1071,
         };
     }
 
@@ -68,6 +68,12 @@ public class GameDataManager
             res.cards.Add(data.enemyCards[i]);
         }
         return res;
+    }
+
+    public int GetFieldId(){
+        IDungeonUnit dungeon = GameRoot.GetInstance().DungeonMng.GetCurrDungeonData();
+        FightDungeonData data = (dungeon as FightDungeon).GetFightData();
+        return data.FieldId;
     }
        
 }

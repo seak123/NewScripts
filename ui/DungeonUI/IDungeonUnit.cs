@@ -13,5 +13,6 @@ public interface IDungeonUnit {
     void SetViewUnit(DungeonUnit view);
     void SetState(DungeonState _state);
     void OpenDungeon();
+    void CompleteDungeon();
     void LeaveDungeon();
 }

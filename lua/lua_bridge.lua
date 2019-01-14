@@ -57,8 +57,8 @@ function GetAssetManager()
     return api.GetAssetManager()
 end
 
-function BattleCompleted(  )
-    return api.BattleCompleted()
+function BattleCompleted( res )
+    return api.BattleCompleted(res)
 end
 
 

@@ -23,8 +23,9 @@ namespace Utils
             return GameRoot.GetInstance().BattleField.assetManager;
         }
 
-        public static void BattleCompleted(){
+        public static void BattleCompleted(int res){
             Debug.Log("Game is Over");
+            GameRoot.GetInstance().CompleteBattle(res);
         }
     }
 }

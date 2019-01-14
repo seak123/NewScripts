@@ -13,6 +13,8 @@ public class GameRoot : MonoBehaviour {
 
     public static Action init;
 
+    public static Action battleStartInit;
+
     public static Action BattleStartAction;
 
     public static Action BattleStartDelayAction;
@@ -30,6 +32,7 @@ public class GameRoot : MonoBehaviour {
     public BattleData battleData;
 
     private static GameRoot instance;
+    private GameObject fieldObj;
 
     private bool battleStart = false;
     private float constEnterDelay = 0;
@@ -95,15 +98,20 @@ public class GameRoot : MonoBehaviour {
         battleGroundUI = mainUIMng.OpenUI(4);
         battleTextUI = mainUIMng.OpenUI(5);
         battleUI = mainUIMng.OpenUI(6);
+        fieldObj = Instantiate(BattleField.assetManager.GetField(gameDataManager.GetFieldId()));
+        fieldObj.transform.position = Vector3.zero;
+        
         PlayerData playerData = gameDataManager.GetPlayerData();
         PlayerData enemyData = gameDataManager.GetEnemyData();
         BattleData data = new BattleData
         {
             player = playerData,
             enemy = enemyData,
-            beginDelay = 5f
+            beginDelay = 5f,
+            fieldId = gameDataManager.GetFieldId(),
         };
         battleData = data;
+        battleStartInit();
     }
 
     public void BeginBattle(){
@@ -114,6 +122,22 @@ public class GameRoot : MonoBehaviour {
         PlayerMng.InjectData(battleData);
         battleStart = true;
         if (BattleStartAction != null) BattleStartAction();
+    }
+
+    public void CompleteBattle(int res){
+        if(res==0){
+
+        }
+        else if(res==1){
+            DungeonMng.DungeonCompleted();
+        }
+    }
+
+    public void ClearBattle(){
+        mainUIMng.CloseUI();
+        mainUIMng.CloseUI();
+        mainUIMng.CloseUI();
+        mainUIMng.HideUI(false);
     }
 
     public static GameRoot GetInstance(){

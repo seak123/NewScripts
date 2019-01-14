@@ -7,9 +7,9 @@ function this.battle_begin(vo)
     this.session = session.new(vo)
 end
 
-function this.battle_completed(  )
+function this.battle_completed( res )
     this.session = nil
-    BattleCompleted()
+    BattleCompleted(res)
 end
 
 return this

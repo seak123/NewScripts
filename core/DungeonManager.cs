@@ -13,7 +13,7 @@ public class DungeonManager : MonoBehaviour {
 
     private DungeonUIMaker uiMaker;
     private Vector2Int currPos;
-    private List<Vector2Int> nextPos;
+    private List<int> nextPos;
 
     public DungeonCreaterData[] initData;
 
@@ -52,7 +52,7 @@ public class DungeonManager : MonoBehaviour {
     // Use this for initialization
     void Start () {
         dungeonUnits = new Dictionary<int, IDungeonUnit>();
-        nextPos = new List<Vector2Int>();
+        nextPos = new List<int>();
 	}
 	
 	// Update is called once per frame
@@ -95,27 +95,43 @@ public class DungeonManager : MonoBehaviour {
 
     public void SetCurrPos(Vector2Int _pos){
         currPos = _pos;
+        foreach (var key in nextPos)
+        {
+            dungeonUnits[key].SetState(DungeonState.Sleeping);
+        }
         dungeonUnits[currPos.x * 100 + currPos.y].SetState(DungeonState.Running);
+        nextPos.Clear();
         if(currPos.x<=dungeonSize){
             int key = (currPos.x+1) * 100 + currPos.y;
             if(dungeonUnits.ContainsKey(key)){
                 dungeonUnits[key].SetVisiable(true);
+                nextPos.Add(key);
             }
             key = (currPos.x + 1) * 100 + currPos.y + 1;
             if (dungeonUnits.ContainsKey(key))
             {
                 dungeonUnits[key].SetVisiable(true);
+                nextPos.Add(key);
             }
             key = (currPos.x + 2) * 100 + currPos.y+1;
             if (dungeonUnits.ContainsKey(key))
             {
                 dungeonUnits[key].SetVisiable(true);
+                nextPos.Add(key);
             }
         }
         else if(currPos.x> 3 * dungeonSize - 3){
 
         }else{
 
+        }
+    }
+
+    public void DungeonCompleted(){
+        dungeonUnits[currPos.x * 100 + currPos.y].CompleteDungeon();
+        dungeonUnits[currPos.x * 100 + currPos.y].SetState(DungeonState.Completed);
+        foreach(var key in nextPos){
+            dungeonUnits[key].SetState(DungeonState.Ready);
         }
     }
 

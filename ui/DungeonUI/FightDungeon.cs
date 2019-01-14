@@ -11,6 +11,7 @@ public class FightDungeon : IDungeonUnit
     Vector2Int pos;
     DungeonUnit viewUnit;
     FightDungeonData data;
+    int fieldId;
 
     public FightDungeon()
     {
@@ -19,6 +20,7 @@ public class FightDungeon : IDungeonUnit
     public void Init(FightDungeonData _data)
     {
         dungeonIcon = _data.icon;
+        fieldId = _data.FieldId;
         data = _data;
     }
 
@@ -29,7 +31,7 @@ public class FightDungeon : IDungeonUnit
         {
             case DungeonState.Sleeping:
                 Debug.Log("sleeping now");
-                GameRoot.GetInstance().mainUIMng.OpenUI(9);
+                //GameRoot.GetInstance().mainUIMng.OpenUI(9);
                 break;
             case DungeonState.Ready:
                 GameRoot.GetInstance().DungeonMng.GetMaker().SetSelectPos(pos);
@@ -39,6 +41,10 @@ public class FightDungeon : IDungeonUnit
                 GameRoot.GetInstance().mainUIMng.OpenUI(11);
                 break;
         }
+    }
+
+    public int GetFieldId(){
+        return fieldId;
     }
 
     public FightDungeonData GetFightData(){
@@ -94,4 +100,8 @@ public class FightDungeon : IDungeonUnit
         viewUnit = view;
     }
 
+    public void CompleteDungeon()
+    {
+        GameRoot.GetInstance().mainUIMng.OpenUI(12);
+    }
 }

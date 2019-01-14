@@ -34,7 +34,7 @@ public class PlayerManager : MonoBehaviour {
     [OnInjected]
     public void AddRootAction()
     {
-        GameRoot.init += Init;
+        GameRoot.battleStartInit += Init;
     }
 
     public void Init()
