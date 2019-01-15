@@ -25,7 +25,7 @@ public class PlayerManager : MonoBehaviour {
     private int baseIncome = 5;
     //private float incomeAdd = 0.5f;
 
-    public int[] enemyCards;
+    //public int[] enemyCards;
 
     private int playId;
     private int playGridX;
@@ -60,6 +60,8 @@ public class PlayerManager : MonoBehaviour {
 
     public void CleanUp(){
         start = false;
+        cardMng.CleanUp();
+        cardMng = null;
     }
 
     public void InjectData(BattleData data){
@@ -78,6 +80,11 @@ public class PlayerManager : MonoBehaviour {
     }
     public CardManager GetCardManager(){
         return cardMng;
+    }
+
+    public int[] GetEnemyCards(){
+        if(cardMng!=null)return cardMng.GetEnemyCardBox();
+        return null;
     }
 
     private void Start()

@@ -17,11 +17,14 @@ public class RandomMapCreator : MonoBehaviour {
     private int[,] mapGrids;
     private int col = BattleDef.columnGridNum / 16;
     private int row = BattleDef.rowGridNum / 16;
+
+    private List<GameObject> objCache;
     // Use this for initialization
     void Start()
     {
         //init map grids
         mapGrids = new int[col, row];
+        objCache = new List<GameObject>();
         for (int i = 0; i < col; ++i)
         {
             for (int j = 0; j < row; ++j)
@@ -56,6 +59,13 @@ public class RandomMapCreator : MonoBehaviour {
        
 
         GameRoot.BattleStartAction += RegisterObstacle;
+        GameRoot.clean += CleanUp;
+    }
+
+    public void CleanUp(){
+        foreach(var obj in objCache){
+            Destroy(obj);
+        }
     }
 
     private void InitBaseObstacle(){
@@ -158,10 +168,12 @@ public class RandomMapCreator : MonoBehaviour {
                 int value = mapGrids[i, j];
                 if(value>0&&value<20 ){
                     GameObject obj = Instantiate(baseObstacle[value%10]);
+                    objCache.Add(obj);
                     obj.transform.position = new Vector3((i+1) * 0.64f - 0.32f, 0, (j+1) * 0.64f - 0.32f);
                 }else if(value>=20){
                     //Debug.Log("index:" +value%10);
                     GameObject obj = Instantiate(decorator[value % 10]);
+                    objCache.Add(obj);
                     obj.transform.position = new Vector3((i + 1) * 0.64f - 0.32f, 0, (j + 1) * 0.64f - 0.32f);
                 }
             }

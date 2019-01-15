@@ -80,7 +80,7 @@ public class CardManager : MonoBehaviour {
         playerMng.SetCardManager(this);
         enemyHandCards = new int[BattleDef.CardBoxNum];
         enemyboxs = new CardInform[enemyHandCards.Length];
-        GameRoot.GetInstance().PlayerMng.enemyCards = enemyHandCards;
+        //GameRoot.GetInstance().PlayerMng.enemyCards = enemyHandCards;
         for (int i = 0; i < enemyHandCards.Length; ++i)
         {
             enemyHandCards[i] = -1;
@@ -291,5 +291,13 @@ public class CardManager : MonoBehaviour {
             }
         }
         return -1;
+    }
+
+    public void CleanUp(){
+        foreach(var entity in cardboxs){
+            if(entity!=null){
+                entity.CleanUp();
+            }
+        }
     }
 }
