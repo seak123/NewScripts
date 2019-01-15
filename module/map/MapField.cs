@@ -28,39 +28,50 @@ namespace Map
         private AssetManager mng;
 
         private int structureUid = 0;
+        private bool isInited = false;
 
         private void Start()
         {
-            entityMap = new Dictionary<int, Entity>();
-            structureMap = new Dictionary<int, List<Vector2>>();
-            entityRemoveCache = new List<Vector2>();
+           
             // aStarRequestList = new List<int>();
         }
 
         private void Update()
         {
-            float alpha = assitField.GetComponent<SpriteRenderer>().material.GetFloat("_Alpha");
-            if(assistActive){
-                assitField.GetComponent<SpriteRenderer>().material.SetFloat("_Alpha", Math.Max(alpha - 0.5f*Time.deltaTime,0.8f));
-            }else{
-                assitField.GetComponent<SpriteRenderer>().material.SetFloat("_Alpha", Math.Min(1,alpha + 0.5f*Time.deltaTime));
-            }
+            if (isInited)
+            {
+                float alpha = assitField.GetComponent<SpriteRenderer>().material.GetFloat("_Alpha");
+                if (assistActive)
+                {
+                    assitField.GetComponent<SpriteRenderer>().material.SetFloat("_Alpha", Math.Max(alpha - 0.5f * Time.deltaTime, 0.8f));
+                }
+                else
+                {
+                    assitField.GetComponent<SpriteRenderer>().material.SetFloat("_Alpha", Math.Min(1, alpha + 0.5f * Time.deltaTime));
+                }
 
-            ///////remove entity
-            List<float> removeCache = new List<float>();
-            if(entityRemoveCache.Count!=0){
-                for (int i = entityRemoveCache.Count-1; i >= 0;--i){
-                    float restTime = entityRemoveCache[i].y - Time.deltaTime;
-                    if(restTime<=0){
-                        removeCache.Add(entityRemoveCache[i].x);
-                        entityRemoveCache.RemoveAt(i);
-                    }else{
-                        entityRemoveCache[i] = new Vector2(entityRemoveCache[i].x,restTime);
+                ///////remove entity
+                List<float> removeCache = new List<float>();
+                if (entityRemoveCache.Count != 0)
+                {
+                    for (int i = entityRemoveCache.Count - 1; i >= 0; --i)
+                    {
+                        float restTime = entityRemoveCache[i].y - Time.deltaTime;
+                        if (restTime <= 0)
+                        {
+                            removeCache.Add(entityRemoveCache[i].x);
+                            entityRemoveCache.RemoveAt(i);
+                        }
+                        else
+                        {
+                            entityRemoveCache[i] = new Vector2(entityRemoveCache[i].x, restTime);
+                        }
                     }
                 }
-            }
-            foreach(var key in removeCache){
-                entityMap.Remove((int)key);
+                foreach (var key in removeCache)
+                {
+                    entityMap.Remove((int)key);
+                }
             }
             // ///////calculate astar
             // for (int i = 0; i < AStarCalcFrame;++i){
@@ -137,11 +148,17 @@ namespace Map
         [OnInjected]
         public void AddRootAction(){
             GameRoot.init += Init;
+            GameRoot.clean += CleanUp;
         }
 
         public void Init()
         {
             Debug.Log("BattleMap Init");
+            isInited = true;
+            entityMap = new Dictionary<int, Entity>();
+            structureMap = new Dictionary<int, List<Vector2>>();
+            entityRemoveCache = new List<Vector2>();
+
             grids = new bool[BattleDef.columnGridNum,BattleDef.rowGridNum];
             for (int i = 0; i < BattleDef.columnGridNum;++i){
                 for (int j = 0; j < BattleDef.rowGridNum;++j){
@@ -179,6 +196,21 @@ namespace Map
 
             mng = GameRoot.GetInstance().BattleField.assetManager;
             //GameRoot.BattleStartAction += InitNaviGrids;
+        }
+
+        public void CleanUp(){
+            Debug.Log("Clean BattleMap");
+            foreach(var entity in entityMap){
+                Destroy(entity.Value.gameObject);
+            }
+            grids = null;
+            structureGrids = null;
+            entityMap = null;
+            structureMap = null;
+            entityRemoveCache = null;
+            isInited = false;
+            // remove main castle grids
+
         }
 
         //public void InitNaviGrids(){

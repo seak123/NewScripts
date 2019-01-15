@@ -20,6 +20,7 @@ public class GameStateManager : MonoBehaviour
     private Dictionary<GameState,FsmState> allStates;
 
     private bool isNeedHelp = false;
+    private bool isInited = false;
 
     public CardEntity selectCard;
 
@@ -33,6 +34,14 @@ public class GameStateManager : MonoBehaviour
             { GameState.MoveCameraState, new MoveCameraState() },
             { GameState.HelperState, new HelperState() }
         };
+
+    }
+    [OnInjected]
+    void AddRootAction(){
+        GameRoot.init += Init;
+        GameRoot.clean += CleanUp;
+    }
+    public void Init(){
         if (isNeedHelp == true)
         {
             currState = allStates[GameState.HelperState];
@@ -43,24 +52,20 @@ public class GameStateManager : MonoBehaviour
             currState = allStates[GameState.EnterState];
             allStates[GameState.EnterState].OnEnter();
         }
+        isInited = true;
     }
-    [OnInjected]
-    void AddRootAction(){
-        GameRoot.init += Init;
-    }
-    public void Init(){
-
+    public void CleanUp(){
+        isInited = false;
     }
     private void Update()
     {
-        //if (currState == null)
-        //{ Debug.Log("state update: null"); }
-        //else{
-        //    Debug.Log("state update:"+currState.stateType);
-        //}
-        GameState stateIndex = currState.OnUpdate();
-        if(stateIndex>=0){
-            Run(allStates[stateIndex]);
+        if (isInited)
+        {
+            GameState stateIndex = currState.OnUpdate();
+            if (stateIndex >= 0)
+            {
+                Run(allStates[stateIndex]);
+            }
         }
     }
     private void Run(FsmState nextState){

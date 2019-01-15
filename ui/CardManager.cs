@@ -68,12 +68,12 @@ public class CardManager : MonoBehaviour {
         creatureCardObj.SetActive(false);
         structureCardObj.SetActive(false);
 
-        GameRoot.BattleStartAction += InjectData;
+        //GameRoot.BattleStartAction += InjectData;
         
 
     }
 
-    private void InjectData(){
+    public void InjectData(){
         List<int> playerData = GameRoot.GetInstance().PlayerMng.GetPlayerData().cards;
         List<int> enemyData = GameRoot.GetInstance().PlayerMng.GetEnemyData().cards;
         playerMng = GameRoot.GetInstance().PlayerMng;

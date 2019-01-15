@@ -53,12 +53,7 @@ public class LuaBridge : LuaClient
                 startBattle = luaState.GetFunction("start_battle");
                 luaUpdate = luaState.GetFunction("lua_update");
 
-                int _ref = luaInit.BeginPCall();
-                luaInit.PCall();
-                object[] tb = luaState.CheckObjects(_ref);
-                luaInit.EndPCall();
-
-                luaRoot = tb[0] as LuaTable;
+                
             }
 
     }
@@ -66,12 +61,22 @@ public class LuaBridge : LuaClient
     [OnInjected]
     public void AddRootAction(){
         GameRoot.init += OnInit;
+        GameRoot.clean += CleanUp;
     }
        
         public void OnInit()
         {
             GameRoot.GetInstance().Schedular.onUpdate += OnUpdate;
-        }
+        int _ref = luaInit.BeginPCall();
+        luaInit.PCall();
+        object[] tb = luaState.CheckObjects(_ref);
+        luaInit.EndPCall();
+
+        luaRoot = tb[0] as LuaTable;
+    }
+    void CleanUp(){
+        GameRoot.GetInstance().Schedular.onUpdate -= OnUpdate;
+    }
 
         public void OnUpdate(float delta){
             luaUpdate.BeginPCall();

@@ -19,7 +19,7 @@ public class BattleField : MonoBehaviour {
 
     [OnInjected]
     public void AddRootAction(){
-        GameRoot.init += Init;
+        GameRoot.moduleInit += Init;
     }
 
     public void Init(){

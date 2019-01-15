@@ -18,12 +18,15 @@ public class EffectManager : MonoBehaviour {
 
     private AssetManager assetMng;
     private List<MessageEffect> messageCantainer;
+    private List<GameObject> effects;
     private bool hasInited = false;
+
 
     [OnInjected]
     public void AddRootAction()
     {
         GameRoot.init += Init;
+        GameRoot.clean += CleanUp;
     }
 
     public void Init()
@@ -33,6 +36,22 @@ public class EffectManager : MonoBehaviour {
        
         assetMng = GameRoot.GetInstance().BattleField.assetManager;
         messageCantainer = new List<MessageEffect>();
+        effects = new List<GameObject>();
+    }
+
+    public void CleanUp(){
+        Debug.Log("Clean EffectManager");
+        foreach(var message in messageCantainer){
+            Destroy(message.effect);
+        }
+        foreach(var effect in effects){
+            if(effect.gameObject!=null){
+                Destroy(effect.gameObject);
+            }
+        }
+        messageCantainer.Clear();
+        effects.Clear();
+        hasInited = false;
     }
 
     public EffectEntity CreateEffect(int id,bool attach,int unitUid,int posX,int posY){
@@ -70,6 +89,7 @@ public class EffectManager : MonoBehaviour {
             }
             Destroy(obj, time);
         }
+        effects.Add(effectEntity.gameObject);
         return effectEntity;
     }
 

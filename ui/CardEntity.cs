@@ -95,6 +95,11 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler,IPointerUpHandler{
 
     public void InjectData(CardData data,int uid){
         if (data == null) return;
+        //clean data
+        if(entityPrefab!=null){
+            Destroy(entityPrefab);
+        }
+
         cardUid = uid;
         if (playerMng.GetPlayerSaving() >= data.cost) {
             EnterIdleState();

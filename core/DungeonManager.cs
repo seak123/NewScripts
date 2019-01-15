@@ -38,7 +38,7 @@ public class DungeonManager : MonoBehaviour {
     [OnInjected]
     public void AddRootAction()
     {
-        GameRoot.init += Init;
+        GameRoot.moduleInit += Init;
     }
 
     private void Init()

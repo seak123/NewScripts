@@ -34,7 +34,8 @@ public class PlayerManager : MonoBehaviour {
     [OnInjected]
     public void AddRootAction()
     {
-        GameRoot.battleStartInit += Init;
+        GameRoot.init += Init;
+        GameRoot.clean += CleanUp;
     }
 
     public void Init()
@@ -42,6 +43,23 @@ public class PlayerManager : MonoBehaviour {
         Debug.Log("PlayerManager Init");
         uIManager = GameRoot.GetInstance().battleUI.GetComponent<BattleUIManager>();
         effectManager = GameRoot.GetInstance().EffectMng;
+        start = false;
+        updateIncomeDelta = 0;
+        baseIncome = 5;
+        playerData = new PlayerBattleData
+        {
+            saving = 50,
+            income = baseIncome,
+        };
+        enemyData = new PlayerBattleData
+        {
+            saving = 50,
+            income = baseIncome,
+        };
+    }
+
+    public void CleanUp(){
+        start = false;
     }
 
     public void InjectData(BattleData data){
@@ -65,16 +83,7 @@ public class PlayerManager : MonoBehaviour {
     private void Start()
     {
         GameRoot.BattleStartDelayAction += StartBattle;
-        playerData = new PlayerBattleData
-        {
-            saving = 50,
-            income = baseIncome,
-        };
-        enemyData = new PlayerBattleData
-        {
-            saving = 50,
-            income = baseIncome,
-        };
+
     }
 
     public void StartBattle(){

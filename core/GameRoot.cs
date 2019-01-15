@@ -11,9 +11,11 @@ public class GameRoot : MonoBehaviour {
 
     public GameObject[] dontDestroy;
 
+    public static Action moduleInit;
+
     public static Action init;
 
-    public static Action battleStartInit;
+    public static Action clean;
 
     public static Action BattleStartAction;
 
@@ -89,11 +91,11 @@ public class GameRoot : MonoBehaviour {
 
     public void StartNewGame(){
         gameDataManager.InitData();
-        init();
+        moduleInit();
+
     }
 
     public void StartBattle(){
-
         mainUIMng.HideUI(true);
         battleGroundUI = mainUIMng.OpenUI(4);
         battleTextUI = mainUIMng.OpenUI(5);
@@ -111,7 +113,7 @@ public class GameRoot : MonoBehaviour {
             fieldId = gameDataManager.GetFieldId(),
         };
         battleData = data;
-        battleStartInit();
+        init();
     }
 
     public void BeginBattle(){
@@ -120,6 +122,7 @@ public class GameRoot : MonoBehaviour {
         battleUI.GetComponent<BattleUIManager>().InitBattleUI();
         Bridge.StartBattle(battleData);
         PlayerMng.InjectData(battleData);
+        battleUI.GetComponentInChildren<CardManager>().InjectData();
         battleStart = true;
         if (BattleStartAction != null) BattleStartAction();
     }
@@ -134,6 +137,7 @@ public class GameRoot : MonoBehaviour {
     }
 
     public void ClearBattle(){
+        clean();
         mainUIMng.CloseUI();
         mainUIMng.CloseUI();
         mainUIMng.CloseUI();
