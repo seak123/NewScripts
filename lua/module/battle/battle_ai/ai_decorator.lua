@@ -50,7 +50,7 @@ end
 function this:check_CardRandom(  )
     if self.database.play_id ~= -1 then return true end
     local card_list = {}
-    local cards = GetPlayerManager().GetEnemyCards()
+    local cards = GetPlayerManager():GetEnemyCards()
     self.database.play_id = -1
     if cards == nil or cards.Length == 0 then
         print("enemy cards is nil or 0") 

@@ -19,7 +19,7 @@ public class GameStateManager : MonoBehaviour
     private FsmState currState;
     private Dictionary<GameState,FsmState> allStates;
 
-    private bool isNeedHelp = false;
+    //private bool isNeedHelp = false;
     private bool isInited = false;
 
     public CardEntity selectCard;
@@ -42,16 +42,10 @@ public class GameStateManager : MonoBehaviour
         GameRoot.clean += CleanUp;
     }
     public void Init(){
-        if (isNeedHelp == true)
-        {
-            currState = allStates[GameState.HelperState];
-            allStates[GameState.HelperState].OnEnter();
-        }
-        else
-        {
+
             currState = allStates[GameState.EnterState];
             allStates[GameState.EnterState].OnEnter();
-        }
+
         isInited = true;
     }
     public void CleanUp(){

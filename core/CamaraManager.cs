@@ -55,59 +55,11 @@ public class CamaraManager : MonoBehaviour {
         m_CameraOffset = m_Camera.transform.position;
     }
 
-    void Update()
+
+    public void Init()
     {
-        ////判断触摸数量为单点触摸
-        //if (Input.touchCount == 1)
-        //{
-        //    if (Input.GetTouch(0).phase == TouchPhase.Began || !m_IsSingleFinger)
-        //    {
-        //        //在开始触摸或者从两字手指放开回来的时候记录一下触摸的位置
-        //        lastSingleTouchPosition = Input.GetTouch(0).position;
-        //    }
-        //    if (Input.GetTouch(0).phase == TouchPhase.Moved)
-        //    {
-        //        MoveCamera(Input.GetTouch(0).position);
-        //    }
-        //    m_IsSingleFinger = true;
-
-        //}
-        //else if (Input.touchCount > 1)
-        //{
-        //    //当从单指触摸进入多指触摸的时候,记录一下触摸的位置
-        //    //保证计算缩放都是从两指手指触碰开始的
-        //    if (m_IsSingleFinger)
-        //    {
-        //        oldPosition1 = Input.GetTouch(0).position;
-        //        oldPosition2 = Input.GetTouch(1).position;
-        //    }
-
-        //    if (Input.GetTouch(0).phase == TouchPhase.Moved || Input.GetTouch(1).phase == TouchPhase.Moved)
-        //    {
-        //        ScaleCamera();
-        //    }
-
-        //    m_IsSingleFinger = false;
-        //}
-
-
-        ////用鼠标的
-        //if (useMouse)
-        //{
-        //    size -= Input.GetAxis("Mouse ScrollWheel") * scaleFactor;
-        //    size = Mathf.Clamp(size, minSize, maxSize);
-        //    if (Input.GetMouseButtonDown(0))
-        //    {
-        //        lastSingleTouchPosition = Input.mousePosition;
-        //        Debug.Log("GetMouseButtonDown:" + lastSingleTouchPosition);
-        //    }
-        //    if (Input.GetMouseButton(0))
-        //    {
-        //        MoveCamera(Input.mousePosition);
-        //    }
-        //}
-
-
+        m_CameraOffset = new Vector3(23.6f, 10f, 2.4f);
+        size = 2f;
     }
 
     /// <summary>

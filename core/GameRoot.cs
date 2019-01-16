@@ -113,6 +113,7 @@ public class GameRoot : MonoBehaviour {
             fieldId = gameDataManager.GetFieldId(),
         };
         battleData = data;
+        Camara.GetComponent<CamaraManager>().Init();
         init();
     }
 
@@ -137,6 +138,7 @@ public class GameRoot : MonoBehaviour {
     }
 
     public void ClearBattle(){
+        Destroy(fieldObj);
         clean();
         mainUIMng.CloseUI();
         mainUIMng.CloseUI();
