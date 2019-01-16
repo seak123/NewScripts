@@ -25,8 +25,9 @@ public class EnterState : FsmState
     public override void OnLeave()
     {
         enterTime = -1;
-        //GameRoot.BattleStartAction -= BattleEnter;
-        //GameRoot.BattleStartDelayAction -= BattleStart;
+        battleIsStart = false;
+        GameRoot.BattleStartAction -= BattleEnter;
+        GameRoot.BattleStartDelayAction -= BattleStart;
     }
 
     public override GameState OnUpdate()

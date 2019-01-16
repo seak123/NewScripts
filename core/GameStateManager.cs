@@ -16,7 +16,7 @@ public enum GameState{
 [Insert]
 public class GameStateManager : MonoBehaviour
 {
-    private FsmState currState;
+    private GameState currState;
     private Dictionary<GameState,FsmState> allStates;
 
     //private bool isNeedHelp = false;
@@ -34,6 +34,7 @@ public class GameStateManager : MonoBehaviour
             { GameState.MoveCameraState, new MoveCameraState() },
             { GameState.HelperState, new HelperState() }
         };
+        currState = GameState.KeepRunning;
 
     }
     [OnInjected]
@@ -43,9 +44,7 @@ public class GameStateManager : MonoBehaviour
     }
     public void Init(){
 
-            currState = allStates[GameState.EnterState];
-            allStates[GameState.EnterState].OnEnter();
-
+        Run(GameState.EnterState);
         isInited = true;
     }
     public void CleanUp(){
@@ -55,17 +54,18 @@ public class GameStateManager : MonoBehaviour
     {
         if (isInited)
         {
-            GameState stateIndex = currState.OnUpdate();
+            GameState stateIndex = allStates[currState].OnUpdate();
             if (stateIndex >= 0)
             {
-                Run(allStates[stateIndex]);
+                Run(stateIndex);
             }
         }
     }
-    private void Run(FsmState nextState){
-        currState.OnLeave();
+    private void Run(GameState nextState){
+        if(currState>=0)
+            allStates[currState].OnLeave();
         currState = nextState;
-        nextState.OnEnter();
+        allStates[nextState].OnEnter();
     }
 
 };
