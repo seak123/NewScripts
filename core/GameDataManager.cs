@@ -7,16 +7,17 @@ using Data;
 public class GameDataManager
 {
     //player data
-    float playerHp;
-    float magicAttack;
-    float defence;
-    float magicResist;
-    int mainCasterId;
+    public float playerHp;
+    public float magicAttack;
+    public float defence;
+    public float magicResist;
+    public int mainCasterId;
     public List<int> playCards;
 
 
     //hero data
     //enhance data
+    
 
     public void InitData(){
         playerHp = 3000;
