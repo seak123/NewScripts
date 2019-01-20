@@ -47,7 +47,7 @@ public class DungeonUIMaker : MonoBehaviour {
                 dungeonUnits.Add(index * 100 + i, _unit);
                 obj.transform.SetParent(map.transform);
                 obj.transform.localPosition = new Vector3(lineStartPos.x+(i-1)*sideLength*3,lineStartPos.y, 0);
-                obj.transform.localScale = Vector3.one * 0.5f;
+                //obj.transform.localScale = Vector3.one;
                 dungeonViews.Add(index * 100 + i, obj);
             }
         }

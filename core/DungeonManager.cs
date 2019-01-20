@@ -68,8 +68,19 @@ public class DungeonManager : MonoBehaviour {
             //DungeonData dunData = GameRoot.GetInstance().BattleField.assetManager.GetDungeonData(data.fieldType, data.dungeonLevel);
             //dungeonDatas.Add(pos.x*100+pos.y, dunData);
             switch(data.unitType){
+                case DungeonUnitType.Close:
+                    break;
+                case DungeonUnitType.Empty:
+                    EmptyDungeonData emptyData = GameRoot.GetInstance().BattleField.assetManager.GetEmptyDungeon(data.fieldType);
+                    EmptyDungeon emptyDungeon = new EmptyDungeon();
+                    emptyDungeon.SetState(DungeonState.Sleeping);
+                    emptyDungeon.SetVisiable(false);
+                    emptyDungeon.SetPos(pos);
+                    emptyDungeon.Init(emptyData);
+                    dungeonUnits.Add(pos.x * 100 + pos.y, emptyDungeon);
+                    break;
                 case DungeonUnitType.Fight:
-                    FightDungeonData dunData = GameRoot.GetInstance().BattleField.assetManager.GetDungeonData(data.fieldType, data.dungeonLevel);
+                    FightDungeonData dunData = GameRoot.GetInstance().BattleField.assetManager.GetFightDungeonData(data.fieldType, data.dungeonLevel);
                     FightDungeon dungeon = new FightDungeon();
                     dungeon.SetState(DungeonState.Sleeping);
                     dungeon.SetVisiable(false);

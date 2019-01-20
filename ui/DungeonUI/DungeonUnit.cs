@@ -29,7 +29,10 @@ public class DungeonUnit : MonoBehaviour {
 
     public void Init(IDungeonUnit _unit)
     {
-        if (_unit == null) return;
+        if (_unit == null) {
+            gameObject.SetActive(false);
+            return;
+        }
         unitData = _unit;
         button.image.sprite = _unit.GetDungeonSprite();
         ChangeState(unitData.GetState());
@@ -61,10 +64,10 @@ public class DungeonUnit : MonoBehaviour {
     public void SetVisiable(bool _isVisiable){
         if(_isVisiable==true){
             isVisiable = true;
-            gameObject.SetActive(true);
+            button.gameObject.SetActive(true);
         }else if(_isVisiable==false){
             isVisiable = false;
-            gameObject.SetActive(false);
+            button.gameObject.SetActive(false);
         }
     }
 }
