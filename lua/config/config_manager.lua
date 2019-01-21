@@ -32,6 +32,17 @@ function this.get_unit_config( id )
     return this.unit_config[id]
 end
 
+function this.get_hero_config( data )
+    local unit_config = {}
+    unit_config.ai_vo = require("config.ai_config.normal_ai")
+    unit_config.normal_attack = require("config.unit.501_ice_dragon.ice_dragon_normal")
+    unit_config.skills = {}
+    unit_config.passives = {}
+    unit_config.battlecry = {}
+    unit_config.deathrattle = {}
+    return unit_config
+end
+
 function this.get_skill_config( id )
     return this.skill_config[id]
 end

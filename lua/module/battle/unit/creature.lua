@@ -24,7 +24,11 @@ function this:ctor( sess,data,uid ,struct_uid)
     self.card_uid = data.card_uid
     -- only structure use
     self.struct_uid = struct_uid
-    self.config = require(config_mng.get_unit_config(self.id))
+    if data.type > 1 then
+        self.config = require(config_mng.get_hero_config(data))
+    else
+        self.config = require(config_mng.get_unit_config(self.id))
+    end
     self.name = data.name
     self.data = data
     self.side = data.side
