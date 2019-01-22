@@ -28,17 +28,61 @@ this.card_config = {
     
 }
 
+this.hero_config = {
+    [1] = {
+        attack = {
+            [1] = "",
+            [2] = ""
+        },
+        skills = {
+            [101] = "",
+            [102] = "",
+            [103] = "",
+            [104] = "",
+            [201] = "",
+            [202] = "",
+            [203] = "",
+            [204] = ""
+        },
+        passives = {
+
+        }
+
+    }
+}
+
 function this.get_unit_config( id )
     return this.unit_config[id]
 end
 
 function this.get_hero_config( data )
     local unit_config = {}
+    local hero_conf = this.hero_config[data.id]
     unit_config.ai_vo = require("config.ai_config.normal_ai")
-    unit_config.normal_attack = require("config.unit.501_ice_dragon.ice_dragon_normal")
+
+    unit_config.normal_attack = hero_conf.attack[data.attack_id]
+
     unit_config.skills = {}
+    local skill_array = data.skills
+    if skill_array ~= nil and skill_array.Length > 0 then
+        for i=0,skill_array.Length-1 do
+            if skill_array[i] >=0 then
+                table.insert( unit_config, require(hero_conf.skills[skill_array[i]]) )
+            end
+        end
+    end
+
     unit_config.passives = {}
+    local pass_array = data.passives
+    if pass_array ~= nil and pass_array.Length > 0 then
+        for i=0,pass_array.Length-1 do
+            if pass_array[i] >=0 then
+                table.insert( unit_config, require(hero_conf.skills[pass_array[i]]) )
+            end
+        end
+    end
     unit_config.battlecry = {}
+    
     unit_config.deathrattle = {}
     return unit_config
 end
