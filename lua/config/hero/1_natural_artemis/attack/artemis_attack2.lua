@@ -26,7 +26,7 @@ local retarget0 = retarget.new()
 retarget0.target_type = retarget.TargetType.Distance
 retarget0.can_repeat = false
 retarget0.cantain_curr_target = false
-retarget0.num = 2
+retarget0.num = 4
 retarget0.distance = 120
 retarget0:append("childs",throw1)
 

@@ -13,7 +13,9 @@ this.unit_config = {
     [107] = "config.unit.107_natural_statue.natural_statue_unit",
     [108] = "config.unit.108_elf_archer.elf_archer_unit",
     [109] = "config.unit.109_elf_pikeman.elf_pikeman_unit",
-    [501] = "config.unit.501_ice_dragon.ice_dragon_unit"
+    [501] = "config.unit.501_ice_dragon.ice_dragon_unit",
+    [20001] = "config.hero.1_natural_artemis.units.20001_porcupine",
+    [20002] = "config.hero.1_natural_artemis.units.20002_sprite_deer"
 }
 
 this.skill_config = {
@@ -31,21 +33,23 @@ this.card_config = {
 this.hero_config = {
     [1] = {
         attack = {
-            [1] = "",
-            [2] = ""
+            [0] = "config.hero.1_natural_artemis.attack.artemis_attack0",
+            [1] = "config.hero.1_natural_artemis.attack.artemis_attack1",
+            [2] = "config.hero.1_natural_artemis.attack.artemis_attack2",
+            [3] = "config.hero.1_natural_artemis.attack.artemis_attack3",
+            [4] = "config.hero.1_natural_artemis.attack.artemis_attack4"
         },
         skills = {
-            [101] = "",
-            [102] = "",
-            [103] = "",
-            [104] = "",
-            [201] = "",
-            [202] = "",
-            [203] = "",
-            [204] = ""
+            [101] = "config.hero.1_natural_artemis.skills.artemis_skill101",
+            [102] = "config.hero.1_natural_artemis.skills.artemis_skill102",
+            [103] = "config.hero.1_natural_artemis.skills.artemis_skill103",
+            [104] = "config.hero.1_natural_artemis.skills.artemis_skill104",
         },
         passives = {
-
+            [101] = "config.hero.1_natural_artemis.passives.artemis_passive1",
+            [102] = "config.hero.1_natural_artemis.passives.artemis_passive2",
+            [103] = "config.hero.1_natural_artemis.passives.artemis_passive3",
+            [104] = "config.hero.1_natural_artemis.passives.artemis_passive4"
         }
 
     }

@@ -105,6 +105,22 @@ function this.check_skill_EnemyInRange(range,with_structure)
 end
 end
 
+function this.check_hurt_friend_in_range( range,with_structure )
+    return function ( database )
+        local field = database.master.sess.field
+        local func = function(unit)
+            return unit.hp<unit.max_hp and field:distance(unit,database.master) <= range
+        end
+        local unit = field:find_random_unit(with_structure,database.master.side,func)
+        if unit == nil then
+            return false
+        else
+            database.target = unit
+            return true
+        end
+    end
+end
+
 function this.check_summon(  )
     return function ( database )
     --    if database.master.sess.players[database.master.side]:has_feature("permit_summon") then

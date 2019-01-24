@@ -32,6 +32,7 @@ function this:ctor( sess,data,uid ,struct_uid)
     self.name = data.name
     self.data = data
     self.side = data.side
+    self.live_time = data.live_time
     self.property = property.new(self,property.unpack_prop(data))
     self.buffcont = buffcont.new(self)
     self.transform = transform.new(self,data)
@@ -103,6 +104,7 @@ end
 
 
 function this:update( delta )
+
     self.super:update(delta)
 
     self.betree:update(delta)
@@ -112,6 +114,14 @@ function this:update( delta )
     self.buffcont:update(delta)
 
     self:update_coold(delta)
+
+    if self.live_time > 0 then
+        self.live_time = self.live_time - delta
+        if self.live_time <= 0 then
+            self.hp = 0
+            self:die()
+        end
+    end
 end
 
 function this:update_coold(delta)

@@ -17,6 +17,11 @@ function this:execute( sess,delta )
     return "completed"
 end
 
+function this:self_select( sess )
+    table.insert( self.targets, self.database.master)
+    table.insert( self.database.target_trace, self.database.master.uid )
+end
+
 function this:random_select( sess )
     local func
     if self.vo.can_repeat == true then

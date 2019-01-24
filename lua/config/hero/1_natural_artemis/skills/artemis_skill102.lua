@@ -9,7 +9,7 @@ local this = {}
 local summon0 = summon.new()
 summon0.live_time = 40
 summon0.data =pack.get_arg(false,20001)
-summon0.num =pack.get_arg(false,1)
+summon0.num =pack.get_arg(false,2)
 
 local normal = normal_skill.new()
 normal:append("raw_skills",summon0)

@@ -9,10 +9,15 @@ local this = {}
 local summon0 = summon.new()
 summon0.live_time = 40
 summon0.data =pack.get_arg(false,20001)
-summon0.num =pack.get_arg(false,1)
+summon0.num =pack.get_arg(false,3)
+
+local summon1 = summon.new()
+summon1.live_time = 40
+summon1.data =pack.get_arg(false,20002)
+summon1.num =pack.get_arg(false,1)
 
 local normal = normal_skill.new()
-normal:append("raw_skills",summon0)
+normal:append("raw_skills",summon0,summon1)
 
 this.root = {normal}
 this.decorators = {}

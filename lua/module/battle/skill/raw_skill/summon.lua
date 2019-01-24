@@ -16,6 +16,9 @@ function this:execute(sess,target)
     if type(data) ~= "userdata" then
         data = self:get_unit_data(data)
     end
+    if self.vo.live_time > 0 then
+        data.live_time = self.vo.live_time
+    end
     if data.type == 0 then
         -- summon creature
         local num = self.vo.num(self.database)

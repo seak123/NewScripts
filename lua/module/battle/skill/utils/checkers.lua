@@ -2,47 +2,17 @@ local math = math
 local this = {}
 
 function this.check_chance(chance)
-	return function(sess,caster ,target) 
+	return function(sess,database ,target) 
 		return math.random() < chance 
 	end
 end
 
 
-function this.check_attr( attr )
-	return function ( sess,caster,target )
-		if caster.attr == attr then return true
-		else return false end
-	end
-end
-
-function this.check_stack( num )
-	return function ( sess,caster,target )
-		local buff_trace = sess.trace:last_of_type("trace_buff")
-		local buff = buff_trace.buff
-		local max_num = num
-	    if buff:get_inst_count() >= max_num then
-            return true
-		else
-			return false
-		end
-	end
-end
-
-function this.check_ap( value )
-	return function ( sess,caster,target )
-		if target.ap <= value then
-			return true
-		else
-			return false
-		end
-	end
-end
-
 function this.check_in_range(  )
     return function ( sess,database ,target)
         local range = database.caster.unit.data.attack_range
         local radius1 = database.caster.unit.data.radius
-        local radius2 = database.target.unit.data.radius
+        local radius2 = target.data.radius
         local target_uid = target.uid
         if sess.field:distance(target,database.caster_pos)< ((radius1+radius2)*1.5 + range + 4) then
             return true
@@ -51,6 +21,16 @@ function this.check_in_range(  )
             return false
         end
     end
+end
+
+function this.check_attack_range( is_short )
+	return function ( sess,database,target )
+		if is_short then
+			return target.data.attack_range < 40
+		else
+			return target.data.attack_range >= 40
+		end
+	end
 end
 
 

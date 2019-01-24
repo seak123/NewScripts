@@ -32,6 +32,7 @@ end
 
 this.checkers = {}
 
+this.interval = 0.1
 this.buff_occasion = "on_add"
 
 return this
