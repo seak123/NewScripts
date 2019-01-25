@@ -114,6 +114,15 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler,IPointerUpHandler{
         }
         cardData = data;
         switch (cardData.cardType){
+            case CardType.Hero:
+                GameDataManager dataMng = GameRoot.GetInstance().gameDataManager;
+                creatureData = dataMng.GetHeroData();
+                baseData = CreatureData.Clone(creatureData);
+                cardData = dataMng.GetHeroCardData();
+                entityPrefab = Instantiate(cardData.entityPrefab);
+                entityPrefab.SetActive(false);
+                sprite.sprite = cardData.icon;
+                cost.text = cardData.cost.ToString();
             case CardType.Creature:
                 creatureData = GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(cardData.unitId);
                 baseData = CreatureData.Clone(creatureData);
@@ -211,6 +220,7 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler,IPointerUpHandler{
             }
             switch (cardData.cardType)
             {
+                case CardType.Hero:
                 case CardType.Creature:
                     if (MapField.CheckPosValiable(gridX, gridY)&&gridX<=BattleDef.UnitBound)
                     {
@@ -281,6 +291,7 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler,IPointerUpHandler{
     public void ExecuteCard(int posX,int posY){
         if (cardData == null) return;
         switch(cardData.cardType){
+            case CardType.Hero:
             case CardType.Creature:
                 if (!MapField.CheckPosValiable(posX, posY)||posX>(BattleDef.UnitBound+32))break;
                 if (!playerMng.RequestCost(1, cardData.cost)) break;

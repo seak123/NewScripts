@@ -16,6 +16,10 @@ public class GameDataManager
 
 
     //hero data
+    public int heroId;
+    public int Skill1Lvl;
+    public int Skill2Lvl;
+    public int Skill3Lvl;
     //enhance data
     
 

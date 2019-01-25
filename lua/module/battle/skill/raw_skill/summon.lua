@@ -68,7 +68,7 @@ function this:get_pos_array( pos,num )
 end
 
 function this:get_unit_data( id )
-    -- body
+    return GetUnitData(id)
 end
 
 function this.clamp( num,min,max )

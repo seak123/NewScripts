@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Map;
+using Data;
 
 namespace Utils
 {
@@ -26,6 +27,12 @@ namespace Utils
         public static void BattleCompleted(int res){
             Debug.Log("Game is Over");
             GameRoot.GetInstance().CompleteBattle(res);
+        }
+
+        public static UnitData GetUnitData(int id){
+            AssetManager mng;
+            mng = GameRoot.GetInstance().BattleField.assetManager;
+            return mng.PackCreatureData(mng.GetCreatureData(id));
         }
     }
 }
