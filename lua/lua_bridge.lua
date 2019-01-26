@@ -61,6 +61,10 @@ function BattleCompleted( res )
     return api.BattleCompleted(res)
 end
 
+function GetUnitData( id )
+    return api.GetUnitData(id)
+end
+
 
 
 
