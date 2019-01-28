@@ -32,6 +32,7 @@ this.card_config = {
 
 this.hero_config = {
     [10001] = {
+        config = {"attack","skills","passives"},
         attack = {
             [0] = "config.hero.1_natural_artemis.attack.artemis_attack0",
             [1] = "config.hero.1_natural_artemis.attack.artemis_attack1",
@@ -63,29 +64,30 @@ function this.get_hero_config( data )
     local unit_config = {}
     local hero_conf = this.hero_config[data.id]
     unit_config.ai_vo = require("config.ai_config.normal_ai")
+    --unit_config.normal_attack = require(hero_conf.attack[0])
 
-    --unit_config.normal_attack = hero_conf.attack[data.attack_id]
-    unit_config.normal_attack = require(hero_conf.attack[0])
 
-    unit_config.skills = {}
-    -- local skill_array = data.skills
-    -- if skill_array ~= nil and skill_array.Length > 0 then
-    --     for i=0,skill_array.Length-1 do
-    --         if skill_array[i] >=0 then
-    --             table.insert( unit_config, require(hero_conf.skills[skill_array[i]]) )
-    --         end
-    --     end
-    -- end
+    local skill_flag = 1
+    local passive_flag = 1
 
-    unit_config.passives = {}
-    -- local pass_array = data.passives
-    -- if pass_array ~= nil and pass_array.Length > 0 then
-    --     for i=0,pass_array.Length-1 do
-    --         if pass_array[i] >=0 then
-    --             table.insert( unit_config, require(hero_conf.skills[pass_array[i]]) )
-    --         end
-    --     end
-    -- end
+    for i=1,3 do
+        local Lv = data["Skill"..i.."Lvl"]
+        local attr = hero_conf.config[i]
+        if attr == "attack" then
+            unit_config.normal_attack = require(hero_conf.attack[Lv])
+        elseif attr == "skills" then
+            skill_flag = skill_flag + 1
+            if Lv ~= 0 then
+                table.insert( unit_config.skills, require(hero_conf.skills[skill_flag*100+Lv]) )
+            end
+        else
+            passive_flag = passive_flag + 1
+            if Lv ~=0 then
+                table.insert( unit_config.passives, require(hero_conf.passives[passive_flag*100+Lv]) )
+            end
+        end
+    end
+   
     unit_config.battlecry = {}
     
     unit_config.deathrattle = {}
