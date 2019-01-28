@@ -59,7 +59,7 @@ end
 function this:state_get(sess, state_name)
     
     -- structure cannot has state change
-    if self.master.type == 2 then return end
+    if self.master.type == 1 then return end
 
 	local state = self[state_name]
 
@@ -87,7 +87,7 @@ end
 function this:state_lose(sess, state_name)
 
      -- structure cannot has state change
-     if self.master.type == 2 then return end
+     if self.master.type == 1 then return end
 
 	
 	local state = self[state_name]

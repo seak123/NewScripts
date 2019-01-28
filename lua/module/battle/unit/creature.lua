@@ -14,7 +14,7 @@ local buff = require("module.battle.skill.raw_skill.buff")
 function this:ctor( sess,data,uid ,struct_uid)
     self.sess = sess
     self.id = data.id
-    -- type: 0,creature;1,structure
+    -- type: 0,creature;1,structure;-1,hero
     self.type = data.type
     -- genus: 1,ground 2,fly
     self.genus = data.genus
@@ -24,8 +24,8 @@ function this:ctor( sess,data,uid ,struct_uid)
     self.card_uid = data.card_uid
     -- only structure use
     self.struct_uid = struct_uid
-    if data.type > 1 then
-        self.config = require(config_mng.get_hero_config(data))
+    if data.type < 0 then
+        self.config = config_mng.get_hero_config(data)
     else
         self.config = require(config_mng.get_unit_config(self.id))
     end
@@ -69,7 +69,7 @@ function this:init(  )
     -- wait for appear action
     self.appeared = 0
  
-    if self.type == 0 then
+    if self.type == 0 or self.type == -1 then
         self.entity = self.sess.map:CreateEntity(self.data.id,self.uid,self.side,self.data.init_x,self.data.init_y,-1)
     else
         self.entity = self.sess.map:CreateEntity(self.data.id,self.uid,self.side,self.data.init_x,self.data.init_y,self.struct_uid)

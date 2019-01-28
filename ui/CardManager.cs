@@ -225,7 +225,7 @@ public class CardManager : MonoBehaviour {
     }
 
     public void SelectCard(int index,CardData cardData,CreatureData creatureData){
-        if(cardData.cardType == CardType.Creature){
+        if(cardData.cardType == CardType.Creature||cardData.cardType == CardType.Hero){
             if(state == CardViewState.Idle){
                 creatureCardObj.SetActive(true);
                 creatureCardObj.transform.localPosition = cardboxs[index].transform.localPosition;

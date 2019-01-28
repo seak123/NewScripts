@@ -99,19 +99,7 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler,IPointerUpHandler{
         CleanUp();
 
         cardUid = uid;
-        if (playerMng.GetPlayerSaving() >= data.cost) {
-            EnterIdleState();
-            state = CardEntityState.Idle;
-            cost.color = defaultReadyWhite;
-            sprite.color = Color.white;
-            magic.color = Color.white;
-        }
-        else {
-            EnterSleepState();
-            state = CardEntityState.Sleep;
-            cost.color = defaultCostRed;
-            sprite.color = Color.gray;
-        }
+
         cardData = data;
         switch (cardData.cardType){
             case CardType.Hero:
@@ -123,6 +111,7 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler,IPointerUpHandler{
                 entityPrefab.SetActive(false);
                 sprite.sprite = cardData.icon;
                 cost.text = cardData.cost.ToString();
+                break;
             case CardType.Creature:
                 creatureData = GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(cardData.unitId);
                 baseData = CreatureData.Clone(creatureData);
@@ -141,6 +130,21 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler,IPointerUpHandler{
                 break;
         }
         SetAlpha(1);
+        if (playerMng.GetPlayerSaving() >= data.cost)
+        {
+            EnterIdleState();
+            state = CardEntityState.Idle;
+            cost.color = defaultReadyWhite;
+            sprite.color = Color.white;
+            magic.color = Color.white;
+        }
+        else
+        {
+            EnterSleepState();
+            state = CardEntityState.Sleep;
+            cost.color = defaultCostRed;
+            sprite.color = Color.gray;
+        }
 
     }
 
@@ -297,6 +301,7 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler,IPointerUpHandler{
                 if (!playerMng.RequestCost(1, cardData.cost)) break;
                 posX = Mathf.Clamp(posX, 0, BattleDef.UnitBound);
                 UnitData unitData = AssetManager.PackCreatureData(creatureData);
+                if (cardData.liveTime > 0) unitData.live_time = cardData.liveTime;
                 unitData.card_uid = cardUid;
                 GameRoot.GetInstance().Bridge.CasterSkill(1, cardData.skillId, posX, posY, unitData, cardData.num);
                 CleanUp();
@@ -312,6 +317,7 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler,IPointerUpHandler{
                 if (!playerMng.RequestCost(1, cardData.cost)) break;
                 int structUid = map.CreateStructure(maxX,maxY,cardData.size);
                 UnitData unitData2 = AssetManager.PackCreatureData(creatureData);
+                if (cardData.liveTime > 0) unitData2.live_time = cardData.liveTime;
                 unitData2.card_uid = cardUid;
                 GameRoot.GetInstance().Bridge.CasterSkill(1, cardData.skillId, centerX, centerY, unitData2, structUid);
                 CleanUp();

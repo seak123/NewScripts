@@ -21,6 +21,16 @@ function this:add_unit( data,struct_uid)
     return unit
 end
 
+function this:unit_die( unit )
+        local side = unit.side
+        for i, v in ipairs(self.units[side]) do
+            if v.uid == unit.uid then
+                table.remove( self.units[side], i )
+                return
+            end
+        end
+end
+
 function this:get_unit( uid,side)
     if side ~= nil then
         for _, v in ipairs(self.units[side]) do

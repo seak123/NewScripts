@@ -37,6 +37,7 @@ public class CreatureCardUI : MonoBehaviour {
     public Image star3Icon;
 
     public GameObject skillContent;
+    public GameObject heroBand;
 
     public GameObject cardName1;
     public Text[] Name1Texts;
@@ -71,6 +72,7 @@ public class CreatureCardUI : MonoBehaviour {
             t.text = "";
         }
         skillContent.SetActive(false);
+        heroBand.SetActive(false);
         skill1.SetActive(false);
         skill2.SetActive(false);
         skill3.SetActive(false);
@@ -80,7 +82,10 @@ public class CreatureCardUI : MonoBehaviour {
 
         AssetManager assetMng = GameRoot.GetInstance().BattleField.assetManager;
 
-        CreatureData data = assetMng.GetCreatureData(cardData.unitId);
+        CreatureData data;
+        if (cardData.cardType != CardType.Hero)
+            data = assetMng.GetCreatureData(cardData.unitId);
+        else data = GameRoot.GetInstance().gameDataManager.GetHeroData();
 
         cost.text = cardData.cost.ToString();
 
@@ -95,6 +100,7 @@ public class CreatureCardUI : MonoBehaviour {
         speed.text = data.speed.ToString();
 
         if (data.skills.Length > 0) skillContent.SetActive(true);
+        if (cardData.cardType == CardType.Hero) heroBand.SetActive(true);
 
         if(data.skills.Length>=1){
             SkillData skillData = assetMng.GetSkillData(data.skills[0]);

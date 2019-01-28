@@ -14,4 +14,11 @@ public class AvatarEvent : MonoBehaviour {
         int posY = entity.posY;
         GameRoot.GetInstance().EffectMng.CreateEffect(id, attach, unitUid, posX, posY);
     }
+
+    public void HideUnit(){
+        Material material = gameObject.GetComponent<SkinnedMeshRenderer>().material;
+        {
+            material.SetFloat("_Alpha", 0.6f);
+        }
+    }
 }

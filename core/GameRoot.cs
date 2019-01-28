@@ -68,6 +68,10 @@ public class GameRoot : MonoBehaviour {
 
     public GameDataManager gameDataManager;
 
+    //temp
+    public GameObject heroPrefab;
+    public Sprite heroIcon;
+
 	// Use this for initialization
 	void Start () {
         Debug.Log("GameRoot Start");
@@ -81,6 +85,8 @@ public class GameRoot : MonoBehaviour {
         instance = this;
         StrUtil.Init();
         gameDataManager = new GameDataManager();
+        gameDataManager.heroPrefab = heroPrefab;
+        gameDataManager.heroIcon = heroIcon;
         mainUIMng = MainUI.GetComponent<MainUIManager>();
         mainUIMng.OpenUI(0);
 	}
