@@ -7,7 +7,7 @@ local calc = require("module.battle.skill.utils.caculate")
 local this = {}
 
 local effect1 = effect.new()
-effect1.effect_id = 1081
+effect1.effect_id = 10001
 effect1.clean_delay = 0.2
 
 local damage1 = damage.new()
@@ -27,7 +27,7 @@ retarget0.target_type = retarget.TargetType.Distance
 retarget0.can_repeat = false
 retarget0.cantain_curr_target = false
 retarget0.num = 2
-retarget0.distance = 120
+retarget0.distance = 160
 retarget0:append("childs",throw1)
 
 local damage0 = damage.new()
@@ -37,7 +37,7 @@ local normal = normal_skill.new()
 normal:append("raw_skills",damage0)
 
 local effect0 = effect.new()
-effect0.effect_id = 1081
+effect0.effect_id = 10001
 effect0.clean_delay = 0.2
 
 local throw = throw_skill.new()

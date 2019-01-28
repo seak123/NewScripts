@@ -64,6 +64,8 @@ function this.get_hero_config( data )
     local unit_config = {}
     local hero_conf = this.hero_config[data.id]
     unit_config.ai_vo = require("config.ai_config.normal_ai")
+    unit_config.skills = {}
+    unit_config.passives = {}
     --unit_config.normal_attack = require(hero_conf.attack[0])
 
 

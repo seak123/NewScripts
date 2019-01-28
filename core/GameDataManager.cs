@@ -19,9 +19,9 @@ public class GameDataManager
     public int heroId;
     public GameObject heroPrefab;
     public Sprite heroIcon;
-    public int Skill1Lvl;
-    public int Skill2Lvl;
-    public int Skill3Lvl;
+    public int Skill1Lvl =1;
+    public int Skill2Lvl =0;
+    public int Skill3Lvl =0;
     //enhance data
     
 
@@ -72,7 +72,7 @@ public class GameDataManager
             opposite_type = 3,
             CreatureName = "月神阿尔忒弥斯",
             hp = 800,
-            attack = 80,
+            attack = 180,
             attack_rate = 0.6f,
             defence = 40,
             magic_resist = 0,
@@ -86,12 +86,15 @@ public class GameDataManager
             magic_suck = 0,
             coold_reduce = 0,
             radius = 4,
-            attack_range = 120,
+            attack_range = 160,
             channal = 0.5f,
             ready_time = 1,
             cost = 10,
             prefab = heroPrefab,
-            skills = new int[0]
+            skills = new int[0],
+            Skill1Lvl = Skill1Lvl,
+            Skill2Lvl = Skill2Lvl,
+            Skill3Lvl = Skill3Lvl
         };
        
         return data;
