@@ -6,7 +6,7 @@ using Data;
 
 public class GameDataManager
 {
-    //player data
+    //property
     public float playerHp;
     public float magicAttack;
     public float defence;
@@ -22,8 +22,22 @@ public class GameDataManager
     public int Skill1Lvl =1;
     public int Skill2Lvl =0;
     public int Skill3Lvl =0;
+    public int Skill4Lvl =0;
+    public int Skill5Lvl = 0;
     //enhance data
-    
+    public int Hero1Lvl =0;
+    public int Hero2Lvl = 0;
+    public int Hero3Lvl = 0;
+
+
+    private void RefreshEnhance(){
+        switch(Hero1Lvl){
+            case 1:
+                break;
+            case 2:
+                break;
+        }
+    }
 
     public void InitData(){
         playerHp = 3000;
