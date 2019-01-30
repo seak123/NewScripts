@@ -3,20 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using Data;
 
+public enum PlayerProperty{
+    PlayerHp = 1,
+    MagicAttack = 2,
+    Defence = 3,
+    MagicResist = 4,
+}
+
 
 public class GameDataManager
 {
     //property
-    public float playerHp;
-    public float magicAttack;
-    public float defence;
-    public float magicResist;
-    public int mainCasterId;
+    public float[] properties;
+
+    public int castleId;
+    public int heroId;
     public List<int> playCards;
 
 
     //hero data
-    public int heroId;
+
     public GameObject heroPrefab;
     public Sprite heroIcon;
     public int Skill1Lvl =1;
@@ -40,11 +46,11 @@ public class GameDataManager
     }
 
     public void InitData(){
-        playerHp = 3000;
-        magicAttack = 1;
-        defence = 100;
-        magicResist = 0.5f;
-        mainCasterId = 1011;
+        //playerHp = 3000;
+        //magicAttack = 1;
+        //defence = 100;
+        //magicResist = 0.5f;
+        //mainCasterId = 1011;
         playCards = new List<int>
             {
                 0,
@@ -63,13 +69,13 @@ public class GameDataManager
     public PlayerData GetPlayerData(){
         PlayerData res = new PlayerData
         {
-            hp = playerHp,
-            attack = magicAttack,
-            denfence = defence,
-            magic_resist = magicResist,
+            hp = properties[0],
+            attack = properties[1],
+            denfence = properties[2],
+            magic_resist = properties[3],
             cards = new List<int>()
         };
-        UnitData mainCastle = AssetManager.PackCreatureData(GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(mainCasterId));
+        UnitData mainCastle = AssetManager.PackCreatureData(GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(castleId));
         res.mainCastle = mainCastle;
         for (int i = 0; i < playCards.Count; ++i)
         {
