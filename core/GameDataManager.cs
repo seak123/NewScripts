@@ -8,6 +8,8 @@ public enum PlayerProperty{
     MagicAttack = 2,
     Defence = 3,
     MagicResist = 4,
+    HeroHp = 10,
+    HeroAttack = 11,
 }
 
 
@@ -22,7 +24,7 @@ public class GameDataManager
 
 
     //hero data
-
+    public int heroLvl = 0
     public GameObject heroPrefab;
     public Sprite heroIcon;
     public int Skill1Lvl =1;
@@ -85,13 +87,15 @@ public class GameDataManager
     }
 
     public CreatureData GetHeroData(){
+        AssetManager assetManager = GameRoot.GetInstance().field.assetManager;
+        HeroData heroData = assetManager.GetHeroData(heroId);
         CreatureData data = new CreatureData
         {
             id = heroId,
             type = -1,
-            opposite_type = 3,
-            CreatureName = "月神阿尔忒弥斯",
-            hp = 800,
+            opposite_type = heroData.opposite_type,
+            CreatureName = heroData.creatureName,
+            hp = heroData.base_hp + heroLvl * heroData.add_hp + properties[(int)PlayerProperty.HeroHp],
             attack = 180,
             attack_rate = 0.6f,
             defence = 40,
@@ -121,21 +125,22 @@ public class GameDataManager
     }
 
     public CardData GetHeroCardData(){
-
-    CardData data = new CardData
+        AssetManager assetManager = GameRoot.GetInstance().field.assetManager;
+        HeroData heroData = assetManager.GetHeroData(heroId);
+        CardData data = new CardData
         {
             cardId = heroId,
-            cardName = "月神阿尔忒弥斯",
+            cardName = heroData.card_name,
             cardType = CardType.Hero,
-            race = 1,
-            icon = heroIcon,
-            entityPrefab = heroPrefab,
+            race = heroData.race,
+            icon = heroData.icon,
+            entityPrefab = heroData.heroPrefab,
             skillId = 1,
-            cost = 10,
+            cost = 30 + heroLvl*5,
             liveTime = -1,
             num = 1
 
-    };
+        };
         return data;
     }
 
