@@ -26,13 +26,9 @@ public class CardManager : MonoBehaviour {
 
     private CardViewState state;
     private List<CardEntity> cardboxs;
-    private CardInform[] enemyboxs;
-    private int[] enemyHandCards;
     private int cardIndex = 0;
     private int cardUid = 0;
-    private int enemyCardIndex = 0;
     private float pushWaitTime = 0f;
-    private float enemyPushWaitTime = 0f;
     private float enterBattleWaitTime = 0f;
 
     //private List<int> cardsId;
@@ -49,16 +45,14 @@ public class CardManager : MonoBehaviour {
     private Dictionary<int,int> cardReviveMap;
     private List<CardInform> playerCards;
     private List<CardInform> playerCardGrave;
-    private List<CardInform> enemyCards;
-    private List<CardInform> enemyCardGrave;
+
     // Use this for initialization
     void Start () {
         //GameRoot.BattleStartAction += CreateCard;
         cardboxs = new List<CardEntity>();
         playerCards = new List<CardInform>();
         playerCardGrave = new List<CardInform>();
-        enemyCards = new List<CardInform>();
-        enemyCardGrave = new List<CardInform>();
+
         cardReviveMap = new Dictionary<int,int>();
         creatureCardObj = Instantiate(creatureCardPrefab);
         creatureCardObj.transform.SetParent(transform);
@@ -75,16 +69,10 @@ public class CardManager : MonoBehaviour {
 
     public void InjectData(){
         List<int> playerData = GameRoot.GetInstance().PlayerMng.GetPlayerData().cards;
-        List<int> enemyData = GameRoot.GetInstance().PlayerMng.GetEnemyData().cards;
+
         playerMng = GameRoot.GetInstance().PlayerMng;
         playerMng.SetCardManager(this);
-        enemyHandCards = new int[BattleDef.CardBoxNum];
-        enemyboxs = new CardInform[enemyHandCards.Length];
-        //GameRoot.GetInstance().PlayerMng.enemyCards = enemyHandCards;
-        for (int i = 0; i < enemyHandCards.Length; ++i)
-        {
-            enemyHandCards[i] = -1;
-        }
+
         while (playerData.Count>0){
             int index = Random.Range(0, playerData.Count - 1);
             playerCards.Add(new CardInform{
@@ -95,18 +83,7 @@ public class CardManager : MonoBehaviour {
             playerData.RemoveAt(index);
             ++cardUid;
         }
-        while (enemyData.Count > 0)
-        {
-            int index = Random.Range(0, enemyData.Count - 1);
-            enemyCards.Add(new CardInform
-            {
-                uid = cardUid,
-                side = 2,
-                id = enemyData[index]
-            });
-            enemyData.RemoveAt(index);
-            ++cardUid;
-        }
+
         CreateCard();
     }
 	
@@ -121,23 +98,16 @@ public class CardManager : MonoBehaviour {
                 {
                     PushCard();
                 }
-                for (int i = 0; i < enemyHandCards.Length; ++i)
-                {
-                    PushEnemyCard();
-                }
+
             }
             pushWaitTime += Time.deltaTime;
-            enemyPushWaitTime += Time.deltaTime;
+
             if (pushWaitTime > BattleDef.CardPushSpeed)
             {
                 pushWaitTime = 0f;
                 PushCard();
             }
-            if (enemyPushWaitTime > BattleDef.CardPushSpeed)
-            {
-                enemyPushWaitTime = 0f;
-                PushEnemyCard();
-            }
+
         }
         else if (hasInited) enterBattleWaitTime -= Time.deltaTime;
 	}
@@ -178,6 +148,7 @@ public class CardManager : MonoBehaviour {
         pushWaitTime = 0f;
     }
 
+    /*
     public void PushEnemyCard(){
         bool flag = true;
         int index = 0;
@@ -195,7 +166,7 @@ public class CardManager : MonoBehaviour {
         enemyCards.RemoveAt(0);
         ++enemyCardIndex;
         enemyPushWaitTime = 0f;
-    }
+    }*/
 
     public void RecoverCard(int cardUid){
         //cardReviveMap
@@ -206,16 +177,6 @@ public class CardManager : MonoBehaviour {
                     if(playerCardGrave[i].uid == cardUid){
                         playerCards.Add(playerCardGrave[i]);
                         playerCardGrave.RemoveAt(i);
-                        cardReviveMap.Remove(cardUid);
-                        return;
-                    }
-                }
-                for (int i = 0; i < enemyCardGrave.Count; ++i)
-                {
-                    if (enemyCardGrave[i].uid == cardUid)
-                    {
-                        enemyCards.Add(enemyCardGrave[i]);
-                        enemyCardGrave.RemoveAt(i);
                         cardReviveMap.Remove(cardUid);
                         return;
                     }
@@ -254,10 +215,8 @@ public class CardManager : MonoBehaviour {
         }
     }
 
-    public int[] GetEnemyCardBox(){
-        return enemyHandCards;
-    }
 
+/*
     public bool PlayEnemyCard(int id,int gridX,int gridY){
         CardData data = GameRoot.GetInstance().BattleField.assetManager.GetCardData(id);
         if (data == null) return false;
@@ -277,7 +236,7 @@ public class CardManager : MonoBehaviour {
         enemyHandCards[index] = -1;
         return true;
     }
-
+*/
     public void HideCard(){
         creatureCardObj.SetActive(false);
         structureCardObj.SetActive(false);

@@ -22,6 +22,7 @@ function this:execute(sess,target)
     if data.type == 0 then
         -- summon creature
         local num = self.vo.num(self.database)
+        local struct_uid = self.vo.struct_uid(self.database)
         data.side = self.database.caster.unit.side
 
         local field = sess.field
@@ -31,13 +32,13 @@ function this:execute(sess,target)
 
             data.init_x = this.clamp(pos_array[i].X,0,def.MAPMATRIX.column)
             data.init_y = this.clamp(pos_array[i].Y,0,def.MAPMATRIX.row)
-            field:add_unit(data)
+            field:add_unit(data,struct_uid)
         end
     end
     if data.type == 1 then
         -- summon structure
         local field = sess.field
-        local struct_uid = self.vo.num(self.database)
+        local struct_uid = self.vo.struct_uid(self.database)
         data.side = self.database.caster.unit.side
         local pos = self.database.target_pos
         data.init_x = this.clamp(pos.X,0,def.MAPMATRIX.column)
@@ -47,12 +48,13 @@ function this:execute(sess,target)
     if data.type == -1 then
         -- hero
         data.side = self.database.caster.unit.side
+        local struct_uid = self.vo.struct_uid(self.database)
         local field = sess.field
         local pos = self.database.target_pos
         local pos_array = self:get_pos_array(pos,1)
         data.init_x = this.clamp(pos_array[1].X,0,def.MAPMATRIX.column)
         data.init_y = this.clamp(pos_array[1].Y,0,def.MAPMATRIX.row)
-        field:add_unit(data)
+        field:add_unit(data,struct_uid)
     end
 
 end

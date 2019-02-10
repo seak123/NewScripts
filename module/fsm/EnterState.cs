@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnterState : FsmState
 {
     private float enterTime = -1;
+    private float openTime = 2f;
     private CamaraManager cameraMng;
     private BattleUIManager uiMng;
 
@@ -35,7 +36,7 @@ public class EnterState : FsmState
         if (enterTime >= 0)
         {
             enterTime += Time.deltaTime;
-            BattleStartAnim();
+            BattleStartAnim(Time.deltaTime);
         }
 
 
@@ -54,9 +55,15 @@ public class EnterState : FsmState
         battleIsStart = true;
     }
 
-    private void BattleStartAnim(){
+    private void BattleStartAnim(float delta){
         float wholeDelay = GameRoot.GetInstance().GetBattleEnterDelay();
-
+        float factor = 1 / (wholeDelay-openTime);
+        if (enterTime > openTime)
+        {
+            cameraMng.size = 16 - (enterTime-openTime) * factor * 10;
+            cameraMng.MoveCameraDirect(new Vector3(-factor * 9.2f * delta, 0, -factor * 2.2f * delta));
+        }
+        /*
         if (enterTime <= wholeDelay - 3f) return;
         if(enterTime<=wholeDelay-2f){
             float startDelta = enterTime - wholeDelay + 3f;
@@ -68,6 +75,6 @@ public class EnterState : FsmState
             float startDelta = enterTime - wholeDelay + 1f;
             float delta = (startDelta - 0.2f) / 0.6f * 1.6f;
             cameraMng.size = Mathf.Clamp(8 - delta,6.4f,8);
-        }
+        }*/
     }
 }

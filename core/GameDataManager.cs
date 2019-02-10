@@ -5,29 +5,38 @@ using Data;
 
 public enum PlayerProperty{
     PlayerHp = 1,
-    MagicAttack = 2,
-    Defence = 3,
-    MagicResist = 4,
+    PlayerMaxHp = 2,
+    MagicAttack = 3,
+    Defence = 4,
+    MagicResist = 5,
     HeroHp = 10,
     HeroAttack = 11,
+    HeroAttackRate = 12,
+    HeroDefence = 13,
+    HeroMagicResist = 14,
+    HeroCrit = 15,
+    HeroCritValue = 16,
+    HeroHitRate = 17,
+    HeroDodge = 18,
+    HeroSpeed = 19,
+    HeroPhysicSuck = 20,
+    HeroMagicSuck = 21,
+    HeroCooldReduce = 22,
 }
 
 
 public class GameDataManager
 {
     //property
-    public float[] properties;
+    public float[] properties=new float[30];
 
-    public int castleId;
     public int heroId;
     public List<int> playCards;
 
 
     //hero data
-    public int heroLvl = 0
-    public GameObject heroPrefab;
-    public Sprite heroIcon;
-    public int Skill1Lvl =1;
+    public int heroLvl = 0;
+    public int Skill1Lvl =0;
     public int Skill2Lvl =0;
     public int Skill3Lvl =0;
     public int Skill4Lvl =0;
@@ -38,24 +47,20 @@ public class GameDataManager
     public int Hero3Lvl = 0;
 
 
-    private void RefreshEnhance(){
-        switch(Hero1Lvl){
-            case 1:
-                break;
-            case 2:
-                break;
-        }
-    }
-
     public void InitData(){
-        //playerHp = 3000;
-        //magicAttack = 1;
-        //defence = 100;
-        //magicResist = 0.5f;
-        //mainCasterId = 1011;
+
+        //init playerData
+        properties[(int)PlayerProperty.PlayerHp] = 1000;
+        properties[(int)PlayerProperty.PlayerMaxHp] = 1000;
+        properties[(int)PlayerProperty.MagicAttack] = 1;
+        properties[(int)PlayerProperty.Defence] = 10;
+        properties[(int)PlayerProperty.MagicResist] = 0.5f;
+        for (int i = 9; i < properties.Length;++i){
+            properties[i] = 0;
+        }
+
         playCards = new List<int>
-            {
-                0,
+        {
                 1081,
                 1091,
                 1081,
@@ -66,18 +71,19 @@ public class GameDataManager
         };
         //temp
         heroId = 10001;
+
     }
 
     public PlayerData GetPlayerData(){
         PlayerData res = new PlayerData
         {
-            hp = properties[0],
-            attack = properties[1],
-            denfence = properties[2],
-            magic_resist = properties[3],
+            hp = properties[(int)PlayerProperty.PlayerMaxHp],
+            attack = properties[(int)PlayerProperty.MagicAttack],
+            denfence = properties[(int)PlayerProperty.Defence],
+            magic_resist = properties[(int)PlayerProperty.MagicResist],
             cards = new List<int>()
         };
-        UnitData mainCastle = AssetManager.PackCreatureData(GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(castleId));
+        UnitData mainCastle = AssetManager.PackCreatureData(GetHeroData());
         res.mainCastle = mainCastle;
         for (int i = 0; i < playCards.Count; ++i)
         {
@@ -87,7 +93,7 @@ public class GameDataManager
     }
 
     public CreatureData GetHeroData(){
-        AssetManager assetManager = GameRoot.GetInstance().field.assetManager;
+        AssetManager assetManager = GameRoot.GetInstance().BattleField.assetManager;
         HeroData heroData = assetManager.GetHeroData(heroId);
         CreatureData data = new CreatureData
         {
@@ -96,36 +102,52 @@ public class GameDataManager
             opposite_type = heroData.opposite_type,
             CreatureName = heroData.creatureName,
             hp = heroData.base_hp + heroLvl * heroData.add_hp + properties[(int)PlayerProperty.HeroHp],
-            attack = 180,
-            attack_rate = 0.6f,
-            defence = 40,
-            magic_resist = 0,
-            crit = 0,
-            crit_value = 1,
-            hit_rate = 0,
-            dodge = 0,
-            speed = 24,
-            base_speed = 12,
-            physic_suck = 0,
-            magic_suck = 0,
-            coold_reduce = 0,
-            radius = 4,
-            attack_range = 160,
-            channal = 0.5f,
-            ready_time = 1,
-            cost = 10,
-            prefab = heroPrefab,
-            skills = new int[0],
+            attack = heroData.base_attack + heroLvl*heroData.add_attack + properties[(int)PlayerProperty.HeroAttack],
+            attack_rate = heroData.base_attack_rate + heroLvl*heroData.add_attack_rate + properties[(int)PlayerProperty.HeroAttackRate],
+            defence = heroData.base_defence + heroLvl*heroData.add_defence + properties[(int)PlayerProperty.HeroDefence],
+            magic_resist = properties[(int)PlayerProperty.HeroMagicResist],
+            crit = properties[(int)PlayerProperty.HeroCrit],
+            crit_value = properties[(int)PlayerProperty.HeroCritValue],
+            hit_rate = properties[(int)PlayerProperty.HeroHitRate],
+            dodge = properties[(int)PlayerProperty.HeroDodge],
+            speed = heroData.speed + properties[(int)PlayerProperty.HeroSpeed],
+            base_speed = heroData.base_speed,
+            physic_suck = properties[(int)PlayerProperty.HeroPhysicSuck],
+            magic_suck = properties[(int)PlayerProperty.HeroMagicSuck],
+            coold_reduce = properties[(int)PlayerProperty.HeroCooldReduce],
+            radius = heroData.radius,
+            attack_range = heroData.attack_range,
+            channal = heroData.channal,
+            ready_time = heroData.ready_time,
+            cost = 10 + 5*heroLvl,
+            prefab = heroData.heroPrefab,
             Skill1Lvl = Skill1Lvl,
             Skill2Lvl = Skill2Lvl,
             Skill3Lvl = Skill3Lvl
         };
-       
+        List<int> skillList = new List<int>();
+        if(Skill1Lvl>0){
+            skillList.Add(heroId * 100 + Skill1Lvl);
+        }
+        if (Skill2Lvl > 0)
+        {
+            skillList.Add(heroId * 100 + 4 + Skill2Lvl);
+        }
+        if (Skill3Lvl > 0)
+        {
+            skillList.Add(heroId * 100 + 8 + Skill3Lvl);
+        }
+        data.skills = new int[skillList.Count];
+        for (int i = 0; i < skillList.Count;++i){
+            data.skills[i] = skillList[i];
+        }
+
+
         return data;
     }
 
     public CardData GetHeroCardData(){
-        AssetManager assetManager = GameRoot.GetInstance().field.assetManager;
+        AssetManager assetManager = GameRoot.GetInstance().BattleField.assetManager;
         HeroData heroData = assetManager.GetHeroData(heroId);
         CardData data = new CardData
         {
@@ -136,7 +158,7 @@ public class GameDataManager
             icon = heroData.icon,
             entityPrefab = heroData.heroPrefab,
             skillId = 1,
-            cost = 30 + heroLvl*5,
+            cost = 10 + 5 * heroLvl,
             liveTime = -1,
             num = 1
 
@@ -154,9 +176,7 @@ public class GameDataManager
         UnitData mainCastle = AssetManager.PackCreatureData(GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(data.mainCastleId));
         res.mainCastle = mainCastle;
         res.cards = new List<int>();
-        for (int i = 0; i < data.enemyCards.Length;++i){
-            res.cards.Add(data.enemyCards[i]);
-        }
+
         return res;
     }
 

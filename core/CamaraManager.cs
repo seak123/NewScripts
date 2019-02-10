@@ -58,8 +58,8 @@ public class CamaraManager : MonoBehaviour {
 
     public void Init()
     {
-        m_CameraOffset = new Vector3(23.6f, 10f, 2.4f);
-        size = 2f;
+        m_CameraOffset = new Vector3(9.2f, 10f, 2.2f);
+        size = 16f;
     }
 
     /// <summary>

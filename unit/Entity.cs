@@ -33,6 +33,7 @@ namespace Map
         private float moveSpeed = 1;
         private float baseSpeed = 1;
         private GameObject shadow;
+        private SpriteRenderer sideCircle;
         private Vector3 shadowPos;
         private GameObject hpPrefab;
         private GameObject hpBar;
@@ -97,6 +98,12 @@ namespace Map
             //init data
             desX = toX;
             desY = toY;
+            if(toX==posX&&toY==posY){
+                gridX = posX;
+                gridY = posY;
+                offset = 0;
+                return;
+            }
             moveSpeed = speed;
             MapField field = GameRoot.GetInstance().MapField;
 
@@ -317,14 +324,18 @@ namespace Map
         {
             mng = GameRoot.GetInstance().BattleField.assetManager;
             shadow = gameObject.transform.Find("Shadow").gameObject;
+            sideCircle = gameObject.transform.Find("Circle").gameObject.GetComponent<SpriteRenderer>();
+            sideCircle.gameObject.SetActive(true);
+            gameObject.transform.Find("Size").gameObject.SetActive(false);
             baseSpeed = GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(id).base_speed;
-            //init hp bar
+            //init hp bar and side
             if (side == 1)
             {
                 hpPrefab = GameRoot.GetInstance().BattleField.assetManager.GreenSlider;
                 gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
                 shadow.transform.rotation = Quaternion.Euler(90, 0, 0);
                 shadowPos = shadow.transform.localPosition;
+                sideCircle.color = new Color(0.215f, 0.57f, 0.98f, 0.8f);
             }
             else
             {
@@ -333,6 +344,7 @@ namespace Map
                 shadow.transform.rotation = Quaternion.Euler(90, 0, 0);
                 shadowPos = -shadow.transform.localPosition;
                 shadowPos.y = 0.01f;
+                sideCircle.color = new Color(0.981f, 0.217f, 0.217f, 0.8f);
             }
             defaultMeshTint = Color.white;
         }

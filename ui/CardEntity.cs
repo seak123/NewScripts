@@ -151,7 +151,7 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler,IPointerUpHandler{
     public void OnPointerDown(PointerEventData eventData)
     {
 
-        if (state == CardEntityState.Empty) return;
+        if (state == CardEntityState.Empty||GameRoot.GetInstance().StateManager.GetCurrBattleState()!=BattleState.Caster) return;
         if (state == CardEntityState.Sleep){
             cardManager.SelectCard(index, cardData, creatureData);
             return;
@@ -222,14 +222,20 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler,IPointerUpHandler{
                 entityPrefab.SetActive(false);
                 return;
             }
+            MapField map = GameRoot.GetInstance().MapField;
             switch (cardData.cardType)
             {
                 case CardType.Hero:
                 case CardType.Creature:
-                    if (MapField.CheckPosValiable(gridX, gridY)&&gridX<=BattleDef.UnitBound)
+                    int mX;
+                    int mY;
+                    bool valiable = map.CheckStructurePosValiable(gridX, gridY, cardData.size, out mX, out mY);
+                    int centX = mX * 16 - (int)Mathf.Floor(cardData.size * 16 / 2);
+                    int centY = mY * 16 - (int)Mathf.Floor(cardData.size * 16 / 2);
+                    if (valiable && mX <= BattleDef.StructBound)
                     {
                         float viewX, viewY;
-                        GameRoot.GetInstance().MapField.GetViewPos(gridX, gridY, out viewX, out viewY);
+                        GameRoot.GetInstance().MapField.GetViewPos(centX, centY, out viewX, out viewY);
                         entityPrefab.transform.position = new Vector3(viewX, 0, viewY);
                         entityPrefab.SetActive(true);
                         SetPrefabActive(entityPrefab);
@@ -237,14 +243,14 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler,IPointerUpHandler{
                     else
                     {
                         float viewX, viewY;
-                        GameRoot.GetInstance().MapField.GetViewPos(gridX, gridY, out viewX, out viewY);
+                        GameRoot.GetInstance().MapField.GetViewPos(centX, centY, out viewX, out viewY);
                         entityPrefab.transform.position = new Vector3(viewX, 0, viewY);
                         entityPrefab.SetActive(true);
                         SetPrefabDeActive(entityPrefab);
                     }
                     break;
                 case CardType.Structure:
-                    MapField map = GameRoot.GetInstance().MapField;
+
                     int maxX;
                     int maxY;
                     bool posValiable = map.CheckStructurePosValiable(gridX, gridY, cardData.size, out maxX, out maxY);
@@ -294,20 +300,27 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler,IPointerUpHandler{
 
     public void ExecuteCard(int posX,int posY){
         if (cardData == null) return;
-        switch(cardData.cardType){
+        MapField map = GameRoot.GetInstance().MapField;
+        switch (cardData.cardType){
             case CardType.Hero:
             case CardType.Creature:
-                if (!MapField.CheckPosValiable(posX, posY)||posX>(BattleDef.UnitBound+32))break;
+
+                int mX;
+                int mY;
+                bool valiable = map.CheckStructurePosValiable(posX, posY, cardData.size, out mX, out mY);
+                int cenX = mX * 16 - (int)Mathf.Floor(cardData.size * 16 / 2);
+                int cenY = mY * 16 - (int)Mathf.Floor(cardData.size * 16 / 2);
+                if (!valiable || mX > BattleDef.StructBound) break;
                 if (!playerMng.RequestCost(1, cardData.cost)) break;
-                posX = Mathf.Clamp(posX, 0, BattleDef.UnitBound);
+                int sUid = map.CreateStructure(mX, mY, cardData.size);
+                //posX = Mathf.Clamp(posX, 0, BattleDef.UnitBound);
                 UnitData unitData = AssetManager.PackCreatureData(creatureData);
                 if (cardData.liveTime > 0) unitData.live_time = cardData.liveTime;
                 unitData.card_uid = cardUid;
-                GameRoot.GetInstance().Bridge.CasterSkill(1, cardData.skillId, posX, posY, unitData, cardData.num);
+                GameRoot.GetInstance().Bridge.CasterSkill(1, cardData.skillId, cenX, cenY, unitData, cardData.num,sUid);
                 CleanUp();
                 break;
             case CardType.Structure:
-                MapField map = GameRoot.GetInstance().MapField;
                 int maxX;
                 int maxY;
                 bool posValiable = map.CheckStructurePosValiable(posX, posY, cardData.size, out maxX, out maxY);
@@ -319,7 +332,7 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler,IPointerUpHandler{
                 UnitData unitData2 = AssetManager.PackCreatureData(creatureData);
                 if (cardData.liveTime > 0) unitData2.live_time = cardData.liveTime;
                 unitData2.card_uid = cardUid;
-                GameRoot.GetInstance().Bridge.CasterSkill(1, cardData.skillId, centerX, centerY, unitData2, structUid);
+                GameRoot.GetInstance().Bridge.CasterSkill(1, cardData.skillId, centerX, centerY, unitData2, 1,structUid);
                 CleanUp();
                 break;
         }

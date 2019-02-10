@@ -68,9 +68,6 @@ public class GameRoot : MonoBehaviour {
 
     public GameDataManager gameDataManager;
 
-    //temp
-    public GameObject heroPrefab;
-    public Sprite heroIcon;
 
 	// Use this for initialization
 	void Start () {
@@ -85,8 +82,6 @@ public class GameRoot : MonoBehaviour {
         instance = this;
         StrUtil.Init();
         gameDataManager = new GameDataManager();
-        gameDataManager.heroPrefab = heroPrefab;
-        gameDataManager.heroIcon = heroIcon;
         mainUIMng = MainUI.GetComponent<MainUIManager>();
         mainUIMng.OpenUI(0);
 	}
@@ -110,12 +105,10 @@ public class GameRoot : MonoBehaviour {
         fieldObj.transform.position = Vector3.zero;
         
         PlayerData playerData = gameDataManager.GetPlayerData();
-        PlayerData enemyData = gameDataManager.GetEnemyData();
         BattleData data = new BattleData
         {
             player = playerData,
-            enemy = enemyData,
-            beginDelay = 5f,
+            beginDelay = 3f,
             fieldId = gameDataManager.GetFieldId(),
         };
         battleData = data;
@@ -124,15 +117,20 @@ public class GameRoot : MonoBehaviour {
     }
 
     public void BeginBattle(){
-        battleEnterDelay = 3 + battleData.beginDelay;
+        battleEnterDelay = battleData.beginDelay;
         constEnterDelay = battleEnterDelay;
-        battleUI.GetComponent<BattleUIManager>().InitBattleUI();
-        Bridge.StartBattle(battleData);
+        BattleStartDelayAction += battleUI.GetComponent<BattleUIManager>().InitBattleUI;
+        //Bridge.StartBattle(battleData);
         PlayerMng.InjectData(battleData);
         battleUI.GetComponentInChildren<CardManager>().InjectData();
         battleStart = true;
         if (BattleStartAction != null) BattleStartAction();
     }
+
+    public void InjectBattleData(){
+        Bridge.StartBattle(battleData);
+    }
+
 
     public void CompleteBattle(int res){
         if(res==0){
@@ -161,6 +159,7 @@ public class GameRoot : MonoBehaviour {
         if(battleStart){
             battleEnterDelay -= Time.deltaTime;
             if(battleEnterDelay<0){
+                Bridge.StartBattle(battleData);
                 if(BattleStartDelayAction!=null) BattleStartDelayAction();
                 battleStart = false;
             }

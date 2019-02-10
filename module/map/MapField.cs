@@ -172,7 +172,7 @@ namespace Map
                 }
             }
             // remove main castle grids
-            for (int x = 0; x < 4;++x){
+            for (int x = 3; x < 7;++x){
                 for (int y = BattleDef.rowGridNum / 32 - 2; y < BattleDef.rowGridNum / 32 + 2;++y){
                     structureGrids[x, y] = true;
                 }

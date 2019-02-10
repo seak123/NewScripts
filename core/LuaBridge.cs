@@ -91,7 +91,7 @@ public class LuaBridge : LuaClient
         startBattle.EndPCall();
     }
 
-    public void CasterSkill(int side,int skill_id,int pos_x,int pos_y,UnitData data =null,int num = 0){
+    public void CasterSkill(int side,int skill_id,int pos_x,int pos_y,UnitData data =null,int num = 0,int structId = -1){
         LuaFunction func = luaState.GetFunction("caster_skill");
         func.BeginPCall();
         func.Push(side);
@@ -100,9 +100,22 @@ public class LuaBridge : LuaClient
         func.Push(pos_y);
         func.Push(data);
         func.Push(num);
+        func.Push(structId);
         func.PCall();
         func.EndPCall();
 
+    }
+
+    public int GetEnemyNum(){
+        LuaFunction func = luaState.GetFunction("enemy_num");
+        func.BeginPCall();
+        func.PCall();
+        double res = func.CheckNumber();
+        func.EndPCall();
+
+        int num = (int)res;
+
+        return num;
     }
 
 

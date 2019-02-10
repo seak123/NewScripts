@@ -125,28 +125,31 @@ function this:abort_by_sel(  )
 end
 
 function this:update_by_seq( delta )
-    for i = self.active_index,#self.childs do
-        local n = self.childs[i]
-        local state = n:update(delta)
-        if state == "running" then
-            self.active_index = i
-            self.running = true
-            self.active_node = n
-            return "running"
-        end
-        if state == "failure" then
-            self.active_index = 1
-            self.running = false
-            self.active_node = nil
-            return "failure"
-        end
-        self.active_index = i
-        if self.active_index == #self.childs then
-            self.active_index = 1
-            self.running = false
-            self.active_node = nil
-            return "completed"
-        end
+    local node = self.childs[self.active_index]
+    if node == nil then
+        self.active_index = 1
+        self.running = false
+        self.active_node = nil 
+        return "failure" 
+    end
+    local state = node:update(delta)
+    if state == "running" then
+        self.running = true
+        self.active_node = node
+        return "running"
+    end
+    if state == "failure" then
+        self.active_index = 1
+        self.running = false
+        self.active_node = nil
+        return "failure"
+    end
+    self.active_index = self.active_index + 1
+    if self.active_index > #self.childs then
+        self.active_index = 1
+        self.running = false
+        self.active_node = nil
+        return "completed"
     end
 end
 

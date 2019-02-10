@@ -1,6 +1,6 @@
 local this = {}
 
-this.ai_vo = require("config.ai_config.normal_ai")
+this.ai_vo = require("config.ai_config.normal_defence_ai")
 this.normal_attack = require("config.skill_config.close_normal_attack")
 this.skills = {require("config.hero.1_natural_artemis.units.sprite_deer_skill1")}
 this.passives = {}

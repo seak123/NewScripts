@@ -7,7 +7,9 @@ this.ACTION = {
     Attack = "Attack",
     MoveToEnemy = "MoveToEnemy",
     Caster = "Caster",
-    Appear = "Appear"
+    Appear = "Appear",
+    StayBack = "StayBack",
+    Idle = "Idle"
 }
 this.execute = "module.battle.unit.behavior_tree.action_node"
 

@@ -82,10 +82,6 @@ public class PlayerManager : MonoBehaviour {
         return cardMng;
     }
 
-    public int[] GetEnemyCards(){
-        if(cardMng!=null)return cardMng.GetEnemyCardBox();
-        return null;
-    }
 
     private void Start()
     {
@@ -122,13 +118,6 @@ public class PlayerManager : MonoBehaviour {
         //if(cardMng!=null)cardMng.PlayEnemyCard(playId, playGridX, playGridY);
     }
 
-    public bool EnemyPlayCard(int id,int gridX,int gridY){
-        //Debug.Log("play" + id+"X"+gridX+"Y"+gridY);
-        return cardMng.PlayEnemyCard(id,gridX,gridY);
-        //playId = id;
-        //playGridX = gridX;
-        //playGridY = gridY;
-    }
 
     public bool RequestCost(int side,int cost){
         switch(side){

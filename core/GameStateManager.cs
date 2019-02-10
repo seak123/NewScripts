@@ -13,16 +13,29 @@ public enum GameState{
     HelperState = 9
 };
 
+public enum BattleState{
+    KeepRunning = -1,
+    Waiting = 0,
+    Caster = 1,
+    Fight = 2
+}
+
 [Insert]
 public class GameStateManager : MonoBehaviour
 {
     private GameState currState;
+    private BattleState currBattleState;
     private Dictionary<GameState,FsmState> allStates;
+    private Dictionary<BattleState, BattleFsm> battleStates;
 
     //private bool isNeedHelp = false;
     private bool isInited = false;
 
     public CardEntity selectCard;
+
+    public BattleState GetCurrBattleState(){
+        return currBattleState;
+    }
 
     void Start()
     {
@@ -34,7 +47,14 @@ public class GameStateManager : MonoBehaviour
             { GameState.MoveCameraState, new MoveCameraState() },
             { GameState.HelperState, new HelperState() }
         };
+        battleStates = new Dictionary<BattleState, BattleFsm>
+        {
+            {BattleState.Waiting,new BattleWaitingState()},
+            {BattleState.Caster,new BattleCasterState()},
+            {BattleState.Fight,new BattleFightState()}
+        };
         currState = GameState.KeepRunning;
+        currBattleState = BattleState.KeepRunning;
 
     }
     [OnInjected]
@@ -45,6 +65,7 @@ public class GameStateManager : MonoBehaviour
     public void Init(){
 
         Run(GameState.EnterState);
+        RunBattle(BattleState.Waiting);
         isInited = true;
     }
     public void CleanUp(){
@@ -55,9 +76,13 @@ public class GameStateManager : MonoBehaviour
         if (isInited)
         {
             GameState stateIndex = allStates[currState].OnUpdate();
+            BattleState battleIndex = battleStates[currBattleState].OnUpdate();
             if (stateIndex >= 0)
             {
                 Run(stateIndex);
+            }
+            if(battleIndex>=0){
+                RunBattle(battleIndex);
             }
         }
     }
@@ -66,6 +91,12 @@ public class GameStateManager : MonoBehaviour
             allStates[currState].OnLeave();
         currState = nextState;
         allStates[nextState].OnEnter();
+    }
+    private void RunBattle(BattleState nextState){
+        if (currBattleState >= 0)
+            battleStates[currBattleState].OnLeave();
+        currBattleState = nextState;
+        battleStates[nextState].OnEnter();
     }
 
 };

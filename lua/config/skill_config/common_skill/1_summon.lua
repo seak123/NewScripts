@@ -9,6 +9,7 @@ local this = {}
 local summon0 = summon.new()
 summon0.data =pack.get_arg(true,1)
 summon0.num =pack.get_arg(true,2)
+summon0.struct_uid = pack.get_arg(true,3)
 
 local normal = normal_skill.new()
 normal:append("raw_skills",summon0)

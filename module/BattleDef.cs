@@ -19,9 +19,9 @@ public static class BattleDef
 
     public static float Transfer2GridFactor = 25;
 
-    public static int UnitBound = 144;
+    public static int UnitBound = 352;
 
-    public static int StructBound = 9;
+    public static int StructBound = 22;
 
     //logic data
     public static float MaxSaving = 20;
@@ -34,7 +34,7 @@ public static class BattleDef
 
     public static float UpdateIncomeDelta = 5;
 
-    public static int CardBoxNum = 4;
+    public static int CardBoxNum = 5;
 
     public static float CardPushSpeed = 2f;
 

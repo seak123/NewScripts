@@ -27,10 +27,15 @@ function lua_update( delta )
     end
 end
 
-function caster_skill( side,skill_id,pos_x,pos_y,arg1,arg2)
+function caster_skill( side,skill_id,pos_x,pos_y,arg1,arg2,arg3)
     if battle_mng.session ~= nil then
-        battle_mng.session.skill_mng:caster_skill(side,skill_id,pos_x,pos_y,arg1,arg2)
+        battle_mng.session.skill_mng:caster_skill(side,skill_id,pos_x,pos_y,arg1,arg2,arg3)
     end
+end
+
+function enemy_num(  )
+    local num = #battle_mng.session.field.units[2]
+    return num
 end
 
 ---------------------------csharp functon

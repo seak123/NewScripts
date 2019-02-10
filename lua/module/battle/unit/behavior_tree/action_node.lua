@@ -133,7 +133,6 @@ function this:abort_MoveToEnemy(  )
 end
 
 function this:update_MoveToEnemy( delta )
-    -- print("uid:"..self.database.master.uid.." update movetoenemy state")
     local field = self.database.master.sess.field
     if self.database.target ~= nil and self.database.target.alive== 0 then
         if field:distance(self.database.target,self.database.master) < 1.5*(self.database.master.data.radius + self.database.target.data.radius) then
@@ -256,7 +255,7 @@ end
 function this:enter_Appear(  )
     if self.database.master.appeared == 1 then return false end
     self.database.master.entity:Appear()
-    self.database.master.entity:AnimCasterAction(transform.AnimationState.Appear)
+    --self.database.master.entity:AnimCasterAction(transform.AnimationState.Appear)
     self.runtime = 0
     return true
 end
@@ -276,5 +275,60 @@ function this:update_Appear(delta  )
         return "completed"
     end
 end
+
+function this:enter_StayBack(  )
+    --print("@@@@@enter stayback")
+    if self.database.master.statectrl:has_feature("de_move") then return false end
+    -- print("uid:"..self.database.master.uid.." enter forward state")
+    self.database.master.entity:AnimCasterAction(transform.AnimationState.Walk)
+    self.runtime = 0
+    self.max_runtime = 2
+    self.enter_pos = {X = self.database.master.transform.grid_pos.X,
+                      Y = self.database.master.transform.grid_pos.Y }
+    return true
+end
+
+function this:abort_StayBack(  )
+    self.database.master.entity:AnimCasterBreak()
+end
+
+function this:update_StayBack( delta )
+    --print("@@@@@update stayback")
+    local field = self.database.master.sess.field
+    self.database.des_pos = {X = self.database.master.data.init_x,Y = self.database.master.data.init_y}
+    
+    self.database.master.transform.des_pos = self.database.des_pos
+    
+    if field:distance(self.database.des_pos,self.database.master) < 2 then
+        self.running = false
+        return "completed"
+    end
+    
+    if self.runtime > self.max_runtime then
+        if field:distance(self.enter_pos,self.database.master) < battle_def.MinSpeed * 2 then
+            self.running = false
+            return "completed"
+        end
+    end
+    self.running = true
+    self.runtime = self.runtime + delta
+    return "running"
+end
+
+function this:enter_Idle(  )
+    self.database.master.entity:AnimCasterBreak()
+end
+
+function this:abort_Idle(  )
+    self.database.master.entity:AnimCasterBreak()
+end
+
+function this:update_Idle(  )
+    --print("@@stay idle")
+    self.database.master.entity:AnimCasterBreak()
+    self.running = true
+    return "running"
+end
+
 
 return this

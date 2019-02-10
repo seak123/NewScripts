@@ -29,6 +29,11 @@ function this:ctor( sess,data,uid ,struct_uid)
     else
         self.config = require(config_mng.get_unit_config(self.id))
     end
+    if data.side == 2 then
+        self.ai_vo = require("config.ai_config.normal_ai")
+    else
+        self.ai_vo = self.config.ai_vo
+    end
     self.name = data.name
     self.data = data
     self.side = data.side
@@ -37,7 +42,7 @@ function this:ctor( sess,data,uid ,struct_uid)
     self.buffcont = buffcont.new(self)
     self.transform = transform.new(self,data)
     self.statectrl = state_ctrl.new(self)
-    self.betree = behavior_tree:build(self,self.config.ai_vo)
+    self.betree = behavior_tree:build(self,self.ai_vo)
     self:init()
 
     -- threat_value to every enemy: key is uid,  ps: value will not be cleared
