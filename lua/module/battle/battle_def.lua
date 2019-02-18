@@ -41,8 +41,8 @@ this.PLAYER2POS = {
 }
 -----------------field 
 this.MAPMATRIX = {
-    column = 800,
-    row = 448
+    column = 576,
+    row = 288
 }
 
 this.ENEMYBOUND = {

@@ -8,9 +8,9 @@ public static class BattleDef
     public static string language = "chinese";
 
     //map data
-    public static int rowGridNum = 448;
+    public static int rowGridNum = 288;
 
-    public static int columnGridNum = 800;
+    public static int columnGridNum = 576;
 
 
     public static int maxSpeed = 64;
