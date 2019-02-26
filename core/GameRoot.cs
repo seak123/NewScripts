@@ -83,7 +83,7 @@ public class GameRoot : MonoBehaviour {
         StrUtil.Init();
         gameDataManager = new GameDataManager();
         mainUIMng = MainUI.GetComponent<MainUIManager>();
-        mainUIMng.OpenUI(0);
+        //mainUIMng.OpenUI(0);
 	}
 
     public float GetBattleEnterDelay(){
