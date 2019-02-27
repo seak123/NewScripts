@@ -92,7 +92,7 @@ public class GameRoot : MonoBehaviour {
 
     public void StartNewGame(){
         gameDataManager.InitData();
-        //moduleInit();
+        moduleInit();
 
     }
 
