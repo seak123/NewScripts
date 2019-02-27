@@ -167,23 +167,10 @@ public class GameDataManager
     }
 
     public PlayerData GetEnemyData(){
-        IDungeonUnit dungeon = GameRoot.GetInstance().DungeonMng.GetCurrDungeonData();
-        FightDungeonData data = (dungeon as FightDungeon).GetFightData();
-        PlayerData res = new PlayerData
-        {
-            hp = data.mainCastleHp,
-        };
-        UnitData mainCastle = AssetManager.PackCreatureData(GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(data.mainCastleId));
-        res.mainCastle = mainCastle;
-        res.cards = new List<int>();
-
-        return res;
+       
+        return null;
     }
 
-    public int GetFieldId(){
-        IDungeonUnit dungeon = GameRoot.GetInstance().DungeonMng.GetCurrDungeonData();
-        FightDungeonData data = (dungeon as FightDungeon).GetFightData();
-        return data.FieldId;
-    }
+
        
 }

@@ -61,8 +61,6 @@ public class GameRoot : MonoBehaviour {
     [Inject]
     public PlayerManager PlayerMng { get; set; }
 
-    [Inject]
-    public DungeonManager DungeonMng { get; set; }
 
     public MainUIManager mainUIMng;
 
@@ -83,7 +81,7 @@ public class GameRoot : MonoBehaviour {
         StrUtil.Init();
         gameDataManager = new GameDataManager();
         mainUIMng = MainUI.GetComponent<MainUIManager>();
-        //mainUIMng.OpenUI(0);
+        mainUIMng.OpenUI(0);
 	}
 
     public float GetBattleEnterDelay(){
@@ -101,7 +99,7 @@ public class GameRoot : MonoBehaviour {
         battleGroundUI = mainUIMng.OpenUI(4);
         battleTextUI = mainUIMng.OpenUI(5);
         battleUI = mainUIMng.OpenUI(6);
-        fieldObj = Instantiate(BattleField.assetManager.GetField(gameDataManager.GetFieldId()));
+//        fieldObj = Instantiate(BattleField.assetManager.GetField(gameDataManager.GetFieldId()));
         fieldObj.transform.position = Vector3.zero;
         
         PlayerData playerData = gameDataManager.GetPlayerData();
@@ -109,7 +107,7 @@ public class GameRoot : MonoBehaviour {
         {
             player = playerData,
             beginDelay = 3f,
-            fieldId = gameDataManager.GetFieldId(),
+            //fieldId = gameDataManager.GetFieldId(),
         };
         battleData = data;
         Camara.GetComponent<CamaraManager>().Init();
@@ -137,7 +135,7 @@ public class GameRoot : MonoBehaviour {
 
         }
         else if(res==1){
-            DungeonMng.DungeonCompleted();
+            //DungeonMng.DungeonCompleted();
         }
     }
 

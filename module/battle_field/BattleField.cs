@@ -30,28 +30,9 @@ public class BattleField : MonoBehaviour {
     }
 
     public void CasterEnemy(){
-        FightDungeon dungeon = GameRoot.GetInstance().DungeonMng.GetCurrDungeonData() as FightDungeon;
-        FightDungeonData data = dungeon.GetFightData();
-        string enemyCode = data.enemys[battleRound];
+        //FightDungeon dungeon = GameRoot.GetInstance().DungeonMng.GetCurrDungeonData() as FightDungeon;
+        //FightDungeonData data = dungeon.GetFightData();
 
-        List<string> line1 = new List<string>();
-        List<string> line2 = new List<string>();
-        List<string> line3 = new List<string>();
-
-        string[] enemyArray = enemyCode.Split('|');
-        foreach(var str in enemyArray){
-            if(str[0]=='1'){
-                line1.Add(str.Substring(1));
-            }else if(str[0]=='2'){
-                line2.Add(str.Substring(1));
-            }else{
-                line3.Add(str.Substring(1));
-            }
-        }
-        CreateEnemy(line1, 700);
-        CreateEnemy(line2, 740);
-        CreateEnemy(line3, 780);
-        battleRound++;
     }
 
     private void CreateEnemy(List<string> list,int posX){
