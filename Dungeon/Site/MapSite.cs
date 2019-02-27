@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public enum SiteType{
     Wilds = 4,
@@ -11,7 +12,7 @@ public class MapSite
 {
     private List<BaseSceneUnit> sceneUnits;
     public static MapSite SiteCreator(){
-        MapSite newSite;
+        MapSite newSite = null;
         return newSite;
     }
 }
