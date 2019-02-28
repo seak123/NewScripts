@@ -5,7 +5,7 @@ public enum SceneType{
     Battle = 1,
 }
 
-public class BaseSceneUnit
+public class BattleSceneUnit:BaseSceneUnit
 {
     private SceneType sceneType;
 
