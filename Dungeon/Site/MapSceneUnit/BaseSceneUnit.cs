@@ -9,7 +9,7 @@ public class BaseSceneUnit
 {
     private SceneType sceneType;
 
-    public void EnterScene(){
+    virtual public void EnterScene(){
         
     }
 }

@@ -16,6 +16,10 @@ public class MapManager : MonoBehaviour {
         GameRoot.moduleInit += Init;
     }
 
+    public MapSite GetCurrSite(){
+        return currSite;
+    }
+
     private void Init()
     {
         Debug.Log("MapManager Init");
@@ -35,7 +39,8 @@ public class MapManager : MonoBehaviour {
 	}
 
     void InitMap(){
-
+        //temp data
+        currSite = MapSite.SiteCreator(SiteType.Wilds);
     }
 
 }

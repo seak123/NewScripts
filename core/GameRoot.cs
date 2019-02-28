@@ -61,6 +61,9 @@ public class GameRoot : MonoBehaviour {
     [Inject]
     public PlayerManager PlayerMng { get; set; }
 
+    [Inject]
+    public MapManager mapManager { get; set; }
+
 
     public MainUIManager mainUIMng;
 

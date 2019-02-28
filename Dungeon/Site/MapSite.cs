@@ -10,9 +10,20 @@ public enum SiteType{
 
 public class MapSite
 {
-    private List<BaseSceneUnit> sceneUnits;
-    public static MapSite SiteCreator(){
+    public List<BaseSceneUnit> sceneUnits;
+    public MapSite(){
+        sceneUnits = new List<BaseSceneUnit>();
+    }
+    public static MapSite SiteCreator(SiteType type){
         MapSite newSite = null;
+        switch(type){
+            case SiteType.Wilds:
+                newSite = new MapSite();
+                newSite.sceneUnits.Add(new BaseSceneUnit());
+                newSite.sceneUnits.Add(new BaseSceneUnit());
+                newSite.sceneUnits.Add(new BaseSceneUnit());
+                break;
+        }
         return newSite;
     }
 }
