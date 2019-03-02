@@ -5,7 +5,6 @@ using System;
 using Map;
 
 public class RandomMapCreator : MonoBehaviour {
-    public Vector3Int[] backObstacle;
     public float basePercent;
     public int opTimes;
     public GameObject[] baseObstacle;
@@ -17,43 +16,33 @@ public class RandomMapCreator : MonoBehaviour {
     private int[,] mapGrids;
     private int col = BattleDef.columnGridNum / 16;
     private int row = BattleDef.rowGridNum / 16;
+    private int bound = 10;
+    private int mCol;
+    private int mRow;
 
     private List<GameObject> objCache;
     // Use this for initialization
     void Start()
     {
         //init map grids
-        mapGrids = new int[col, row];
+        mCol = col+bound*2;
+        mRow = row+bound*2;
+        mapGrids = new int[mCol, mRow];
         objCache = new List<GameObject>();
-        for (int i = 0; i < col; ++i)
-        {
-            for (int j = 0; j < row; ++j)
-            {
+
+        for (int i = 0; i < mCol;++i){
+            for (int j = 0; j < mRow;++j){
                 mapGrids[i, j] = 0;
             }
         }
-        //remove build area
-        for(int x=0;x<BattleDef.StructBound;++x){
-            for(int y=0;y<row;++y){
-                mapGrids[x,y] = -2;
-            }
-        }
-        for(int x=col-1;x>col-BattleDef.StructBound-1;--x){
-            for(int y=0;y<row;++y){
-                mapGrids[x,y] = -2;
-            }
-        }
-        //remove and register backObstacle
-        foreach (var b in backObstacle)
-        {
-            mapGrids[b.x - 1, b.y - 1] = b.z > 0 ? -1 : -2;
-        }
+
+
 
         InitBaseObstacle();
 
-        OptimizeObstacle(opTimes);
+        //OptimizeObstacle(opTimes);
 
-        CreateDecorator();
+        //CreateDecorator();
 
         InstantiateObstacle();
        
@@ -71,10 +60,11 @@ public class RandomMapCreator : MonoBehaviour {
     private void InitBaseObstacle(){
         int count = baseObstacle.Length;
         int curr_type = UnityEngine.Random.Range(1,count+1);
-        for (int i = 0; i < col; ++i)
+        for (int i = 0; i < mCol; ++i)
         {
-            for (int j = 0; j < row; ++j)
+            for (int j = 0; j < mRow; ++j)
             {
+                if (i > bound && i < mCol - bound && j > bound && j < mRow - bound) continue;
                 if (mapGrids[i, j] == 0)
                 {
                     float flag = UnityEngine.Random.Range(0f,1f);
@@ -161,20 +151,20 @@ public class RandomMapCreator : MonoBehaviour {
     }
 
     private void InstantiateObstacle(){
-        for (int i = 0; i < col; ++i)
+        for (int i = 0; i < mCol; ++i)
         {
-            for (int j = 0; j < row; ++j)
+            for (int j = 0; j < mRow; ++j)
             {
                 int value = mapGrids[i, j];
                 if(value>0&&value<20 ){
                     GameObject obj = Instantiate(baseObstacle[value%10]);
                     objCache.Add(obj);
-                    obj.transform.position = new Vector3((i+1) * 0.64f - 0.32f, 0, (j+1) * 0.64f - 0.32f);
+                    obj.transform.position = new Vector3((i+1) * 0.64f - 0.32f-bound*0.64f, 0, (j+1) * 0.64f - 0.32f - bound * 0.64f);
                 }else if(value>=20){
                     //Debug.Log("index:" +value%10);
                     GameObject obj = Instantiate(decorator[value % 10]);
                     objCache.Add(obj);
-                    obj.transform.position = new Vector3((i + 1) * 0.64f - 0.32f, 0, (j + 1) * 0.64f - 0.32f);
+                    obj.transform.position = new Vector3((i + 1) * 0.64f - 0.32f - bound * 0.64f, 0, (j + 1) * 0.64f - 0.32f - bound * 0.64f);
                 }
             }
         }

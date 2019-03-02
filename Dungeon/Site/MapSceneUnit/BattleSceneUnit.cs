@@ -8,6 +8,6 @@ public class BattleSceneUnit:BaseSceneUnit
     private SceneType sceneType;
 
     override public void EnterScene(){
-        GameRoot.GetInstance().mainUIMng.OpenUI(10);
+        GameRoot.GetInstance().StartBattle();
     }
 }

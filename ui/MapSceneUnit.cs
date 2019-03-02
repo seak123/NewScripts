@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class MapSceneUnit : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    private BaseSceneUnit ownScene;
+
+    public void EnterUnit(){
+        if(ownScene!=null){
+            ownScene.EnterScene();
+        }
+    }
+
+    public void InjectScene(BaseSceneUnit _scene){
+        ownScene = _scene;
+    }
 }

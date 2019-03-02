@@ -102,10 +102,10 @@ public class GameRoot : MonoBehaviour {
         battleGroundUI = mainUIMng.OpenUI(4);
         battleTextUI = mainUIMng.OpenUI(5);
         battleUI = mainUIMng.OpenUI(6);
-//        fieldObj = Instantiate(BattleField.assetManager.GetField(gameDataManager.GetFieldId()));
+        fieldObj = Instantiate(BattleField.assetManager.GetField(0));
         fieldObj.transform.position = Vector3.zero;
         
-        PlayerData playerData = gameDataManager.GetPlayerData();
+        /*PlayerData playerData = gameDataManager.GetPlayerData();
         BattleData data = new BattleData
         {
             player = playerData,
@@ -114,7 +114,7 @@ public class GameRoot : MonoBehaviour {
         };
         battleData = data;
         Camara.GetComponent<CamaraManager>().Init();
-        init();
+        init();*/
     }
 
     public void BeginBattle(){

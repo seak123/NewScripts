@@ -91,8 +91,7 @@ public class PlayerManager : MonoBehaviour {
 
     public void StartBattle(){
         start = true;
-        uIManager.UpdatePlayerSaving(playerData.saving);
-        uIManager.UpdatePlayerIncome(playerData.income);
+
     }
 
     public int GetPlayerSaving(){
@@ -105,7 +104,7 @@ public class PlayerManager : MonoBehaviour {
                 playerData.saving = playerData.saving + playerData.income;
                 enemyData.saving = enemyData.saving + enemyData.income;
                 updateIncomeDelta = -BattleDef.UpdateIncomeDelta;
-                uIManager.UpdatePlayerSaving(playerData.saving);
+
             }
             //float playerDelta = Mathf.Max(0,(playerData.income - playerData.cost)*Time.deltaTime);
             //playerData.saving = Mathf.Clamp(playerData.saving+playerDelta,0,BattleDef.MaxSaving);
@@ -125,7 +124,7 @@ public class PlayerManager : MonoBehaviour {
                 int rest = playerData.saving - cost;
                 if(rest>=0){
                     playerData.saving = rest;
-                    uIManager.UpdatePlayerSaving(playerData.saving);
+
                     return true;
                 }else{
                     return false;
@@ -147,7 +146,7 @@ public class PlayerManager : MonoBehaviour {
         {
             case 1:
                 playerData.income = playerData.income+value;
-                uIManager.UpdatePlayerIncome(playerData.income);
+
                 break;
             case 2:
                 enemyData.income = enemyData.income+value;
@@ -161,7 +160,7 @@ public class PlayerManager : MonoBehaviour {
         {
             case 1:
                 playerData.saving = playerData.saving + value;
-                uIManager.UpdatePlayerSaving(playerData.saving);
+
                 break;
             case 2:
                 enemyData.saving = enemyData.saving + value;

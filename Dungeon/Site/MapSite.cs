@@ -19,9 +19,9 @@ public class MapSite
         switch(type){
             case SiteType.Wilds:
                 newSite = new MapSite();
-                newSite.sceneUnits.Add(new BaseSceneUnit());
-                newSite.sceneUnits.Add(new BaseSceneUnit());
-                newSite.sceneUnits.Add(new BaseSceneUnit());
+                newSite.sceneUnits.Add(new BattleSceneUnit());
+                newSite.sceneUnits.Add(new BattleSceneUnit());
+                newSite.sceneUnits.Add(new BattleSceneUnit());
                 break;
         }
         return newSite;
