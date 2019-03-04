@@ -57,12 +57,13 @@ this.hero_config = {
 }
 
 function this.get_unit_config( id )
+    local config = require(this.unit_config[id])
     local unit_vo = {
-        ai_vo = this.unit_config[id].ai_vo,
-        normal_attack = this.unit_config[id].normal_attack,
-        skills = {this.unit_config[id].sp_attr[1]}
+        ai_vo = config.ai_vo,
+        normal_attack = config.normal_attack,
+        skills = {config.sp_attr[1]}
     }
-    return this.unit_config[id]
+    return unit_vo
 end
 
 function this.get_hero_config( data )

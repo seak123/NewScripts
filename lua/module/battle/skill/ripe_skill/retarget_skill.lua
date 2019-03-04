@@ -46,7 +46,7 @@ function this:distance_select( sess )
         func = self:check_repeat()
     end
     --for i=1,self.vo.num do
-        local unit = sess.field:get_units(false,self.target_side,self.database.caster,3,nil)
+        local unit = sess.field:get_units(false,self.target_side,self.database.caster,self.vo.num,func)
         --local close_unit = field:get_units(true,3-database.main_castle.side,database.main_castle,1)[1]
         if unit ~= nil then
             for _,u in ipairs(unit) do

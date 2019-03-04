@@ -2,7 +2,7 @@
 local this = {}
 
 local buff = require("module.battle.skill.raw_skill_vo.buff_vo")
-local retarget = require("module.battle.skill.ripe_skill_vo.retarget_skill_vo")
+local retarget = require("module.battle.skill.raw_skill_vo.retarget_vo")
 local damage = require("module.battle.skill.raw_skill_vo.damage_vo")
 local calc = require("module.battle.skill.utils.caculate")
 local normal_skill = require("module.battle.skill.ripe_skill_vo.normal_skill_vo")
@@ -27,7 +27,6 @@ throw1:append("childs",normal1)
 
 local retarget0 = retarget.new()
 retarget0.target_type = retarget.TargetType.Distance
-retarget0.can_repeat = false
 retarget0.cantain_curr_target = false
 retarget0.num = 2
 retarget0.distance = 120

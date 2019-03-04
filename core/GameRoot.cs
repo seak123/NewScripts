@@ -105,29 +105,39 @@ public class GameRoot : MonoBehaviour {
         battleData = data;
         Camara.GetComponent<CamaraManager>().Init();
         init();*/
+        //battleData = new BattleData();
+        //battleData.unitNum = 6;
+        //battleData.units = new UnitData[6];
+        //battleData.units[0] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1081));
+        //battleData.units[0].init_x = 100;
+        //battleData.units[0].init_y = 50;
+        //battleData.units[1] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1081));
+        //battleData.units[1].init_x = 100;
+        //battleData.units[1].init_y = 100;
+        //battleData.units[2] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1091));
+        //battleData.units[2].init_x = 100;
+        //battleData.units[2].init_y = 150;
+        //battleData.units[3] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1091));
+        //battleData.units[3].init_x = 100;
+        //battleData.units[3].init_y = 200;
+        //battleData.units[4] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(5011));
+        //battleData.units[4].init_x = 100;
+        //battleData.units[4].init_y = 250;
+        //battleData.units[5] = AssetManager.PackCreatureData(GameRoot.GetInstance().gameDataManager.GetHeroData(),2);
+        //battleData.units[5].init_x = 400;
+        //battleData.units[5].init_y = 150;
+
         battleData = new BattleData();
-        battleData.unitNum = 6;
-        battleData.units = new UnitData[6];
-        battleData.units[0] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1081));
+        battleData.unitNum = 2;
+        battleData.units = new UnitData[2];
+        battleData.units[0] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1091));
         battleData.units[0].init_x = 100;
         battleData.units[0].init_y = 50;
-        battleData.units[1] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1081));
-        battleData.units[1].init_x = 100;
+        battleData.units[1] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1091),2);
+        battleData.units[1].init_x = 400;
         battleData.units[1].init_y = 100;
-        battleData.units[2] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1091));
-        battleData.units[2].init_x = 100;
-        battleData.units[2].init_y = 150;
-        battleData.units[3] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1091));
-        battleData.units[3].init_x = 100;
-        battleData.units[3].init_y = 200;
-        battleData.units[4] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(5011));
-        battleData.units[4].init_x = 100;
-        battleData.units[4].init_y = 250;
-        battleData.units[5] = AssetManager.PackCreatureData(GameRoot.GetInstance().gameDataManager.GetHeroData(),2);
-        battleData.units[5].init_x = 400;
-        battleData.units[5].init_y = 150;
 
- 
+
         Bridge.StartBattle(battleData);
     }
 

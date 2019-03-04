@@ -29,7 +29,7 @@ function this:execute(sess, target)
 
     if self.vo.damage_source == damage_vo.DamageSource.Attack then
         database.caster:pre_normal_damage()
-        target.pre_normal_damaged()
+        target:pre_normal_damaged()
     end
 
     database.caster:pre_damage()

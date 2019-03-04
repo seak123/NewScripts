@@ -28,7 +28,7 @@ function this:ctor( sess,data,uid ,struct_uid)
     if data.type < 0 then
         self.config = config_mng.get_hero_config(data)
     else
-        self.config = require(config_mng.get_unit_config(self.id))
+        self.config = config_mng.get_unit_config(self.id)
     end
         self.ai_vo = self.config.ai_vo
 

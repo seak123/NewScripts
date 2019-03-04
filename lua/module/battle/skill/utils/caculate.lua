@@ -4,7 +4,7 @@ local battle_def = require("module.battle.battle_def")
 
 function this.make_common_attack(rate, add) 
   return function(sess, caster, target)
-    return rate * caster.attack + add
+    return rate * caster.property:get("attack") + add
   end
 end
 
@@ -61,7 +61,7 @@ function this.damage(caster,target,value,source,type )
   -- flag means: 1, crit;2,miss;
   local flag,value = 0,value
   local crit_factor = 1
-  if source == damage_vo.source_type.Attack then
+  if source == damage_vo.DamageSource.Attack then
     if math.random() > caster.property:get("hit_rate") and math.random() < target.property:get("dodge") then
       flag = 2
       value = 0
