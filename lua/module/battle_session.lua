@@ -36,26 +36,11 @@ function this:init_battle_data( vo )
     for i=0,vo.unitNum-1 do
         self.field:add_unit( vo.units[i],-1)
     end
-    -- local player_data = vo.player.mainCastle
-    -- player_data.side = 1
-    -- player_data.init_x = 80
-    -- player_data.init_y = battle_def.MAPMATRIX.row/2
-    -- self.players[1].unit = self.field:add_unit(player_data,-1)
-
-    -- local enemy_data = vo.enemy.mainCastle
-    -- enemy_data.side = 2
-    -- enemy_data.init_x = battle_def.MAPMATRIX.column - 32
-    -- enemy_data.init_y = battle_def.MAPMATRIX.row/2
-    -- self.players[2].unit = self.field:add_unit(enemy_data,-1)
-    -- self.ai = battle_ai:build(self,normal_ai)
-
+   
 end
 
 function this:check_result(  )
-    -- if self.players[1].unit.alive == 2 then
-    --     print("players 1 lose")
-    --     root.mng.battle_completed(0)
-    -- end
+
     
 end
 

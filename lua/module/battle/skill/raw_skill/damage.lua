@@ -21,40 +21,45 @@ function this:execute(sess, target)
     -- damage execute
     local value = self.vo.calc(sess,database.caster,target)
 
-    local judge,damage = calc.damage(database.caster, target, value, self.vo.damage_type)
+    local judge,damage = calc.damage(database.caster, target, value,self.vo.damage_source ,self.vo.damage_type)
 
     -- push trace
-    local trace_damage = trace.trace_damage(damage,database.caster.unit,target)
+    local trace_damage = trace.trace_damage(damage,database.caster,target)
     sess.trace:push(trace_damage)
 
-    database.caster.unit:pre_damage()
+    if self.vo.damage_source == damage_vo.DamageSource.Attack then
+        database.caster:pre_normal_damage()
+        target.pre_normal_damaged()
+    end
+
+    database.caster:pre_damage()
     target:pre_damaged()
 
     --logic
-    target:damage(trace_damage.damage_value, database.caster.unit)
+    target:damage(trace_damage.damage_value, database.caster)
     self:life_steal(sess,database,trace_damage)
 
-    database.caster.unit:post_damage()
+    database.caster:post_damage()
     target:post_damaged()
 
 end
 
 function this:life_steal( sess,database,trace_data )
-    if database.caster.unit.alive ~= 0 then return end
+    if database.caster.alive ~= 0 then return end
     local rate = 0
     if self.vo.damage_type == damage_vo.DamageType.Physical then
-        rate = database.caster.unit.property:get("physic_suck")
+        rate = database.caster.property:get("physic_suck")
     elseif self.vo.damage_type == damage_vo.DamageType.Magic then
-        rate = database.caster.unit.property:get("magic_suck")
+        rate = database.caster.property:get("magic_suck")
     end
     if rate == 0 then return end
     local heal_value = trace_data.damage_value*rate
-    local trace_heal = trace.trace_heal(heal_value,database.caster.unit,database.target.unit)
+    local trace_heal = trace.trace_heal(heal_value,database.caster,database.target)
     sess.trace:push(trace_heal)
 
-    database.caster.unit:pre_healed()
-    database.caster.unit:heal(heal_value,database.caster.unit)
-    database.caster.unit:post_healed()
+    database.caster:pre_healed()
+    database.caster:heal(heal_value,database.caster)
+    database.caster:post_healed()
 end
 
 return this

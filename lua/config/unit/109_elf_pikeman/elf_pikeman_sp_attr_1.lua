@@ -39,4 +39,6 @@ buff0.feature = 1
 buff0.execute_type = 0
 buff0:append("belongs",sp_buff)
 
+buff0.skill_type = "passive"
+
 return buff0

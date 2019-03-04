@@ -57,20 +57,20 @@ function this.make_special_calc(command)
   return res
 end
 
-function this.damage(caster,target,value,type )
+function this.damage(caster,target,value,source,type )
   -- flag means: 1, crit;2,miss;
   local flag,value = 0,value
   local crit_factor = 1
-  if type == damage_vo.DamageType.Physical then
-    if math.random() > caster.hit_rate and math.random() < target.property:get("dodge") then
+  if source == damage_vo.source_type.Attack then
+    if math.random() > caster.property:get("hit_rate") and math.random() < target.property:get("dodge") then
       flag = 2
       value = 0
       return flag,value
     end
     
-    if math.random() < caster.crit then
+    if math.random() < caster.property:get("crit") then
       flag = 1
-      crit_factor = caster.crit_value
+      crit_factor = caster.property:get("crit_value")
     end
   end
   if type == damage_vo.DamageType.Physical then

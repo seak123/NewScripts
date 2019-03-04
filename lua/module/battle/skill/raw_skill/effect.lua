@@ -25,7 +25,7 @@ function this:execute(sess, target)
     local effect = nil
     -- init pos
     if self.vo.execute_pos == effect_vo.ExecutePos.Caster then
-        effect = sess.effect_mng:CreateEffect(self.effect_id,self.vo.attach,database.caster.unit.uid,0,0)
+        effect = sess.effect_mng:CreateEffect(self.effect_id,self.vo.attach,database.caster.uid,0,0)
     elseif self.vo.execute_pos == effect_vo.ExecutePos.Target then
         effect = sess.effect_mng:CreateEffect(self.effect_id,self.vo.attach,target.uid,0,0)
     elseif self.vo.execute_pos == effect_vo.ExecutePos.CasterPos then

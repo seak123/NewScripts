@@ -14,7 +14,7 @@ end
 function this:execute(sess, target)
     local database = self.database
     local _target = nil
-    if self.vo.execute_type == 0 then _target = database.caster.unit 
+    if self.vo.execute_type == 0 then _target = database.caster 
     else _target = target end
 
     if _target.alive ~= 0 then return end

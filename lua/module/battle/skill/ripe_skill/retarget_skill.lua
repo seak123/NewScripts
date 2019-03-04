@@ -10,7 +10,7 @@ end
 
 function this:execute( sess,delta )
     self.target_side = self.targets[1].side
-    if self.vo.cantain_curr_target == false then table.insert( self.database.target_trace,self.targets[1].uid) end
+    if self.vo.cantain_curr_target == false then table.insert( self.database.target_trace,sess.trace.get_last_data().target) end
     self.targets = {}
     self[self.vo.target_type.."_select"](self,sess)
   
@@ -46,11 +46,11 @@ function this:distance_select( sess )
         func = self:check_repeat()
     end
     --for i=1,self.vo.num do
-        local unit = sess.field:get_units(false,self.target_side,self.database.caster.unit,3,nil)
+        local unit = sess.field:get_units(false,self.target_side,self.database.caster,3,nil)
         --local close_unit = field:get_units(true,3-database.main_castle.side,database.main_castle,1)[1]
         if unit ~= nil then
             for _,u in ipairs(unit) do
-                if sess.field:distance(u,self.database.caster.unit) <= self.vo.distance then
+                if sess.field:distance(u,self.database.caster) <= self.vo.distance then
                     table.insert( self.targets, u )
                     table.insert( self.database.target_trace, unit.uid )
                 end

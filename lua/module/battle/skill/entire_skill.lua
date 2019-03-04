@@ -10,7 +10,7 @@ function this:execute(database )
     self.playing = {}
     for _,v in ipairs(self.vo.root) do
         local skill = require(v.execute).new(v,self.database)
-        table.insert( skill.targets, database.target.unit)
+        table.insert( skill.targets, database.target)
         table.insert( self.playing, skill )
     end
     self.sess.skill_mng:reg(self)

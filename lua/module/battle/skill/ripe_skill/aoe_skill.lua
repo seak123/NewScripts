@@ -26,7 +26,7 @@ function this:execute( sess,delta )
             self.target_pos.Y = self.database.target_pos.Y
         end
         --target trace
-        if self.vo.cantain_curr_target == false then table.insert( self.database.target_trace,self.targets[1].uid) end
+        if self.vo.cantain_curr_target == false then table.insert( self.database.target_trace,sess.trace:get_last_data().target_uid) end
 
         --opposite_type
         if self.vo.opposite_type == 1 then
@@ -36,14 +36,14 @@ function this:execute( sess,delta )
         elseif self.vo.opposite_type == 3 then
             self.opposite_type = 3
         else
-            self.opposite_type = self.database.target.unit.genus
+            self.opposite_type = self.database.target.genus
         end
 
         --side
         if self.vo.side == 0 then
-            self.side = self.database.caster.unit.side
+            self.side = self.database.caster.side
         else
-            self.side = 3-self.database.caster.unit.side
+            self.side = 3-self.database.caster.side
         end
 
         self.inited = true
@@ -110,7 +110,7 @@ function this:update_shape_by_circle( sess,delta )
         end
         return self:check_repeat()(unit) and flag
     end
-    return sess.field:get_targets(self.opposite_type,self.vo.with_structure,self.side,self.database.caster.unit,-1,func)
+    return sess.field:get_targets(self.opposite_type,self.vo.with_structure,self.side,self.database.caster,-1,func)
 end
 
 

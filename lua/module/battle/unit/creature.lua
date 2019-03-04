@@ -1,6 +1,7 @@
 
 local base = require("module.battle.unit.base_unit")
 local this = class("creature",base)
+local trace = require("module.battle.battle_trace")
 
 local transform = require("module.battle.unit.component.transform")
 local state_ctrl = require("module.battle.unit.component.state_control")
@@ -51,6 +52,9 @@ local function make_event(name)
       obj:dispatch(name, src)
     end
 end
+
+make_event("pre_normal_damage")
+make_event("pre_normal_damaged")
 make_event("pre_damage")
 make_event("pre_damaged")
 make_event("post_damage")
@@ -86,16 +90,17 @@ function this:init(  )
    self.attack_skill_vo = self.config.normal_attack
    self.skills = self.config.skills
    self.skills_coold = {}
+  
    for i,v in ipairs(self.skills) do
-       self.skills_coold[i] = {coold =v.coold,value = 0}
+        if v.skill_type == "passive" then
+            local database = pack_data.pack_database(self,self,self.transform.grid_pos)
+            local buff = buff.new(v,database)
+            buff:execute(self.sess,self)
+        else
+            table.insert(self.skills_coold,{coold =v.coold,value = 0})
+        end
    end
-   -- init passive
-   self.passives = self.config.passives
-   for i,v in ipairs(self.passives) do
-    local database = pack_data.pack_database(self,self,self.transform.grid_pos)
-    local buff = buff.new(v,database)
-    buff:execute(self.sess,self)
-   end
+   
 
    self.hp = self.property:get("hp")
    self.max_hp = self.hp
@@ -145,6 +150,8 @@ end
 function this:do_attack( delta ,enemy)
     local old_value = self.attack_process
     self.attack_process = self.attack_process + delta
+    local trace_data = trace.trace_attack(self,enemy)
+    self.sess.trace:push(trace_data)
     if old_value < 0.45 and self.attack_process >= 0.45 then
         local database = pack_data.pack_database(self,enemy,self.transform.grid_pos)
         local attack_skill = entire_skill.new(self.sess,self.attack_skill_vo)

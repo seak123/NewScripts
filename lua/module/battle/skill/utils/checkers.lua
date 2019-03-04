@@ -10,8 +10,8 @@ end
 
 function this.check_in_range(  )
     return function ( sess,database ,target)
-        local range = database.caster.unit.data.attack_range
-        local radius1 = database.caster.unit.data.radius
+        local range = database.caster.data.attack_range
+        local radius1 = database.caster.data.radius
         local radius2 = target.data.radius
         local target_uid = target.uid
         if sess.field:distance(target,database.caster_pos)< ((radius1+radius2)*1.5 + range + 4) then

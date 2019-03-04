@@ -23,16 +23,16 @@ function this:execute(sess, target)
     local heal_value = calc.heal(database.caster, target, value)
 
     -- push trace
-    local trace_heal = trace.trace_heal(heal_value,database.caster.unit,target)
+    local trace_heal = trace.trace_heal(heal_value,database.caster,target)
     sess.trace:push(trace_heal)
 
-    database.caster.unit:pre_heal()
+    database.caster:pre_heal()
     target:pre_healed()
 
     --logic
-    target:heal(trace_heal.heal_value, database.caster.unit)
+    target:heal(trace_heal.heal_value, database.caster)
 
-    database.caster.unit:post_heal()
+    database.caster:post_heal()
     target:post_healed()
 
 end

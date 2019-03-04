@@ -23,7 +23,7 @@ function this:execute(sess,target)
         -- summon creature
         local num = self.vo.num(self.database)
         local struct_uid = self.vo.struct_uid(self.database)
-        data.side = self.database.caster.unit.side
+        data.side = self.database.caster.side
 
         local field = sess.field
         local pos = self.database.target_pos
@@ -39,7 +39,7 @@ function this:execute(sess,target)
         -- summon structure
         local field = sess.field
         local struct_uid = self.vo.struct_uid(self.database)
-        data.side = self.database.caster.unit.side
+        data.side = self.database.caster.side
         local pos = self.database.target_pos
         data.init_x = this.clamp(pos.X,0,def.MAPMATRIX.column)
         data.init_y = this.clamp(pos.Y,0,def.MAPMATRIX.row)
@@ -47,7 +47,7 @@ function this:execute(sess,target)
     end
     if data.type == -1 then
         -- hero
-        data.side = self.database.caster.unit.side
+        data.side = self.database.caster.side
         local struct_uid = self.vo.struct_uid(self.database)
         local field = sess.field
         local pos = self.database.target_pos

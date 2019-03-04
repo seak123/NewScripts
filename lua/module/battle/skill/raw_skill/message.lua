@@ -12,7 +12,7 @@ end
 
 function this:execute(sess, target)
     local database = self.database
-    sess.effect_mng:PrintMessage(database.caster.unit.uid,self.text)
+    sess.effect_mng:PrintMessage(database.caster.uid,self.text)
 end
 
 return this

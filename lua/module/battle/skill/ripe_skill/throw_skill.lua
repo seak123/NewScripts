@@ -50,10 +50,10 @@ function this:execute( sess,delta )
                 self.target_pos.Y = self.database.target_pos.Y
             end
             -- curve_type: 0,ground to ground or fly to fly 1,fly to ground 2,ground to fly
-            if self.targets[1].genus == 1 and self.database.caster.unit.genus == 2 then
+            if self.targets[1].genus == 1 and self.database.caster.genus == 2 then
                 self.curve_type = 1
                 self.target_pos_z = battle_def.DefaultGroundHurtZ
-            elseif self.targets[1].genus == 2 and self.database.caster.unit.genus == 1 then
+            elseif self.targets[1].genus == 2 and self.database.caster.genus == 1 then
                 self.curve_type = 2
                 self.target_pos_z = battle_def.DefaultSkyHurtZ
             else

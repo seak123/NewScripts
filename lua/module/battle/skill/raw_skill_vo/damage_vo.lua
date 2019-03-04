@@ -8,8 +8,14 @@ this.DamageType = {
     Real = 3
 }
 
+this.DamageSource = {
+    Attack = 1,
+    Skill = 2,
+}
+
 this.execute = "module.battle.skill.raw_skill.damage"
 
+this.damage_source = this.damage_source.Attack
 --0,physical 1,magic 2,real
 this.damage_type = this.DamageType.Physical
 this.calc = nil
