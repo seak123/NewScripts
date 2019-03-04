@@ -17,8 +17,8 @@ public class EnterState : FsmState
 
     public override void OnEnter()
     {
-        GameRoot.BattleStartAction += BattleEnter;
-        GameRoot.BattleStartDelayAction += BattleStart;
+        //GameRoot.BattleStartAction += BattleEnter;
+        //GameRoot.BattleStartDelayAction += BattleStart;
         cameraMng = GameRoot.GetInstance().Camara.GetComponent<CamaraManager>();
         uiMng = GameRoot.GetInstance().battleUI.GetComponent<BattleUIManager>();
     }
@@ -27,8 +27,8 @@ public class EnterState : FsmState
     {
         enterTime = -1;
         battleIsStart = false;
-        GameRoot.BattleStartAction -= BattleEnter;
-        GameRoot.BattleStartDelayAction -= BattleStart;
+        //GameRoot.BattleStartAction -= BattleEnter;
+        //GameRoot.BattleStartDelayAction -= BattleStart;
     }
 
     public override GameState OnUpdate()
@@ -56,13 +56,13 @@ public class EnterState : FsmState
     }
 
     private void BattleStartAnim(float delta){
-        float wholeDelay = GameRoot.GetInstance().GetBattleEnterDelay();
-        float factor = 1 / (wholeDelay-openTime);
-        if (enterTime > openTime)
-        {
-            cameraMng.size = 16 - (enterTime-openTime) * factor * 10;
-            cameraMng.MoveCameraDirect(new Vector3(-factor * 9.2f * delta, 0, -factor * 2.2f * delta));
-        }
+        //float wholeDelay = GameRoot.GetInstance().GetBattleEnterDelay();
+        //float factor = 1 / (wholeDelay-openTime);
+        //if (enterTime > openTime)
+        //{
+        //    cameraMng.size = 16 - (enterTime-openTime) * factor * 10;
+        //    cameraMng.MoveCameraDirect(new Vector3(-factor * 9.2f * delta, 0, -factor * 2.2f * delta));
+        //}
         /*
         if (enterTime <= wholeDelay - 3f) return;
         if(enterTime<=wholeDelay-2f){

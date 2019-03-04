@@ -17,7 +17,7 @@ function this:ctor( vo )
     self.effect_mng = GetEffectManager()
 
     self.players = {{side = 1},{side = 2}}
-    self:init_player_data(vo)
+    self:init_battle_data(vo)
 
     -- record every frame deltatime
     self.deltatime = 0
@@ -32,12 +32,15 @@ function this:update( delta )
     self:check_result()
 end
 
-function this:init_player_data( vo )
-    local player_data = vo.player.mainCastle
-    player_data.side = 1
-    player_data.init_x = 80
-    player_data.init_y = battle_def.MAPMATRIX.row/2
-    self.players[1].unit = self.field:add_unit(player_data,-1)
+function this:init_battle_data( vo )
+    for i=0,vo.unitNum-1 do
+        self.field:add_unit( vo.units[i],-1)
+    end
+    -- local player_data = vo.player.mainCastle
+    -- player_data.side = 1
+    -- player_data.init_x = 80
+    -- player_data.init_y = battle_def.MAPMATRIX.row/2
+    -- self.players[1].unit = self.field:add_unit(player_data,-1)
 
     -- local enemy_data = vo.enemy.mainCastle
     -- enemy_data.side = 2
@@ -49,10 +52,10 @@ function this:init_player_data( vo )
 end
 
 function this:check_result(  )
-    if self.players[1].unit.alive == 2 then
-        print("players 1 lose")
-        root.mng.battle_completed(0)
-    end
+    -- if self.players[1].unit.alive == 2 then
+    --     print("players 1 lose")
+    --     root.mng.battle_completed(0)
+    -- end
     
 end
 

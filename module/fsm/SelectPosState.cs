@@ -15,7 +15,7 @@ public class SelectPosState : FsmState {
     public override void OnEnter()
     {
         Debug.Log("Enter Select State");
-        cardEntity = GameRoot.GetInstance().StateManager.selectCard;
+        //cardEntity = GameRoot.GetInstance().StateManager.selectCard;
     }
 
     public override void OnLeave()
@@ -25,29 +25,29 @@ public class SelectPosState : FsmState {
 
     public override GameState OnUpdate()
     {
-        if (Input.touchCount > 0)
-        {
-            if (Input.GetTouch(0).phase == TouchPhase.Moved)
-            {
-                cardEntity.OnMove(Input.GetTouch(0).position+offset);
-            }
-            if (Input.GetTouch(0).phase == TouchPhase.Ended)
-            {
-                cardEntity.OnRelease(Input.GetTouch(0).position+offset);
-                GameRoot.GetInstance().StateManager.selectCard = null;
-                return GameState.IdleState;
-            }
-        }
-        if(useMouse){
-            if(Input.GetMouseButton(0)){
-                cardEntity.OnMove(Input.mousePosition+new Vector3(offset.x,offset.y,0));
-            }
-            if(Input.GetMouseButtonUp(0)){
-                cardEntity.OnRelease(Input.mousePosition);
-                GameRoot.GetInstance().StateManager.selectCard = null;
-                return GameState.IdleState;
-            }
-        }
+        //if (Input.touchCount > 0)
+        //{
+        //    if (Input.GetTouch(0).phase == TouchPhase.Moved)
+        //    {
+        //        cardEntity.OnMove(Input.GetTouch(0).position+offset);
+        //    }
+        //    if (Input.GetTouch(0).phase == TouchPhase.Ended)
+        //    {
+        //        cardEntity.OnRelease(Input.GetTouch(0).position+offset);
+        //        GameRoot.GetInstance().StateManager.selectCard = null;
+        //        return GameState.IdleState;
+        //    }
+        //}
+        //if(useMouse){
+        //    if(Input.GetMouseButton(0)){
+        //        cardEntity.OnMove(Input.mousePosition+new Vector3(offset.x,offset.y,0));
+        //    }
+        //    if(Input.GetMouseButtonUp(0)){
+        //        cardEntity.OnRelease(Input.mousePosition);
+        //        GameRoot.GetInstance().StateManager.selectCard = null;
+        //        return GameState.IdleState;
+        //    }
+        //}
         return GameState.KeepRunning;
     }
 

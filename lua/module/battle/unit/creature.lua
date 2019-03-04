@@ -29,11 +29,8 @@ function this:ctor( sess,data,uid ,struct_uid)
     else
         self.config = require(config_mng.get_unit_config(self.id))
     end
-    if data.side == 2 then
-        self.ai_vo = require("config.ai_config.normal_ai")
-    else
         self.ai_vo = self.config.ai_vo
-    end
+
     self.name = data.name
     self.data = data
     self.side = data.side

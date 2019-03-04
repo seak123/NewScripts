@@ -32,7 +32,6 @@ namespace Map
         private float animatorAttackSpeed = 1f;
         private float moveSpeed = 1;
         private float baseSpeed = 1;
-        private GameObject shadow;
         private SpriteRenderer sideCircle;
         private Vector3 shadowPos;
         private GameObject hpPrefab;
@@ -307,23 +306,23 @@ namespace Map
 
         public void Die(int cardUid)
         {
+            gameObject.transform.Find("Circle").gameObject.SetActive(false);
             if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
             {
                 animator.SetTrigger("Break");
             }
             animator.SetTrigger("Die");
 
-            GameRoot.GetInstance().PlayerMng.AddSaving(GetSocketPos("S_Center"), 3 - side, (int)(cost * BattleDef.KillEarnFactor));
+            //GameRoot.GetInstance().PlayerMng.AddSaving(GetSocketPos("S_Center"), 3 - side, (int)(cost * BattleDef.KillEarnFactor));
             GameRoot.GetInstance().MapField.RemoveEntity(this, 2f);
             Destroy(hpBar, 0.5f);
             Destroy(gameObject, 2f);
-            GameRoot.GetInstance().PlayerMng.GetCardManager().RecoverCard(cardUid);
+            //GameRoot.GetInstance().PlayerMng.GetCardManager().RecoverCard(cardUid);
         }
 
         private void Start()
         {
             mng = GameRoot.GetInstance().BattleField.assetManager;
-            shadow = gameObject.transform.Find("Shadow").gameObject;
             sideCircle = gameObject.transform.Find("Circle").gameObject.GetComponent<SpriteRenderer>();
             sideCircle.gameObject.SetActive(true);
             gameObject.transform.Find("Size").gameObject.SetActive(false);
@@ -333,16 +332,14 @@ namespace Map
             {
                 hpPrefab = GameRoot.GetInstance().BattleField.assetManager.GreenSlider;
                 gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
-                shadow.transform.rotation = Quaternion.Euler(90, 0, 0);
-                shadowPos = shadow.transform.localPosition;
+
                 sideCircle.color = new Color(0.215f, 0.57f, 0.98f, 0.8f);
             }
             else
             {
                 hpPrefab = GameRoot.GetInstance().BattleField.assetManager.RedSlider;
                 gameObject.transform.rotation = Quaternion.Euler(0, 180, 0);
-                shadow.transform.rotation = Quaternion.Euler(90, 0, 0);
-                shadowPos = -shadow.transform.localPosition;
+
                 shadowPos.y = 0.01f;
                 sideCircle.color = new Color(0.981f, 0.217f, 0.217f, 0.8f);
             }
@@ -366,8 +363,7 @@ namespace Map
             //set rotation
             Quaternion start = gameObject.transform.rotation;
             gameObject.transform.rotation = Quaternion.Lerp(start, forward, 0.1f);
-            shadow.transform.rotation = Quaternion.Euler(90, 0, 0);
-            shadow.transform.localPosition = shadowPos;
+
 
             //set damage or heal
             if (damageCacheTime > 0)
@@ -405,7 +401,7 @@ namespace Map
             if (hpBar != null && hpBar.activeSelf == true)
             {
                 hpBarCacheTime += Time.deltaTime;
-                if (hpBarCacheTime > 3)
+                if (hpBarCacheTime > 5)
                 {
                     hpBar.SetActive(false);
                     hpBarCacheTime = 0;
@@ -421,8 +417,7 @@ namespace Map
                 //hpBar.GetComponent<RectTransform>().position = new Vector3(0, 0, 0);
                 hpBar.transform.position = new Vector3(screenPos.x, screenPos.y, 0);
 
-                float scale = camara.minSize / camara.size;
-                hpBar.transform.localScale = new Vector3(Mathf.Sqrt(radius) / 2, 1, 1) * scale * 1.2f; ;
+                hpBar.transform.localScale = new Vector3(1+((float)radius-4)/16f, 1, 1)*0.5f;
 
             }
         }

@@ -35,8 +35,8 @@ public class GameDataManager
 
 
     //hero data
-    public int heroLvl = 0;
-    public int Skill1Lvl =0;
+    public int heroLvl = 12;
+    public int Skill1Lvl =2;
     public int Skill2Lvl =0;
     public int Skill3Lvl =0;
     public int Skill4Lvl =0;
@@ -74,23 +74,6 @@ public class GameDataManager
 
     }
 
-    public PlayerData GetPlayerData(){
-        PlayerData res = new PlayerData
-        {
-            hp = properties[(int)PlayerProperty.PlayerMaxHp],
-            attack = properties[(int)PlayerProperty.MagicAttack],
-            denfence = properties[(int)PlayerProperty.Defence],
-            magic_resist = properties[(int)PlayerProperty.MagicResist],
-            cards = new List<int>()
-        };
-        UnitData mainCastle = AssetManager.PackCreatureData(GetHeroData());
-        res.mainCastle = mainCastle;
-        for (int i = 0; i < playCards.Count; ++i)
-        {
-            res.cards.Add(playCards[i]);
-        }
-        return res;
-    }
 
     public CreatureData GetHeroData(){
         AssetManager assetManager = GameRoot.GetInstance().BattleField.assetManager;
@@ -164,11 +147,6 @@ public class GameDataManager
 
         };
         return data;
-    }
-
-    public PlayerData GetEnemyData(){
-       
-        return null;
     }
 
 

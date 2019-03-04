@@ -20,26 +20,26 @@ public class Test:MonoBehaviour  {
     {
         AssetManager mng = GameRoot.GetInstance().BattleField.assetManager;
         BattleData data = new BattleData();
-        data.player = new PlayerData
-        {
-            attack = 1,
-            hp = 3000,
-            denfence = 100,
-            magic_resist = 0.5f,
-            mainCastle = AssetManager.PackCreatureData(mng.GetCreatureData(0)),
-            cardBoxNum = 3,
-            cardSpeed = 1
-    };
-        data.enemy = new PlayerData
-        {
-            attack = 1,
-            hp = 3000,
-            denfence = 100,
-            magic_resist = 0.5f,
-            mainCastle = AssetManager.PackCreatureData(mng.GetCreatureData(0)),
-            cardBoxNum = 3,
-            cardSpeed = 10
-        };
+    //    data.player = new PlayerData
+    //    {
+    //        attack = 1,
+    //        hp = 3000,
+    //        denfence = 100,
+    //        magic_resist = 0.5f,
+    //        mainCastle = AssetManager.PackCreatureData(mng.GetCreatureData(0)),
+    //        cardBoxNum = 3,
+    //        cardSpeed = 1
+    //};
+        //data.enemy = new PlayerData
+        //{
+        //    attack = 1,
+        //    hp = 3000,
+        //    denfence = 100,
+        //    magic_resist = 0.5f,
+        //    mainCastle = AssetManager.PackCreatureData(mng.GetCreatureData(0)),
+        //    cardBoxNum = 3,
+        //    cardSpeed = 10
+        //};
         GameRoot.GetInstance().StartBattle();
     }
 }

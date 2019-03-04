@@ -116,10 +116,8 @@ namespace Map
             entity.posX = (int)pos.x;
             entity.posY = (int)pos.y;
             entity.animator = obj.GetComponentInChildren<Animator>();
-            //structure
-            if(entity.structUid>0){
-                GameRoot.GetInstance().PlayerMng.ChangeIncome(side, (int)(entity.cost * BattleDef.StructureEarnFactor));
-            }
+
+          
 
             entityMap.Add(uid, entity);
             entity.gameObject.SetActive(false);
@@ -131,7 +129,7 @@ namespace Map
             MarkMovable(entity.genus,entity.posX, entity.posY, entity.radius, false);
             //entityMap.Remove(entity.uid);
             if(entity.structUid != -1){
-                GameRoot.GetInstance().PlayerMng.ChangeIncome(entity.side, -(int)entity.cost * 2 / 100);
+
                 foreach (var point in structureMap[entity.structUid])
                 {
                     structureGrids[(int)point.x, (int)point.y] = false;
@@ -147,55 +145,49 @@ namespace Map
 
         [OnInjected]
         public void AddRootAction(){
-            GameRoot.init += Init;
-            GameRoot.clean += CleanUp;
+            GameRoot.moduleInit += Init;
+            GameRoot.BattleStartAction += StartBattle;
+            GameRoot.BattleEndAction += CleanUp;
         }
 
         public void Init()
         {
             Debug.Log("BattleMap Init");
+            mng = GameRoot.GetInstance().BattleField.assetManager;
+        }
+
+        public void StartBattle(){
             isInited = true;
             entityMap = new Dictionary<int, Entity>();
             structureMap = new Dictionary<int, List<Vector2>>();
             entityRemoveCache = new List<Vector2>();
 
-            grids = new bool[BattleDef.columnGridNum,BattleDef.rowGridNum];
-            for (int i = 0; i < BattleDef.columnGridNum;++i){
-                for (int j = 0; j < BattleDef.rowGridNum;++j){
-                    grids[i,j] = false;
+            grids = new bool[BattleDef.columnGridNum, BattleDef.rowGridNum];
+            for (int i = 0; i < BattleDef.columnGridNum; ++i)
+            {
+                for (int j = 0; j < BattleDef.rowGridNum; ++j)
+                {
+                    grids[i, j] = false;
                 }
             }
-            structureGrids = new bool[BattleDef.columnGridNum/16,BattleDef.rowGridNum/16];
-            for (int i = 0; i < BattleDef.columnGridNum/16; ++i){
-                for (int j = 0; j < BattleDef.rowGridNum / 16;++j){
+            structureGrids = new bool[BattleDef.columnGridNum / 16, BattleDef.rowGridNum / 16];
+            for (int i = 0; i < BattleDef.columnGridNum / 16; ++i)
+            {
+                for (int j = 0; j < BattleDef.rowGridNum / 16; ++j)
+                {
                     structureGrids[i, j] = false;
                 }
             }
-            // remove main castle grids
-            for (int x = 3; x < 7;++x){
-                for (int y = BattleDef.rowGridNum / 32 - 2; y < BattleDef.rowGridNum / 32 + 2;++y){
-                    structureGrids[x, y] = true;
-                }
-            }
-            for (int x = BattleDef.columnGridNum/16-4; x < BattleDef.columnGridNum/16; ++x)
+           
+            for (int x = BattleDef.columnGridNum / 16 - 4; x < BattleDef.columnGridNum / 16; ++x)
             {
                 for (int y = BattleDef.rowGridNum / 32 - 2; y < BattleDef.rowGridNum / 32 + 2; ++y)
                 {
                     structureGrids[x, y] = true;
                 }
             }
-            //init navi grids
-            //naviGrids = new bool[BattleDef.columnGridNum / 32, BattleDef.rowGridNum / 32];
-            //for (int i = 0; i < BattleDef.columnGridNum / 32; ++i)
-            //{
-            //    for (int j = 0; j < BattleDef.rowGridNum / 32; ++j)
-            //    {
-            //        naviGrids[i, j] = false;
-            //    }
-            //}
 
-            mng = GameRoot.GetInstance().BattleField.assetManager;
-            //GameRoot.BattleStartAction += InitNaviGrids;
+
         }
 
         public void CleanUp(){

@@ -64,27 +64,27 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler,IPointerUpHandler{
     }
     private void Update()
     {
-        if(state == CardEntityState.Sleep){
-            if (playerMng.GetPlayerSaving() >= cardData.cost)
-            {
-                EnterIdleState();
-                state = CardEntityState.Idle;
-                cost.color = defaultReadyWhite;
-                sprite.color = Color.white;
-                magic.color = Color.white;
-            }
-        }
-        if (cardData != null)
-        {
-            if (playerMng.GetPlayerSaving() < cardData.cost)
-            {
-                EnterSleepState();
-                state = CardEntityState.Sleep;
-                cost.color = defaultCostRed;
-                sprite.color = Color.gray;
-                magic.color = Color.gray;
-            }
-        }
+        //if(state == CardEntityState.Sleep){
+        //    if (playerMng.GetPlayerSaving() >= cardData.cost)
+        //    {
+        //        EnterIdleState();
+        //        state = CardEntityState.Idle;
+        //        cost.color = defaultReadyWhite;
+        //        sprite.color = Color.white;
+        //        magic.color = Color.white;
+        //    }
+        //}
+        //if (cardData != null)
+        //{
+        //    if (playerMng.GetPlayerSaving() < cardData.cost)
+        //    {
+        //        EnterSleepState();
+        //        state = CardEntityState.Sleep;
+        //        cost.color = defaultCostRed;
+        //        sprite.color = Color.gray;
+        //        magic.color = Color.gray;
+        //    }
+        //}
 
     }
 
@@ -130,34 +130,34 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler,IPointerUpHandler{
                 break;
         }
         SetAlpha(1);
-        if (playerMng.GetPlayerSaving() >= data.cost)
-        {
-            EnterIdleState();
-            state = CardEntityState.Idle;
-            cost.color = defaultReadyWhite;
-            sprite.color = Color.white;
-            magic.color = Color.white;
-        }
-        else
-        {
-            EnterSleepState();
-            state = CardEntityState.Sleep;
-            cost.color = defaultCostRed;
-            sprite.color = Color.gray;
-        }
+        //if (playerMng.GetPlayerSaving() >= data.cost)
+        //{
+        //    EnterIdleState();
+        //    state = CardEntityState.Idle;
+        //    cost.color = defaultReadyWhite;
+        //    sprite.color = Color.white;
+        //    magic.color = Color.white;
+        //}
+        //else
+        //{
+        //    EnterSleepState();
+        //    state = CardEntityState.Sleep;
+        //    cost.color = defaultCostRed;
+        //    sprite.color = Color.gray;
+        //}
 
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
 
-        if (state == CardEntityState.Empty||GameRoot.GetInstance().StateManager.GetCurrBattleState()!=BattleState.Caster) return;
+        //if (state == CardEntityState.Empty||GameRoot.GetInstance().StateManager.GetCurrBattleState()!=BattleState.Caster) return;
         if (state == CardEntityState.Sleep){
             cardManager.SelectCard(index, cardData, creatureData);
             return;
         }
         state = CardEntityState.Select;
-        GameRoot.GetInstance().StateManager.selectCard = this;
+        //GameRoot.GetInstance().StateManager.selectCard = this;
     }
 
     public void OnPointerUp(PointerEventData eventData){
@@ -311,7 +311,7 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler,IPointerUpHandler{
                 int cenX = mX * 16 - (int)Mathf.Floor(cardData.size * 16 / 2);
                 int cenY = mY * 16 - (int)Mathf.Floor(cardData.size * 16 / 2);
                 if (!valiable || mX > BattleDef.StructBound) break;
-                if (!playerMng.RequestCost(1, cardData.cost)) break;
+                //if (!playerMng.RequestCost(1, cardData.cost)) break;
                 int sUid = map.CreateStructure(mX, mY, cardData.size);
                 //posX = Mathf.Clamp(posX, 0, BattleDef.UnitBound);
                 UnitData unitData = AssetManager.PackCreatureData(creatureData);
@@ -327,7 +327,7 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler,IPointerUpHandler{
                 int centerX = maxX * 16 - (int)Mathf.Floor(cardData.size * 16 / 2);
                 int centerY = maxY * 16 - (int)Mathf.Floor(cardData.size * 16 / 2);
                 if (!posValiable || maxX > BattleDef.StructBound) break;
-                if (!playerMng.RequestCost(1, cardData.cost)) break;
+                //if (!playerMng.RequestCost(1, cardData.cost)) break;
                 int structUid = map.CreateStructure(maxX,maxY,cardData.size);
                 UnitData unitData2 = AssetManager.PackCreatureData(creatureData);
                 if (cardData.liveTime > 0) unitData2.live_time = cardData.liveTime;

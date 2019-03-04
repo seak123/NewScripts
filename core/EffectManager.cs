@@ -19,21 +19,26 @@ public class EffectManager : MonoBehaviour {
     private AssetManager assetMng;
     private List<MessageEffect> messageCantainer;
     private List<GameObject> effects;
-    private bool hasInited = false;
+    private bool inBattle = false;
 
 
     [OnInjected]
     public void AddRootAction()
     {
-        GameRoot.init += Init;
-        GameRoot.clean += CleanUp;
+        GameRoot.moduleInit += Init;
+        GameRoot.BattleStartAction += BattleStart;
+        GameRoot.BattleEndAction += CleanUp;
     }
 
     public void Init()
     {
         Debug.Log("EffectManager Init");
-        hasInited = true;
        
+
+    }
+
+    public void BattleStart(){
+        inBattle = true;
         assetMng = GameRoot.GetInstance().BattleField.assetManager;
         messageCantainer = new List<MessageEffect>();
         effects = new List<GameObject>();
@@ -51,7 +56,7 @@ public class EffectManager : MonoBehaviour {
         }
         messageCantainer.Clear();
         effects.Clear();
-        hasInited = false;
+        inBattle = false;
     }
 
     public EffectEntity CreateEffect(int id,bool attach,int unitUid,int posX,int posY){
@@ -162,7 +167,7 @@ public class EffectManager : MonoBehaviour {
 
     private void Update()
     {
-        if(hasInited){
+        if(inBattle){
             for (int index = messageCantainer.Count - 1; index >= 0;--index){
                 MessageEffect effect = messageCantainer[index];
                 MapField mapField = GameRoot.GetInstance().MapField;

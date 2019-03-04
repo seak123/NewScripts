@@ -68,21 +68,21 @@ public class CardManager : MonoBehaviour {
     }
 
     public void InjectData(){
-        List<int> playerData = GameRoot.GetInstance().PlayerMng.GetPlayerData().cards;
+        //List<int> playerData = GameRoot.GetInstance().PlayerMng.GetPlayerData().cards;
 
-        playerMng = GameRoot.GetInstance().PlayerMng;
-        playerMng.SetCardManager(this);
+        //playerMng = GameRoot.GetInstance().PlayerMng;
+        //playerMng.SetCardManager(this);
 
-        while (playerData.Count>0){
-            int index = Random.Range(0, playerData.Count - 1);
-            playerCards.Add(new CardInform{
-                uid = cardUid,
-                side = 1,
-                id = playerData[index]
-            });
-            playerData.RemoveAt(index);
-            ++cardUid;
-        }
+        //while (playerData.Count>0){
+        //    int index = Random.Range(0, playerData.Count - 1);
+        //    playerCards.Add(new CardInform{
+        //        uid = cardUid,
+        //        side = 1,
+        //        id = playerData[index]
+        //    });
+        //    playerData.RemoveAt(index);
+        //    ++cardUid;
+        //}
 
         CreateCard();
     }
@@ -131,7 +131,7 @@ public class CardManager : MonoBehaviour {
         }
         hasInited = true;
         initCard = true;
-        enterBattleWaitTime = GameRoot.GetInstance().GetBattleEnterDelay();
+
         //cards[0].InjectData(GameRoot.GetInstance().BattleField.assetManager.GetCardData(1));
     }
 

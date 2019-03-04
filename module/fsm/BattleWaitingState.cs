@@ -12,13 +12,13 @@ public class BattleWaitingState : BattleFsm
     public override void OnEnter()
     {
         isStart = false;
-        GameRoot.BattleStartDelayAction += BattleStart;
+        GameRoot.BattleStartAction += BattleStart;
     }
 
     public override void OnLeave()
     {
         isStart = false;
-        GameRoot.BattleStartDelayAction -= BattleStart;
+        //GameRoot.BattleStartDelayAction -= BattleStart;
     }
 
     public override BattleState OnUpdate()

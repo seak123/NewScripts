@@ -66,7 +66,7 @@ function this:find_enemy( with_structure,unit,is_find_friend )
 
     for _,u in ipairs(self.units[enemy_side]) do
         local dis = self:distance(unit,u)
-        if self:distance(unit,u) < battle_def.MAPMATRIX.row/2 and u.type < type_flag and bit._and(opposite_type,u.genus)==u.genus then
+        if  u.type < type_flag and bit._and(opposite_type,u.genus)==u.genus then
             local threat = unit.threat_value[u.uid]
             if threat == nil then
                 -- set base threat_value

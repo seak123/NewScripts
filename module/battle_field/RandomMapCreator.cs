@@ -48,7 +48,7 @@ public class RandomMapCreator : MonoBehaviour {
        
 
         GameRoot.BattleStartAction += RegisterObstacle;
-        GameRoot.clean += CleanUp;
+        GameRoot.BattleEndAction += CleanUp;
     }
 
     public void CleanUp(){
@@ -64,7 +64,7 @@ public class RandomMapCreator : MonoBehaviour {
         {
             for (int j = 0; j < mRow; ++j)
             {
-                if (i > bound && i < mCol - bound && j > bound && j < mRow - bound) continue;
+                if (i >= bound && i < mCol - bound && j >= bound && j < mRow - bound) continue;
                 if (mapGrids[i, j] == 0)
                 {
                     float flag = UnityEngine.Random.Range(0f,1f);

@@ -59,8 +59,8 @@ public class GameStateManager : MonoBehaviour
     }
     [OnInjected]
     void AddRootAction(){
-        GameRoot.init += Init;
-        GameRoot.clean += CleanUp;
+        GameRoot.moduleInit += Init;
+        GameRoot.BattleEndAction += CleanUp;
     }
     public void Init(){
 
