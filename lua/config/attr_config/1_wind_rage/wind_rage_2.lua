@@ -26,7 +26,7 @@ sp_buff.execute_type = 0
 sp_buff.max_stack = 1
 -- 2bit: 11
 sp_buff.feature = 3
-sp_buff.checkers = {check.check_chance(0.1)}
+sp_buff.checkers = {check.check_chance(0.15)}
 sp_buff.buff_occasion = "on_attack"
 sp_buff:append("belongs",prop0,effect0)
 

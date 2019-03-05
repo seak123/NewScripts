@@ -77,9 +77,9 @@ function this.damage(caster,target,value,source,type )
     local target_def = target.property:get("defence")
     local defence_factor = 1
     if target_def >= 0 then
-      defence_factor = 1/(target_def/battle_def.DefenceFactor+1)
+      defence_factor = 1-target_def*battle_def.DefenceFactor/(100+target_def*battle_def.DefenceFactor)
     else
-      defence_factor = 2-1/(-target_def/battle_def.DefenceFactor+1)
+      defence_factor = 2-((100-battle_def.DefenceFactor)/100)^(-target_def)
     end
     value = value * defence_factor * crit_factor
     return flag,value

@@ -8,6 +8,7 @@ local calc = require("module.battle.skill.utils.caculate")
 local normal_skill = require("module.battle.skill.ripe_skill_vo.normal_skill_vo")
 local effect = require("module.battle.skill.raw_skill_vo.effect_vo")
 local throw_skill = require("module.battle.skill.ripe_skill_vo.throw_skill_vo")
+local caster = require("module.battle.skill.raw_skill_vo.caster_skill_vo")
 
 local effect1 = effect.new()
 effect1.effect_id = 1081
@@ -30,8 +31,11 @@ retarget0.target_type = retarget.TargetType.Distance
 retarget0.cantain_curr_target = false
 retarget0.num = 2
 retarget0.distance = 120
-retarget0.buff_occasion = "on_attack"
 retarget0:append("childs",throw1)
+
+local caster0 = caster.new()
+caster0.buff_occasion = "on_attack"
+caster0.skills = {retarget0}
 
 local buff0 = buff.new()
 buff0.buff_id = 1081
@@ -39,7 +43,7 @@ buff0.duration = -1
 -- 2bit: 01
 buff0.feature = 1
 buff0.execute_type = 0
-buff0:append("belongs",retarget0)
+buff0:append("belongs",caster0)
 
 
 buff0.skill_type = "passive"

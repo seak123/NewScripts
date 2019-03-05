@@ -9,6 +9,7 @@ local message = require("module.battle.skill.raw_skill_vo.message_vo")
 local aoe = require("module.battle.skill.ripe_skill_vo.aoe_skill_vo")
 local damage = require("module.battle.skill.raw_skill_vo.damage_vo")
 local state = require("module.battle.skill.raw_skill_vo.state_vo")
+local caster = require("module.battle.skill.raw_skill_vo.caster_skill_vo")
 local this = {}
 
 
@@ -32,7 +33,6 @@ aoe0.tick = -1
 aoe0.duraton = 0
 aoe0.opposite_type = 4
 aoe0.radius = 20
-aoe0.buff_occasion = "pre_normal_damage"
 aoe0:append("raw_skills",aoe_dam,buff3)
 
 local buff2 = buff.new()
@@ -44,13 +44,17 @@ buff2.execute_type = 1
 buff2.buff_occasion = "pre_normal_damage"
 buff2:append("belongs",state0)
 
+local caster0 = caster.new()
+caster0.buff_occasion = "pre_normal_damage"
+caster0.skills = {aoe0}
+
 local buff0 = buff.new()
 buff0.buff_id = 5011
 buff0.duration = -1
 -- 2bit: 01
 buff0.feature = 1
 buff0.execute_type = 0
-buff0:append("belongs",aoe0,buff2)
+buff0:append("belongs",caster0,buff2)
 
 
 buff0.skill_type = "passive"

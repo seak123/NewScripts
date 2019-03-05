@@ -304,6 +304,12 @@ namespace Map
 
         }
 
+        public void SetAttackSpeed(float attack_rate)
+        {
+            animatorAttackSpeed = attack_rate;
+            animator.speed = animatorAttackSpeed;
+        }
+
         public void Die(int cardUid)
         {
             gameObject.transform.Find("Circle").gameObject.SetActive(false);

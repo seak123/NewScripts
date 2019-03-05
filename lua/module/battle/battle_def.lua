@@ -10,6 +10,7 @@ this.VALUE = 1
 this.PROPERTY = {
     hp = this.VALUE,
     attack = this.VALUE,
+    base_attack_interval = this.VALUE,
     attack_rate = this.RATE,
     defence = this.VALUE,
     magic_resist = this.RATE,
@@ -56,9 +57,9 @@ this.NormalSpeed = 16
 this.DefaultSkyHurtZ = 3.5
 this.DefaultGroundHurtZ = 0.75
 
-this.MinAttackRate = 0.2
+this.Attack_Rate_Factor = 0.02
 
 -----------------damage
-this.DefenceFactor = 20
+this.DefenceFactor = 6
 
 return this
