@@ -12,7 +12,7 @@ local this = {}
 
 local prop0 = property.new()
 prop0.prop_name = "attack_rateadd"
-prop0.calc = calc.make_common_calc(2)
+prop0.calc = calc.make_common_calc(60)
 
 local effect0 = effect.new()
 effect0.effect_id = 1091
@@ -22,7 +22,7 @@ effect0.attach = true
 
 local sp_buff = buff.new()
 sp_buff.buff_id = 1091
-sp_buff.duration = 2
+sp_buff.duration = 4
 sp_buff.execute_type = 0
 sp_buff.max_stack = 1
 -- 2bit: 11

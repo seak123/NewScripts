@@ -13,6 +13,7 @@ this.execute = "module.battle.skill.ripe_skill.retarget_skill"
 this.target_type = this.TargetType.Random
 this.can_repeat = true
 this.cantain_curr_target = false
+this.is_friend = false
 this.num = 1
 
 this.distance = 80

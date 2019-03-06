@@ -9,7 +9,12 @@ function this:ctor( vo,database )
 end
 
 function this:execute( sess,delta )
-    self.target_side = self.targets[1].side
+    if self.vo.is_friend == false then
+        self.target_side = 3 - self.database.caster.side
+    else
+        self.target_side = self.database.caster.side
+    end
+    
     if self.vo.cantain_curr_target == false then table.insert( self.database.target_trace,sess.trace:get_last_data().target) end
     self.targets = {}
     self[self.vo.target_type.."_select"](self,sess)
@@ -36,6 +41,7 @@ function this:random_select( sess )
             table.insert( self.database.target_trace, unit.uid ) 
         end
     end
+    
 end
 
 function this:distance_select( sess )
@@ -52,11 +58,12 @@ function this:distance_select( sess )
             for _,u in ipairs(unit) do
                 if sess.field:distance(u,self.database.caster) <= self.vo.distance then
                     table.insert( self.targets, u )
-                    table.insert( self.database.target_trace, unit.uid )
+                    table.insert( self.database.target_trace, u.uid )
                 end
             end 
         end
     --end
+    
 end
 
 function this:random_hurted_select( sess )

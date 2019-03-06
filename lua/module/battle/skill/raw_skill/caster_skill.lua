@@ -23,7 +23,7 @@ function this:execute(sess, target)
     end
     local skill = entire_skill.new(sess,skill_vo)
     local new_database = pack.pack_database(database.caster,target,database.target_pos)
-    skill:execute(self.database)
+    skill:execute(new_database)
 end
 
 return this

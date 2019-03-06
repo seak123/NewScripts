@@ -119,11 +119,11 @@ public class GameRoot : MonoBehaviour {
         battleData.units[5].init_y = 50;
         battleData.units[6] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1081),2);
         battleData.units[6].init_x = 400;
-        battleData.units[6].init_y = 100;
-        battleData.units[7] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1091),2);
+        battleData.units[6].init_y = 210;
+        battleData.units[7] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1081),2);
         battleData.units[7].init_x = 400;
-        battleData.units[7].init_y = 150;
-        battleData.units[8] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1091),2);
+        battleData.units[7].init_y = 202;
+        battleData.units[8] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1081),2);
         battleData.units[8].init_x = 400;
         battleData.units[8].init_y = 200;
         battleData.units[9] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(5011),2);

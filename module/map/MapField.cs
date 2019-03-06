@@ -365,7 +365,7 @@ namespace Map
             {
                 for (int y = Math.Max(0, grid_y - radius); y < Math.Min(BattleDef.rowGridNum, grid_y + radius); ++y)
                 {
-                    grids[x, y] = cannotMove;
+                    grids[x, y] = false;
                 }
             }
         }

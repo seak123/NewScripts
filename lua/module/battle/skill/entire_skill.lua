@@ -9,7 +9,7 @@ function this:execute(database )
     self.database = database
     self.playing = {}
     for _,v in ipairs(self.vo.root) do
-        print("@@execute:"..v.execute)
+        
         local skill = require(v.execute).new(v,self.database)
         table.insert( skill.targets, database.target)
         table.insert( self.playing, skill )
