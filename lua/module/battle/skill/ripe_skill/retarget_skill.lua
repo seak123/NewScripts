@@ -10,7 +10,7 @@ end
 
 function this:execute( sess,delta )
     self.target_side = self.targets[1].side
-    if self.vo.cantain_curr_target == false then table.insert( self.database.target_trace,sess.trace.get_last_data().target) end
+    if self.vo.cantain_curr_target == false then table.insert( self.database.target_trace,sess.trace:get_last_data().target) end
     self.targets = {}
     self[self.vo.target_type.."_select"](self,sess)
   
