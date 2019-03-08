@@ -351,6 +351,7 @@ namespace Map
 
         public bool IsCanMove(int grid_x,int grid_y,int radius){
             if (grid_x < 0 || grid_x >= BattleDef.columnGridNum || grid_y < 0 || grid_y >= BattleDef.rowGridNum) return false;
+            if (BattleDef.useCollision == false) return true;
             for (int x = Math.Max(0, grid_x - radius); x < Math.Min(BattleDef.columnGridNum, grid_x + radius);++x){
                 for (int y = Math.Max(0, grid_y - radius); y < Math.Min(BattleDef.rowGridNum, grid_y + radius);++y){
                     if (grids[x, y] == true) return false;
@@ -360,12 +361,12 @@ namespace Map
         }
 
         public void MarkMovable(int genus,int grid_x,int grid_y,int radius,bool cannotMove){
-            if(genus==2)return;
+            if(BattleDef.useCollision == false || genus==2)return;
             for (int x = Math.Max(0, grid_x - radius); x < Math.Min(BattleDef.columnGridNum, grid_x + radius); ++x)
             {
                 for (int y = Math.Max(0, grid_y - radius); y < Math.Min(BattleDef.rowGridNum, grid_y + radius); ++y)
                 {
-                    grids[x, y] = false;
+                    grids[x, y] = cannotMove;
                 }
             }
         }
