@@ -8,6 +8,8 @@ public static class BattleDef
     public static string language = "chinese";
 
     //map data
+    public static bool useCollision = true
+
     public static int rowGridNum = 288;
 
     public static int columnGridNum = 576;
