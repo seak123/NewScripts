@@ -77,16 +77,17 @@ public class CamaraManager : MonoBehaviour {
 
         //计算上次和这次双指触摸之间的距离差距
         //然后去更改摄像机的距离
-        size -= (currentTouchDistance - lastTouchDistance) * scaleFactor * Time.deltaTime;
+        //size -= (currentTouchDistance - lastTouchDistance) * scaleFactor * Time.deltaTime;
 
 
-        //把距离限制住在min和max之间
-        size = Mathf.Clamp(size, minSize, maxSize);
+        ////把距离限制住在min和max之间
+        //size = Mathf.Clamp(size, minSize, maxSize);
 
 
         ////备份上一次触摸点的位置，用于对比
         //oldPosition1 = tempPosition1;
         //oldPosition2 = tempPosition2;
+        m_Camera.fieldOfView -= (currentTouchDistance - lastTouchDistance) * scaleFactor * Time.deltaTime;
     }
 
 
@@ -125,35 +126,35 @@ public class CamaraManager : MonoBehaviour {
 
         //Debug.Log(lastTouchPostion + "|" + currentTouchPosition + "|" + v);
         //lastSingleTouchPosition = scenePos;
-        float offset = (6.4f / size - 1) / Mathf.Sqrt(2) * 16;
+        //float offset = (6.4f / size - 1) / Mathf.Sqrt(2) * 16;
       
-        if ((m_CameraOffset.x + m_CameraOffset.z) > topLevelValue+offset)
-        {
-            float cut = m_CameraOffset.x + m_CameraOffset.z - topLevelValue-offset;
-            m_CameraOffset.x -= cut / 2;
-            m_CameraOffset.z -= cut / 2;
-        }
+        //if ((m_CameraOffset.x + m_CameraOffset.z) > topLevelValue+offset)
+        //{
+        //    float cut = m_CameraOffset.x + m_CameraOffset.z - topLevelValue-offset;
+        //    m_CameraOffset.x -= cut / 2;
+        //    m_CameraOffset.z -= cut / 2;
+        //}
 
-        if ((m_CameraOffset.x + m_CameraOffset.z) < floorLevelValue - offset)
-        {
-            float cut = floorLevelValue - offset - (m_CameraOffset.x + m_CameraOffset.z) ;
-            m_CameraOffset.x += cut / 2;
-            m_CameraOffset.z += cut / 2;
-        }
+        //if ((m_CameraOffset.x + m_CameraOffset.z) < floorLevelValue - offset)
+        //{
+        //    float cut = floorLevelValue - offset - (m_CameraOffset.x + m_CameraOffset.z) ;
+        //    m_CameraOffset.x += cut / 2;
+        //    m_CameraOffset.z += cut / 2;
+        //}
 
-        if ((m_CameraOffset.x - m_CameraOffset.z) > rightLevelValue + offset)
-        {
-            float cut = (m_CameraOffset.x - m_CameraOffset.z)- rightLevelValue-offset;
-            m_CameraOffset.x -= cut / 2;
-            m_CameraOffset.z += cut / 2;
-        }
+        //if ((m_CameraOffset.x - m_CameraOffset.z) > rightLevelValue + offset)
+        //{
+        //    float cut = (m_CameraOffset.x - m_CameraOffset.z)- rightLevelValue-offset;
+        //    m_CameraOffset.x -= cut / 2;
+        //    m_CameraOffset.z += cut / 2;
+        //}
 
-        if ((m_CameraOffset.x - m_CameraOffset.z) < leftLevelValue - offset)
-        {
-            float cut = -(m_CameraOffset.x - m_CameraOffset.z) + leftLevelValue-offset;
-            m_CameraOffset.x += cut / 2;
-            m_CameraOffset.z -= cut / 2;
-        }
+        //if ((m_CameraOffset.x - m_CameraOffset.z) < leftLevelValue - offset)
+        //{
+        //    float cut = -(m_CameraOffset.x - m_CameraOffset.z) + leftLevelValue-offset;
+        //    m_CameraOffset.x += cut / 2;
+        //    m_CameraOffset.z -= cut / 2;
+        //}
 
         //把摄像机的位置控制在范围内lastSingleTouchPosition
         m_CameraOffset = new Vector3(Mathf.Clamp(m_CameraOffset.x, xMin, xMax), m_CameraOffset.y, Mathf.Clamp(m_CameraOffset.z, zMin, zMax));
