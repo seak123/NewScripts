@@ -7,7 +7,13 @@ local bit = require("utils.bit_calc")
 function this:ctor(sess )
     self.sess = sess
     self.units = {{},{}}
+    self.room_units = {}
     self.counter = 0
+
+    -- init 
+    for id,_ in pairs(sess.battle_map.room_table) do
+        self.room_units[id] = {}
+    end
 end
 
 function this:add_unit( data,struct_uid)
@@ -18,17 +24,36 @@ function this:add_unit( data,struct_uid)
     local unit = creature.new(self.sess,data,uid,struct_uid)
     self.counter = self.counter + 1
     table.insert( self.units[data.side],unit)
+    table.insert(self.room_units[data.init_room],unit)
     return unit
 end
 
 function this:unit_die( unit )
         local side = unit.side
+        local location = unit.location
         for i, v in ipairs(self.units[side]) do
             if v.uid == unit.uid then
                 table.remove( self.units[side], i )
+                break
+            end
+        end
+        for i, v in ipairs(self.room_units[location]) do
+            if v.uid == unit.uid then
+                table.remove( self.room_units[location], i )
                 return
             end
         end
+end
+
+function this:portal( unit,new_room,out_door )
+    local location = unit.location
+    for i, v in ipairs(self.room_units[location]) do
+        if v.uid == unit.uid then
+            table.remove( self.room_units[location], i )
+            break
+        end
+    end
+    table.insert( self.room_units[new_room], unit )
 end
 
 function this:get_unit( uid,side)
@@ -50,12 +75,12 @@ function this:get_unit( uid,side)
     return nil
 end
 --opposite_type: attack ground or sky
+--just for normal attack
 function this:find_enemy( with_structure,unit,is_find_friend )
     local enemy_side = 3 - unit.side
     if is_find_friend ~= nil and is_find_friend == true then
         enemy_side = unit.side
     end
-    local opposite_type = unit.opposite_type
     local enemy = nil
     local threat_enemy = nil
     local max_threat = -9999
@@ -64,9 +89,9 @@ function this:find_enemy( with_structure,unit,is_find_friend )
     local type_flag = 0
     if with_structure == true then type_flag = 2 else type_flag =1 end
 
-    for _,u in ipairs(self.units[enemy_side]) do
+    for _,u in ipairs(self.room_units[unit.location]) do
         local dis = self:distance(unit,u)
-        if  u.type < type_flag and bit._and(opposite_type,u.genus)==u.genus then
+        if  u.type < type_flag and u.side == enemy_side then
             local threat = unit.threat_value[u.uid]
             if threat == nil then
                 -- set base threat_value
@@ -83,15 +108,7 @@ function this:find_enemy( with_structure,unit,is_find_friend )
             end
         end
     end
-    
-    -- for _,u in ipairs(self.units[enemy_side]) do
-    --     local threat = unit.threat_value[u.uid]
-    --     local dis = self:distance(unit,u)
-    --     if threat >= 10 and dis < min_dis and u.type< type_flag then
-    --         min_dis = dis
-    --         enemy = u
-    --     end
-    -- end
+
     if enemy~=nil and enemy.type == 1 and threat_enemy ~= nil and threat_enemy.alive == 0 then
         return threat_enemy
     end

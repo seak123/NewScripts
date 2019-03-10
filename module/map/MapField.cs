@@ -10,6 +10,7 @@ namespace Map
     public class MapField : MonoBehaviour
     {
         public GameObject assitField;
+        public GameObject temRoom;
         private bool assistActive=false;
 
         private bool[,] grids;
@@ -95,6 +96,12 @@ namespace Map
 
         //>>>>>>>>>>>>>>>>>map entity>>>>>>>>>>>>>>>>>>>
 
+        public void CreateRoom(int gridX,int gridY){
+            float x, y;
+            GetViewPos(gridX, gridY, out x, out y);
+            Instantiate(temRoom, new Vector3(x, 0, y), Quaternion.identity);
+        }
+
         public Entity CreateEntity(int id,int uid,int side,int gridX,int gridY,int structUid){
             float x, y;
             Vector2 pos = FindInitPos(gridX,gridY, mng.GetCreatureData(id).radius);
@@ -122,6 +129,16 @@ namespace Map
             entityMap.Add(uid, entity);
             entity.gameObject.SetActive(false);
             return entity;
+        }
+
+        public void PortalEntity(Entity entity,int _x,int _y){
+            float x, y;
+            Vector2 pos = FindInitPos(_x, _y, entity.radius);
+            GetViewPos((int)pos.x, (int)pos.y, out x, out y);
+            MarkMovable(entity.genus, (int)pos.x, (int)pos.y, entity.radius, true);
+            entity.gameObject.transform.position = new Vector3(x, 0, y);
+            entity.posX = (int)pos.x;
+            entity.posY = (int)pos.y;
         }
 
         public void RemoveEntity(Entity entity,float delay){

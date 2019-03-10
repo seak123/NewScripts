@@ -16,13 +16,27 @@ end
 
 function this:check_Forward(  )
     local transform = self.database.master.transform
-    local grid_pos = transform.grid_pos
-    if self.database.master.side == 1 then
-        self.database.des_pos = {X = battle_def.MAPMATRIX.column,Y = grid_pos.Y}
-    else
-        self.database.des_pos = {X = 0,Y = grid_pos.Y}
+    local now_room = self.database.master.location
+    if transform.des_room == now_room then
+        local next_room = this.get_next_room_id(now_room,math.random(4))
+        while self.database.master.sess.battle_map:get_room_center(next_room) == nil do
+            next_room = this.get_next_room_id(now_room,math.random(4))
+        end
+        transform.des_room = next_room
     end
     return true
+end
+
+function this.get_next_room_id( now_id,flag )
+    if flag == 1 then
+        return now_id + 10
+    elseif flag == 2 then
+        return now_id - 10
+    elseif flag == 3 then
+        return now_id + 1
+    else
+        return now_id - 1
+    end
 end
 
 function this:check_EnemyAround(  )

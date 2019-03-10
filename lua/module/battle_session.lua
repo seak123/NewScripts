@@ -1,6 +1,7 @@
 
 local this = class("battle_session")
 local battle_field = require("module.battle.battle_field")
+local battle_map = require("module.battle.battle_map")
 local battle_skill_mng = require("module.battle.battle_skill_manager")
 local battle_trace = require("module.battle.battle_trace")
 local battle_def = require("module.battle.battle_def")
@@ -9,11 +10,14 @@ local battle_ai = require("module.battle.battle_ai.ai_tree")
 local normal_ai = require("config.ai_config.normal_player_ai")
 
 function this:ctor( vo )
+    self.map = GetMapField()
+    self.battle_map = battle_map.new(self)
     self.field = battle_field.new(self)
     self.skill_mng = battle_skill_mng.new(self)
     self.trace = battle_trace.new(self)
     self.trigger = battle_trig.new(self)
-    self.map = GetMapField()
+    
+    
     self.effect_mng = GetEffectManager()
 
     self.players = {{side = 1},{side = 2}}

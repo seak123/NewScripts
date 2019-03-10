@@ -78,7 +78,7 @@ public class GameRoot : MonoBehaviour {
         StrUtil.Init();
         gameDataManager = new GameDataManager();
         mainUIMng = MainUI.GetComponent<MainUIManager>();
-        //mainUIMng.OpenUI(0);
+        mainUIMng.OpenUI(0);
 	}
 
     public void StartNewGame(){
@@ -100,35 +100,25 @@ public class GameRoot : MonoBehaviour {
         battleData.unitNum = 10;
         battleData.units = new UnitData[10];
         battleData.units[0] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1081));
-        battleData.units[0].init_x = 100;
-        battleData.units[0].init_y = 50;
+        battleData.units[0].init_room = 32;
         battleData.units[1] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1081));
-        battleData.units[1].init_x = 100;
-        battleData.units[1].init_y = 100;
+        battleData.units[1].init_room = 32;
         battleData.units[2] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1091));
-        battleData.units[2].init_x = 100;
-        battleData.units[2].init_y = 150;
+        battleData.units[2].init_room = 32;
         battleData.units[3] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1091));
-        battleData.units[3].init_x = 100;
-        battleData.units[3].init_y = 200;
+        battleData.units[3].init_room = 33;
         battleData.units[4] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(5011));
-        battleData.units[4].init_x = 100;
-        battleData.units[4].init_y = 250;
+        battleData.units[4].init_room = 31;
         battleData.units[5] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1081),2);
-        battleData.units[5].init_x = 400;
-        battleData.units[5].init_y = 50;
+        battleData.units[5].init_room = 11;
         battleData.units[6] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1081),2);
-        battleData.units[6].init_x = 400;
-        battleData.units[6].init_y = 210;
+        battleData.units[6].init_room = 11;
         battleData.units[7] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1081),2);
-        battleData.units[7].init_x = 400;
-        battleData.units[7].init_y = 202;
+        battleData.units[7].init_room = 11;
         battleData.units[8] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1081),2);
-        battleData.units[8].init_x = 400;
-        battleData.units[8].init_y = 200;
+        battleData.units[8].init_room = 11;
         battleData.units[9] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(5011),2);
-        battleData.units[9].init_x = 400;
-        battleData.units[9].init_y = 250;
+        battleData.units[9].init_room = 11;
         //battleData = new BattleData();
         //battleData.unitNum = 2;
         //battleData.units = new UnitData[2];

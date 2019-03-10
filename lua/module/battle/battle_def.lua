@@ -42,8 +42,8 @@ this.PLAYER2POS = {
 }
 -----------------field 
 this.MAPMATRIX = {
-    column = 576,
-    row = 288
+    column = 500,
+    row = 500
 }
 
 this.ENEMYBOUND = {
@@ -51,6 +51,10 @@ this.ENEMYBOUND = {
     row = 448
 }
 
+this.room_bound = 138
+
+
+------------------
 this.MaxSpeed = 64
 this.MinSpeed = 4
 this.NormalSpeed = 16

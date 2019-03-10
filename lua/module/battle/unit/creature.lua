@@ -14,6 +14,7 @@ local buff = require("module.battle.skill.raw_skill.buff")
 
 function this:ctor( sess,data,uid ,struct_uid)
     self.sess = sess
+    self.data = data
     self.id = data.id
     -- type: 0,creature;1,structure;-1,hero
     self.type = data.type
@@ -30,17 +31,20 @@ function this:ctor( sess,data,uid ,struct_uid)
     else
         self.config = config_mng.get_unit_config(self.id)
     end
-        self.ai_vo = self.config.ai_vo
 
-    self.name = data.name
-    self.data = data
-    self.side = data.side
-    self.live_time = data.live_time
-    self.property = property.new(self,property.unpack_prop(data))
-    self.buffcont = buffcont.new(self)
-    self.transform = transform.new(self,data)
-    self.statectrl = state_ctrl.new(self)
-    self.betree = behavior_tree:build(self,self.ai_vo)
+    if data.side == 1 then
+        self.ai_vo = require("config.ai_config.normal_defence_ai")
+    else
+        self.ai_vo = require("config.ai_config.normal_ai")
+    end
+   
+
+   self.time = 0
+
+   self.name = data.name
+   
+   self.side = data.side
+    
     self:init()
 
     -- threat_value to every enemy: key is uid,  ps: value will not be cleared
@@ -74,12 +78,29 @@ function this:init(  )
     self.threat_value = {}
     -- wait for appear action
     self.appeared = 0
+    -- init room
+    self.location = self.data.init_room
+
+    local data = self.data
+    local init_pos = self.sess.battle_map:get_room_center(self.data.init_room)
+    self.data.init_x = init_pos.X
+    self.data.init_y = init_pos.Y
+
  
     if self.type == 0 or self.type == -1 then
         self.entity = self.sess.map:CreateEntity(self.data.id,self.uid,self.side,self.data.init_x,self.data.init_y,-1)
     else
         self.entity = self.sess.map:CreateEntity(self.data.id,self.uid,self.side,self.data.init_x,self.data.init_y,self.struct_uid)
     end
+
+
+ 
+   self.live_time = data.live_time
+   self.property = property.new(self,property.unpack_prop(data))
+   self.buffcont = buffcont.new(self)
+   self.transform = transform.new(self,data)
+   self.statectrl = state_ctrl.new(self)
+   self.betree = behavior_tree:build(self,self.ai_vo)
     
    -- attack cache
    self.attack_process = 0
@@ -100,12 +121,10 @@ function this:init(  )
             table.insert(self.skills_coold,{coold =v.coold,value = 0})
         end
    end
-   
+
 
    self.hp = self.property:get("hp")
    self.max_hp = self.hp
-
-   self.time = 0
 end
 
 

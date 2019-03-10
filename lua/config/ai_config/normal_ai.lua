@@ -43,9 +43,13 @@ be_attack:append("decorators",de_find)
 local ac_move0 = action.new()
 ac_move0.action_type = action.ACTION.MoveForward
 
+local de_forward = decorator.new()
+de_forward.type = decorator.Type.Forward
+
 local be_forward = behavior.new()
 be_forward.controll_type = "seq"
 be_forward:append("subs",ac_move0)
+be_forward:append("decorators",de_forward)
 
 ------------------------------
 local be_root = behavior.new()

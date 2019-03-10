@@ -87,7 +87,7 @@ public class CamaraManager : MonoBehaviour {
         ////备份上一次触摸点的位置，用于对比
         //oldPosition1 = tempPosition1;
         //oldPosition2 = tempPosition2;
-        m_Camera.fieldOfView -= (currentTouchDistance - lastTouchDistance) * scaleFactor * Time.deltaTime;
+        //m_Camera.fieldOfView -= (currentTouchDistance - lastTouchDistance) * scaleFactor * Time.deltaTime;
     }
 
 

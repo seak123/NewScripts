@@ -92,6 +92,11 @@ namespace Map
             field.MarkMovable(genus, posX, posY, radius, true);
         }
 
+        public void Portal(int _x,int _y){
+            MapField field = GameRoot.GetInstance().MapField;
+            field.PortalEntity(this, _x, _y);
+        }
+
         public void Move(int toX, int toY, int speed, float value, out int gridX, out int gridY, out float offset)
         {
             //init data

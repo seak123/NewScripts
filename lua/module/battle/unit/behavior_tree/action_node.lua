@@ -67,15 +67,45 @@ function this:abort_MoveForward(  )
 end
 
 function this:update_MoveForward( delta )
+    local field = self.database.master.sess.field
     local transform = self.database.master.transform
     local grid_pos = transform.grid_pos
-    if self.database.master.side == 1 then
-        self.database.des_pos = {X = battle_def.MAPMATRIX.column,Y = grid_pos.Y}
+    local next_room = transform.des_room
+    local now_room = self.database.master.location
+    local now_center = self.database.master.sess.battle_map:get_room_center(now_room)
+    if next_room == now_room then
+        return "completed"
+    end
+    local flag = nil
+    if self.database.des_pos == nil then self.database.des_pos = {} end
+    if next_room/10 == now_room/10 then
+        local now_col = math.fmod( now_room,10 )
+        local next_col = math.fmod( next_room,10 )
+        if now_col>next_col then
+            self.database.des_pos.X = now_center.X
+            self.database.des_pos.Y = now_center.Y - battle_def.room_bound/2
+            flag = 4
+        else
+            self.database.des_pos.X = now_center.X
+            self.database.des_pos.Y = now_center.Y + battle_def.room_bound/2
+            flag = 2
+        end
     else
-        self.database.des_pos = {X = 0,Y = grid_pos.Y}
+        local now_row = math.modf(now_room/10)
+        local next_row = math.modf( next_room/10 )
+        if now_row>next_row then
+            self.database.des_pos.X = now_center.X - battle_def.room_bound/2
+            self.database.des_pos.Y = now_center.Y
+            flag = 1
+        else
+            self.database.des_pos.X = now_center.X + battle_def.room_bound/2
+            self.database.des_pos.Y = now_center.Y
+            flag = 3
+        end
     end
     self.database.master.transform.des_pos = self.database.des_pos
-    if self.database.master.transform.grid_pos.X == self.database.des_pos.X and self.database.master.transform.grid_pos.Y == self.database.des_pos.Y then
+    if field:distance(self.database.master.transform.grid_pos,self.database.des_pos) < 40 then
+        field:portal(self.database.master,next_room,flag)
         self.running = false
         return "completed"
     end
