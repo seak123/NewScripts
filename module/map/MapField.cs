@@ -13,7 +13,7 @@ namespace Map
         public GameObject temRoom;
         private bool assistActive=false;
 
-        private bool[,] grids;
+        private int[,] grids;
         private bool[,] structureGrids;
         //private bool[,] naviGrids;
 
@@ -23,7 +23,7 @@ namespace Map
         //private float centerOffset = 0.365f;
         private Dictionary<int,Entity> entityMap;
         private Dictionary<int, List<Vector2>> structureMap;
-        private Dictionary<Vector2 room_id,Vector2 center> roomMap;
+        private Dictionary<Vector2,Vector2> roomMap;
         private List<Vector2> entityRemoveCache;
         // private List<int> aStarRequestList;
 
@@ -122,26 +122,19 @@ namespace Map
 
         public void PortalEntity(Entity entity,int _x,int _y){
             float x, y;
-            Vector2 pos = FindInitPos(_x, _y, entity.radius);
-            GetViewPos((int)pos.x, (int)pos.y, out x, out y);
-            MarkMovable((int)pos.x, (int)pos.y, entity.radius, true);
+            GetViewPos(_x, _y, out x, out y);
+            MarkMovable(entity.posX, entity.posY, entity.radius, false);
+            MarkMovable(_x, _y, entity.radius, true);
             entity.gameObject.transform.position = new Vector3(x, 0, y);
-            entity.posX = (int)pos.x;
-            entity.posY = (int)pos.y;
+            entity.posX = _x;
+            entity.posY = _y;
         }
 
         public void RemoveEntity(Entity entity,float delay){
 
             MarkMovable(entity.posX, entity.posY, entity.radius, false);
             //entityMap.Remove(entity.uid);
-            if(entity.structUid != -1){
 
-                foreach (var point in structureMap[entity.structUid])
-                {
-                    structureGrids[(int)point.x, (int)point.y] = false;
-                }
-                structureMap.Remove(entity.structUid);
-            }
             entityRemoveCache.Add(new Vector2(entity.uid,delay));
         }
 
@@ -169,7 +162,7 @@ namespace Map
             roomMap = new Dictionary<Vector2,Vector2>();
             entityRemoveCache = new List<Vector2>();
 
-            grids = new bool[BattleDef.columnGridNum, BattleDef.rowGridNum];
+            grids = new int[BattleDef.columnGridNum, BattleDef.rowGridNum];
             for (int i = 0; i < BattleDef.columnGridNum; ++i)
             {
                 for (int j = 0; j < BattleDef.rowGridNum; ++j)
@@ -341,7 +334,7 @@ namespace Map
                 }
                 ++index;
                 if(index > 200){
-                    return new Vector2(initX,initY)
+                    return new Vector2(initX, initY);
                 }
             }
            
@@ -387,7 +380,7 @@ namespace Map
                 if (centerX - 16 < 0 || centerX + 16 > BattleDef.columnGridNum || centerY - 16 < 0 || centerY - 16 > BattleDef.rowGridNum) return false;
                 for (int x = centerX - 16; x < centerX + 16;++x){
                     for (int y = centerY - 16; y < centerY + 16;++y){
-                        if (grids[x, y] == true) return false;
+                        if (grids[x, y] >0) return false;
                     }
                 }
                 for (int x = maxX - size; x < maxX; ++x)
@@ -406,7 +399,7 @@ namespace Map
                 if (startX < 0 || startX + 48 > BattleDef.columnGridNum || startY < 0 || startY + 48 > BattleDef.rowGridNum) return false;
                 for (int x = startX; x < startX + 48;++x){
                     for (int y = startY; y < startY + 48;++y){
-                        if (grids[x, y] == true) return false;
+                        if (grids[x, y] >0) return false;
                     }
                 }
                 for (int x = maxX - size; x < maxX; ++x)

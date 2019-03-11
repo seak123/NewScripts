@@ -83,24 +83,24 @@ function this:update_MoveForward( delta )
         local next_col = math.fmod( next_room,10 )
         if now_col>next_col then
             self.database.des_pos.X = now_center.X
-            self.database.des_pos.Y = now_center.Y - battle_def.room_bound/2
-            flag = 4
-        else
-            self.database.des_pos.X = now_center.X
             self.database.des_pos.Y = now_center.Y + battle_def.room_bound/2
             flag = 2
+        else
+            self.database.des_pos.X = now_center.X
+            self.database.des_pos.Y = now_center.Y - battle_def.room_bound/2
+            flag = 4
         end
     else
         local now_row = math.modf(now_room/10)
         local next_row = math.modf( next_room/10 )
         if now_row>next_row then
-            self.database.des_pos.X = now_center.X - battle_def.room_bound/2
-            self.database.des_pos.Y = now_center.Y
-            flag = 1
-        else
             self.database.des_pos.X = now_center.X + battle_def.room_bound/2
             self.database.des_pos.Y = now_center.Y
             flag = 3
+        else
+            self.database.des_pos.X = now_center.X - battle_def.room_bound/2
+            self.database.des_pos.Y = now_center.Y
+            flag = 1
         end
     end
     self.database.master.transform.des_pos = self.database.des_pos

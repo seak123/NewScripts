@@ -23,6 +23,7 @@ function this:check_Forward(  )
             next_room = this.get_next_room_id(now_room,math.random(4))
         end
         transform.des_room = next_room
+        
     end
     return true
 end
@@ -107,8 +108,8 @@ function this:check_Boring(  )
     if math.modf(master.idle_time) < math.modf(master.idle_time +delta ) and math.random() < 0.2 then
         local pos = master.transform.grid_pos
         local center = master.sess.battle_map:get_room_center(master.location)
-        local x = clamp(pos.X + math.random(-100,100),center.X - battle_def.room_bound/2,center + battle_def.room_bound/2)
-        local y = clamp(pos.Y + math.random(-100,100),center.Y - battle_def.room_bound/2,center + battle_def.room_bound/2)
+        local x = clamp(pos.X + math.random(-100,100),center.X - battle_def.room_bound/2,center.X + battle_def.room_bound/2)
+        local y = clamp(pos.Y + math.random(-100,100),center.Y - battle_def.room_bound/2,center.Y + battle_def.room_bound/2)
         self.database.des_pos = {X = x,Y= y}
         
         return true

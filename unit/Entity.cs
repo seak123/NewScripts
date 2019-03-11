@@ -119,6 +119,7 @@ namespace Map
             offset = 0;
             
             gameObject.transform.position = new Vector3(nextViewX, 0f, nextViewY);
+            SetRotation(toX, toY);
             posX = gridX;
             posY = gridY;
             field.MarkMovable(posX, posY, radius, true);
