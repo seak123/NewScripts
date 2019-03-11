@@ -64,6 +64,6 @@ be_wander:append("decorators",de_wander)
 ------------------------------
 local be_root = behavior.new()
 be_root.controll_type = "sel"
-be_root:append("subs",be_attack,be_stay,be_caster,ac_appear)
+be_root:append("subs",be_attack,be_wander,be_stay,be_caster,ac_appear)
 
 return be_root
