@@ -7,7 +7,8 @@ this.Type = {
     Forward = "Forward",
     EnemyAround = "EnemyAround",
     EnemyInAttackRange = "EnemyInAttackRange",
-    SkillAvaliable = "SkillAvaliable"
+    SkillAvaliable = "SkillAvaliable",
+    Boring = "Boring",
 }
 
 this.type = this.Type.Foward

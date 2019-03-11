@@ -47,6 +47,7 @@ end
 
 function this:portal( unit,new_room,out_door )
     local location = unit.location
+    unit.transform:portal(new_room,out_door)
     for i, v in ipairs(self.room_units[location]) do
         if v.uid == unit.uid then
             table.remove( self.room_units[location], i )
@@ -127,7 +128,7 @@ function this:get_units(with_structure,side,unit,num,condition_func  )
     if with_structure == true then type_flag = 2 else type_flag = 1 end
     if condition_func == nil then condition_func = function(a) return true end end
     for _,u in ipairs(self.units[side]) do
-        if condition_func(u) and u.type < type_flag and bit._and(opposite_type,u.genus)==u.genus then
+        if condition_func(u) and u.type < type_flag  then
             local dis = self:distance(unit,u)
             local index = -1
             for i=num,1,-1 do
@@ -208,7 +209,7 @@ function this:get_targets(opposite_type,with_structure,side,unit,num,condition_f
     if with_structure == true then type_flag = 2 else type_flag = 1 end
     if condition_func == nil then condition_func = function(a) return true end end
     for _,u in ipairs(self.units[side]) do
-        if condition_func(u) and u.type < type_flag and bit._and(opposite_type,u.genus)==u.genus then
+        if condition_func(u) and u.type < type_flag then
             local dis = self:distance(unit,u)
             local index = -1
             for i=num,1,-1 do

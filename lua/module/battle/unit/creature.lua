@@ -39,7 +39,8 @@ function this:ctor( sess,data,uid ,struct_uid)
     end
    
 
-   self.time = 0
+   self.delta = 0
+   self.idle_time = 0
 
    self.name = data.name
    
@@ -130,7 +131,8 @@ end
 
 
 function this:update( delta )
-
+    self.delta = delta
+    
     self.super:update(delta)
 
     self.betree:update(delta)

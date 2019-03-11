@@ -25,6 +25,8 @@ public static class BattleDef
 
     public static int StructBound = 22;
 
+    public static int roomBound = 140;
+
     //logic data
     public static float MaxSaving = 20;
 

@@ -84,14 +84,6 @@ namespace Map
             return gameObject.transform.Find(name).gameObject.transform.position;
         }
 
-        public void ResetMapNode()
-        {
-            MapField field = GameRoot.GetInstance().MapField;
-            field.MarkMovable(genus, posX, posY, radius, false);
-            //currMapNode = field.GetAStarRoute(id, posX, posY, desX, desY);
-            field.MarkMovable(genus, posX, posY, radius, true);
-        }
-
         public void Portal(int _x,int _y){
             MapField field = GameRoot.GetInstance().MapField;
             field.PortalEntity(this, _x, _y);
@@ -115,87 +107,23 @@ namespace Map
             float toViewX, toViewY;
             field.GetViewPos(toX, toY, out toViewX, out toViewY);
 
-            field.MarkMovable(genus, posX, posY, radius, false);
+            field.MarkMovable(posX, posY, radius, false);
 
-            if (state == TransformState.Straight)
-            {
-
-                RouteUpdateFlag += 1;
-                float nowViewX = gameObject.transform.position.x;
-                float nowViewY = gameObject.transform.position.z;
-                float factor = value / BattleDef.Transfer2GridFactor / Vector2.Distance(new Vector2(toViewX, toViewY), new Vector2(nowViewX, nowViewY));
-                float nextViewX = Mathf.Max(0, Mathf.Min(BattleDef.columnGridNum - 1, nowViewX + (toViewX - nowViewX) * factor));
-                float nextViewY = Mathf.Max(0, Mathf.Min(BattleDef.rowGridNum - 1, nowViewY + (toViewY - nowViewY) * factor));
-                field.GetGridPos(nextViewX, nextViewY, out gridX, out gridY);
-                if (field.IsCanMove(gridX, gridY, radius) || genus == 2)
-                {
-                    RouteUpdateFactor = 0;
-                    offset = 0;
-                    //if (debug) Debug.Log("Straight:"+gridX+" "+gridY+"offset:"+offset);
-                    gameObject.transform.position = new Vector3(nextViewX, 0f, nextViewY);
-                    if (RouteUpdateFlag > 5) SetRotation(toX, toY);
-                    posX = gridX;
-                    posY = gridY;
-                    field.MarkMovable(genus, posX, posY, radius, true);
-
-                    return;
-                }
-                else
-                {
-                    RouteUpdateFactor += 1;
-                    if (RouteUpdateFactor > 4) RouteUpdateFactor = 4;
-                    state = TransformState.AStar;
-                    currMapNode = field.GetAStarRoute(id, posX, posY, toX, toY, speed * BattleDef.aStarUpdateFrame * RouteUpdateFactor / 30);
-                    RouteUpdateFlag = 0;
-                }
-            }
-
-            if (state == TransformState.AStar)
-            {
-                RouteUpdateFlag += 1;
-                float startG = currMapNode.G;
-                while (currMapNode.Next != null && (currMapNode.Next.G - startG) <= value)
-                {
-
-                    currMapNode = currMapNode.Next;
-                }
-                if (field.IsCanMove(currMapNode.X, currMapNode.Y, radius))
-                {
-                    if (currMapNode.Next != null) offset = value - (currMapNode.G - startG);
-                    else offset = 0;
-                    gridX = currMapNode.X;
-                    gridY = currMapNode.Y;
-                    //if (debug) Debug.Log("AStar:" + gridX + " " + gridY+ "offset:"+offset);
-                    SetTransform(gridX, gridY);
-                    SetRotation(gridX, gridY);
-                    posX = gridX;
-                    posY = gridY;
-                    if (RouteUpdateFlag == BattleDef.aStarUpdateFrame * RouteUpdateFactor)
-                    {
-                        state = TransformState.Straight;
-                        RouteUpdateFlag = 0;
-                    }
-                    field.MarkMovable(genus, posX, posY, radius, true);
-                    return;
-                }
-                else
-                {
-                    currMapNode.Next = null;
-                }
-                if (currMapNode.Next == null)
-                {
-                    gridX = posX;
-                    gridY = posY;
-                    offset = 0;
-                    field.MarkMovable(genus, posX, posY, radius, true);
-                    RouteUpdateFlag = 0;
-                    state = TransformState.Straight;
-                    return;
-                }
-            }
-            gridX = 0;
-            gridY = 0;
+            float nowViewX = gameObject.transform.position.x;
+            float nowViewY = gameObject.transform.position.z;
+            float factor = value / BattleDef.Transfer2GridFactor / Vector2.Distance(new Vector2(toViewX, toViewY), new Vector2(nowViewX, nowViewY));
+            float nextViewX = Mathf.Max(0, Mathf.Min(BattleDef.columnGridNum - 1, nowViewX + (toViewX - nowViewX) * factor));
+            float nextViewY = Mathf.Max(0, Mathf.Min(BattleDef.rowGridNum - 1, nowViewY + (toViewY - nowViewY) * factor));
+            field.GetGridPos(nextViewX, nextViewY, out gridX, out gridY);
+            
             offset = 0;
+            
+            gameObject.transform.position = new Vector3(nextViewX, 0f, nextViewY);
+            posX = gridX;
+            posY = gridY;
+            field.MarkMovable(posX, posY, radius, true);
+
+            return;
         }
         //>>>>>>>>>>>>>>Mesh Color
         public void SetColor(string color)

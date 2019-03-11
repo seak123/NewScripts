@@ -78,7 +78,7 @@ function this:update_MoveForward( delta )
     end
     local flag = nil
     if self.database.des_pos == nil then self.database.des_pos = {} end
-    if next_room/10 == now_room/10 then
+    if math.modf(next_room/10) == math.modf(now_room/10) then
         local now_col = math.fmod( now_room,10 )
         local next_col = math.fmod( next_room,10 )
         if now_col>next_col then
@@ -354,14 +354,15 @@ end
 
 function this:abort_Idle(  )
     self.database.master.entity:AnimCasterBreak()
+    self.database.master.idle_time = 0
 end
 
-function this:update_Idle(  )
+function this:update_Idle( delta )
     --print("@@stay idle")
     self.database.master.entity:AnimCasterBreak()
+    self.database.master.idle_time = self.database.master.idle_time + delta
     self.running = true
     return "running"
 end
-
 
 return this

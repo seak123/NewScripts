@@ -101,6 +101,21 @@ function this:check_SkillAvaliable()
     return false
 end
 
+function this:check_Boring(  )
+    local master = self.database.master
+    local delta = master.delta
+    if math.modf(master.idle_time) < math.modf(master.idle_time +delta ) and math.random() < 0.2 then
+        local pos = master.transform.grid_pos
+        local center = master.sess.battle_map:get_room_center(master.location)
+        local x = clamp(pos.X + math.random(-100,100),center.X - battle_def.room_bound/2,center + battle_def.room_bound/2)
+        local y = clamp(pos.Y + math.random(-100,100),center.Y - battle_def.room_bound/2,center + battle_def.room_bound/2)
+        self.database.des_pos = {X = x,Y= y}
+        
+        return true
+    end
+    return false
+end
+
 
 ----------------------------------skill check (build database.target or database.target_pos)
 

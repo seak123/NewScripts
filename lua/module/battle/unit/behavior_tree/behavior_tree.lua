@@ -30,6 +30,8 @@ end
 function this:build_database( master )
     local data = {}
     data.master = master
+    data.des_pos = {}
+    data.des_room = nil
     return data
 end
 

@@ -23,6 +23,7 @@ namespace Map
         //private float centerOffset = 0.365f;
         private Dictionary<int,Entity> entityMap;
         private Dictionary<int, List<Vector2>> structureMap;
+        private Dictionary<Vector2 room_id,Vector2 center> roomMap;
         private List<Vector2> entityRemoveCache;
         // private List<int> aStarRequestList;
 
@@ -74,17 +75,6 @@ namespace Map
                     entityMap.Remove((int)key);
                 }
             }
-            // ///////calculate astar
-            // for (int i = 0; i < AStarCalcFrame;++i){
-            //     if (aStarRequestList.Count == 0) break;
-            //     int uid = aStarRequestList[0];
-            //     Entity entity = entityMap[uid];
-            //     if(entity != null){
-            //         Debug.Log("reset");
-            //         entity.ResetMapNode();
-            //     }
-            //     aStarRequestList.RemoveAt(0);
-            // }
 
         }
         //>>>>>>>>>>>>>>>>>map effect>>>>>>>>>>>>>>>>>>>
@@ -99,23 +89,22 @@ namespace Map
         public void CreateRoom(int gridX,int gridY){
             float x, y;
             GetViewPos(gridX, gridY, out x, out y);
-            Instantiate(temRoom, new Vector3(x, 0, y), Quaternion.identity);
+            Instantiate(temRoom, new Vector3(x, 1, y), Quaternion.identity);
         }
 
-        public Entity CreateEntity(int id,int uid,int side,int gridX,int gridY,int structUid){
+        public Entity CreateEntity(int id,int uid,int side,int gridX,int gridY,int room_id){
             float x, y;
-            Vector2 pos = FindInitPos(gridX,gridY, mng.GetCreatureData(id).radius);
+            Vector2 pos = FindInitPos(gridX,gridY, mng.GetCreatureData(id).radius,room_id);
             CreatureData data = mng.GetCreatureData(id);
             GetViewPos((int)pos.x, (int)pos.y, out x, out y);
 
-            MarkMovable(data.genus,(int)pos.x, (int)pos.y, data.radius, true);
+            MarkMovable((int)pos.x, (int)pos.y, data.radius, true);
            
             GameObject obj = Instantiate(data.prefab, new Vector3(x, 0, y), Quaternion.identity);
             var entity = obj.AddComponent<Entity>();
             //init entity
             entity.id = id;
             entity.uid = uid;
-            entity.structUid = structUid;
             entity.side = side;
             entity.genus = data.genus;
             entity.radius = data.radius;
@@ -135,7 +124,7 @@ namespace Map
             float x, y;
             Vector2 pos = FindInitPos(_x, _y, entity.radius);
             GetViewPos((int)pos.x, (int)pos.y, out x, out y);
-            MarkMovable(entity.genus, (int)pos.x, (int)pos.y, entity.radius, true);
+            MarkMovable((int)pos.x, (int)pos.y, entity.radius, true);
             entity.gameObject.transform.position = new Vector3(x, 0, y);
             entity.posX = (int)pos.x;
             entity.posY = (int)pos.y;
@@ -143,7 +132,7 @@ namespace Map
 
         public void RemoveEntity(Entity entity,float delay){
 
-            MarkMovable(entity.genus,entity.posX, entity.posY, entity.radius, false);
+            MarkMovable(entity.posX, entity.posY, entity.radius, false);
             //entityMap.Remove(entity.uid);
             if(entity.structUid != -1){
 
@@ -177,6 +166,7 @@ namespace Map
             isInited = true;
             entityMap = new Dictionary<int, Entity>();
             structureMap = new Dictionary<int, List<Vector2>>();
+            roomMap = new Dictionary<Vector2,Vector2>();
             entityRemoveCache = new List<Vector2>();
 
             grids = new bool[BattleDef.columnGridNum, BattleDef.rowGridNum];
@@ -184,7 +174,7 @@ namespace Map
             {
                 for (int j = 0; j < BattleDef.rowGridNum; ++j)
                 {
-                    grids[i, j] = false;
+                    grids[i, j] = 0;
                 }
             }
             structureGrids = new bool[BattleDef.columnGridNum / 16, BattleDef.rowGridNum / 16];
@@ -222,18 +212,6 @@ namespace Map
 
         }
 
-        //public void InitNaviGrids(){
-        //    for (int i = 0; i < BattleDef.columnGridNum / 16; ++i)
-        //    {
-        //        for (int j = 0; j < BattleDef.rowGridNum / 16; ++j)
-        //        {
-        //            if(structureGrids[i, j] == true){
-        //                naviGrids[(int)(i / 2), (int)(j / 2)] = true;
-        //            };
-        //        }
-        //    }
-        //}
-
         public void GetGridPos(float x,float y,out int grid_x,out int grid_y){
             grid_x = (int)Math.Floor(x * Transfer2GridFactor);
             grid_y = (int)Math.Floor(y * Transfer2GridFactor);
@@ -255,80 +233,80 @@ namespace Map
         //     }
         // }
 
-        public HeapNode GetAStarRoute(int unit_id,int s_x,int s_y,int e_x,int e_y,int factor){
+        // public HeapNode GetAStarRoute(int unit_id,int s_x,int s_y,int e_x,int e_y,int factor){
 
-            //bool[,] prioGrids = new bool[BattleDef.columnGridNum,BattleDef.rowGridNum];
-            //for(int x=0;x<BattleDef.columnGridNum;++x){
-            //    for(int y=0;y<BattleDef.rowGridNum;++y){
-            //        prioGrids[x,y] = false;
-            //    }
-            //}
-            //GetPrioAStarRoute(s_x,s_y,e_x,e_y,factor,ref prioGrids);
+        //     //bool[,] prioGrids = new bool[BattleDef.columnGridNum,BattleDef.rowGridNum];
+        //     //for(int x=0;x<BattleDef.columnGridNum;++x){
+        //     //    for(int y=0;y<BattleDef.rowGridNum;++y){
+        //     //        prioGrids[x,y] = false;
+        //     //    }
+        //     //}
+        //     //GetPrioAStarRoute(s_x,s_y,e_x,e_y,factor,ref prioGrids);
 
-            int radius = mng.GetCreatureData(unit_id).radius;
-            //int maxG = BattleDef.maxSpeed / 30 * BattleDef.aStarUpdateFrame*factor;
-            int maxG = (int)(factor*1.4);
+        //     int radius = mng.GetCreatureData(unit_id).radius;
+        //     //int maxG = BattleDef.maxSpeed / 30 * BattleDef.aStarUpdateFrame*factor;
+        //     int maxG = (int)(factor*1.4);
 
-            MapMinHeap heap = new MapMinHeap();
-            heap.SetBound(BattleDef.columnGridNum,BattleDef.rowGridNum);
-            HeapNode root = new HeapNode();
-            HeapNode currNode = null;
-            List<HeapNode> CloseList = new List<HeapNode>();
-            Dictionary<int,bool> IsCanMoveCache = new Dictionary<int,bool>();
-            heap.Push(s_x, s_y, 0f,Distance(s_x, s_y, e_x, e_y),root);
-            while (heap.Count() > 0)
-            {
-                    int count = heap.Count();
-                    currNode = heap.Pop();
-                    CloseList.Add(currNode);
+        //     MapMinHeap heap = new MapMinHeap();
+        //     heap.SetBound(BattleDef.columnGridNum,BattleDef.rowGridNum);
+        //     HeapNode root = new HeapNode();
+        //     HeapNode currNode = null;
+        //     List<HeapNode> CloseList = new List<HeapNode>();
+        //     Dictionary<int,bool> IsCanMoveCache = new Dictionary<int,bool>();
+        //     heap.Push(s_x, s_y, 0f,Distance(s_x, s_y, e_x, e_y),root);
+        //     while (heap.Count() > 0)
+        //     {
+        //             int count = heap.Count();
+        //             currNode = heap.Pop();
+        //             CloseList.Add(currNode);
 
-                    if (currNode.X == e_x && currNode.Y == e_y || currNode.G > maxG) break;
-                    // execute 8-round grids
-                    Vector2Int[] direct = new Vector2Int[8];
-                    direct[0] = new Vector2Int(-1, 1);
-                    direct[1] = new Vector2Int(0, 1);
-                    direct[2] = new Vector2Int(1, 1);
-                    direct[3] = new Vector2Int(-1, 0);
-                    direct[4] = new Vector2Int(1, 0);
-                    direct[5] = new Vector2Int(-1, -1);
-                    direct[6] = new Vector2Int(0, -1);
-                    direct[7] = new Vector2Int(1, -1);
+        //             if (currNode.X == e_x && currNode.Y == e_y || currNode.G > maxG) break;
+        //             // execute 8-round grids
+        //             Vector2Int[] direct = new Vector2Int[8];
+        //             direct[0] = new Vector2Int(-1, 1);
+        //             direct[1] = new Vector2Int(0, 1);
+        //             direct[2] = new Vector2Int(1, 1);
+        //             direct[3] = new Vector2Int(-1, 0);
+        //             direct[4] = new Vector2Int(1, 0);
+        //             direct[5] = new Vector2Int(-1, -1);
+        //             direct[6] = new Vector2Int(0, -1);
+        //             direct[7] = new Vector2Int(1, -1);
 
-                    for (int i = 0; i < 8; ++i)
-                    {
-                        Vector2Int roundPos = new Vector2Int(currNode.X, currNode.Y) + direct[i];
-                        if (CloseList.FindIndex(node => node.X == roundPos.x && node.Y == roundPos.y) == -1)
-                        {
-                            int key = roundPos.x * 1000 + roundPos.y;
-                            bool flag = false;
-                            if (IsCanMoveCache.ContainsKey(key))
-                            {
-                                flag = IsCanMoveCache[key];
-                            }
-                            else
-                            {
-                                flag = IsCanMove(roundPos.x, roundPos.y, radius);
-                                IsCanMoveCache.Add(key, flag);
-                            }
-                        if (flag)
-                        {
-                            if(direct[i].x*direct[i].y!=0)heap.Find(roundPos.x, roundPos.y, currNode.G + DiagoFactor, Distance(roundPos.x, roundPos.y, e_x, e_y), currNode);
-                            else heap.Find(roundPos.x, roundPos.y, currNode.G + 1, Distance(roundPos.x, roundPos.y, e_x, e_y), currNode);
-                        }
-                        }
-                    }
+        //             for (int i = 0; i < 8; ++i)
+        //             {
+        //                 Vector2Int roundPos = new Vector2Int(currNode.X, currNode.Y) + direct[i];
+        //                 if (CloseList.FindIndex(node => node.X == roundPos.x && node.Y == roundPos.y) == -1)
+        //                 {
+        //                     int key = roundPos.x * 1000 + roundPos.y;
+        //                     bool flag = false;
+        //                     if (IsCanMoveCache.ContainsKey(key))
+        //                     {
+        //                         flag = IsCanMoveCache[key];
+        //                     }
+        //                     else
+        //                     {
+        //                         flag = IsCanMove(roundPos.x, roundPos.y, radius);
+        //                         IsCanMoveCache.Add(key, flag);
+        //                     }
+        //                 if (flag)
+        //                 {
+        //                     if(direct[i].x*direct[i].y!=0)heap.Find(roundPos.x, roundPos.y, currNode.G + DiagoFactor, Distance(roundPos.x, roundPos.y, e_x, e_y), currNode);
+        //                     else heap.Find(roundPos.x, roundPos.y, currNode.G + 1, Distance(roundPos.x, roundPos.y, e_x, e_y), currNode);
+        //                 }
+        //                 }
+        //             }
 
 
-                }   
+        //         }   
 
-                while(currNode.Parent != null){
-                    currNode.Parent.Next = currNode;
-                    currNode = currNode.Parent;
-                }
+        //         while(currNode.Parent != null){
+        //             currNode.Parent.Next = currNode;
+        //             currNode = currNode.Parent;
+        //         }
 
-                return currNode;
+        //         return currNode;
 
-        }
+        // }
 
 
         public float Distance(int s_x,int s_y,int e_x,int e_y){
@@ -340,7 +318,7 @@ namespace Map
             return height * DiagoFactor + width - height;
         }
 
-        public Vector2 FindInitPos(int initX,int initY,int radius){
+        public Vector2 FindInitPos(int initX,int initY,int radius,int room_id){
             if(IsCanMove(initX,initY,radius)){
                 Debug.Log("canmove");
                 return new Vector2(initX,initY);
@@ -362,28 +340,32 @@ namespace Map
                     }
                 }
                 ++index;
+                if(index > 200){
+                    return new Vector2(initX,initY)
+                }
             }
            
         }
 
         public bool IsCanMove(int grid_x,int grid_y,int radius){
             if (grid_x < 0 || grid_x >= BattleDef.columnGridNum || grid_y < 0 || grid_y >= BattleDef.rowGridNum) return false;
-            if (BattleDef.useCollision == false) return true;
             for (int x = Math.Max(0, grid_x - radius); x < Math.Min(BattleDef.columnGridNum, grid_x + radius);++x){
                 for (int y = Math.Max(0, grid_y - radius); y < Math.Min(BattleDef.rowGridNum, grid_y + radius);++y){
-                    if (grids[x, y] == true) return false;
+                    if (grids[x, y] > 0) return false;
                 }
             }
             return true;
         }
 
-        public void MarkMovable(int genus,int grid_x,int grid_y,int radius,bool cannotMove){
-            if(BattleDef.useCollision == false || genus==2)return;
+        public void MarkMovable(int grid_x,int grid_y,int radius,bool cannotMove){
+            int flag = 0;
+            if(cannotMove)flag += 1;
+            else flag -= 1;
             for (int x = Math.Max(0, grid_x - radius); x < Math.Min(BattleDef.columnGridNum, grid_x + radius); ++x)
             {
                 for (int y = Math.Max(0, grid_y - radius); y < Math.Min(BattleDef.rowGridNum, grid_y + radius); ++y)
                 {
-                    grids[x, y] = cannotMove;
+                    grids[x, y] += flag;
                 }
             }
         }
@@ -454,86 +436,12 @@ namespace Map
             {
                 int centerX = maxX * 16 - (int)Mathf.Floor(size * 16 / 2);
                 int centerY = maxY * 16 - (int)Mathf.Floor(size * 16 / 2);
-                MarkMovable(1,centerX, centerY, radius, true);
+                MarkMovable(centerX, centerY, radius, true);
             }
 
             return structureUid;
         }
 
-        //private void GetPrioAStarRoute(int s_x,int s_y,int e_x,int e_y,int factor,ref bool[,] prioGrids){
-        //    Debug.Log("Factor:" + factor);
-        //    int value = 25;
-        //    int s_X=(int)(s_x/32);
-        //    int s_Y=(int)(s_y/32);
-        //    int e_X=(int)(e_x/32);
-        //    int e_Y=(int)(e_y/32);
-        //    MapMinHeap heap = new MapMinHeap();
-        //    heap.SetBound(BattleDef.columnGridNum/32,BattleDef.rowGridNum/32);
-        //    HeapNode root = new HeapNode();
-        //    HeapNode currNode = null;
-        //    List<HeapNode> CloseList = new List<HeapNode>();
-        //    Dictionary<int,bool> IsCanMoveCache = new Dictionary<int,bool>();
-        //    heap.Push(s_X, s_Y, 0f,Distance(s_X, s_Y, e_X, e_Y),root);
-        //    while (heap.Count() > 0)
-        //    {
-        //            int count = heap.Count();
-        //            currNode = heap.Pop();
-        //            CloseList.Add(currNode);
 
-        //            if (currNode.X == e_X && currNode.Y == e_Y || currNode.G > value) break;
-        //            // execute 8-round grids
-        //            Vector2Int[] direct = new Vector2Int[8];
-        //            direct[0] = new Vector2Int(-1, 1);
-        //            direct[1] = new Vector2Int(0, 1);
-        //            direct[2] = new Vector2Int(1, 1);
-        //            direct[3] = new Vector2Int(-1, 0);
-        //            direct[4] = new Vector2Int(1, 0);
-        //            direct[5] = new Vector2Int(-1, -1);
-        //            direct[6] = new Vector2Int(0, -1);
-        //            direct[7] = new Vector2Int(1, -1);
-
-        //            for (int i = 0; i < 8; ++i)
-        //            {
-        //                Vector2Int roundPos = new Vector2Int(currNode.X, currNode.Y) + direct[i];
-        //                if (CloseList.FindIndex(node => node.X == roundPos.x && node.Y == roundPos.y) == -1)
-        //                {
-        //                //int key = roundPos.x * 1000 + roundPos.y;
-        //                // bool flag = false;
-        //                // if (IsCanMoveCache.ContainsKey(key))
-        //                // {
-        //                //     flag = IsCanMoveCache[key];
-        //                // }
-        //                // else
-        //                // {
-        //                //     flag = IsCanMove(roundPos.x, roundPos.y, radius);
-        //                //     IsCanMoveCache.Add(key, flag);
-        //                // }
-        //                if (roundPos.x < 0 || roundPos.x >= BattleDef.columnGridNum / 32 || roundPos.y < 0 || roundPos.y >= BattleDef.rowGridNum / 32) continue;
-        //                if (naviGrids[roundPos.x,roundPos.y]==false)
-        //                    {
-        //                        if(direct[i].x*direct[i].y!=0)heap.Find(roundPos.x, roundPos.y, currNode.G + DiagoFactor, Distance(roundPos.x, roundPos.y, e_x, e_y), currNode);
-        //                        else heap.Find(roundPos.x, roundPos.y, currNode.G + 1, Distance(roundPos.x, roundPos.y, e_x, e_y), currNode);
-        //                    }
-        //                }
-        //            }
-
-
-        //        }   
-
-        //        while(currNode.Parent != null){
-        //            currNode.Parent.Next = currNode;
-        //            currNode = currNode.Parent;
-        //        }
-
-        //        while(currNode!=null){
-        //            for(int x=currNode.X*32;x<currNode.X*32+32;++x){
-        //                for(int y=currNode.Y*32;y<currNode.Y*32+32;++y){
-        //                    prioGrids[x,y]=true;
-        //                }
-        //            }
-        //            currNode=currNode.Next;
-        //        }
-
-        //}
         };
     }

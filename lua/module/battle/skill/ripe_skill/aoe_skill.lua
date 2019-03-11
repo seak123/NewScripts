@@ -28,17 +28,6 @@ function this:execute( sess,delta )
         --target trace
         if self.vo.cantain_curr_target == false then table.insert( self.database.target_trace,sess.trace:get_last_data().target_uid) end
 
-        --opposite_type
-        if self.vo.opposite_type == 1 then
-            self.opposite_type = 1
-        elseif self.vo.opposite_type == 2 then
-            self.opposite_type = 2
-        elseif self.vo.opposite_type == 3 then
-            self.opposite_type = 3
-        else
-            self.opposite_type = self.database.target.genus
-        end
-
         --side
         if self.vo.side == 0 then
             self.side = self.database.caster.side
