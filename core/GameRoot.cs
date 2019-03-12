@@ -97,28 +97,23 @@ public class GameRoot : MonoBehaviour {
 
        
         battleData = new BattleData();
-        battleData.unitNum = 10;
-        battleData.units = new UnitData[10];
+        battleData.unitNum = 25;
+        battleData.units = new UnitData[25];
         battleData.units[0] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1081));
         battleData.units[0].init_room = 32;
         battleData.units[1] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1081));
         battleData.units[1].init_room = 32;
-        battleData.units[2] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1091));
+        battleData.units[2] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1081));
         battleData.units[2].init_room = 32;
-        battleData.units[3] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1091));
+        battleData.units[3] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1081));
         battleData.units[3].init_room = 33;
         battleData.units[4] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(5011));
         battleData.units[4].init_room = 31;
-        battleData.units[5] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1081),2);
-        battleData.units[5].init_room = 11;
-        battleData.units[6] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1081),2);
-        battleData.units[6].init_room = 11;
-        battleData.units[7] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1081),2);
-        battleData.units[7].init_room = 11;
-        battleData.units[8] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1081),2);
-        battleData.units[8].init_room = 11;
-        battleData.units[9] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(5011),2);
-        battleData.units[9].init_room = 11;
+        for (int i = 0; i < 20;++i){
+            battleData.units[5+i] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1091), 2);
+            battleData.units[5 + i].init_room = 11;
+        }
+
         //battleData = new BattleData();
         //battleData.unitNum = 2;
         //battleData.units = new UnitData[2];

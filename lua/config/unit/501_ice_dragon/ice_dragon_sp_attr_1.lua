@@ -35,6 +35,9 @@ aoe0.opposite_type = 4
 aoe0.radius = 20
 aoe0:append("raw_skills",aoe_dam,buff3)
 
+local normal = normal_skill.new()
+normal:append("raw_skills",buff3)
+
 local buff2 = buff.new()
 buff2.buff_id = 5012
 buff2.duration = 4
@@ -46,7 +49,7 @@ buff2:append("belongs",state0)
 
 local caster0 = caster.new()
 caster0.buff_occasion = "pre_normal_damage"
-caster0.skills = {aoe0}
+caster0.skills = {normal}
 
 local buff0 = buff.new()
 buff0.buff_id = 5011
@@ -54,7 +57,7 @@ buff0.duration = -1
 -- 2bit: 01
 buff0.feature = 1
 buff0.execute_type = 0
-buff0:append("belongs",caster0,buff2)
+buff0:append("belongs",caster0)
 
 
 buff0.skill_type = "passive"

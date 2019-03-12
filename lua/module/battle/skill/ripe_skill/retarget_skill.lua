@@ -11,11 +11,13 @@ end
 function this:execute( sess,delta )
     if self.vo.is_friend == false then
         self.target_side = 3 - self.database.caster.side
+        if self.vo.cantain_curr_target == false then table.insert( self.database.target_trace,sess.trace:get_last_data().target_uid) end
     else
         self.target_side = self.database.caster.side
+        if self.vo.cantain_curr_target == false then table.insert( self.database.target_trace,sess.trace:get_last_data().caster_uid) end
     end
     
-    if self.vo.cantain_curr_target == false then table.insert( self.database.target_trace,sess.trace:get_last_data().target) end
+    
     self.targets = {}
     self[self.vo.target_type.."_select"](self,sess)
   
