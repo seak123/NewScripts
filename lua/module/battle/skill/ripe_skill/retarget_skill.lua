@@ -35,7 +35,7 @@ function this:random_select( sess )
         func = self:check_repeat()
     end
     for i=1,self.vo.num do
-        local unit = sess.field:find_random_unit(false,self.target_side,func)
+        local unit = sess.field:find_random_unit(false,self.target_side,self.database.master,func)
         if unit ~= nil then
             table.insert( self.targets, unit )
             table.insert( self.database.target_trace, unit.uid ) 
@@ -80,7 +80,7 @@ function this:random_hurted_select( sess )
         func2 = self:check_repeat()
     end
     for i=1,self.vo.num do
-        local unit = sess.field:find_random_unit(false,self.target_side,func)
+        local unit = sess.field:find_random_unit(false,self.target_side,self.database.master,func)
         if unit == nil then
             break
         end
@@ -88,7 +88,7 @@ function this:random_hurted_select( sess )
         table.insert( self.database.target_trace,unit.uid )
     end
     for i=#self.targets+1,self.vo.num do
-        local unit = sess.field:find_random_unit(false,self.target_side,func2)
+        local unit = sess.field:find_random_unit(false,self.target_side,self.database.master,func2)
         if unit ~= nil then
             table.insert( self.targets,unit )
             table.insert( self.database.target_trace,unit.uid )

@@ -133,17 +133,19 @@ end
 
 function this:update_MoveToPos( delta )
     -- print("uid:"..self.database.master.uid.." update movetopos state")
+    local field = self.database.master.sess.field
     self.database.master.transform.des_pos = self.database.des_pos
-    if self.database.master.transform.grid_pos.X == self.database.des_pos.X and self.database.master.transform.grid_pos.Y == self.database.des_pos.Y then
+    
+    if field:distance(self.database.master.transform.grid_pos,self.database.des_pos) < 8 then
         self.running = false
         return "completed"
     end
     self.running = true
     self.runtime = self.runtime + delta
-    -- if self.runtime > self.max_runtime then
-    --     self.running = false
-    --      return "failure" 
-    -- end
+    if self.runtime > self.max_runtime then
+         self.running = false
+          return "failure" 
+    end
     return "running"
 end
 

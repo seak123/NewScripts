@@ -46,7 +46,13 @@ function this:check_EnemyAround(  )
     if self.database.pre_attack_target ~= nil and self.database.pre_attack_target.alive ==0 and self.database.pre_attack_target.type == 0 then
         unit = self.database.pre_attack_target
     else
-        unit = field:find_enemy(true,self.database.master)
+        local active = nil
+        if self.database.master.side == 1 then
+            active = 1
+        else
+            active = 0
+        end
+        unit = field:find_enemy(true,self.database.master,false,active)
     end
     if self.database.master.statectrl:has_feature("confused") then
         unit = field:find_enemy(true,self.database.master,true)
@@ -108,8 +114,8 @@ function this:check_Boring(  )
     if math.modf(master.idle_time) < math.modf(master.idle_time +delta ) and math.random() < 0.2 then
         local pos = master.transform.grid_pos
         local center = master.sess.battle_map:get_room_center(master.location)
-        local x = clamp(pos.X + math.random(-100,100),center.X - battle_def.room_bound/2,center.X + battle_def.room_bound/2)
-        local y = clamp(pos.Y + math.random(-100,100),center.Y - battle_def.room_bound/2,center.Y + battle_def.room_bound/2)
+        local x = clamp(pos.X + math.random(-100,100),center.X - battle_def.room_bound/4,center.X + battle_def.room_bound/4)
+        local y = clamp(pos.Y + math.random(-100,100),center.Y - battle_def.room_bound/4,center.Y + battle_def.room_bound/4)
         self.database.des_pos = {X = x,Y= y}
         
         return true
@@ -141,7 +147,7 @@ function this.check_hurt_friend_in_range( range,with_structure )
         local func = function(unit)
             return unit.hp<unit.max_hp and field:distance(unit,database.master) <= range
         end
-        local unit = field:find_random_unit(with_structure,database.master.side,func)
+        local unit = field:find_random_unit(with_structure,database.master.side,database.master,func)
         if unit == nil then
             return false
         else

@@ -77,7 +77,9 @@ function this:get_unit( uid,side)
 end
 --opposite_type: attack ground or sky
 --just for normal attack
-function this:find_enemy( with_structure,unit,is_find_friend )
+-- range: 0,all map  1,only room
+-- active: 0,not active 1,active
+function this:find_enemy( with_structure,unit,is_find_friend,active,range)
     local enemy_side = 3 - unit.side
     if is_find_friend ~= nil and is_find_friend == true then
         enemy_side = unit.side
@@ -90,33 +92,36 @@ function this:find_enemy( with_structure,unit,is_find_friend )
     local type_flag = 0
     if with_structure == true then type_flag = 2 else type_flag =1 end
 
-    for _,u in ipairs(self.room_units[unit.location]) do
+    local units = nil
+    if range == nil or range == 1 then
+        units = self.room_units[unit.location]
+    else
+        units = self.units[enemy_side]
+    end
+
+    for _,u in ipairs(units) do
         local dis = self:distance(unit,u)
         if  u.type < type_flag and u.side == enemy_side then
             local threat = unit.threat_value[u.uid]
-            if threat == nil then
-                -- set base threat_value
-                unit.threat_value[u.uid] = 10
-                threat = 10
-            end
-            if  threat > max_threat then
-                max_threat = threat
-                threat_enemy = u
-            end
-            if threat >= 10 and dis < min_dis then
-                min_dis = dis
-                enemy = u
+            if threat ~= nil or active == 1 then
+                if threat == nil then
+                    -- set base threat_value
+                    unit.threat_value[u.uid] = 10
+                    threat = 10
+                end
+
+                if dis < min_dis then
+                    min_dis = dis
+                    enemy = u
+                end
             end
         end
     end
 
-    if enemy~=nil and enemy.type == 1 and threat_enemy ~= nil and threat_enemy.alive == 0 then
-        return threat_enemy
-    end
     return enemy
 end
 
-function this:get_units(with_structure,side,unit,num,condition_func  )
+function this:get_units(with_structure,side,unit,num,condition_func,range  )
     local opposite_type = unit.opposite_type
     local min_dis = 9999
     local enemy = {}
@@ -127,8 +132,16 @@ function this:get_units(with_structure,side,unit,num,condition_func  )
     local type_flag = 0
     if with_structure == true then type_flag = 2 else type_flag = 1 end
     if condition_func == nil then condition_func = function(a) return true end end
-    for _,u in ipairs(self.units[side]) do
-        if condition_func(u) and u.type < type_flag  then
+
+    local units = nil
+    if range == nil or range == 1 then
+        units = self.room_units[unit.location]
+    else
+        units = self.units[side]
+    end
+
+    for _,u in ipairs(units) do
+        if condition_func(u) and u.type < type_flag and u.side == side  then
             local dis = self:distance(unit,u)
             local index = -1
             for i=num,1,-1 do
@@ -155,25 +168,32 @@ function this:get_units(with_structure,side,unit,num,condition_func  )
     return res
 end
 
-function this:find_friend( with_structure,unit,condition_func )
+function this:find_friend( with_structure,unit,condition_func ,range)
     local side = unit.side
     local min_dis = 9999
     local friend = nil
 
     local type_flag = 0
     if with_structure == true then type_flag = 2 else type_flag =1 end
+
+    local units = nil
+    if range == nil or range == 1 then
+        units = self.room_units[unit.location]
+    else
+        units = self.units[side]
+    end
     if condition_func == nil then
-        for _,u in ipairs(self.units[side]) do
+        for _,u in ipairs(units) do
             local dis = self:distance(unit,u)
-            if dis < min_dis and unit.uid ~= u.uid and u.type < type_flag then
+            if dis < min_dis and unit.uid ~= u.uid and u.type < type_flag and u.side == side then
                 min_dis = dis
                 friend = u
             end
         end
     else
-        for _,u in ipairs(self.units[side]) do
+        for _,u in ipairs(units) do
             local dis = self:distance(unit,u)
-            if dis < min_dis and condition_func(u) and u.type < type_flag then
+            if dis < min_dis and condition_func(u) and u.type < type_flag and u.side == side then
                 min_dis = dis
                 friend = u
             end
@@ -182,22 +202,30 @@ function this:find_friend( with_structure,unit,condition_func )
     return friend
 end
 
-function this:find_random_unit(with_structure,side,condition_func )
+function this:find_random_unit(with_structure,side,unit,condition_func,range )
 
     local type_flag = 0
     if with_structure == true then type_flag = 2 else type_flag =1 end
     if condition_func == nil then condition_func = function(a) return true end end
 
-    local units = {}
-    for _,u in ipairs(self.units[side]) do
-       if u.type < type_flag and condition_func(u) then table.insert( units, u ) end
+    local res = {}
+
+    local units = nil
+    if range == nil or range == 1 then
+        units = self.room_units[unit.location]
+    else
+        units = self.units[side]
     end
-    if #units ==0 then return nil end
-    local index = math.random( 1, #units )
-    return units[index]
+
+    for _,u in ipairs(units) do
+       if u.type < type_flag and condition_func(u) then table.insert( res, u ) end
+    end
+    if #res ==0 then return nil end
+    local index = math.random( 1, #res )
+    return res[index]
 end
 
-function this:get_targets(opposite_type,with_structure,side,unit,num,condition_func  )
+function this:get_targets(opposite_type,with_structure,side,unit,num,condition_func,range)
     local min_dis = 9999
     local enemy = {}
     if num == -1 then num = 99 end
@@ -208,8 +236,15 @@ function this:get_targets(opposite_type,with_structure,side,unit,num,condition_f
     local type_flag = 0
     if with_structure == true then type_flag = 2 else type_flag = 1 end
     if condition_func == nil then condition_func = function(a) return true end end
-    for _,u in ipairs(self.units[side]) do
-        if condition_func(u) and u.type < type_flag then
+
+    local units = nil
+    if range == nil or range == 1 then
+        units = self.room_units[unit.location]
+    else
+        units = self.units[side]
+    end
+    for _,u in ipairs(units) do
+        if condition_func(u) and u.type < type_flag and u.side == side then
             local dis = self:distance(unit,u)
             local index = -1
             for i=num,1,-1 do
