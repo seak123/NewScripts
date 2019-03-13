@@ -21,7 +21,12 @@ function this:execute(sess, target)
     for _, v in ipairs(self.vo.skills) do
         table.insert( skill_vo.root, v)
     end
-    local _target =  sess.field:get_unit(sess.trace:get_last_data().target_uid)
+    local _target
+    if self.vo.on_target == 1 then
+        _target =  sess.field:get_unit(sess.trace:get_last_data().target_uid)
+    else
+        _target = sess.field:get_unit(sess.trace:get_last_data().caster_uid)
+    end
     local skill = entire_skill.new(sess,skill_vo)
     local new_database = pack.pack_database(database.caster,_target,database.target_pos)
     skill:execute(new_database)

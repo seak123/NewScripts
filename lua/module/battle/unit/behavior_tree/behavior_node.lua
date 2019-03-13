@@ -88,10 +88,12 @@ function this:update_by_sel( delta )
             return "running"
         end
         if state == "completed" then
+            self:abort()
             self.running = false
             self.active_node = nil
             return "completed"
         end
+        self.abort()
         self.running = false
         self.active_node = nil
         return "failure"
@@ -139,11 +141,13 @@ function this:update_by_seq( delta )
         return "running"
     end
     if state == "failure" then
+        self:abort()
         self.active_index = 1
         self.running = false
         self.active_node = nil
         return "failure"
     end
+    self:abort()
     self.active_index = self.active_index + 1
     if self.active_index > #self.childs then
         self.active_index = 1

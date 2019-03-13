@@ -355,13 +355,13 @@ function this:enter_Idle(  )
 end
 
 function this:abort_Idle(  )
-    self.database.master.entity:AnimCasterBreak()
+    --self.database.master.entity:AnimCasterBreak()
     self.database.master.idle_time = 0
 end
 
 function this:update_Idle( delta )
     --print("@@stay idle")
-    self.database.master.entity:AnimCasterBreak()
+    --self.database.master.entity:AnimCasterBreak()
     self.database.master.idle_time = self.database.master.idle_time + delta
     self.running = true
     return "running"

@@ -38,18 +38,10 @@ aoe0:append("raw_skills",aoe_dam,buff3)
 local normal = normal_skill.new()
 normal:append("raw_skills",buff3)
 
-local buff2 = buff.new()
-buff2.buff_id = 5012
-buff2.duration = 4
--- 2bit: 10
-buff2.feature = 2
-buff2.execute_type = 1
-buff2.buff_occasion = "pre_normal_damage"
-buff2:append("belongs",state0)
-
 local caster0 = caster.new()
+caster0.on_target = 1
 caster0.buff_occasion = "pre_normal_damage"
-caster0.skills = {normal}
+caster0.skills = {normal,aoe0}
 
 local buff0 = buff.new()
 buff0.buff_id = 5011
