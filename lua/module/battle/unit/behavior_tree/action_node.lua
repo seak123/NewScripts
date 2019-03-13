@@ -114,6 +114,7 @@ function this:update_MoveForward( delta )
     end
     self.database.master.transform.des_pos = self.database.des_pos
     if field:distance(self.database.master.transform.grid_pos,self.database.des_pos) < 8 then
+        field:change_room(self.database.master,next_room)
         self.running = false
         return "completed"
     end

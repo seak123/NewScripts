@@ -93,7 +93,7 @@ function this:update_by_sel( delta )
             self.active_node = nil
             return "completed"
         end
-        self.abort()
+        self:abort()
         self.running = false
         self.active_node = nil
         return "failure"

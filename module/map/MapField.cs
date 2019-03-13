@@ -221,11 +221,20 @@ namespace Map
         }
 
         public Vector2 GetRoute(int s_x,int s_y,int e_x,int e_y,float value){
-
+            return Vector2.zero;
         }
 
         public Vector2 GetRoomId(int _x,int _y){
-            //int indexX = Math.
+            int indexX = _x / (BattleDef.roomBound + BattleDef.roomInterval);
+            int indexY = _y / (BattleDef.roomBound + BattleDef.roomInterval);
+            int maxX = (indexX + 1) * (BattleDef.roomBound + BattleDef.roomInterval);
+            int maxY = (indexY + 1) * (BattleDef.roomBound + BattleDef.roomInterval);
+            if(_x<maxX && _x>maxX-BattleDef.roomBound && _y<maxY && _y>maxY-BattleDef.roomBound){
+                return new Vector2(indexX + 1, indexY + 1);
+            }else{
+                return Vector2.zero;
+            }
+
         }
         // public void AddAStarRequestList(int uid){
         //     if(!aStarRequestList.Contains(uid)){

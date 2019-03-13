@@ -45,9 +45,9 @@ function this:unit_die( unit )
         end
 end
 
-function this:portal( unit,new_room,out_door )
+function this:change_room( unit,new_room )
     local location = unit.location
-    unit.transform:portal(new_room,out_door)
+    unit.transform:change_room(new_room)
     for i, v in ipairs(self.room_units[location]) do
         if v.uid == unit.uid then
             table.remove( self.room_units[location], i )
@@ -55,6 +55,18 @@ function this:portal( unit,new_room,out_door )
         end
     end
     table.insert( self.room_units[new_room], unit )
+end
+
+function this:portal( unit,new_room )
+    -- local location = unit.location
+    -- unit.transform:portal(new_room,out_door)
+    -- for i, v in ipairs(self.room_units[location]) do
+    --     if v.uid == unit.uid then
+    --         table.remove( self.room_units[location], i )
+    --         break
+    --     end
+    -- end
+    -- table.insert( self.room_units[new_room], unit )
 end
 
 function this:get_unit( uid,side)
