@@ -220,6 +220,13 @@ namespace Map
             lGridY = (int)Mathf.Floor(gridY / 16);
         }
 
+        public Vector2 GetRoute(int s_x,int s_y,int e_x,int e_y,float value){
+
+        }
+
+        public Vector2 GetRoomId(int _x,int _y){
+            //int indexX = Math.
+        }
         // public void AddAStarRequestList(int uid){
         //     if(!aStarRequestList.Contains(uid)){
         //         aStarRequestList.Add(uid);

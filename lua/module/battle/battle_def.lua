@@ -51,7 +51,7 @@ this.ENEMYBOUND = {
     row = 448
 }
 
-this.room_bound = 138
+this.room_bound = 140
 
 
 ------------------

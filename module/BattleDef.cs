@@ -27,6 +27,8 @@ public static class BattleDef
 
     public static int roomBound = 140;
 
+    public static int roomInterval = 20;
+
     //logic data
     public static float MaxSaving = 20;
 
