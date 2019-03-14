@@ -180,6 +180,10 @@ function this:update_MoveToEnemy( delta )
             self.running = false
             return "completed"
         end
+        if self.database.target.location ~= self.database.master.location then
+            self.running = false
+            return "failure"
+        end
         self.database.master.transform.des_pos =  self.database.target.transform.grid_pos
         self.running = true
         self.runtime = self.runtime + delta

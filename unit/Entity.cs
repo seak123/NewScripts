@@ -102,19 +102,19 @@ namespace Map
             }
             moveSpeed = speed;
             MapField field = GameRoot.GetInstance().MapField;
-
-
-            float toViewX, toViewY;
-            field.GetViewPos(toX, toY, out toViewX, out toViewY);
-
             field.MarkMovable(posX, posY, radius, false);
 
-            float nowViewX = gameObject.transform.position.x;
-            float nowViewY = gameObject.transform.position.z;
-            float factor = value / BattleDef.Transfer2GridFactor / Vector2.Distance(new Vector2(toViewX, toViewY), new Vector2(nowViewX, nowViewY));
-            float nextViewX = Mathf.Max(0, Mathf.Min(BattleDef.columnGridNum - 1, nowViewX + (toViewX - nowViewX) * factor));
-            float nextViewY = Mathf.Max(0, Mathf.Min(BattleDef.rowGridNum - 1, nowViewY + (toViewY - nowViewY) * factor));
-            field.GetGridPos(nextViewX, nextViewY, out gridX, out gridY);
+            // float toViewX, toViewY;
+            // field.GetViewPos(toX, toY, out toViewX, out toViewY);
+
+            // field.MarkMovable(posX, posY, radius, false);
+
+            // float nowViewX = gameObject.transform.position.x;
+            // float nowViewY = gameObject.transform.position.z;
+            // float factor = value / BattleDef.Transfer2GridFactor / Vector2.Distance(new Vector2(toViewX, toViewY), new Vector2(nowViewX, nowViewY));
+            // float nextViewX = Mathf.Max(0, Mathf.Min(BattleDef.columnGridNum - 1, nowViewX + (toViewX - nowViewX) * factor));
+            // float nextViewY = Mathf.Max(0, Mathf.Min(BattleDef.rowGridNum - 1, nowViewY + (toViewY - nowViewY) * factor));
+            // field.GetGridPos(nextViewX, nextViewY, out gridX, out gridY);
             
             offset = 0;
             
