@@ -221,8 +221,12 @@ namespace Map
         }
 
         public Vector2 GetRoute(float s_x,float s_y,float e_x,float e_y,float value){
-            Vector2 startRoom = GetRoomId(s_x,s_y);
-            Vector2 endRoom = GetRoomId(e_x,e_y);
+            int s_X, s_Y;
+            int e_X, e_Y;
+            GetGridPos(s_x, s_x, out s_X, out s_Y);
+            GetGridPos(e_x, e_y, out e_X, out e_Y);
+            Vector2Int startRoom = GetRoomId(s_X,s_Y);
+            Vector2Int endRoom = GetRoomId(e_X,e_Y);
             if(startRoom.x == endRoom.x && startRoom.y == endRoom.y){
                 float nowViewX = s_x;
                 float nowViewY = s_y;
@@ -236,10 +240,50 @@ namespace Map
                 return new Vector2(nextViewX,nextViewY);
             }
             else if(startRoom.x == 0 && startRoom.y == 0 && endRoom.x != 0){
+                int maxX = endRoom.x * (BattleDef.roomBound + BattleDef.roomInterval);
+                int minX = maxX - BattleDef.roomBound;
+                int maxY = endRoom.y * (BattleDef.roomBound + BattleDef.roomInterval);
+                int minY = maxY - BattleDef.roomBound;
+                int desX, desY;
+                float des_x, des_y;
+                desX = Mathf.Clamp(s_X, minX - 4, maxX + 4);
+                desY = Mathf.Clamp(s_Y, minY - 4, maxY + 4);
+                GetViewPos(desX, desY, out des_x, out des_y);
 
-            }else if(endRoom.x == 0 && endRoom.y == 0 && startRoom.x != 0){
+                float nowViewX = s_x;
+                float nowViewY = s_y;
 
-            }else{
+                float toViewX = des_x;
+                float toViewY = des_y;
+
+                float factor = value / BattleDef.Transfer2GridFactor / Vector2.Distance(new Vector2(toViewX, toViewY), new Vector2(nowViewX, nowViewY));
+                float nextViewX = Mathf.Max(0, Mathf.Min(BattleDef.columnGridNum - 1, nowViewX + (toViewX - nowViewX) * factor));
+                float nextViewY = Mathf.Max(0, Mathf.Min(BattleDef.rowGridNum - 1, nowViewY + (toViewY - nowViewY) * factor));
+                return new Vector2(nextViewX, nextViewY);
+            }
+            else if(endRoom.x == 0 && endRoom.y == 0 && startRoom.x != 0){
+                int maxX = startRoom.x * (BattleDef.roomBound + BattleDef.roomInterval);
+                int minX = maxX - BattleDef.roomBound;
+                int maxY = startRoom.y * (BattleDef.roomBound + BattleDef.roomInterval);
+                int minY = maxY - BattleDef.roomBound;
+                int desX, desY;
+                float des_x, des_y;
+                desX = Mathf.Clamp(e_X, minX - 4, maxX + 4);
+                desY = Mathf.Clamp(e_Y, minY - 4, maxY + 4);
+                GetViewPos(desX, desY, out des_x, out des_y);
+
+                float nowViewX = s_x;
+                float nowViewY = s_y;
+
+                float toViewX = des_x;
+                float toViewY = des_y;
+
+                float factor = value / BattleDef.Transfer2GridFactor / Vector2.Distance(new Vector2(toViewX, toViewY), new Vector2(nowViewX, nowViewY));
+                float nextViewX = Mathf.Max(0, Mathf.Min(BattleDef.columnGridNum - 1, nowViewX + (toViewX - nowViewX) * factor));
+                float nextViewY = Mathf.Max(0, Mathf.Min(BattleDef.rowGridNum - 1, nowViewY + (toViewY - nowViewY) * factor));
+                return new Vector2(nextViewX, nextViewY);
+            }
+            else{
                 float nowViewX = s_x;
                 float nowViewY = s_y;
 
@@ -252,18 +296,17 @@ namespace Map
                 return new Vector2(nextViewX,nextViewY);
             }
 
-            return Vector2.zero;
         }
 
-        public Vector2 GetRoomId(int _x,int _y){
+        public Vector2Int GetRoomId(int _x,int _y){
             int indexX = _x / (BattleDef.roomBound + BattleDef.roomInterval);
             int indexY = _y / (BattleDef.roomBound + BattleDef.roomInterval);
             int maxX = (indexX + 1) * (BattleDef.roomBound + BattleDef.roomInterval);
             int maxY = (indexY + 1) * (BattleDef.roomBound + BattleDef.roomInterval);
             if(_x<maxX && _x>maxX-BattleDef.roomBound && _y<maxY && _y>maxY-BattleDef.roomBound){
-                return new Vector2(indexX + 1, indexY + 1);
+                return new Vector2Int(indexX + 1, indexY + 1);
             }else{
-                return Vector2.zero;
+                return Vector2Int.zero;
             }
 
         }

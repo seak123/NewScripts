@@ -104,21 +104,22 @@ namespace Map
             MapField field = GameRoot.GetInstance().MapField;
             field.MarkMovable(posX, posY, radius, false);
 
-            // float toViewX, toViewY;
-            // field.GetViewPos(toX, toY, out toViewX, out toViewY);
+            float toViewX, toViewY;
+            field.GetViewPos(toX, toY, out toViewX, out toViewY);
 
-            // field.MarkMovable(posX, posY, radius, false);
+            float nowViewX = gameObject.transform.position.x;
+            float nowViewY = gameObject.transform.position.z;
 
-            // float nowViewX = gameObject.transform.position.x;
-            // float nowViewY = gameObject.transform.position.z;
-            // float factor = value / BattleDef.Transfer2GridFactor / Vector2.Distance(new Vector2(toViewX, toViewY), new Vector2(nowViewX, nowViewY));
-            // float nextViewX = Mathf.Max(0, Mathf.Min(BattleDef.columnGridNum - 1, nowViewX + (toViewX - nowViewX) * factor));
-            // float nextViewY = Mathf.Max(0, Mathf.Min(BattleDef.rowGridNum - 1, nowViewY + (toViewY - nowViewY) * factor));
-            // field.GetGridPos(nextViewX, nextViewY, out gridX, out gridY);
-            
+            Vector2 desPoint = field.GetRoute(nowViewX, nowViewY, toViewX, toViewY, value);
+
+            float nextViewX = desPoint.x;
+            float nextViewY = desPoint.y;
+
             offset = 0;
             
             gameObject.transform.position = new Vector3(nextViewX, 0f, nextViewY);
+
+            field.GetGridPos(nextViewX,nextViewY,out gridX,out gridY);
             SetRotation(toX, toY);
             posX = gridX;
             posY = gridY;
