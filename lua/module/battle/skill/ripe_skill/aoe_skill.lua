@@ -26,7 +26,7 @@ function this:execute( sess,delta )
             self.target_pos.Y = self.database.target_pos.Y
         end
         --target trace
-        if self.vo.cantain_curr_target == false then table.insert( self.database.target_trace,sess.trace:get_last_data().target_uid) end
+        if self.vo.cantain_curr_target == false then table.insert( self.database.target_trace,self.targets[1].uid) end
 
         --side
         if self.vo.side == 0 then

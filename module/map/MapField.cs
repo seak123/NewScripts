@@ -246,8 +246,8 @@ namespace Map
                 int minY = maxY - BattleDef.roomBound;
                 int desX, desY;
                 float des_x, des_y;
-                desX = Mathf.Clamp(s_X, minX - 4, maxX + 4);
-                desY = Mathf.Clamp(s_Y, minY - 4, maxY + 4);
+                desX = Mathf.Clamp(s_X, minX + 8, maxX - 8);
+                desY = Mathf.Clamp(s_Y, minY + 8, maxY - 8);
                 GetViewPos(desX, desY, out des_x, out des_y);
 
                 float nowViewX = s_x;
@@ -268,8 +268,8 @@ namespace Map
                 int minY = maxY - BattleDef.roomBound;
                 int desX, desY;
                 float des_x, des_y;
-                desX = Mathf.Clamp(e_X, minX - 4, maxX + 4);
-                desY = Mathf.Clamp(e_Y, minY - 4, maxY + 4);
+                desX = Mathf.Clamp(e_X, minX + 8, maxX - 8);
+                desY = Mathf.Clamp(e_Y, minY + 8, maxY - 8);
                 GetViewPos(desX, desY, out des_x, out des_y);
 
                 float nowViewX = s_x;

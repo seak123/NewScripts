@@ -77,6 +77,9 @@ function this:update_MoveForward( delta )
     if next_room == now_room then
         return "completed"
     end
+    if now_room == -1 then
+        now_room = self.database.master.sess.battle_map:get_entry_room() + 10
+    end
     local flag = nil
     if self.database.des_pos == nil then self.database.des_pos = {} end
     if math.modf(next_room/10) == math.modf(now_room/10) then
@@ -86,14 +89,14 @@ function this:update_MoveForward( delta )
             -- self.database.des_pos.X = now_center.X
             -- self.database.des_pos.Y = now_center.Y + battle_def.room_bound/2
             self.database.des_pos.X = next_center.X
-            self.database.des_pos.Y = next_center.Y - battle_def.room_bound/2
+            self.database.des_pos.Y = next_center.Y - battle_def.room_bound/2 + 8
             --flag = 2
         else
             -- self.database.des_pos.X = now_center.X
             -- self.database.des_pos.Y = now_center.Y - battle_def.room_bound/2
             --flag = 4
             self.database.des_pos.X = next_center.X
-            self.database.des_pos.Y = next_center.Y + battle_def.room_bound/2
+            self.database.des_pos.Y = next_center.Y + battle_def.room_bound/2 -8
         end
     else
         local now_row = math.modf(now_room/10)
@@ -102,18 +105,18 @@ function this:update_MoveForward( delta )
             -- self.database.des_pos.X = now_center.X + battle_def.room_bound/2
             -- self.database.des_pos.Y = now_center.Y
             -- flag = 3
-            self.database.des_pos.X = next_center.X - battle_def.room_bound/2
+            self.database.des_pos.X = next_center.X - battle_def.room_bound/2+8
             self.database.des_pos.Y = next_center.Y
         else
             -- self.database.des_pos.X = now_center.X - battle_def.room_bound/2
             -- self.database.des_pos.Y = now_center.Y
             -- flag = 1
-            self.database.des_pos.X = next_center.X + battle_def.room_bound/2
+            self.database.des_pos.X = next_center.X + battle_def.room_bound/2-8
             self.database.des_pos.Y = next_center.Y
         end
     end
     self.database.master.transform.des_pos = self.database.des_pos
-    if field:distance(self.database.master.transform.grid_pos,self.database.des_pos) < 8 then
+    if field:distance(self.database.master.transform.grid_pos,self.database.des_pos) < 4 then
         field:change_room(self.database.master,next_room)
         self.running = false
         return "completed"

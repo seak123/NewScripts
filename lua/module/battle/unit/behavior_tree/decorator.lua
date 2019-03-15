@@ -17,6 +17,11 @@ end
 function this:check_Forward(  )
     local transform = self.database.master.transform
     local now_room = self.database.master.location
+    if now_room == -1 then
+        local next_room = self.database.master.sess.battle_map:get_entry_room()
+        transform.des_room = next_room
+        return true
+    end
     if transform.des_room == now_room then
         local next_room = this.get_next_room_id(now_room,math.random(4))
         while self.database.master.sess.battle_map:get_room_center(next_room) == nil do

@@ -29,4 +29,9 @@ function this:get_room_center( id )
     return self.room_table[id]
 end
 
+function this:get_entry_room(  )
+    -- temp
+    return 32
+end
+
 return this

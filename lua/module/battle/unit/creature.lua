@@ -80,13 +80,16 @@ function this:init(  )
     -- wait for appear action
     self.appeared = 0
     -- init room
-    self.location = self.data.init_room
+    if self.data.init_room ~= -1 then
+        self.location = self.data.init_room
+        local init_pos = self.sess.battle_map:get_room_center(self.data.init_room)
+        self.data.init_x = init_pos.X
+        self.data.init_y = init_pos.Y
+    else
+        self.location = -1
+    end
 
     local data = self.data
-    local init_pos = self.sess.battle_map:get_room_center(self.data.init_room)
-    self.data.init_x = init_pos.X
-    self.data.init_y = init_pos.Y
-
  
     if self.type == 0 or self.type == -1 then
         self.entity = self.sess.map:CreateEntity(self.data.id,self.uid,self.side,self.data.init_x,self.data.init_y,-1)
