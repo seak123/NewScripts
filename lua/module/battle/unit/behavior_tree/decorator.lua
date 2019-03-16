@@ -23,25 +23,51 @@ function this:check_Forward(  )
         return true
     end
     if transform.des_room == now_room then
-        local next_room = this.get_next_room_id(now_room,math.random(4))
-        while self.database.master.sess.battle_map:get_room_center(next_room) == nil do
-            next_room = this.get_next_room_id(now_room,math.random(4))
-        end
+        local next_room = self:get_next_room_id(now_room)
         transform.des_room = next_room
-        
     end
     return true
 end
 
-function this.get_next_room_id( now_id,flag )
-    if flag == 1 then
-        return now_id + 10
-    elseif flag == 2 then
-        return now_id - 10
-    elseif flag == 3 then
-        return now_id + 1
+function this.get_next_room_id( now_id )
+    local valid_rooms = {now_id-1,now_id+1,now_id+10,now_id-10}
+    local new_rooms = {}
+    for i=#valid_rooms,1,-1 do
+        if self.database.master.sess.battle_map:get_room_center(valid_rooms[i]) == nil or valid_rooms[i] == self.database.master.last_location then
+            table.remove( valid_rooms, i)
+        end
+    end
+
+    for _, i in ipairs(valid_rooms) do
+        local flag = true
+        for _,j in ipairs(self.database.master.arrived_rooms) do
+            if j == i then
+                flag = false
+            end
+            if flag then table.insert( new_rooms, i ) end
+        end
+    end
+
+    if #new_rooms ~= 0 then
+        local index = math.random(#new_rooms)
+        return new_rooms[index]
     else
-        return now_id - 1
+        local boss_room = self.database.master.sess.battle_map:get_boss_room()
+        local boss_row = math.modf(boss_room/10)
+        local boss_col = math.fmod(boss_room,10)
+        local min = 9999
+        local res
+        for _,i in ipairs(valid_rooms) do
+            local row = math.modf(valid_rooms[i]/10 )
+            local col = math.fmod( valid_rooms[i],10 )
+            local dis = (row-boss_row)*(row-boss_row)+(col-boss_col)*(col-boss_col)
+            
+            if dis < min then
+                min = dis
+                res = i
+            end
+        end
+        return res
     end
 end
 

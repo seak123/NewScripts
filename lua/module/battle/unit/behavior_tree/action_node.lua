@@ -177,6 +177,7 @@ function this:abort_MoveToEnemy(  )
 end
 
 function this:update_MoveToEnemy( delta )
+    self.database.master.entity:AnimCasterAction(transform.AnimationState.Walk)
     local field = self.database.master.sess.field
     if self.database.target ~= nil and self.database.target.alive== 0 then
         if field:distance(self.database.target,self.database.master) < 1.5*(self.database.master.data.radius + self.database.target.data.radius) then
@@ -248,6 +249,7 @@ function this:update_Attack( delta )
     local base_interval = self.database.master.property:get("base_attack_interval")
     local attack_rate = self.database.master.property:get("attack_rate")
     local rate = base_interval/(1+battle_def.Attack_Rate_Factor*attack_rate)
+    self.database.master.entity:AnimCasterAttack(1/rate)
     self.database.master.entity:SetAttackSpeed(1/rate)
     local flag = self.database.master:do_attack(delta*1/rate,self.database.target)
     if flag == false then
@@ -279,6 +281,7 @@ function this:abort_Caster(  )
 end
 
 function this:update_Caster(delta)
+    self.database.master.entity:AnimCasterAction(transform.AnimationState.Caster)
     local target = {}
     local target_pos = {X =0,Y =0}
     if self.database.target ~= nil then
@@ -345,6 +348,7 @@ end
 
 function this:update_StayBack( delta )
     --print("@@@@@update stayback")
+    self.database.master.entity:AnimCasterAction(transform.AnimationState.Walk)
     local field = self.database.master.sess.field
     self.database.des_pos = {X = self.database.master.data.init_x,Y = self.database.master.data.init_y}
     
@@ -371,13 +375,13 @@ function this:enter_Idle(  )
 end
 
 function this:abort_Idle(  )
-    --self.database.master.entity:AnimCasterBreak()
+    self.database.master.entity:AnimCasterBreak()
     self.database.master.idle_time = 0
 end
 
 function this:update_Idle( delta )
     --print("@@stay idle")
-    --self.database.master.entity:AnimCasterBreak()
+    self.database.master.entity:AnimCasterBreak()
     self.database.master.idle_time = self.database.master.idle_time + delta
     self.running = true
     return "running"

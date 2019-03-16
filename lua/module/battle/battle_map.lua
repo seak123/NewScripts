@@ -34,4 +34,8 @@ function this:get_entry_room(  )
     return 32
 end
 
+function this:get_boss_room(  )
+    return 2
+end
+
 return this

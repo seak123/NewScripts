@@ -221,24 +221,22 @@ namespace Map
 
         public void AnimCasterAction(string name)
         {
-            if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+            if (!animator.GetCurrentAnimatorStateInfo(0).IsName(name))
             {
-                //animator.SetTrigger("Break");
-                //Debug.Log("Trigger:Break");
+                 animator.SetTrigger(name);
             }
-            animator.SetTrigger(name);
-            //Debug.Log("Trigger:" + name);
+           
         }
 
         public void AnimCasterAttack(float attack_rate)
         {
-            if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+            if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
             {
-                //animator.SetTrigger("Break");
+                animatorAttackSpeed = attack_rate;
+                animator.SetTrigger("Attack");
+                animator.speed = animatorAttackSpeed;
             }
-            animatorAttackSpeed = attack_rate;
-            animator.SetTrigger("Attack");
-            animator.speed = animatorAttackSpeed;
+            
 
         }
 
