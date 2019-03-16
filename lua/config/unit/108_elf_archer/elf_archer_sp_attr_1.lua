@@ -15,6 +15,7 @@ effect1.effect_id = 1081
 effect1.clean_delay = 0.2
 
 local damage1 = damage.new()
+damage1.damage_source = damage.DamageSource.Skill
 damage1.calc = calc.make_common_attack(0.5, 0) 
 
 local normal1 = normal_skill.new()
