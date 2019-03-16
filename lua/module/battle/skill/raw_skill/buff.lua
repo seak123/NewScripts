@@ -28,7 +28,7 @@ function this:execute(sess, target)
 end
 
 function this:add_buff( sess,database,target )
-    print("add buff["..self.vo.buff_id.."] on "..target.data.name.." uid:"..target.uid)
+    --print("add buff["..self.vo.buff_id.."] on "..target.data.name.." uid:"..target.uid)
     local inst = buff_inst.new(database,self.vo)
     local buff = target.buffcont:add_buff(sess,self.vo,inst)
 end

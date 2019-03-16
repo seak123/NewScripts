@@ -223,7 +223,7 @@ namespace Map
         public Vector2 GetRoute(float s_x,float s_y,float e_x,float e_y,float value){
             int s_X, s_Y;
             int e_X, e_Y;
-            GetGridPos(s_x, s_x, out s_X, out s_Y);
+            GetGridPos(s_x, s_y, out s_X, out s_Y);
             GetGridPos(e_x, e_y, out e_X, out e_Y);
             Vector2Int startRoom = GetRoomId(s_X,s_Y);
             Vector2Int endRoom = GetRoomId(e_X,e_Y);
@@ -284,16 +284,26 @@ namespace Map
                 return new Vector2(nextViewX, nextViewY);
             }
             else{
+                int maxX = startRoom.x * (BattleDef.roomBound + BattleDef.roomInterval);
+                int minX = maxX - BattleDef.roomBound;
+                int maxY = startRoom.y * (BattleDef.roomBound + BattleDef.roomInterval);
+                int minY = maxY - BattleDef.roomBound;
+                int desX, desY;
+                float des_x, des_y;
+                desX = Mathf.Clamp(e_X, minX , maxX);
+                desY = Mathf.Clamp(e_Y, minY, maxY);
+                GetViewPos(desX, desY, out des_x, out des_y);
+
                 float nowViewX = s_x;
                 float nowViewY = s_y;
 
-                float toViewX = e_x;
-                float toViewY = e_y;
+                float toViewX = des_x;
+                float toViewY = des_y;
 
                 float factor = value / BattleDef.Transfer2GridFactor / Vector2.Distance(new Vector2(toViewX, toViewY), new Vector2(nowViewX, nowViewY));
                 float nextViewX = Mathf.Max(0, Mathf.Min(BattleDef.columnGridNum - 1, nowViewX + (toViewX - nowViewX) * factor));
                 float nextViewY = Mathf.Max(0, Mathf.Min(BattleDef.rowGridNum - 1, nowViewY + (toViewY - nowViewY) * factor));
-                return new Vector2(nextViewX,nextViewY);
+                return new Vector2(nextViewX, nextViewY);
             }
 
         }

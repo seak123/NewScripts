@@ -215,6 +215,7 @@ namespace Map
             if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
             {
                 animator.SetTrigger("Break");
+               //Debug.Log("Trigger:Break");
             }
         }
 
@@ -222,16 +223,18 @@ namespace Map
         {
             if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
             {
-                animator.SetTrigger("Break");
+                //animator.SetTrigger("Break");
+                //Debug.Log("Trigger:Break");
             }
             animator.SetTrigger(name);
+            //Debug.Log("Trigger:" + name);
         }
 
         public void AnimCasterAttack(float attack_rate)
         {
             if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
             {
-                animator.SetTrigger("Break");
+                //animator.SetTrigger("Break");
             }
             animatorAttackSpeed = attack_rate;
             animator.SetTrigger("Attack");

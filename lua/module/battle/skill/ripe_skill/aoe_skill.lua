@@ -38,6 +38,7 @@ function this:execute( sess,delta )
         self.inited = true
     end
     if self["update_pos_by_"..self.vo.target](self,sess,delta)==false then
+        print("@@return true")
         return "completed"
     end
     self["update_track_by_"..self.vo.track](self,sess,delta)
@@ -49,8 +50,9 @@ function this:execute( sess,delta )
                 table.insert( self.database.target_trace,u.uid )
             end
         end
-
+        print("@@aoe targets:"..#units.." caster:"..self.database.caster.uid.." target:"..self.targets[1].uid)
         for _,u in ipairs(units) do
+            print("@@unit id:"..u.uid)
             for _, v in ipairs(self.raw_skills) do
                 v:execute(sess,u) 
             end

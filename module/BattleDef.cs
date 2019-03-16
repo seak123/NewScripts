@@ -10,9 +10,9 @@ public static class BattleDef
     //map data
     public static bool useCollision = false;
 
-    public static int rowGridNum = 500;
+    public static int rowGridNum = 580;
 
-    public static int columnGridNum = 500;
+    public static int columnGridNum = 580;
 
 
     public static int maxSpeed = 64;
@@ -27,7 +27,7 @@ public static class BattleDef
 
     public static int roomBound = 140;
 
-    public static int roomInterval = 20;
+    public static int roomInterval = 40;
 
     //logic data
     public static float MaxSaving = 20;

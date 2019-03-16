@@ -61,7 +61,7 @@ end
 
 function this:attach(buff)
   if self.vo == nil then 
-    print(self.classname)
+    --print(self.classname)
   end
 	local occasion = self.vo.buff_occasion
 	if occasion ~= nil then 

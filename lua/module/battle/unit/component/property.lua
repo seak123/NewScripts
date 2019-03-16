@@ -25,7 +25,6 @@ function this:init(  )
 end
 
 function this:change_prop( name,value )
-    print("change value"..name..value.."on"..self.master.uid)
     self[name] = self[name] + value
 end
 

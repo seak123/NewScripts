@@ -14,6 +14,7 @@ local this = {}
 
 
 local aoe_dam = damage.new()
+aoe_dam.damage_source = damage.DamageSource.Skill
 aoe_dam.calc = calc.make_common_attack(0.5,0)
 
 local state0 = state.new()
@@ -30,7 +31,7 @@ buff3:append("belongs",state0)
 local aoe0 = aoe.new()
 aoe0.can_repeat = false
 aoe0.tick = -1
-aoe0.duraton = 0
+aoe0.duration = 0
 aoe0.opposite_type = 4
 aoe0.radius = 20
 aoe0:append("raw_skills",aoe_dam,buff3)

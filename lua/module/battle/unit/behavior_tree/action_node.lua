@@ -105,13 +105,13 @@ function this:update_MoveForward( delta )
             -- self.database.des_pos.X = now_center.X + battle_def.room_bound/2
             -- self.database.des_pos.Y = now_center.Y
             -- flag = 3
-            self.database.des_pos.X = next_center.X - battle_def.room_bound/2+8
+            self.database.des_pos.X = next_center.X - battle_def.room_bound/2 +8
             self.database.des_pos.Y = next_center.Y
         else
             -- self.database.des_pos.X = now_center.X - battle_def.room_bound/2
             -- self.database.des_pos.Y = now_center.Y
             -- flag = 1
-            self.database.des_pos.X = next_center.X + battle_def.room_bound/2-8
+            self.database.des_pos.X = next_center.X + battle_def.room_bound/2 -8
             self.database.des_pos.Y = next_center.Y
         end
     end
