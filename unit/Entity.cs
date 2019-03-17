@@ -32,6 +32,7 @@ namespace Map
         private float animatorAttackSpeed = 1f;
         private float moveSpeed = 1;
         private float baseSpeed = 1;
+        private bool alive = true;
         private SpriteRenderer sideCircle;
         private Vector3 shadowPos;
         private GameObject hpPrefab;
@@ -215,12 +216,16 @@ namespace Map
             if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
             {
                 animator.SetTrigger("Break");
-               //Debug.Log("Trigger:Break");
             }
         }
 
         public void AnimCasterAction(string name)
         {
+            //if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle")&&!animator.GetCurrentAnimatorStateInfo(0).IsName(name))
+            //{
+            //    animator.SetTrigger("Break");
+
+            //}
             if (!animator.GetCurrentAnimatorStateInfo(0).IsName(name))
             {
                  animator.SetTrigger(name);
@@ -230,6 +235,10 @@ namespace Map
 
         public void AnimCasterAttack(float attack_rate)
         {
+            //if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle")&& !animator.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
+            //{
+            //    animator.SetTrigger("Break");
+            //}
             if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
             {
                 animatorAttackSpeed = attack_rate;
@@ -254,6 +263,7 @@ namespace Map
                 animator.SetTrigger("Break");
             }
             animator.SetTrigger("Die");
+            alive = false;
 
             //GameRoot.GetInstance().PlayerMng.AddSaving(GetSocketPos("S_Center"), 3 - side, (int)(cost * BattleDef.KillEarnFactor));
             GameRoot.GetInstance().MapField.RemoveEntity(this, 2f);
@@ -301,6 +311,13 @@ namespace Map
             else
             {
                 animator.speed = 1;
+            }
+            if(alive == false){
+
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Die"))
+                {
+                    animator.SetTrigger("Die");
+                }
             }
             //set rotation
             Quaternion start = gameObject.transform.rotation;

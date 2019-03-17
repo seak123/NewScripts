@@ -20,7 +20,7 @@ function this:ctor( master,data )
 end
 
 function this:change_room( next_room )
-    self.last_location = self.master.location
+    self.master.last_location = self.master.location
     self.master.location = next_room
     table.insert( self.master.arrived_rooms,next_room)
 end

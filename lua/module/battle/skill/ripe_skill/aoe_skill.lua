@@ -18,7 +18,7 @@ end
 function this:execute( sess,delta )
     if self.inited == false then
         if self.vo.target == aoe_vo.Target.Unit then
-            if self.targets[1].alive ~= 0 then return "completed" end 
+            --if self.targets[1].alive ~= 0 then return "completed" end 
             self.target_pos.X = self.targets[1].transform.grid_pos.X
             self.target_pos.Y = self.targets[1].transform.grid_pos.Y
         elseif self.vo.target == aoe_vo.Target.Pos then
@@ -37,22 +37,22 @@ function this:execute( sess,delta )
 
         self.inited = true
     end
+
     if self["update_pos_by_"..self.vo.target](self,sess,delta)==false then
-        print("@@return true")
         return "completed"
     end
+
     self["update_track_by_"..self.vo.track](self,sess,delta)
     if self.process > self.vo.tick then
-        local units = self["update_shape_by_"..self.vo.shape](self,sess,delta)
 
+        local units = self["update_shape_by_"..self.vo.shape](self,sess,delta)
+        
         if self.vo.can_repeat == false then
             for _,u in ipairs(units) do
                 table.insert( self.database.target_trace,u.uid )
             end
         end
-        print("@@aoe targets:"..#units.." caster:"..self.database.caster.uid.." target:"..self.targets[1].uid)
         for _,u in ipairs(units) do
-            print("@@unit id:"..u.uid)
             for _, v in ipairs(self.raw_skills) do
                 v:execute(sess,u) 
             end
@@ -70,7 +70,7 @@ end
 
 ------------target
 function this:update_pos_by_unit( sess,delta )
-    if self.targets[1].alive ~= 0 then return false end
+    --if self.targets[1].alive ~= 0 then return false end
     self.target_pos.X = self.targets[1].transform.grid_pos.X
     self.target_pos.Y = self.targets[1].transform.grid_pos.Y
     return true

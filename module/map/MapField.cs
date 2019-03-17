@@ -11,6 +11,8 @@ namespace Map
     {
         public GameObject assitField;
         public GameObject temRoom;
+        public GameObject temWall;
+        public GameObject temPath;
         private bool assistActive=false;
 
         private int[,] grids;
@@ -90,6 +92,21 @@ namespace Map
             float x, y;
             GetViewPos(gridX, gridY, out x, out y);
             Instantiate(temRoom, new Vector3(x, 1, y), Quaternion.identity);
+        }
+
+        public void CreateWall(int gridX,int gridY,int rotation){
+            float x, y;
+            GetViewPos(gridX, gridY, out x, out y);
+            GameObject obj = Instantiate(temWall, new Vector3(x, 1, y), Quaternion.identity);
+            obj.transform.rotation = Quaternion.Euler(0,rotation,0);
+        }
+
+        public void CreatePath(int gridX, int gridY, int rotation)
+        {
+            float x, y;
+            GetViewPos(gridX, gridY, out x, out y);
+            GameObject obj = Instantiate(temPath, new Vector3(x, 1, y), Quaternion.identity);
+            obj.transform.rotation = Quaternion.Euler(0, rotation, 0);
         }
 
         public Entity CreateEntity(int id,int uid,int side,int gridX,int gridY,int room_id){

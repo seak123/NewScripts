@@ -67,6 +67,7 @@ function this:abort_MoveForward(  )
 end
 
 function this:update_MoveForward( delta )
+    self.database.master.entity:AnimCasterAction(transform.AnimationState.Walk)
     local field = self.database.master.sess.field
     local transform = self.database.master.transform
     local grid_pos = transform.grid_pos
@@ -144,6 +145,7 @@ function this:abort_MoveToPos(  )
 end
 
 function this:update_MoveToPos( delta )
+    self.database.master.entity:AnimCasterAction(transform.AnimationState.Walk)
     -- print("uid:"..self.database.master.uid.." update movetopos state")
     local field = self.database.master.sess.field
     self.database.master.transform.des_pos = self.database.des_pos
@@ -331,7 +333,7 @@ function this:update_Appear(delta  )
 end
 
 function this:enter_StayBack(  )
-    --print("@@@@@enter stayback")
+    
     if self.database.master.statectrl:has_feature("de_move") then return false end
     -- print("uid:"..self.database.master.uid.." enter forward state")
     self.database.master.entity:AnimCasterAction(transform.AnimationState.Walk)
@@ -347,7 +349,7 @@ function this:abort_StayBack(  )
 end
 
 function this:update_StayBack( delta )
-    --print("@@@@@update stayback")
+    
     self.database.master.entity:AnimCasterAction(transform.AnimationState.Walk)
     local field = self.database.master.sess.field
     self.database.des_pos = {X = self.database.master.data.init_x,Y = self.database.master.data.init_y}
@@ -380,7 +382,7 @@ function this:abort_Idle(  )
 end
 
 function this:update_Idle( delta )
-    --print("@@stay idle")
+    
     self.database.master.entity:AnimCasterBreak()
     self.database.master.idle_time = self.database.master.idle_time + delta
     self.running = true

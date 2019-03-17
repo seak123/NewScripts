@@ -29,9 +29,10 @@ function this:check_Forward(  )
     return true
 end
 
-function this.get_next_room_id( now_id )
+function this:get_next_room_id( now_id )
     local valid_rooms = {now_id-1,now_id+1,now_id+10,now_id-10}
     local new_rooms = {}
+    
     for i=#valid_rooms,1,-1 do
         if self.database.master.sess.battle_map:get_room_center(valid_rooms[i]) == nil or valid_rooms[i] == self.database.master.last_location then
             table.remove( valid_rooms, i)
@@ -43,9 +44,9 @@ function this.get_next_room_id( now_id )
         for _,j in ipairs(self.database.master.arrived_rooms) do
             if j == i then
                 flag = false
-            end
-            if flag then table.insert( new_rooms, i ) end
+            end      
         end
+        if flag then table.insert( new_rooms, i ) end
     end
 
     if #new_rooms ~= 0 then
@@ -57,7 +58,7 @@ function this.get_next_room_id( now_id )
         local boss_col = math.fmod(boss_room,10)
         local min = 9999
         local res
-        for _,i in ipairs(valid_rooms) do
+        for i,_ in ipairs(valid_rooms) do
             local row = math.modf(valid_rooms[i]/10 )
             local col = math.fmod( valid_rooms[i],10 )
             local dis = (row-boss_row)*(row-boss_row)+(col-boss_col)*(col-boss_col)
@@ -67,7 +68,8 @@ function this.get_next_room_id( now_id )
                 res = i
             end
         end
-        return res
+        
+        return valid_rooms[res]
     end
 end
 

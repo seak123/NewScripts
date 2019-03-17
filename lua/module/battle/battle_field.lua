@@ -14,6 +14,7 @@ function this:ctor(sess )
     for id,_ in pairs(sess.battle_map.room_table) do
         self.room_units[id] = {}
     end
+    self.room_units[-1] = {}
 end
 
 function this:add_unit( data,struct_uid)
