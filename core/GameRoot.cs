@@ -111,8 +111,8 @@ public class GameRoot : MonoBehaviour {
         battleData.units[4].init_room = 13;
         for (int i = 0; i < 20;++i){
             battleData.units[5+i] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1091), 2);
-            battleData.units[5 + i].init_x = 560;
-            battleData.units[5 + i].init_y = 290;
+            battleData.units[5 + i].init_x = 600;
+            battleData.units[5 + i].init_y = 310;
             battleData.units[5 + i].init_room = -1;
         }
 

@@ -4,15 +4,15 @@ local battle_def = require("module.battle.battle_def")
 
 function this:ctor( sess )
     self.room_table = {
-        [33] = {X=470,Y=470},
-        [32] = {X=470,Y=290},
-        [31] = {X=470,Y=110},
-        [23] = {X=290,Y=470},
-        [22] = {X=290,Y=290},
-        [21] = {X=290,Y=110},
-        [13] = {X=110,Y=470},
-        [12] = {X=110,Y=290},
-        [11] = {X=110,Y=110}
+        [33] = {X=500,Y=500},
+        [32] = {X=500,Y=310},
+        [31] = {X=500,Y=120},
+        [23] = {X=310,Y=500},
+        [22] = {X=310,Y=310},
+        [21] = {X=310,Y=120},
+        [13] = {X=120,Y=500},
+        [12] = {X=120,Y=310},
+        [11] = {X=120,Y=120}
 
     }
     self.sess = sess
@@ -28,11 +28,11 @@ function this:init(  )
         local tem_id
         tem_id = id + 10
         if self:get_room_center(tem_id) == nil then
-            self.sess.map:CreateWall(pos.X + battle_def.room_bound/2+3,pos.Y+4,0)
+            self.sess.map:CreateWall(pos.X + battle_def.room_bound/2+2,pos.Y+4,0)
         end
         tem_id = id - 10
         if self:get_room_center(tem_id) == nil then
-            self.sess.map:CreateWall(pos.X - battle_def.room_bound/2-3,pos.Y+4,0)
+            self.sess.map:CreateWall(pos.X - battle_def.room_bound/2-2,pos.Y+4,0)
         end
         tem_id = id + 1
         if self:get_room_center(tem_id) == nil then
