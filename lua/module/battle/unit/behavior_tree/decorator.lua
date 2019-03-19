@@ -52,7 +52,7 @@ function this:get_next_room_id( now_id )
     if #new_rooms ~= 0 then
         local index = math.random(#new_rooms)
         return new_rooms[index]
-    else
+    elseif #valid_rooms ~= 0 then
         local boss_room = self.database.master.sess.battle_map:get_boss_room()
         local boss_row = math.modf(boss_room/10)
         local boss_col = math.fmod(boss_room,10)
@@ -70,6 +70,8 @@ function this:get_next_room_id( now_id )
         end
         
         return valid_rooms[res]
+    else
+        return self.database.master.last_location
     end
 end
 
