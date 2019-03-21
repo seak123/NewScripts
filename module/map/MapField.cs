@@ -91,13 +91,14 @@ namespace Map
         public void CreateRoom(int gridX,int gridY){
             float x, y;
             GetViewPos(gridX, gridY, out x, out y);
-            Instantiate(temRoom, new Vector3(x, 1, y), Quaternion.identity);
+            GameObject obj = Instantiate(temRoom, new Vector3(x, 1.7f, y), Quaternion.identity);
+            obj.transform.rotation = Quaternion.Euler(new Vector3(0, UnityEngine.Random.Range(1, 4) * 90, 0));
         }
 
         public void CreateWall(int gridX,int gridY,int rotation){
             float x, y;
             GetViewPos(gridX, gridY, out x, out y);
-            GameObject obj = Instantiate(temWall, new Vector3(x, 1, y), Quaternion.identity);
+            GameObject obj = Instantiate(temWall, new Vector3(x, 1.7f, y), Quaternion.identity);
             obj.transform.rotation = Quaternion.Euler(0,rotation,0);
         }
 
@@ -105,7 +106,7 @@ namespace Map
         {
             float x, y;
             GetViewPos(gridX, gridY, out x, out y);
-            GameObject obj = Instantiate(temPath, new Vector3(x, 1, y), Quaternion.identity);
+            GameObject obj = Instantiate(temPath, new Vector3(x, 1.7f, y), Quaternion.identity);
             obj.transform.rotation = Quaternion.Euler(0, rotation, 0);
         }
 
