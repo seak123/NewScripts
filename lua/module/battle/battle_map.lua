@@ -28,7 +28,7 @@ function this:init(  )
         local tem_id
         tem_id = id + 10
         if self:get_room_center(tem_id) == nil then
-            self.sess.map:CreateWall(pos.X + battle_def.room_bound/2+2,pos.Y+4,0)
+            self.sess.map:CreateWall(pos.X + battle_def.room_bound/2+3,pos.Y+4,0)
         end
         tem_id = id - 10
         if self:get_room_center(tem_id) == nil then
@@ -36,11 +36,11 @@ function this:init(  )
         end
         tem_id = id + 1
         if self:get_room_center(tem_id) == nil then
-            self.sess.map:CreateWall(pos.X ,pos.Y+ battle_def.room_bound/2+5,90)
+            self.sess.map:CreateWall(pos.X ,pos.Y+ battle_def.room_bound/2+2,90)
         end
         tem_id = id - 1
         if self:get_room_center(tem_id) == nil then
-            self.sess.map:CreateWall(pos.X,pos.Y- battle_def.room_bound/2,90)
+            self.sess.map:CreateWall(pos.X,pos.Y- battle_def.room_bound/2-5,90)
         end
     end
 
@@ -63,7 +63,7 @@ function this:init(  )
             path.X = (self:get_room_center(tem_id).X + pos.X)/2
             path.Y = (self:get_room_center(tem_id).Y + pos.Y)/2
             path.R = 0
-            path.Offset = {X=0,Y=4}
+            path.Offset = {X=0,Y=0}
             check_path(path)
         end
         tem_id = id - 10
@@ -72,7 +72,7 @@ function this:init(  )
             path.X = (self:get_room_center(tem_id).X + pos.X)/2
             path.Y = (self:get_room_center(tem_id).Y + pos.Y)/2
             path.R = 0
-            path.Offset = {X=0,Y=4}
+            path.Offset = {X=0,Y=0}
             check_path(path)
         end
         tem_id = id + 1
@@ -81,7 +81,7 @@ function this:init(  )
             path.X = (self:get_room_center(tem_id).X + pos.X)/2
             path.Y = (self:get_room_center(tem_id).Y + pos.Y)/2
             path.R = 90
-            path.Offset = {X=-2,Y=4}
+            path.Offset = {X=-2,Y=0}
             check_path(path)
         end
         tem_id = id - 1
@@ -90,7 +90,7 @@ function this:init(  )
             path.X = (self:get_room_center(tem_id).X + pos.X)/2
             path.Y = (self:get_room_center(tem_id).Y + pos.Y)/2
             path.R = 90
-            path.Offset = {X=-2,Y=4}
+            path.Offset = {X=-2,Y=0}
             check_path(path)
         end
     end
