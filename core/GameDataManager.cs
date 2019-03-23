@@ -28,11 +28,9 @@ public enum PlayerProperty{
 public class GameDataManager
 {
     //property
-    public float[] properties=new float[30];
-
+    public List<float> properties=new List<float>();
+    //public UnitData[] 
     public int heroId;
-    public List<int> playCards;
-
 
     //hero data
     public int heroLvl = 12;
@@ -59,16 +57,6 @@ public class GameDataManager
             properties[i] = 0;
         }
 
-        playCards = new List<int>
-        {
-                1081,
-                1091,
-                1081,
-                1091,
-                5011,
-                5011,
-                1071,
-        };
         //temp
         heroId = 10001;
 

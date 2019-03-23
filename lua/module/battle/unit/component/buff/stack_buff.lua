@@ -7,18 +7,24 @@ function this:ctor(sess,buff_id, buff_vo)
 	self:init(sess,buff_id, buff_vo)
 	self.stacks = {}
 	self.limit = buff_vo.max_stack
+	self.update_type = buff_vo.update_type
 end
 
 function this:handle_stack (sess,inst)
 	table.insert(self.stacks, inst)
 	inst.buff = self
 	local count = #self.stacks 
-	if count > self.limit then 
+	if self.limit ~= -1 and count > self.limit then 
 		for n = 1, count - self.limit do
 			self:remove_stack(1)
 		end
 	end
 	inst:attach(sess)
+	if self.update_type ~=0 then
+		for _, inst in ipairs(self.stacks) do
+			inst:refresh()
+		end
+	end
 end
 
 function this:remove_stack( index )

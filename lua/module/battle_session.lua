@@ -40,7 +40,6 @@ function this:init_battle_data( vo )
     for i=0,vo.unitNum-1 do
         self.field:add_unit( vo.units[i],-1)
     end
-   
 end
 
 function this:check_result(  )
