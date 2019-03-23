@@ -92,7 +92,7 @@ namespace Map
             float x, y;
             GetViewPos(gridX, gridY, out x, out y);
             GameObject obj = Instantiate(temRoom, new Vector3(x, 1.7f, y), Quaternion.identity);
-            //obj.transform.rotation = Quaternion.Euler(new Vector3(0, UnityEngine.Random.Range(1, 4) * 90, 0));
+            obj.transform.rotation = Quaternion.Euler(new Vector3(0, UnityEngine.Random.Range(0, 4) * 90, 0));
         }
 
         public void CreateWall(int gridX,int gridY,int rotation){
