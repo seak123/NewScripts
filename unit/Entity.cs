@@ -16,6 +16,7 @@ namespace Map
         public int id;
         public int side;
         public int uid;
+        public int type;
         public int structUid;
         public int radius;
         public int genus;
@@ -84,6 +85,7 @@ namespace Map
         {
             return gameObject.transform.Find(name).gameObject.transform.position;
         }
+
 
         public void Portal(int _x,int _y){
             MapField field = GameRoot.GetInstance().MapField;
@@ -275,25 +277,29 @@ namespace Map
         private void Start()
         {
             mng = GameRoot.GetInstance().BattleField.assetManager;
-            sideCircle = gameObject.transform.Find("Circle").gameObject.GetComponent<SpriteRenderer>();
-            sideCircle.gameObject.SetActive(true);
+           
             gameObject.transform.Find("Size").gameObject.SetActive(false);
             baseSpeed = GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(id).base_speed;
             //init hp bar and side
-            if (side == 1)
+            if (type != 1)
             {
-                hpPrefab = GameRoot.GetInstance().BattleField.assetManager.GreenSlider;
-                gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
+                sideCircle = gameObject.transform.Find("Circle").gameObject.GetComponent<SpriteRenderer>();
+                sideCircle.gameObject.SetActive(true);
+                if (side == 1)
+                {
+                    hpPrefab = GameRoot.GetInstance().BattleField.assetManager.GreenSlider;
+                    gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
 
-                sideCircle.color = new Color(0.215f, 0.57f, 0.98f, 0.8f);
-            }
-            else
-            {
-                hpPrefab = GameRoot.GetInstance().BattleField.assetManager.RedSlider;
-                gameObject.transform.rotation = Quaternion.Euler(0, 180, 0);
+                    sideCircle.color = new Color(0.215f, 0.57f, 0.98f, 0.8f);
+                }
+                else
+                {
+                    hpPrefab = GameRoot.GetInstance().BattleField.assetManager.RedSlider;
+                    gameObject.transform.rotation = Quaternion.Euler(0, 180, 0);
 
-                shadowPos.y = 0.01f;
-                sideCircle.color = new Color(0.981f, 0.217f, 0.217f, 0.8f);
+                    shadowPos.y = 0.01f;
+                    sideCircle.color = new Color(0.981f, 0.217f, 0.217f, 0.8f);
+                }
             }
             defaultMeshTint = Color.white;
         }

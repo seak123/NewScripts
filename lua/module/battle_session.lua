@@ -25,11 +25,17 @@ function this:ctor( vo )
 
     -- record every frame deltatime
     self.deltatime = 0
+
+    -- record enemy process
+    self.summoun_interval = 0.5
+    self.summoun_process = 0
+    self.summoun_count = 0
 end
 
 function this:update( delta )
 
     self.deltatime = delta
+    self:update_enemys(delta)
     self.field:update(delta)
     self.skill_mng:update(delta)
     --self.ai:execute()
@@ -37,8 +43,21 @@ function this:update( delta )
 end
 
 function this:init_battle_data( vo )
-    for i=0,vo.unitNum-1 do
+    for i=0,vo.units.Length-1 do
         self.field:add_unit( vo.units[i],-1)
+    end
+    self.enemy_num = vo.enemys.Length
+    self.vo = vo
+end
+
+function this:update_enemys( delta )
+    if self.summoun_count >= self.enemy_num then return end
+    self.summoun_process = self.summoun_process + delta
+    if self.summoun_process > self.summoun_interval then
+        self.field:add_unit(self.vo.enemys[self.summoun_count],-1)
+        self.summoun_process = 0
+        self.summoun_count = self.summoun_count + 1
+        self.summoun_interval = math.random()*0.5 + 0.5
     end
 end
 

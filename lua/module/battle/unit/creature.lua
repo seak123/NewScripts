@@ -32,10 +32,14 @@ function this:ctor( sess,data,uid ,struct_uid)
         self.config = config_mng.get_unit_config(self.id)
     end
 
-    if data.side == 1 then
-        self.ai_vo = require("config.ai_config.normal_defence_ai")
+    if self.type == 0 then
+        if data.side == 1 then
+            self.ai_vo = require("config.ai_config.normal_defence_ai")
+        else
+            self.ai_vo = require("config.ai_config.normal_ai")
+        end
     else
-        self.ai_vo = require("config.ai_config.normal_ai")
+        self.ai_vo = require("config.ai_config.normal_structure_ai")
     end
    
 

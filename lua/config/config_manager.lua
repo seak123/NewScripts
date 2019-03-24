@@ -14,6 +14,7 @@ this.unit_config = {
     [1081] = "config.unit.108_elf_archer.elf_archer_unit",
     [1091] = "config.unit.109_elf_pikeman.elf_pikeman_unit",
     [5011] = "config.unit.501_ice_dragon.ice_dragon_unit",
+    [6011] = "config.unit.601_fire_tower.fire_tower_unit",
     [20001] = "config.hero.1_natural_artemis.units.20001_porcupine",
     [20002] = "config.hero.1_natural_artemis.units.20002_sprite_deer"
 }
@@ -61,8 +62,14 @@ function this.get_unit_config( id )
     local unit_vo = {
         ai_vo = config.ai_vo,
         normal_attack = config.normal_attack,
-        skills = {config.sp_attr[1]}
+        skills = {}
     }
+    for _,v in ipairs(config.sp_attr) do
+        table.insert( unit_vo.skills, v)
+    end
+    for _,v in ipairs(config.skills) do
+        table.insert( unit_vo.skills, v)
+    end
     return unit_vo
 end
 

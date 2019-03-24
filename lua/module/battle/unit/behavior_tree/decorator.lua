@@ -87,10 +87,10 @@ function this:check_EnemyAround(  )
         else
             active = 0
         end
-        unit = field:find_enemy(true,self.database.master,false,active)
+        unit = field:find_enemy(false,self.database.master,false,active)
     end
     if self.database.master.statectrl:has_feature("confused") then
-        unit = field:find_enemy(true,self.database.master,true)
+        unit = field:find_enemy(false,self.database.master,true)
     end
     if self.database.master.statectrl:has_feature("taunt") then
         unit = self.database.master.statectrl.taunt_target
@@ -161,16 +161,13 @@ end
 
 ----------------------------------skill check (build database.target or database.target_pos)
 
-function this.check_skill_EnemyInRange(range,with_structure)
+function this.check_skill_EnemyInRange(with_structure,range)
     return function (database)
     local field = database.master.sess.field
-    local enemy = field:find_enemy(with_structure,database.master)
+    local enemy = field:find_enemy(with_structure,database.master,false,1,range)
     if enemy ~= nil then
-        local dis = field:distance(enemy,database.master)
-        if dis < range then
-            database.target = enemy
-            return true
-        end
+        database.target = enemy
+        return true
     end
     return false
 end

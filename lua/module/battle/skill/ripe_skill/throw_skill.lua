@@ -91,6 +91,10 @@ function this:update_by_straight(sess,delta )
         self.target_pos.X = self.database.target_pos.X
         self.target_pos.Y = self.database.target_pos.Y
     end
+
+   
+    local pos = self.database.caster.entity:GetSocketPos("S_Attack")
+    
     
     local de_x = self.target_pos.X - self.curr_pos.X
     local de_y = self.target_pos.Y - self.curr_pos.Y

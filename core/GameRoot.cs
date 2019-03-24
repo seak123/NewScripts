@@ -97,23 +97,28 @@ public class GameRoot : MonoBehaviour {
 
        
         battleData = new BattleData();
-        battleData.unitNum = 25;
-        battleData.units = new UnitData[25];
-        battleData.units[0] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1081));
-        battleData.units[0].init_room = 12;
-        battleData.units[1] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1081));
-        battleData.units[1].init_room = 12;
-        battleData.units[2] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1081));
-        battleData.units[2].init_room = 12;
-        battleData.units[3] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1081));
-        battleData.units[3].init_room = 11;
-        battleData.units[4] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(5011));
-        battleData.units[4].init_room = 13;
+
+        List<UnitData> allStructures = gameDataManager.GetBattleConstructures();
+        List<UnitData> allCreatures = gameDataManager.GetBattleCreatures();
+
+        int num = allStructures.Count + allCreatures.Count;
+        battleData.units = new UnitData[num];
+
+        for (int i = 0; i < allStructures.Count;++i){
+            battleData.units[i] = allStructures[i];
+        }
+
+        for (int i = 0; i < allCreatures.Count;++i){
+            battleData.units[allStructures.Count + i] = allCreatures[i];
+        }
+
+        battleData.enemys = new UnitData[20];
+       
         for (int i = 0; i < 20;++i){
-            battleData.units[5+i] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1091), 2);
-            battleData.units[5 + i].init_x = 600;
-            battleData.units[5 + i].init_y = 310;
-            battleData.units[5 + i].init_room = -1;
+            battleData.enemys[i] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1091), 2);
+            battleData.enemys[i].init_x = 600;
+            battleData.enemys[i].init_y = 310;
+            battleData.enemys[i].init_room = -1;
         }
 
         //battleData = new BattleData();

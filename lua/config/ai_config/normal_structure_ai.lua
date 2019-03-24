@@ -10,17 +10,21 @@ de_skill.type = decorator.Type.SkillAvaliable
 
 local be_caster = behavior.new()
 be_caster.controll_type = "sel"
-be_caster.priority = 1
+be_caster.priority = 2
 be_caster:append("subs",ac_caster)
 be_caster:append("decorators",de_skill)
 
 local ac_appear = action.new()
 ac_appear.action_type = action.ACTION.Appear
-ac_appear.priority = 2
+ac_appear.priority = 3
+
+local ac_idle = action.new()
+ac_idle.action_type = action.ACTION.Idle
+ac_idle.priority = 1
 
 ------------------------------
 local be_root = behavior.new()
 be_root.controll_type = "sel"
-be_root:append("subs",ac_appear,be_caster)
+be_root:append("subs",ac_appear,be_caster,ac_idle)
 
 return be_root

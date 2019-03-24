@@ -123,6 +123,7 @@ namespace Map
             //init entity
             entity.id = id;
             entity.uid = uid;
+            entity.type = data.type;
             entity.side = side;
             entity.genus = data.genus;
             entity.radius = data.radius;

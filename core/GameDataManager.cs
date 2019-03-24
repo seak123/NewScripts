@@ -28,7 +28,9 @@ public enum PlayerProperty{
 public class GameDataManager
 {
     //property
-    public List<float> properties=new List<float>();
+    public List<float> properties;
+    public List<UnitData> creatures;
+    public List<UnitData> constructures;
     //public UnitData[] 
     public int heroId;
 
@@ -46,20 +48,63 @@ public class GameDataManager
 
 
     public void InitData(){
+        //init data
+        properties = new List<float>();
+        creatures = new List<UnitData>();
+        constructures = new List<UnitData>();
 
-        //init playerData
-        properties[(int)PlayerProperty.PlayerHp] = 1000;
-        properties[(int)PlayerProperty.PlayerMaxHp] = 1000;
-        properties[(int)PlayerProperty.MagicAttack] = 1;
-        properties[(int)PlayerProperty.Defence] = 10;
-        properties[(int)PlayerProperty.MagicResist] = 0.5f;
-        for (int i = 9; i < properties.Length;++i){
-            properties[i] = 0;
+        AssetManager assetManager = GameRoot.GetInstance().BattleField.assetManager;
+        creatures.Add(assetManager.GetUnitData(1081));
+        creatures.Add(assetManager.GetUnitData(1081));
+        creatures.Add(assetManager.GetUnitData(1081));
+     
+
+        for (int i = 0; i < creatures.Count;++i){
+            creatures[i].init_room = 22;
         }
 
-        //temp
-        heroId = 10001;
+        creatures.Add(assetManager.GetUnitData(6011));
+        creatures[3].init_room = 21;
 
+        creatures.Add(assetManager.GetUnitData(6011));
+        creatures[4].init_room = 23;
+
+        creatures.Add(assetManager.GetUnitData(6011));
+        creatures[5].init_room = 32;
+
+        //init playerData
+        //properties[(int)PlayerProperty.PlayerHp] = 1000;
+        //properties[(int)PlayerProperty.PlayerMaxHp] = 1000;
+        //properties[(int)PlayerProperty.MagicAttack] = 1;
+        //properties[(int)PlayerProperty.Defence] = 10;
+        //properties[(int)PlayerProperty.MagicResist] = 0.5f;
+        //for (int i = 9; i < properties.Count;++i){
+        //    properties[i] = 0;
+        //}
+
+        ////temp
+        //heroId = 10001;
+
+    }
+
+    public List<UnitData> GetBattleCreatures(){
+        List<UnitData> res = new List<UnitData>();
+        foreach(UnitData data in creatures){
+            if(data.init_room != 0){
+                res.Add(data);
+            }
+        }
+        return res;
+    }
+
+    public List<UnitData> GetBattleConstructures(){
+        List<UnitData> res = new List<UnitData>();
+        foreach(UnitData data in constructures){
+            if(data.init_room !=0){
+                res.Add(data);
+            }
+        }
+        return res;
     }
 
 
