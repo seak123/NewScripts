@@ -18,4 +18,6 @@ this.a = 10
 this.effect = nil
 this.target_type = this.Target.Unit
 
+this.target_socket = "S_Bottom"
+
 return this

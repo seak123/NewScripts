@@ -85,25 +85,24 @@ end
 
 function this:update_by_straight(sess,delta )
     if self.vo.target_type == throw_vo.Target.Unit and self.targets[1].alive == 0 then
-        self.target_pos.X = self.targets[1].transform.grid_pos.X
-        self.target_pos.Y = self.targets[1].transform.grid_pos.Y
+        local pos = self.targets[1].entity:GetSocketPos(self.vo.target_socket)
+        self.target_pos.X = pos.x
+        self.target_pos.Y = pos.z
+        self.target_pos.Z = pos.y
     elseif self.vo.target_type == throw_vo.Target.Pos then
         self.target_pos.X = self.database.target_pos.X
         self.target_pos.Y = self.database.target_pos.Y
+        self.target_pos.Z = 0.1
     end
 
    
-    local pos = self.database.caster.entity:GetSocketPos("S_Attack")
+    --local pos = self.database.caster.entity:GetSocketPos("S_Attack")
     
     
     local de_x = self.target_pos.X - self.curr_pos.X
     local de_y = self.target_pos.Y - self.curr_pos.Y
-    local de_z
-    if self.targets[1].genus == 1 then
-        de_z = battle_def.DefaultGroundHurtZ - self.curr_pos.Z
-    else
-        de_z = battle_def.DefaultSkyHurtZ - self.curr_pos.Z
-    end
+    local de_z = self.target_pos.Z - self.curr_pos.Z
+
     local dis = math.sqrt( de_x*de_x+de_y*de_y )
     local time = dis/self.speed
     
@@ -111,9 +110,11 @@ function this:update_by_straight(sess,delta )
     if dis > self.min_dis or time == 0 then return "completed"
     else self.min_dis = dis end
    
-    de_x = de_x/time*delta
-    de_y = de_y/time*delta
-    de_z = de_z/time*delta
+    if time ~= 0 then
+        de_x = de_x/time*delta
+        de_y = de_y/time*delta
+        de_z = de_z/time*delta
+    end
 
     
     self.curr_pos.X = self.curr_pos.X + de_x
