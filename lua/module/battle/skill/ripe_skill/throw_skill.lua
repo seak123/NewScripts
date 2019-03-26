@@ -86,7 +86,6 @@ end
 function this:update_by_straight(sess,delta )
     if self.vo.target_type == throw_vo.Target.Unit and self.targets[1].alive == 0 then
         local pos = self.targets[1].entity:GetSocketPos(self.vo.target_socket)
-        print("@@pos::"..pos.x.." "..pos.z)
         self.target_pos.X = pos.x*25
         self.target_pos.Y = pos.z*25
         self.target_pos.Z = pos.y

@@ -10,7 +10,7 @@ de_skill.type = decorator.Type.SkillAvaliable
 
 local be_caster = behavior.new()
 be_caster.controll_type = "sel"
-be_caster.priority = 3
+be_caster.priority = 4
 be_caster:append("subs",ac_caster)
 be_caster:append("decorators",de_skill)
 
@@ -31,12 +31,12 @@ de_find.type = decorator.Type.EnemyAround
 -------------------------------------------
 local ac_appear = action.new()
 ac_appear.action_type = action.ACTION.Appear
-ac_appear.priority = 4
+ac_appear.priority = 5
 ----------------------------------------
 
 local be_attack = behavior.new()
 be_attack.controll_type = "sel"
-be_attack.priority = 2
+be_attack.priority = 3
 be_attack:append("subs",ac_move,ac_attack)
 be_attack:append("decorators",de_find)
 -----------------------------
@@ -48,12 +48,20 @@ de_forward.type = decorator.Type.Forward
 
 local be_forward = behavior.new()
 be_forward.controll_type = "seq"
+be_forward.priority = 2
 be_forward:append("subs",ac_move0)
 be_forward:append("decorators",de_forward)
+----------------------------
+local ac_idle0 = action.new()
+ac_idle0.action_type = action.ACTION.Idle
+
+local be_stay = behavior.new()
+be_stay.controll_type = "seq"
+be_stay:append("subs",ac_idle0)
 
 ------------------------------
 local be_root = behavior.new()
 be_root.controll_type = "sel"
-be_root:append("subs",be_attack,be_forward,be_caster,ac_appear)
+be_root:append("subs",be_attack,be_forward,be_caster,ac_appear,be_stay)
 
 return be_root

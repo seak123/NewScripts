@@ -52,6 +52,7 @@ this.ENEMYBOUND = {
 }
 
 this.room_bound = 140
+this.room_interval = 50
 
 
 ------------------

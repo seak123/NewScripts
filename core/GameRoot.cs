@@ -87,6 +87,7 @@ public class GameRoot : MonoBehaviour {
     }
 
     public void StartBattle(){
+        //Time.timeScale = 3;
         BattleStartAction();
         mainUIMng.HideUI(true);
         battleGroundUI = mainUIMng.OpenUI(4);
@@ -104,6 +105,9 @@ public class GameRoot : MonoBehaviour {
         int num = allStructures.Count + allCreatures.Count;
         battleData.units = new UnitData[num];
 
+        battleData.roomCol = gameDataManager.roomCol;
+        battleData.roomRow = gameDataManager.roomRow;
+
         for (int i = 0; i < allStructures.Count;++i){
             battleData.units[i] = allStructures[i];
         }
@@ -116,8 +120,6 @@ public class GameRoot : MonoBehaviour {
        
         for (int i = 0; i < 20;++i){
             battleData.enemys[i] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1091), 2);
-            battleData.enemys[i].init_x = 600;
-            battleData.enemys[i].init_y = 310;
             battleData.enemys[i].init_room = -1;
         }
 

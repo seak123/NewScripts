@@ -10,9 +10,9 @@ public static class BattleDef
     //map data
     public static bool useCollision = false;
 
-    public static int rowGridNum = 620;
+    public static int rowGridNum = 1400;
 
-    public static int columnGridNum = 620;
+    public static int columnGridNum = 1400;
 
 
     public static int maxSpeed = 64;

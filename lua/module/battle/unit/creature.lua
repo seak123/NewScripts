@@ -86,15 +86,15 @@ function this:init(  )
     -- init room
     self.last_location = -1
     self.arrived_rooms = {}
-    if self.data.init_room ~= -1 then
-        self.location = self.data.init_room
-        local init_pos = self.sess.battle_map:get_room_center(self.data.init_room)
-        self.data.init_x = init_pos.X
-        self.data.init_y = init_pos.Y
-        table.insert( self.arrived_rooms,self.location)
-    else
-        self.location = -1
-    end
+    --if self.data.init_room ~= -1 then
+    self.location = self.data.init_room
+    local init_pos = self.sess.battle_map:get_room_center(self.data.init_room)
+    self.data.init_x = init_pos.X
+    self.data.init_y = init_pos.Y
+    table.insert( self.arrived_rooms,self.location)
+    --else
+    --self.location = -1
+    --end
     
 
 

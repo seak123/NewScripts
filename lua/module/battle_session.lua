@@ -10,6 +10,7 @@ local battle_ai = require("module.battle.battle_ai.ai_tree")
 local normal_ai = require("config.ai_config.normal_player_ai")
 
 function this:ctor( vo )
+    self.vo = vo
     self.map = GetMapField()
     self.battle_map = battle_map.new(self)
     self.field = battle_field.new(self)
@@ -47,7 +48,6 @@ function this:init_battle_data( vo )
         self.field:add_unit( vo.units[i],-1)
     end
     self.enemy_num = vo.enemys.Length
-    self.vo = vo
 end
 
 function this:update_enemys( delta )

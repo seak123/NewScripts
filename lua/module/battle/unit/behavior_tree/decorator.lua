@@ -23,6 +23,9 @@ function this:check_Forward(  )
         return true
     end
     if transform.des_room == now_room then
+        if now_room == self.database.master.sess.battle_map:get_boss_room() then
+            return false
+        end
         local next_room = self:get_next_room_id(now_room)
         transform.des_room = next_room
     end
@@ -50,6 +53,11 @@ function this:get_next_room_id( now_id )
     end
 
     if #new_rooms ~= 0 then
+        for _,v in ipairs(new_rooms) do
+            if v == self.database.master.sess.battle_map:get_boss_room() then
+                return v
+            end
+        end
         local index = math.random(#new_rooms)
         return new_rooms[index]
     elseif #valid_rooms ~= 0 then

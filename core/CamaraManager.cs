@@ -53,12 +53,17 @@ public class CamaraManager : MonoBehaviour {
     {
         m_Camera = this.GetComponent<Camera>();
         m_CameraOffset = m_Camera.transform.position;
+        GameRoot.moduleInit += Init;
     }
 
 
     public void Init()
     {
-        m_CameraOffset = new Vector3(-1.38f, 23.64f, 5.76f);
+        m_CameraOffset = new Vector3(16.65f, 29.88f, 20f);
+        xMin = 1;
+        xMax = 23;
+        zMin = 12.5f;
+        zMax = 27.8f;
         //size = 16f;
     }
 

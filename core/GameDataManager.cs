@@ -31,6 +31,9 @@ public class GameDataManager
     public List<float> properties;
     public List<UnitData> creatures;
     public List<UnitData> constructures;
+
+    public int roomRow;
+    public int roomCol;
     //public UnitData[] 
     public int heroId;
 
@@ -52,6 +55,8 @@ public class GameDataManager
         properties = new List<float>();
         creatures = new List<UnitData>();
         constructures = new List<UnitData>();
+        roomRow = 3;
+        roomCol = 3;
 
         AssetManager assetManager = GameRoot.GetInstance().BattleField.assetManager;
         creatures.Add(assetManager.GetUnitData(1081));
@@ -60,17 +65,17 @@ public class GameDataManager
      
 
         for (int i = 0; i < creatures.Count;++i){
-            creatures[i].init_room = 22;
+            creatures[i].init_room = 33;
         }
 
         creatures.Add(assetManager.GetUnitData(6011));
-        creatures[3].init_room = 21;
+        creatures[3].init_room = 32;
 
         creatures.Add(assetManager.GetUnitData(6011));
-        creatures[4].init_room = 23;
+        creatures[4].init_room = 34;
 
         creatures.Add(assetManager.GetUnitData(6011));
-        creatures[5].init_room = 32;
+        creatures[5].init_room = 43;
 
         //init playerData
         //properties[(int)PlayerProperty.PlayerHp] = 1000;

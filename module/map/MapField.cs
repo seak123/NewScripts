@@ -13,6 +13,7 @@ namespace Map
         public GameObject temRoom;
         public GameObject temWall;
         public GameObject temPath;
+        public GameObject temBossRoom;
         private bool assistActive=false;
 
         private int[,] grids;
@@ -87,6 +88,13 @@ namespace Map
         }
 
         //>>>>>>>>>>>>>>>>>map entity>>>>>>>>>>>>>>>>>>>
+
+        public void CreateBossRoom(int gridX,int gridY){
+            float x, y;
+            GetViewPos(gridX, gridY, out x, out y);
+            GameObject obj = Instantiate(temBossRoom, new Vector3(x, 1.7f, y), Quaternion.identity);
+            obj.transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
+        }
 
         public void CreateRoom(int gridX,int gridY){
             float x, y;
