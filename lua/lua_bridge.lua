@@ -63,6 +63,7 @@ function GetAssetManager()
 end
 
 function BattleCompleted( res )
+    battle_mng.session = nil
     return api.BattleCompleted(res)
 end
 

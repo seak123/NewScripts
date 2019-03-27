@@ -48,6 +48,8 @@ function this:init_battle_data( vo )
         self.field:add_unit( vo.units[i],-1)
     end
     self.enemy_num = vo.enemys.Length
+    self.boss_vo = vo.boss
+    self.field:add_boss(self.boss_vo)
 end
 
 function this:update_enemys( delta )
@@ -62,8 +64,10 @@ function this:update_enemys( delta )
 end
 
 function this:check_result(  )
-
-    
+    local res = self.field:check_result()
+    if res ~= -1 then
+        BattleCompleted(res)
+    end
 end
 
 return this

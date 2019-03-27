@@ -32,38 +32,21 @@ this.card_config = {
 }
 
 this.hero_config = {
-    [10001] = {
-        config = {"attack","skills","passives"},
-        attack = {
-            [0] = "config.hero.1_natural_artemis.attack.artemis_attack0",
-            [1] = "config.hero.1_natural_artemis.attack.artemis_attack1",
-            [2] = "config.hero.1_natural_artemis.attack.artemis_attack2",
-            [3] = "config.hero.1_natural_artemis.attack.artemis_attack3",
-            [4] = "config.hero.1_natural_artemis.attack.artemis_attack4"
-        },
-        skills = {
-            [101] = "config.hero.1_natural_artemis.skills.artemis_skill101",
-            [102] = "config.hero.1_natural_artemis.skills.artemis_skill102",
-            [103] = "config.hero.1_natural_artemis.skills.artemis_skill103",
-            [104] = "config.hero.1_natural_artemis.skills.artemis_skill104",
-        },
-        passives = {
-            [101] = "config.hero.1_natural_artemis.passives.artemis_passive1",
-            [102] = "config.hero.1_natural_artemis.passives.artemis_passive2",
-            [103] = "config.hero.1_natural_artemis.passives.artemis_passive3",
-            [104] = "config.hero.1_natural_artemis.passives.artemis_passive4"
-        }
-
-    }
+    [10002] = "config.hero.2_lava_boss.unit.lava_unit",
 }
 
-function this.get_unit_config( id )
+function this.get_unit_config( data )
+    local id = data.id
     local config = require(this.unit_config[id])
     local unit_vo = {
-        ai_vo = config.ai_vo,
         normal_attack = config.normal_attack,
         skills = {}
     }
+    if data.side == 1 then
+        unit_vo.ai_vo =  require("config.ai_config.normal_defence_ai")
+    else
+        unit_vo.ai_vo = require("config.ai_config.normal_ai")
+    end
     for _,v in ipairs(config.sp_attr) do
         table.insert( unit_vo.skills, v)
     end
@@ -74,39 +57,19 @@ function this.get_unit_config( id )
 end
 
 function this.get_hero_config( data )
-    local unit_config = {}
-    local hero_conf = this.hero_config[data.id]
-    unit_config.ai_vo = require("config.ai_config.normal_defence_ai")
-    unit_config.skills = {}
-    unit_config.passives = {}
-    --unit_config.normal_attack = require(hero_conf.attack[0])
-
-
-    local skill_flag = 1
-    local passive_flag = 1
-
-    for i=1,3 do
-        local Lv = data["Skill"..i.."Lvl"]
-        local attr = hero_conf.config[i]
-        if attr == "attack" then
-            unit_config.normal_attack = require(hero_conf.attack[Lv])
-        elseif attr == "skills" then
-            skill_flag = skill_flag + 1
-            if Lv ~= 0 then
-                table.insert( unit_config.skills, require(hero_conf.skills[skill_flag*100+Lv]) )
-            end
-        else
-            passive_flag = passive_flag + 1
-            if Lv ~=0 then
-                table.insert( unit_config.passives, require(hero_conf.passives[passive_flag*100+Lv]) )
-            end
-        end
+    local config = require(this.hero_config[data.id])
+    local unit_vo = {
+        normal_attack = config.normal_attack,
+        ai_vo = require("config.ai_config.normal_boss_ai"),
+        skills = {}
+    }
+    for _,v in ipairs(config.sp_attr) do
+        table.insert( unit_vo.skills, v)
     end
-   
-    unit_config.battlecry = {}
-    
-    unit_config.deathrattle = {}
-    return unit_config
+    for _,v in ipairs(config.skills) do
+        table.insert( unit_vo.skills, v)
+    end
+    return unit_vo
 end
 
 function this.get_skill_config( id )

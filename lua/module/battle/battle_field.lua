@@ -8,6 +8,7 @@ function this:ctor(sess )
     self.sess = sess
     self.units = {{},{}}
     self.room_units = {}
+    self.boss = nil
     self.counter = 0
 
     -- init 
@@ -27,6 +28,15 @@ function this:add_unit( data,struct_uid)
     table.insert( self.units[data.side],unit)
     table.insert(self.room_units[data.init_room],unit)
     return unit
+end
+
+function this:add_boss( data )
+    local uid = self.counter
+    self.counter = self.counter + 1
+    local unit = creature.new(self.sess,data,uid,-1)
+    table.insert( self.units[data.side],unit)
+    table.insert( self.room_units[self.sess.battle_map:get_boss_room()], unit)
+    self.boss = unit
 end
 
 function this:unit_die( unit )
@@ -306,6 +316,16 @@ function this:update( delta )
             unit:update(delta)
         end
     end
+end
+
+function this:check_result(  )
+    if self.boss ~= nil and self.boss.alive ~= 0 then
+        return 0
+    end
+    if #self.units[2] == 0 then
+        return 1
+    end
+    return -1
 end
 
 return this

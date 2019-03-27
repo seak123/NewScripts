@@ -28,5 +28,6 @@ throw:append("childs",normal)
 this.root = {throw}
 this.decorators = {decorator.check_skill_EnemyInRange(true,1)}
 this.coold = 2
+this.energy = 0
 
 return this

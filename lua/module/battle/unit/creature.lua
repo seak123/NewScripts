@@ -16,7 +16,7 @@ function this:ctor( sess,data,uid ,struct_uid)
     self.sess = sess
     self.data = data
     self.id = data.id
-    -- type: 0,creature;1,structure;-1,hero
+    -- type: 0,creature;1,structure;2,boss
     self.type = data.type
     -- genus: 1,ground 2,fly
     self.genus = data.genus
@@ -29,7 +29,7 @@ function this:ctor( sess,data,uid ,struct_uid)
     if data.type < 0 then
         self.config = config_mng.get_hero_config(data)
     else
-        self.config = config_mng.get_unit_config(self.id)
+        self.config = config_mng.get_unit_config(data)
     end
 
     if self.type == 0 then
@@ -124,6 +124,7 @@ function this:init(  )
    self.attack_skill_vo = self.config.normal_attack
    self.skills = self.config.skills
    self.skills_coold = {}
+   self.energy = 0
   
    for i,v in ipairs(self.skills) do
         if v.skill_type == "passive" then
@@ -190,6 +191,8 @@ function this:do_attack( delta ,enemy)
         local attack_skill = entire_skill.new(self.sess,self.attack_skill_vo)
         self:on_attack() 
         attack_skill:execute(database)
+        self.energy = self.energy + 1
+        self.energy = math.min( self.energy,20)
     end
     if self.attack_process >= 1 then
         self.attack_process = 0
@@ -205,6 +208,7 @@ function this:do_skill(delta,target,pos ,index )
         local database = pack_data.pack_database(self,target,pos)
         local skill = entire_skill.new(self.sess,self.skills[index])
         self.skills_coold[index].value = self.skills_coold[index].coold
+        self.energy = self.energy - self.skills[index].energy
         skill:execute(database)
     end
     if self.skill_process >= self.caster_channal*2 then

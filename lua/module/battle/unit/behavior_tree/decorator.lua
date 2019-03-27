@@ -137,7 +137,7 @@ function this:check_SkillAvaliable()
     local master = self.database.master
     for index=#master.skills_coold,1,-1 do
         -- check skill coold is 0
-        if master.skills_coold[index].value == 0 then
+        if master.skills_coold[index].value == 0 and master.energy >= master.skills[index].energy then
             local flag = true
             for _,v in ipairs(master.skills[index].decorators) do
                 flag = flag and v(self.database)
@@ -154,11 +154,17 @@ end
 function this:check_Boring(  )
     local master = self.database.master
     local delta = master.delta
+    local bound
+    if self.database.master.location == self.database.master.sess.battle_map:get_boss_room() then
+        bound = battle_def.room_bound/3
+    else
+        bound = battle_def.room_bound/4
+    end
     if math.modf(master.idle_time) < math.modf(master.idle_time +delta ) and math.random() < 0.2 then
         local pos = master.transform.grid_pos
         local center = master.sess.battle_map:get_room_center(master.location)
-        local x = clamp(pos.X + math.random(-100,100),center.X - battle_def.room_bound/4,center.X + battle_def.room_bound/4)
-        local y = clamp(pos.Y + math.random(-100,100),center.Y - battle_def.room_bound/4,center.Y + battle_def.room_bound/4)
+        local x = clamp(pos.X + math.random(-100,100),center.X - bound,center.X + bound)
+        local y = clamp(pos.Y + math.random(-100,100),center.Y - bound,center.Y + bound)
         self.database.des_pos = {X = x,Y= y}
         
         return true
