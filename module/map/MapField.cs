@@ -14,6 +14,7 @@ namespace Map
         public GameObject temWall;
         public GameObject temPath;
         public GameObject temBossRoom;
+        public GameObject temPortal;
         private bool assistActive=false;
 
         private int[,] grids;
@@ -88,6 +89,14 @@ namespace Map
         }
 
         //>>>>>>>>>>>>>>>>>map entity>>>>>>>>>>>>>>>>>>>
+
+        public void CreatePortal(int gridX, int gridY)
+        {
+            float x, y;
+            GetViewPos(gridX, gridY, out x, out y);
+            GameObject obj = Instantiate(temPortal, new Vector3(x, 1.7f, y), Quaternion.identity);
+            obj.transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
+        }
 
         public void CreateBossRoom(int gridX,int gridY){
             float x, y;

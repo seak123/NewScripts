@@ -41,9 +41,11 @@ function this:init(  )
     self.boss_room = self:get_boss_room()
 
     -- portal room
-    self.room_table[-1] = {X=self:get_room_center(self.entry_room).X + battle_def.room_bound/2 + 50,Y=self:get_room_center(self.entry_room).Y}
-    self.room_table[self.boss_room] = {X=self:get_room_center(self.boss_room+10).X-battle_def.room_interval-battle_def.room_bound*1.25,Y=self:get_room_center(self.boss_room+10).Y}
+    self.room_table[-1] = {X=self:get_room_center(self.entry_room).X + battle_def.room_bound/2 + 75,Y=self:get_room_center(self.entry_room).Y}
+    self.room_table[self.boss_room] = {X=self:get_room_center(self.boss_room+10).X-battle_def.room_interval-battle_def.room_bound*1.15,Y=self:get_room_center(self.boss_room+10).Y}
     -------------- init view
+    ------create portal
+    self.sess.map:CreatePortal(self.room_table[-1].X-25,self.room_table[-1].Y)
     ------ create room
     for id,pos in pairs(self.room_table) do
         if id == -1 then
@@ -131,7 +133,7 @@ function this:init(  )
     end
     -- add boos path
     local boss_path = {
-        X = self:get_room_center(self.boss_room).X + battle_def.room_bound*0.75 + battle_def.room_interval/2,
+        X = self:get_room_center(self.boss_room).X + battle_def.room_bound*0.65 + battle_def.room_interval/2,
         Y = self:get_room_center(self.boss_room).Y,
         R = 0,
         Offset = {X = 0,Y = 0}

@@ -43,7 +43,11 @@ function this.get_unit_config( data )
         skills = {}
     }
     if data.side == 1 then
-        unit_vo.ai_vo =  require("config.ai_config.normal_defence_ai")
+        if data.type == 0 then
+            unit_vo.ai_vo =  require("config.ai_config.normal_defence_ai")
+        else
+            unit_vo.ai_vo = require("config.ai_config.normal_structure_ai")
+        end
     else
         unit_vo.ai_vo = require("config.ai_config.normal_ai")
     end

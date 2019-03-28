@@ -16,7 +16,7 @@ function this:ctor( sess,data,uid ,struct_uid)
     self.sess = sess
     self.data = data
     self.id = data.id
-    -- type: 0,creature;1,structure;2,boss
+    -- type: 0,creature;1,structure;-1,boss
     self.type = data.type
     -- genus: 1,ground 2,fly
     self.genus = data.genus
@@ -26,21 +26,13 @@ function this:ctor( sess,data,uid ,struct_uid)
     self.card_uid = data.card_uid
     -- only structure use
     self.struct_uid = struct_uid
-    if data.type < 0 then
+    if data.type == -1 then
         self.config = config_mng.get_hero_config(data)
     else
         self.config = config_mng.get_unit_config(data)
     end
 
-    if self.type == 0 then
-        if data.side == 1 then
-            self.ai_vo = require("config.ai_config.normal_defence_ai")
-        else
-            self.ai_vo = require("config.ai_config.normal_ai")
-        end
-    else
-        self.ai_vo = require("config.ai_config.normal_structure_ai")
-    end
+    self.ai_vo = self.config.ai_vo
    
 
    self.delta = 0

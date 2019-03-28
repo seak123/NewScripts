@@ -29,6 +29,7 @@ public class GameDataManager
 {
     //property
     public List<float> properties;
+    public UnitData boss;
     public List<UnitData> creatures;
     public List<UnitData> constructures;
 
@@ -64,6 +65,11 @@ public class GameDataManager
 
         creatures.Add(assetManager.GetUnitData(6011));
         creatures[5].init_room = 43;
+
+        UnitData boss_data = assetManager.GetUnitData(10002);
+        boss_data.type = -1;
+        boss_data.init_room = 23;
+        boss = boss_data;
 
     }
 

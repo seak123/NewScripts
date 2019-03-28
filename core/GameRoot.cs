@@ -123,6 +123,8 @@ public class GameRoot : MonoBehaviour {
             battleData.enemys[i].init_room = -1;
         }
 
+        battleData.boss = gameDataManager.boss;
+
         //battleData = new BattleData();
         //battleData.unitNum = 2;
         //battleData.units = new UnitData[2];

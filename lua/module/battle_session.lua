@@ -28,6 +28,7 @@ function this:ctor( vo )
     self.deltatime = 0
 
     -- record enemy process
+    self.summoun_completed = false
     self.summoun_interval = 0.5
     self.summoun_process = 0
     self.summoun_count = 0
@@ -53,7 +54,10 @@ function this:init_battle_data( vo )
 end
 
 function this:update_enemys( delta )
-    if self.summoun_count >= self.enemy_num then return end
+    if self.summoun_count >= self.enemy_num then
+        self.summoun_completed = true 
+        return 
+    end
     self.summoun_process = self.summoun_process + delta
     if self.summoun_process > self.summoun_interval then
         self.field:add_unit(self.vo.enemys[self.summoun_count],-1)

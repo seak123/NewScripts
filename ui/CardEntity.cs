@@ -102,16 +102,6 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler,IPointerUpHandler{
 
         cardData = data;
         switch (cardData.cardType){
-            case CardType.Hero:
-                GameDataManager dataMng = GameRoot.GetInstance().gameDataManager;
-                creatureData = dataMng.GetHeroData();
-                baseData = CreatureData.Clone(creatureData);
-                cardData = dataMng.GetHeroCardData();
-                entityPrefab = Instantiate(cardData.entityPrefab);
-                entityPrefab.SetActive(false);
-                sprite.sprite = cardData.icon;
-                cost.text = cardData.cost.ToString();
-                break;
             case CardType.Creature:
                 creatureData = GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(cardData.unitId);
                 baseData = CreatureData.Clone(creatureData);
