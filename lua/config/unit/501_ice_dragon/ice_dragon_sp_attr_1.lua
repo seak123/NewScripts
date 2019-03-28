@@ -32,7 +32,6 @@ local aoe0 = aoe.new()
 aoe0.can_repeat = false
 aoe0.tick = -1
 aoe0.duration = 0
-aoe0.opposite_type = 4
 aoe0.radius = 20
 aoe0:append("raw_skills",aoe_dam,buff3)
 

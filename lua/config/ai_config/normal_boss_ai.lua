@@ -19,7 +19,7 @@ local de_inrange = decorator.new()
 de_inrange.type = decorator.Type.EnemyInAttackRange
 
 local ac_attack = action.new()
-ac_attack.priority =4
+ac_attack.priority =2
 ac_attack.action_type = action.ACTION.Attack
 ac_attack:append("decorators",de_inrange)
 

@@ -27,7 +27,6 @@ public class CardManager : MonoBehaviour {
     private CardViewState state;
     private List<CardEntity> cardboxs;
     private int cardIndex = 0;
-    private int cardUid = 0;
     private float pushWaitTime = 0f;
     private float enterBattleWaitTime = 0f;
 

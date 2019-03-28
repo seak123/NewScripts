@@ -34,7 +34,6 @@ local aoe0 = aoe.new()
 aoe0.can_repeat = true
 aoe0.tick = -1
 aoe0.duraton = 0
-aoe0.opposite_type = 3
 aoe0.radius = 120
 aoe0.buff_occasion = "on_tick"
 aoe0.interval = 1

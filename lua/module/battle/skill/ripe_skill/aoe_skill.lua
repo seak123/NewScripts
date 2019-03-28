@@ -101,7 +101,7 @@ function this:update_shape_by_circle( sess,delta )
         end
         return self:check_repeat()(unit) and flag
     end
-    return sess.field:get_targets(self.opposite_type,self.vo.with_structure,self.side,self.database.caster,-1,func)
+    return sess.field:get_targets(self.vo.with_structure,self.side,self.database.caster,-1,func)
 end
 
 

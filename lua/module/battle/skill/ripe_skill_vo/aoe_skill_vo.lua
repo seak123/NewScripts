@@ -29,9 +29,6 @@ this.tick = 1
 -- duration = -1 means forever ; duration = 0 then means once
 this.duration = 1
 
--- opposite_type: 1,ground 2,fly 3,ground and fly 4,refer to main target
-this.opposite_type = 1
-
 this.with_structure = false
 
 -- side: 0, friend 1,enemy

@@ -31,8 +31,6 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler,IPointerUpHandler{
 
     private PlayerManager playerMng;
 
-
-    private int cardUid;
     //private Button button;
     private CardData cardData;
     private Vector3 defaultPos;
@@ -97,8 +95,6 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler,IPointerUpHandler{
         if (data == null) return;
         
         CleanUp();
-
-        cardUid = uid;
 
         cardData = data;
         switch (cardData.cardType){
@@ -306,7 +302,6 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler,IPointerUpHandler{
                 //posX = Mathf.Clamp(posX, 0, BattleDef.UnitBound);
                 UnitData unitData = AssetManager.PackCreatureData(creatureData);
                 if (cardData.liveTime > 0) unitData.live_time = cardData.liveTime;
-                unitData.card_uid = cardUid;
                 GameRoot.GetInstance().Bridge.CasterSkill(1, cardData.skillId, cenX, cenY, unitData, cardData.num,sUid);
                 CleanUp();
                 break;
@@ -321,7 +316,6 @@ public class CardEntity : MonoBehaviour, IPointerDownHandler,IPointerUpHandler{
                 int structUid = map.CreateStructure(maxX,maxY,cardData.size);
                 UnitData unitData2 = AssetManager.PackCreatureData(creatureData);
                 if (cardData.liveTime > 0) unitData2.live_time = cardData.liveTime;
-                unitData2.card_uid = cardUid;
                 GameRoot.GetInstance().Bridge.CasterSkill(1, cardData.skillId, centerX, centerY, unitData2, 1,structUid);
                 CleanUp();
                 break;

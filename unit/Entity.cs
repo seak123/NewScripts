@@ -257,7 +257,7 @@ namespace Map
             animator.speed = animatorAttackSpeed;
         }
 
-        public void Die(int cardUid)
+        public void Die()
         {
             gameObject.transform.Find("Circle").gameObject.SetActive(false);
             if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
@@ -271,7 +271,7 @@ namespace Map
             GameRoot.GetInstance().MapField.RemoveEntity(this, 2f);
             Destroy(hpBar, 0.5f);
             Destroy(gameObject, 2f);
-            //GameRoot.GetInstance().PlayerMng.GetCardManager().RecoverCard(cardUid);
+            
         }
 
         private void Start()

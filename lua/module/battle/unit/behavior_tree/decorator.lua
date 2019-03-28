@@ -175,7 +175,7 @@ end
 function this:check_NeedBack(  )
     local master = self.database.master
     local center = master.sess.battle_map:get_room_center(master.location)
-    local dis = self.database.master.sess.field.distance(master,center)
+    local dis = self.database.master.sess.field:distance(master,center)
     if dis > 8 then
         self.database.des_pos = {X = center.X,Y = center.Y}
         return true

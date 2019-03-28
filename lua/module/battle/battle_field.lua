@@ -98,7 +98,7 @@ function this:get_unit( uid,side)
     end
     return nil
 end
---opposite_type: attack ground or sky
+
 --just for normal attack
 -- range: 0,all map  1,only room
 -- active: 0,not active 1,active
@@ -145,7 +145,6 @@ function this:find_enemy( with_structure,unit,is_find_friend,active,range)
 end
 
 function this:get_units(with_structure,side,unit,num,condition_func,range  )
-    local opposite_type = unit.opposite_type
     local min_dis = 9999
     local enemy = {}
     for i=1,num do
@@ -248,7 +247,7 @@ function this:find_random_unit(with_structure,side,unit,condition_func,range )
     return res[index]
 end
 
-function this:get_targets(opposite_type,with_structure,side,unit,num,condition_func,range)
+function this:get_targets(with_structure,side,unit,num,condition_func,range)
     local min_dis = 9999
     local enemy = {}
     if num == -1 then num = 99 end

@@ -20,10 +20,9 @@ function this:ctor( sess,data,uid ,struct_uid)
     self.type = data.type
     -- genus: 1,ground 2,fly
     self.genus = data.genus
-    -- opposite_type: 1,only ground 2,only fly 3,ground and sky
-    self.opposite_type =data.opposite_type
+
     self.uid = uid
-    self.card_uid = data.card_uid
+
     -- only structure use
     self.struct_uid = struct_uid
     if data.type == -1 then
@@ -244,7 +243,7 @@ function this:die(  )
     self.alive = 2
     self:on_die()
     self.sess.field:unit_die(self)
-    self.entity:Die(self.card_uid)
+    self.entity:Die()
 end
 
 
