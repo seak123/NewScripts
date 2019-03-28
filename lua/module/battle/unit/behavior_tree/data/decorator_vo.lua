@@ -9,6 +9,7 @@ this.Type = {
     EnemyInAttackRange = "EnemyInAttackRange",
     SkillAvaliable = "SkillAvaliable",
     Boring = "Boring",
+    NeedBack = "NeedBack"
 }
 
 this.type = this.Type.Foward

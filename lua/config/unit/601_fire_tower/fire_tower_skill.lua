@@ -11,7 +11,7 @@ local this = {}
 
 
 local damage0 = damage.new()
-damage0.calc = calc.make_common_attack(10, 0) 
+damage0.calc = calc.make_common_attack(1, 0) 
 
 local normal = normal_skill.new()
 normal:append("raw_skills",damage0)

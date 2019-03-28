@@ -19,7 +19,7 @@ local de_inrange = decorator.new()
 de_inrange.type = decorator.Type.EnemyInAttackRange
 
 local ac_attack = action.new()
-ac_attack.priority =2
+ac_attack.priority =4
 ac_attack.action_type = action.ACTION.Attack
 ac_attack:append("decorators",de_inrange)
 
@@ -48,22 +48,22 @@ be_stay.controll_type = "seq"
 be_stay:append("subs",ac_idle0)
 ----------------------------------
 
-local ac_wander = action.new()
-ac_wander.action_type = action.ACTION.MoveToPos
+local ac_back = action.new()
+ac_back.action_type = action.ACTION.MoveToPos
 
-local de_wander = decorator.new()
-de_wander.type = decorator.Type.Boring
+local de_back = decorator.new()
+de_back.type = decorator.Type.NeedBack
 
-local be_wander = behavior.new()
-be_wander.controll_type = "sel"
-be_wander.priority = 2
-be_wander:append("subs",ac_wander)
-be_wander:append("decorators",de_wander)
+local be_back = behavior.new()
+be_back.controll_type = "sel"
+be_back.priority = 2
+be_back:append("subs",ac_back)
+be_back:append("decorators",de_back)
 
 
 ------------------------------
 local be_root = behavior.new()
 be_root.controll_type = "sel"
-be_root:append("subs",be_attack,be_wander,be_stay,be_caster,ac_appear)
+be_root:append("subs",be_attack,be_back,be_stay,be_caster,ac_appear)
 
 return be_root
