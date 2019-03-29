@@ -23,6 +23,10 @@ this.skill_config = {
     [1] = "config.skill_config.common_skill.1_summon"
 }
 
+this.common_attr = {
+    
+}
+
 this.card_config = {
     [1] = {target=decorator.check_pos_creature()},
     [1081] = {target=decorator.check_pos_creature()},
