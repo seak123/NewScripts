@@ -10,6 +10,7 @@ public class MapSceneUnit : MonoBehaviour {
         if(ownScene!=null){
             ownScene.EnterScene();
         }
+        GameRoot.GetInstance().StartBattle();
     }
 
     public void InjectScene(BaseSceneUnit _scene){

@@ -80,119 +80,112 @@ public class CreatureCardUI : MonoBehaviour {
 
     public void InjectData(CardData cardData,bool openSkill = true){
 
-        AssetManager assetMng = GameRoot.GetInstance().BattleField.assetManager;
+    //    AssetManager assetMng = GameRoot.GetInstance().BattleField.assetManager;
 
-        CreatureData data;
-        if (cardData.cardType != CardType.Hero)
-            data = assetMng.GetCreatureData(cardData.unitId);
-        else data = GameRoot.GetInstance().gameDataManager.GetHeroData();
+    //    CreatureData data;
 
-        cost.text = cardData.cost.ToString();
+    //    cost.text = cardData.cost.ToString();
 
-        attack.text = data.attack.ToString();
+    //    defence.text = data.defence.ToString();
 
-        hp.text = data.hp.ToString();
+    //    attackRate.text = data.attack_rate.ToString();
 
-        defence.text = data.defence.ToString();
+    //    speed.text = data.speed.ToString();
 
-        attackRate.text = data.attack_rate.ToString();
+    //    if (data.skills.Length > 0) skillContent.SetActive(true);
+    //    if (cardData.cardType == CardType.Hero) heroBand.SetActive(true);
 
-        speed.text = data.speed.ToString();
+    //    if(data.skills.Length>=1){
+    //        SkillData skillData = assetMng.GetSkillData(data.skills[0]);
+    //        if(skillData != null){
+    //            skill1.SetActive(true);
+    //            skill1Name.text = StrUtil.GetText(skillData.skill_name);
+    //            skill1CD.text = skillData.skill_coold > 0 ? skillData.skill_coold.ToString() + "s" : StrUtil.GetText("被动");
+    //            skill1Des.text = StrUtil.GetText(skillData.skill_des);
+    //            skill1Icon.sprite = skillData.skill_icon;
+    //        }
+    //    }
+    //    if (data.skills.Length >= 2)
+    //    {
+    //        SkillData skillData = assetMng.GetSkillData(data.skills[1]);
+    //        if (skillData != null)
+    //        {
+    //            skill2.SetActive(true);
+    //            skill2Name.text = StrUtil.GetText(skillData.skill_name);
+    //            skill2CD.text = skillData.skill_coold > 0 ? skillData.skill_coold.ToString() + "s" : StrUtil.GetText("被动");
+    //            skill2Des.text = StrUtil.GetText(skillData.skill_des);
+    //            skill2Icon.sprite = skillData.skill_icon;
+    //        }
+    //    }
+    //    if (data.skills.Length >= 3)
+    //    {
+    //        SkillData skillData = assetMng.GetSkillData(data.skills[2]);
+    //        if (skillData != null)
+    //        {
+    //            skill3.SetActive(true);
+    //            skill3Name.text = StrUtil.GetText(skillData.skill_name);
+    //            skill3CD.text = skillData.skill_coold > 0 ? skillData.skill_coold.ToString() + "s" : StrUtil.GetText("被动");
+    //            skill3Des.text = StrUtil.GetText(skillData.skill_des);
+    //            skill3Icon.sprite = skillData.skill_icon;
+    //        }
+    //    }
 
-        if (data.skills.Length > 0) skillContent.SetActive(true);
-        if (cardData.cardType == CardType.Hero) heroBand.SetActive(true);
+    //    back.color = BattleDef.backColor[cardData.race];
+    //    skillBack.color = BattleDef.backColor[cardData.race];
+    //    cardIcon.sprite = cardData.icon;
+    //    attackSprite.sprite = data.attack_range > 40 ? longRange : shortRange;
 
-        if(data.skills.Length>=1){
-            SkillData skillData = assetMng.GetSkillData(data.skills[0]);
-            if(skillData != null){
-                skill1.SetActive(true);
-                skill1Name.text = StrUtil.GetText(skillData.skill_name);
-                skill1CD.text = skillData.skill_coold > 0 ? skillData.skill_coold.ToString() + "s" : StrUtil.GetText("被动");
-                skill1Des.text = StrUtil.GetText(skillData.skill_des);
-                skill1Icon.sprite = skillData.skill_icon;
-            }
-        }
-        if (data.skills.Length >= 2)
-        {
-            SkillData skillData = assetMng.GetSkillData(data.skills[1]);
-            if (skillData != null)
-            {
-                skill2.SetActive(true);
-                skill2Name.text = StrUtil.GetText(skillData.skill_name);
-                skill2CD.text = skillData.skill_coold > 0 ? skillData.skill_coold.ToString() + "s" : StrUtil.GetText("被动");
-                skill2Des.text = StrUtil.GetText(skillData.skill_des);
-                skill2Icon.sprite = skillData.skill_icon;
-            }
-        }
-        if (data.skills.Length >= 3)
-        {
-            SkillData skillData = assetMng.GetSkillData(data.skills[2]);
-            if (skillData != null)
-            {
-                skill3.SetActive(true);
-                skill3Name.text = StrUtil.GetText(skillData.skill_name);
-                skill3CD.text = skillData.skill_coold > 0 ? skillData.skill_coold.ToString() + "s" : StrUtil.GetText("被动");
-                skill3Des.text = StrUtil.GetText(skillData.skill_des);
-                skill3Icon.sprite = skillData.skill_icon;
-            }
-        }
-
-        back.color = BattleDef.backColor[cardData.race];
-        skillBack.color = BattleDef.backColor[cardData.race];
-        cardIcon.sprite = cardData.icon;
-        attackSprite.sprite = data.attack_range > 40 ? longRange : shortRange;
-
-        //stars
-        int starNum = cardData.cardId % 10;
-        star1Icon.color = starNum >= 1 ? Color.white : new Color(0.6f, 0.6f, 0.6f);
-        star2Icon.color = starNum >= 2 ? Color.white : new Color(0.6f, 0.6f, 0.6f);
-        star3Icon.color = starNum >= 3 ? Color.white : new Color(0.6f, 0.6f, 0.6f);
+    //    //stars
+    //    int starNum = cardData.cardId % 10;
+    //    star1Icon.color = starNum >= 1 ? Color.white : new Color(0.6f, 0.6f, 0.6f);
+    //    star2Icon.color = starNum >= 2 ? Color.white : new Color(0.6f, 0.6f, 0.6f);
+    //    star3Icon.color = starNum >= 3 ? Color.white : new Color(0.6f, 0.6f, 0.6f);
 
 
-        //calc card Name Text
-        string name = StrUtil.GetText(cardData.cardName);
-        int num = name.Length;
-        if (BattleDef.language != "chinese")
-        {
-            cardName1.SetActive(false);
-            cardName2.SetActive(false);
-            englishName.text = name;
-        }
-        else
-        {
-            englishName.text = "";
-            if (num % 2 == 1)
-            {
-                cardName1.SetActive(true);
-                cardName2.SetActive(false);
-                int index = (7 - num) / 2;
-                for (int i = 0; i < num; ++i)
-                {
-                    Name1Texts[index + i].text = name[i].ToString();
-                }
-            }
-            else
-            {
-                cardName1.SetActive(false);
-                cardName2.SetActive(true);
-                int index = (8 - num) / 2;
-                for (int i = 0; i < num; ++i)
-                {
-                    Name2Texts[index + i].text = name[i].ToString();
-                }
-            }
-        }
-        if (openSkill == false) skillContent.SetActive(false);
-    }
-    public void SetAlpha(float alpha)
-    {
-        foreach (var v in gameObject.GetComponentsInChildren<Text>())
-        {
-            v.color = new Color(v.color.r, v.color.g, v.color.b, alpha);
-        }
-        foreach (var v in gameObject.GetComponentsInChildren<Image>())
-        {
-            v.color = new Color(v.color.r, v.color.g, v.color.b, alpha);
-        }
+    //    //calc card Name Text
+    //    string name = StrUtil.GetText(cardData.cardName);
+    //    int num = name.Length;
+    //    if (BattleDef.language != "chinese")
+    //    {
+    //        cardName1.SetActive(false);
+    //        cardName2.SetActive(false);
+    //        englishName.text = name;
+    //    }
+    //    else
+    //    {
+    //        englishName.text = "";
+    //        if (num % 2 == 1)
+    //        {
+    //            cardName1.SetActive(true);
+    //            cardName2.SetActive(false);
+    //            int index = (7 - num) / 2;
+    //            for (int i = 0; i < num; ++i)
+    //            {
+    //                Name1Texts[index + i].text = name[i].ToString();
+    //            }
+    //        }
+    //        else
+    //        {
+    //            cardName1.SetActive(false);
+    //            cardName2.SetActive(true);
+    //            int index = (8 - num) / 2;
+    //            for (int i = 0; i < num; ++i)
+    //            {
+    //                Name2Texts[index + i].text = name[i].ToString();
+    //            }
+    //        }
+    //    }
+    //    if (openSkill == false) skillContent.SetActive(false);
+    //}
+    //public void SetAlpha(float alpha)
+    //{
+    //    foreach (var v in gameObject.GetComponentsInChildren<Text>())
+    //    {
+    //        v.color = new Color(v.color.r, v.color.g, v.color.b, alpha);
+    //    }
+    //    foreach (var v in gameObject.GetComponentsInChildren<Image>())
+    //    {
+    //        v.color = new Color(v.color.r, v.color.g, v.color.b, alpha);
+    //    }
     }
 }

@@ -21,6 +21,10 @@ function start_battle( battle_vo )
     battle_mng.battle_begin(battle_vo)
 end
 
+function start_strategy( battle_vo )
+    battle_mng.strategy_begin(battle_vo)
+end
+
 function lua_update( delta )
     if battle_mng.session ~= nil then
         battle_mng.session:update(delta)

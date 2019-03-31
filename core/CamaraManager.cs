@@ -3,7 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+
 public class CamaraManager : MonoBehaviour {
+
+    private readonly bool useMouse = BattleDef.useMouse;
+    private Vector2 lastSingleTouchPosition;
+    private CamaraManager camareMng;
+
+    private MoveCameraStateFSM state;
+
 
     //摄像机View Size
     public float size = 6.4f;
@@ -17,18 +25,16 @@ public class CamaraManager : MonoBehaviour {
     public float maxSize = 12.8f;
     public float minSize = 3.2f;
 
+    public bool active = false;
 
     //记录上一次手机触摸位置判断用户是在左放大还是缩小手势
     private Vector2 oldPosition1;
     private Vector2 oldPosition2;
 
 
-    public Vector2 lastSingleTouchPosition;
-
     private Vector3 m_CameraOffset;
     public Camera m_Camera;
 
-    public bool useMouse = BattleDef.useMouse;
 
     //定义摄像机可以活动的范围
     public float xMin = -100;
@@ -51,6 +57,9 @@ public class CamaraManager : MonoBehaviour {
     //初始化游戏信息设置
     void Start()
     {
+        state = MoveCameraStateFSM.Idle;
+        camareMng = gameObject.GetComponent<CamaraManager>();
+        lastSingleTouchPosition = useMouse ? (Vector2)Input.mousePosition : Input.GetTouch(0).position;
         m_Camera = this.GetComponent<Camera>();
         m_CameraOffset = m_Camera.transform.position;
         GameRoot.moduleInit += Init;
@@ -65,6 +74,8 @@ public class CamaraManager : MonoBehaviour {
         zMin = 12.5f;
         zMax = 27.8f;
         //size = 16f;
+        active = true;
+       
     }
 
     /// <summary>
@@ -129,40 +140,104 @@ public class CamaraManager : MonoBehaviour {
         speed = delta / Time.deltaTime;
         m_CameraOffset += new Vector3(-v.x, 0, -v.z) * m_Camera.transform.position.y;
 
-        //Debug.Log(lastTouchPostion + "|" + currentTouchPosition + "|" + v);
-        //lastSingleTouchPosition = scenePos;
-        //float offset = (6.4f / size - 1) / Mathf.Sqrt(2) * 16;
-      
-        //if ((m_CameraOffset.x + m_CameraOffset.z) > topLevelValue+offset)
-        //{
-        //    float cut = m_CameraOffset.x + m_CameraOffset.z - topLevelValue-offset;
-        //    m_CameraOffset.x -= cut / 2;
-        //    m_CameraOffset.z -= cut / 2;
-        //}
-
-        //if ((m_CameraOffset.x + m_CameraOffset.z) < floorLevelValue - offset)
-        //{
-        //    float cut = floorLevelValue - offset - (m_CameraOffset.x + m_CameraOffset.z) ;
-        //    m_CameraOffset.x += cut / 2;
-        //    m_CameraOffset.z += cut / 2;
-        //}
-
-        //if ((m_CameraOffset.x - m_CameraOffset.z) > rightLevelValue + offset)
-        //{
-        //    float cut = (m_CameraOffset.x - m_CameraOffset.z)- rightLevelValue-offset;
-        //    m_CameraOffset.x -= cut / 2;
-        //    m_CameraOffset.z += cut / 2;
-        //}
-
-        //if ((m_CameraOffset.x - m_CameraOffset.z) < leftLevelValue - offset)
-        //{
-        //    float cut = -(m_CameraOffset.x - m_CameraOffset.z) + leftLevelValue-offset;
-        //    m_CameraOffset.x += cut / 2;
-        //    m_CameraOffset.z -= cut / 2;
-        //}
 
         //把摄像机的位置控制在范围内lastSingleTouchPosition
         m_CameraOffset = new Vector3(Mathf.Clamp(m_CameraOffset.x, xMin, xMax), m_CameraOffset.y, Mathf.Clamp(m_CameraOffset.z, zMin, zMax));
     }
 
+    private void Update()
+    {
+        if (active)
+        {
+            if (Input.touchCount == 1)
+            {
+                camareMng.touchLeaving = false;
+                if (state == MoveCameraStateFSM.Idle || state == MoveCameraStateFSM.Double)
+                {
+                    //在开始触摸或者从两字手指放开回来的时候记录一下触摸的位置
+                    lastSingleTouchPosition = Input.GetTouch(0).position;
+                }
+                if (state == MoveCameraStateFSM.Single && Input.GetTouch(0).phase == TouchPhase.Moved)
+                {
+                    Vector3 lastTouchPos = Camera.main.ScreenToWorldPoint(new Vector3(lastSingleTouchPosition.x, lastSingleTouchPosition.y, -1));
+                    float deltaY = Input.GetTouch(0).position.y - lastSingleTouchPosition.y;
+                    Vector3 currTouchPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.GetTouch(0).position.x, lastSingleTouchPosition.y + deltaY * 1.41f, -1));
+                    Vector3 delta = lastTouchPos - currTouchPos;
+                    camareMng.MoveCamera(delta);
+                    lastSingleTouchPosition = Input.GetTouch(0).position;
+                }
+                //m_IsSingleFinger = true;
+                state = MoveCameraStateFSM.Single;
+            }
+            else if (Input.touchCount > 1)
+            {
+                camareMng.touchLeaving = false;
+                //当从单指触摸进入多指触摸的时候,记录一下触摸的位置
+                //保证计算缩放都是从两指手指触碰开始的
+                if (state == MoveCameraStateFSM.Idle || state == MoveCameraStateFSM.Single)
+                {
+                    oldPosition1 = Input.GetTouch(0).position;
+                    oldPosition2 = Input.GetTouch(1).position;
+                }
+
+                if (state == MoveCameraStateFSM.Double && (Input.GetTouch(0).phase == TouchPhase.Moved || Input.GetTouch(1).phase == TouchPhase.Moved))
+                {
+                    var tempPosition1 = Input.GetTouch(0).position;
+                    var tempPosition2 = Input.GetTouch(1).position;
+
+
+                    float currentTouchDistance = Vector3.Distance(tempPosition1, tempPosition2);
+                    float lastTouchDistance = Vector3.Distance(oldPosition1, oldPosition2);
+
+                    camareMng.ScaleCamera(currentTouchDistance, lastTouchDistance);
+
+
+                    oldPosition1 = tempPosition1;
+                    oldPosition2 = tempPosition2;
+                    camareMng.MoveCamera(Vector3.zero);
+                }
+
+                //m_IsSingleFinger = false;
+                state = MoveCameraStateFSM.Double;
+            }
+            else if (Input.touchCount == 0 && !useMouse)
+            {
+                camareMng.touchLeaving = true;
+                state = MoveCameraStateFSM.Idle;
+                return;
+            }
+
+
+            //用鼠标的
+            if (useMouse)
+            {
+                camareMng.size -= Input.GetAxis("Mouse ScrollWheel") * camareMng.scaleFactor;
+                camareMng.size = Mathf.Clamp(camareMng.size, camareMng.minSize, camareMng.maxSize);
+                if (Input.GetMouseButtonDown(0))
+                {
+                    camareMng.touchLeaving = false;
+                    lastSingleTouchPosition = Input.mousePosition;
+                    //Debug.Log("GetMouseButtonDown:" + lastSingleTouchPosition);
+                }
+                if (Input.GetMouseButton(0))
+                {
+
+                    Vector3 lastTouchPos = Camera.main.ScreenToWorldPoint(new Vector3(lastSingleTouchPosition.x, lastSingleTouchPosition.y, -1));
+                    float deltaY = Input.mousePosition.y - lastSingleTouchPosition.y;
+                    Vector3 currTouchPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, lastSingleTouchPosition.y + deltaY * 1.4f, -1));
+
+                    Vector3 delta = lastTouchPos - currTouchPos;
+                    camareMng.MoveCamera(delta);
+                    lastSingleTouchPosition = Input.mousePosition;
+                }
+                if (Input.GetMouseButtonUp(0))
+                {
+                    camareMng.touchLeaving = true;
+                    return;
+                }
+            }
+
+            return;
+        }
+    }
 }

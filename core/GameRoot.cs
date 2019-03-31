@@ -55,9 +55,6 @@ public class GameRoot : MonoBehaviour {
     [Inject]
     public PlayerManager PlayerMng { get; set; }
 
-    [Inject]
-    public MapManager mapManager { get; set; }
-
 
     public MainUIManager mainUIMng;
 
@@ -84,6 +81,16 @@ public class GameRoot : MonoBehaviour {
     public void StartNewGame(){
         gameDataManager.InitData();
         moduleInit();
+        GameRoot.GetInstance().mainUIMng.OpenUI(9);
+    }
+
+    public void LoadGame(){
+        if(gameDataManager.LoadData()== -1){
+            Debug.Log("No Save File");
+            return;
+        }
+        moduleInit();
+        GameRoot.GetInstance().mainUIMng.OpenUI(9);
     }
 
     public void StartBattle(){
@@ -96,61 +103,26 @@ public class GameRoot : MonoBehaviour {
         fieldObj = Instantiate(BattleField.assetManager.GetField(0));
         fieldObj.transform.position = Vector3.zero;
 
-       
-        battleData = new BattleData();
 
-        List<UnitData> allStructures = gameDataManager.GetBattleConstructures();
-        List<UnitData> allCreatures = gameDataManager.GetBattleCreatures();
-
-        int num = allStructures.Count + allCreatures.Count;
-        battleData.units = new UnitData[num];
-
-        battleData.roomCol = gameDataManager.roomCol;
-        battleData.roomRow = gameDataManager.roomRow;
-
-        for (int i = 0; i < allStructures.Count;++i){
-            battleData.units[i] = allStructures[i];
-        }
-
-        for (int i = 0; i < allCreatures.Count;++i){
-            battleData.units[allStructures.Count + i] = allCreatures[i];
-        }
-
-        battleData.enemys = new UnitData[20];
-       
-        for (int i = 0; i < 20;++i){
-            battleData.enemys[i] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1091), 2);
-            battleData.enemys[i].init_room = -1;
-        }
-
-        battleData.boss = gameDataManager.boss;
-
-        //battleData = new BattleData();
-        //battleData.unitNum = 2;
-        //battleData.units = new UnitData[2];
-        //battleData.units[0] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1091));
-        //battleData.units[0].init_x = 100;
-        //battleData.units[0].init_y = 50;
-        //battleData.units[1] = AssetManager.PackCreatureData(BattleField.assetManager.GetCreatureData(1091),2);
-        //battleData.units[1].init_x = 400;
-        //battleData.units[1].init_y = 100;
-
+        battleData = gameDataManager.GetBattleData();
 
         Bridge.StartBattle(battleData);
     }
 
-    //public void BeginBattle(){
+    public void StartStrategy(){
+        BattleStartAction();
+        mainUIMng.HideUI(true);
+        mainUIMng.OpenUI(14);
+        fieldObj = Instantiate(BattleField.assetManager.GetField(0));
+        fieldObj.transform.position = Vector3.zero;
 
-    //    constEnterDelay = battleEnterDelay;
-    //    //Bridge.StartBattle(battleData);
-    //    PlayerMng.InjectData(battleData);
-    //    battleUI.GetComponentInChildren<CardManager>().InjectData();
-    //    battleStart = true;
-    //    if (BattleStartAction != null) BattleStartAction();
-    //}
+        battleData = gameDataManager.GetBattleData();
+        Bridge.StartStrategy(battleData);
+    }
 
-    public void InjectBattleData(){
-        Bridge.StartBattle(battleData);
+    public void QuitStrategy(){
+        mainUIMng.CloseUI();
+        mainUIMng.HideUI(false);
     }
 
 

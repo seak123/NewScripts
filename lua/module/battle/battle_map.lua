@@ -3,18 +3,6 @@ local this = class("battle_map")
 local battle_def = require("module.battle.battle_def")
 
 function this:ctor( sess )
-    -- self.room_table = {
-    --     [33] = {X=500,Y=500},
-    --     [32] = {X=500,Y=310},
-    --     [31] = {X=500,Y=120},
-    --     [23] = {X=310,Y=500},
-    --     [22] = {X=310,Y=310},
-    --     [21] = {X=310,Y=120},
-    --     [13] = {X=120,Y=500},
-    --     [12] = {X=120,Y=310},
-    --     [11] = {X=120,Y=120}
-
-    -- }
     self.room_table = {}
     self.sess = sess
     self:init()

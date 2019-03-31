@@ -135,7 +135,7 @@ namespace Map
 
             MarkMovable((int)pos.x, (int)pos.y, data.radius, true);
            
-            GameObject obj = Instantiate(data.prefab, new Vector3(x, 0, y), Quaternion.identity);
+            GameObject obj = Instantiate(mng.GetUnitPrefab(data.prefab), new Vector3(x, 0, y), Quaternion.identity);
             var entity = obj.AddComponent<Entity>();
             //init entity
             entity.id = id;
@@ -449,7 +449,6 @@ namespace Map
 
         public Vector2 FindInitPos(int initX,int initY,int radius,int room_id){
             if(IsCanMove(initX,initY,radius)){
-                Debug.Log("canmove");
                 return new Vector2(initX,initY);
             }
 

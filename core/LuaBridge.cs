@@ -12,6 +12,7 @@ public class LuaBridge : LuaClient
         //private LuaState luaState;
         private LuaFunction luaInit;
         private LuaFunction startBattle;
+        private LuaFunction startStrategy;
         private LuaFunction luaUpdate;
 
         private LuaTable luaRoot;
@@ -51,6 +52,7 @@ public class LuaBridge : LuaClient
                 //luaState.DoFile("lua_bridge.lua");
                 luaInit = luaState.GetFunction("lua_init");
                 startBattle = luaState.GetFunction("start_battle");
+                startStrategy = luaState.GetFunction("start_strategy");
                 luaUpdate = luaState.GetFunction("lua_update");
 
                 
@@ -92,6 +94,13 @@ public class LuaBridge : LuaClient
         startBattle.Push(data);
         startBattle.PCall();
         startBattle.EndPCall();
+    }
+
+    public void StartStrategy(BattleData data){
+        startStrategy.BeginPCall();
+        startStrategy.Push(data);
+        startStrategy.PCall();
+        startStrategy.EndPCall();
     }
 
     public void CasterSkill(int side,int skill_id,int pos_x,int pos_y,UnitData data =null,int num = 0,int structId = -1){
