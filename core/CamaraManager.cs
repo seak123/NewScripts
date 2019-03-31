@@ -68,6 +68,7 @@ public class CamaraManager : MonoBehaviour {
 
     public void Init()
     {
+        Debug.Log("CameraManager Init");
         m_CameraOffset = new Vector3(16.65f, 29.88f, 20f);
         xMin = 1;
         xMax = 23;
@@ -107,22 +108,7 @@ public class CamaraManager : MonoBehaviour {
     }
 
 
-    //Update方法一旦调用结束以后进入这里算出重置摄像机的位置
-    private void LateUpdate()
-    {
-        if(touchLeaving==true&&speed.magnitude>=0.1f){
-            MoveCamera(speed * Time.deltaTime);
-            speed = speed / 1.3f;
-        }
 
-        var position = m_CameraOffset;
-        m_Camera.transform.position = position;
-        m_Camera.orthographicSize = size;
-        if (UpdateUI != null)
-        {
-            UpdateUI();
-        }
-    }
 
     public void MoveCameraDirect(Vector3 delta){
         Vector3 v = delta * 0.1f;
@@ -238,6 +224,27 @@ public class CamaraManager : MonoBehaviour {
             }
 
             return;
+        }
+
+    }
+    //Update方法一旦调用结束以后进入这里算出重置摄像机的位置
+    private void LateUpdate()
+    {
+        if (active)
+        {
+            if (touchLeaving == true && speed.magnitude >= 0.1f)
+            {
+                MoveCamera(speed * Time.deltaTime);
+                speed = speed / 1.3f;
+            }
+
+            var position = m_CameraOffset;
+            m_Camera.transform.position = position;
+            m_Camera.orthographicSize = size;
+            if (UpdateUI != null)
+            {
+                UpdateUI();
+            }
         }
     }
 }
