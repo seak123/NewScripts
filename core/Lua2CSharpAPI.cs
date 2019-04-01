@@ -32,7 +32,9 @@ namespace Utils
         public static UnitData GetUnitData(int id){
             AssetManager mng;
             mng = GameRoot.GetInstance().BattleField.assetManager;
-            return AssetManager.PackCreatureData(mng.GetCreatureData(id));
+            CreatureFightData data = new CreatureFightData();
+            data.LoadData(mng.GetCreatureData(id));
+            return AssetManager.PackCreatureData(data);
         }
     }
 }

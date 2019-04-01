@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using PowerInject;
 
-
+[Insert]
 public class CamaraManager : MonoBehaviour {
 
     private readonly bool useMouse = BattleDef.useMouse;
@@ -12,7 +13,7 @@ public class CamaraManager : MonoBehaviour {
 
     private MoveCameraStateFSM state;
 
-
+    public GameObject cameraObj;
     //摄像机View Size
     public float size = 6.4f;
     //缩放系数
@@ -57,18 +58,28 @@ public class CamaraManager : MonoBehaviour {
     //初始化游戏信息设置
     void Start()
     {
-        state = MoveCameraStateFSM.Idle;
-        camareMng = gameObject.GetComponent<CamaraManager>();
-        lastSingleTouchPosition = useMouse ? (Vector2)Input.mousePosition : Input.GetTouch(0).position;
-        m_Camera = this.GetComponent<Camera>();
-        m_CameraOffset = m_Camera.transform.position;
+
+    }
+
+    [OnInjected]
+    public void AddRootAction()
+    {
         GameRoot.moduleInit += Init;
+        GameRoot.BattleStartAction += StartBattle;
+        GameRoot.BattleEndAction += CleanUp;
     }
 
 
     public void Init()
     {
         Debug.Log("CameraManager Init");
+    }
+
+    public void StartBattle(){
+        state = MoveCameraStateFSM.Idle;
+        camareMng = gameObject.GetComponent<CamaraManager>();
+        lastSingleTouchPosition = useMouse ? (Vector2)Input.mousePosition : Input.GetTouch(0).position;
+        m_Camera = cameraObj.GetComponent<Camera>();
         m_CameraOffset = new Vector3(16.65f, 29.88f, 20f);
         xMin = 1;
         xMax = 23;
@@ -76,8 +87,12 @@ public class CamaraManager : MonoBehaviour {
         zMax = 27.8f;
         //size = 16f;
         active = true;
-       
     }
+
+    public void CleanUp(){
+        active = false;
+    }
+
 
     /// <summary>
     /// 触摸缩放摄像头

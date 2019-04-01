@@ -27,14 +27,6 @@ this.common_attr = {
     
 }
 
-this.card_config = {
-    [1] = {target=decorator.check_pos_creature()},
-    [1081] = {target=decorator.check_pos_creature()},
-    [1091] = {target=decorator.check_pos_creature()},
-    [5011] = {target=decorator.check_pos_creature()}
-    
-}
-
 this.hero_config = {
     [10002] = "config.hero.2_lava_boss.unit.lava_unit",
 }

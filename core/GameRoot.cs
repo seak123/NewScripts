@@ -55,6 +55,9 @@ public class GameRoot : MonoBehaviour {
     [Inject]
     public PlayerManager PlayerMng { get; set; }
 
+    [Inject]
+    public CamaraManager CameraMng { get; set; }
+
 
     public MainUIManager mainUIMng;
 

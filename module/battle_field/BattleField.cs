@@ -34,17 +34,5 @@ public class BattleField : MonoBehaviour {
         //FightDungeonData data = dungeon.GetFightData();
 
     }
-
-    private void CreateEnemy(List<string> list,int posX){
-        //GameRoot.GetInstance().Bridge.CasterSkill(1, cardData.skillId, cenX, cenY, unitData, cardData.num, sUid);
-        int num = list.Count;
-        if (num == 0) return;
-        int interval = BattleDef.rowGridNum / (num+1);
-        for (int i = 0; i < num;++i){
-            int posY = (i + 1) * interval;
-            UnitData data = AssetManager.PackCreatureData(GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(int.Parse(list[i].Substring(1)) * 10 + 1));
-            GameRoot.GetInstance().Bridge.CasterSkill(2, 1, posX, posY, data, int.Parse(list[i].Substring(0,1)), -1);
-        }
-    }
    
 }

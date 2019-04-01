@@ -36,9 +36,9 @@ public class PlayerData{
 
     public int roomRow;
     public int roomCol;
-    public CreatureData4Save boss;
-    public List<CreatureData4Save> creatures;
-    public List<CreatureData4Save> constructures;
+    public CreatureFightData boss;
+    public List<CreatureFightData> creatures;
+    public List<CreatureFightData> constructures;
 
 }
 
@@ -49,9 +49,9 @@ public class GameDataManager
     public int unitUid;
     public int roomRow;
     public int roomCol;
-    public CreatureData boss;
-    public List<CreatureData> creatures;
-    public List<CreatureData> constructures;
+    public CreatureFightData boss;
+    public List<CreatureFightData> creatures;
+    public List<CreatureFightData> constructures;
 
     public void InitData(){
         //init data
@@ -59,22 +59,36 @@ public class GameDataManager
         unitUid = 0;
         roomRow = 3;
         roomCol = 3;
-        creatures = new List<CreatureData>();
-        constructures = new List<CreatureData>();
+        creatures = new List<CreatureFightData>();
+        constructures = new List<CreatureFightData>();
 
         AssetManager assetManager = GameRoot.GetInstance().BattleField.assetManager;
-        GetNewCreature(assetManager.GetCreatureData(1081),33);
-        GetNewCreature(assetManager.GetCreatureData(1081),33);
-        GetNewCreature(assetManager.GetCreatureData(1081),33);
-     
+        CreatureFightData temp = new CreatureFightData();
+        temp.LoadData(assetManager.GetCreatureData(1081));
+        GetNewCreature(temp,33);
+        temp = new CreatureFightData();
+        temp.LoadData(assetManager.GetCreatureData(1081));
+        GetNewCreature(temp,33);
+        temp = new CreatureFightData();
+        temp.LoadData(assetManager.GetCreatureData(1081));
+        GetNewCreature(temp,33);
 
-        GetNewConstructure(assetManager.GetCreatureData(6011),32);
 
-        GetNewConstructure(assetManager.GetCreatureData(6011),34);
+        temp = new CreatureFightData();
+        temp.LoadData(assetManager.GetCreatureData(6011));
+        GetNewConstructure(temp,32);
 
-        GetNewConstructure(assetManager.GetCreatureData(6011),43);
+        temp = new CreatureFightData();
+        temp.LoadData(assetManager.GetCreatureData(6011));
+        GetNewConstructure(temp,34);
 
-        CreatureData boss_data = assetManager.GetCreatureData(10002);
+        temp = new CreatureFightData();
+        temp.LoadData(assetManager.GetCreatureData(6011));
+        GetNewConstructure(temp,43);
+
+        temp = new CreatureFightData();
+        temp.LoadData(assetManager.GetCreatureData(10002));
+        CreatureFightData boss_data = temp;
         boss_data.type = -1;
         boss_data.uid = -1;
         boss_data.init_room = 23;
@@ -84,25 +98,23 @@ public class GameDataManager
 
     }
 
-    public void GetNewCreature(CreatureData creature,int initRoom = 0){
-        CreatureData data = CreatureData.Clone(creature);
-        data.uid = unitUid;
-        data.init_room = initRoom;
+    public void GetNewCreature(CreatureFightData creature,int initRoom = 0){
+        creature.uid = unitUid;
+        creature.init_room = initRoom;
         ++unitUid;
-        creatures.Add(data);
+        creatures.Add(creature);
     }
 
-    public void GetNewConstructure(CreatureData constructure,int initRoom = 0){
-        CreatureData data = CreatureData.Clone(constructure);
-        data.uid = unitUid;
-        data.init_room = initRoom;
+    public void GetNewConstructure(CreatureFightData constructure,int initRoom = 0){
+        constructure.uid = unitUid;
+        constructure.init_room = initRoom;
         ++unitUid;
-        constructures.Add(data);
+        constructures.Add(constructure);
     }
 
     public List<UnitData> GetBattleCreatures(){
         List<UnitData> res = new List<UnitData>();
-        foreach(CreatureData data in creatures){
+        foreach(CreatureFightData data in creatures){
             if(data.init_room != 0){
                 res.Add(AssetManager.PackCreatureData(data));
             }
@@ -112,7 +124,7 @@ public class GameDataManager
 
     public List<UnitData> GetBattleConstructures(){
         List<UnitData> res = new List<UnitData>();
-        foreach(CreatureData data in constructures){
+        foreach(CreatureFightData data in constructures){
             if(data.init_room !=0){
                 res.Add(AssetManager.PackCreatureData(data));
             }
@@ -154,7 +166,9 @@ public class GameDataManager
 
         for (int i = 0; i < 20; ++i)
         {
-            battleData.enemys[i] = AssetManager.PackCreatureData(GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(1091), 2);
+            CreatureFightData temp = new CreatureFightData();
+            temp.LoadData(GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(1091));
+            battleData.enemys[i] = AssetManager.PackCreatureData(temp, 2);
             battleData.enemys[i].init_room = -1;
         }
 
@@ -166,20 +180,22 @@ public class GameDataManager
     public void SaveData(){
 
         //format data
-        PlayerData data = new PlayerData();
-        data.unitUid = unitUid;
-        data.roomCol = roomCol;
-        data.roomRow = roomRow;
-        data.boss = boss.Save2Data();
-        data.creatures = new List<CreatureData4Save>();
-        data.constructures = new List<CreatureData4Save>();
+        PlayerData data = new PlayerData
+        {
+            unitUid = unitUid,
+            roomCol = roomCol,
+            roomRow = roomRow,
+            boss = boss,
+            creatures = new List<CreatureFightData>(),
+            constructures = new List<CreatureFightData>()
+        };
 
-        foreach(var creature in creatures){
-            data.creatures.Add(creature.Save2Data());
+        foreach (var creature in creatures){
+            data.creatures.Add(creature);
         }
 
         foreach(var constructure in constructures){
-            data.constructures.Add(constructure.Save2Data());
+            data.constructures.Add(constructure);
         }
 
         BinaryFormatter formatter = new BinaryFormatter();
@@ -201,25 +217,21 @@ public class GameDataManager
             unitUid = data.unitUid;
             roomRow = data.roomRow;
             roomCol = data.roomCol;
-            boss = new CreatureData();
-            creatures = new List<CreatureData>();
-            constructures = new List<CreatureData>();
+            boss = new CreatureFightData();
+            creatures = new List<CreatureFightData>();
+            constructures = new List<CreatureFightData>();
 
-            boss.LoadData(data.boss);
+            boss = data.boss;
 
             int creatureNum = data.creatures.Count;
             for (int i = 0; i < creatureNum;++i){
-                CreatureData temp = new CreatureData();
-                temp.LoadData(data.creatures[i]);
-                creatures.Add(temp);
+                creatures.Add(data.creatures[i]);
             }
 
             int constructureNum = data.constructures.Count;
             for (int i = 0; i < constructureNum; ++i)
             {
-                CreatureData temp = new CreatureData();
-                temp.LoadData(data.constructures[i]);
-                constructures.Add(temp);
+                constructures.Add(data.constructures[i]);
             }
 
             return 1;
