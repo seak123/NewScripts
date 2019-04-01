@@ -31,7 +31,7 @@ public class MainUIManager : MonoBehaviour {
 	
     public GameObject OpenUI(int id){
         GameObject ui = Instantiate(UIPrefab[id]);
-        ui.transform.SetParent(gameObject.transform);
+        //ui.transform.SetParent(gameObject.transform);
         Canvas canvas = ui.GetComponent<Canvas>();
         canvas.sortingOrder = currSort;
         ++currSort;

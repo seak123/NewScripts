@@ -369,11 +369,11 @@ namespace Map
                 return temId;
             }else{
                 int boss_room_max_x = 2*(BattleDef.roomBound + BattleDef.roomInterval);
-                int boss_room_max_y = 2*(BattleDef.roomBound + BattleDef.roomInterval) + BattleDef.roomBound/2 + BattleDef.roomInterval + 0.65*BattleDef.roomBound;
-                int boss_room_min_x = boss_room_max_x - 1.3*BattleDef.roomBound;
-                int boss_room_min_y = boss_room_max_y - 1.3*BattleDef.roomBound;
+                int boss_room_max_y = 3*(BattleDef.roomBound + BattleDef.roomInterval) + (int)0.1*BattleDef.roomBound;
+                int boss_room_min_x = boss_room_max_x - (int)1.2*BattleDef.roomBound;
+                int boss_room_min_y = boss_room_max_y - (int)1.2*BattleDef.roomBound;
                 if(_x <= boss_room_max_x && _x >= boss_room_min_x && _y <= boss_room_max_y && _y >= boss_room_min_y){
-                    return 23;
+                    return new Vector2Int(2,3);
                 }
             }
             return Vector2Int.zero;

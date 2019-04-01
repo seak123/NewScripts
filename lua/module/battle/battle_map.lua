@@ -30,7 +30,7 @@ function this:init(  )
 
     -- portal room
     self.room_table[-1] = {X=self:get_room_center(self.entry_room).X + battle_def.room_bound/2 + 75,Y=self:get_room_center(self.entry_room).Y}
-    self.room_table[self.boss_room] = {X=self:get_room_center(self.boss_room+10).X-battle_def.room_interval-battle_def.room_bound*1.15,Y=self:get_room_center(self.boss_room+10).Y}
+    self.room_table[self.boss_room] = {X=self:get_room_center(self.boss_room+10).X-battle_def.room_interval-battle_def.room_bound*1.1,Y=self:get_room_center(self.boss_room+10).Y}
     -------------- init view
     ------create portal
     self.sess.map:CreatePortal(self.room_table[-1].X-25,self.room_table[-1].Y)

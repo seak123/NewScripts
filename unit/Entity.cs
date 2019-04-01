@@ -192,9 +192,9 @@ namespace Map
                 hpBar = Instantiate(hpPrefab);
                 hpBar.GetComponent<RectTransform>().parent = GameRoot.GetInstance().battleGroundUI.GetComponent<RectTransform>();
                 //hpBar.GetComponent<RectTransform>().sizeDelta = new Vector2(Mathf.Sqrt(radius)/2*80,22);
-                hpBar.transform.localScale = new Vector3(Mathf.Sqrt(radius) / 2, 1, 1) * 1.2f;
+                hpBar.transform.localScale = new Vector3(Mathf.Sqrt(radius) / 2, 1, 1) * 3.2f;
                 hpBar.SetActive(false);
-                GameRoot.GetInstance().Camara.GetComponent<CamaraManager>().UpdateUI += UpdateHpBar;
+                GameRoot.GetInstance().CameraMng.UpdateUI += UpdateHpBar;
             }
             hpBar.SetActive(true);
             hpBar.GetComponent<Slider>().value = hp / maxHp;
@@ -382,7 +382,7 @@ namespace Map
                 //hpBar.GetComponent<RectTransform>().position = new Vector3(0, 0, 0);
                 hpBar.transform.position = new Vector3(screenPos.x, screenPos.y, 0);
 
-                hpBar.transform.localScale = new Vector3(1+((float)radius-4)/16f, 1f, 1)*0.45f;
+                hpBar.transform.localScale = new Vector3(1+((float)radius-4)/16f, 1f, 1)*2f;
 
             }
         }
