@@ -356,6 +356,29 @@ namespace Map
             }
 
         }
+
+        public Vector2Int GetRoomViewId(int _x,int _y){
+
+            GameDataManager mng = GameRoot.GetInstance().gameDataManager;
+            Vector2Int temId = GetRoomId(_x,_y);
+            int start_row = 3;
+            int end_row = 2 + mng.roomRow;
+            int start_col = 3 - (int)(mng.roomCol/2);
+            int end_col = 2 + mng.roomCol;
+            if(temId.x <= end_row && temId.x >= start_row && temId.y <= end_col && temId.y >= start_col){
+                return temId;
+            }else{
+                int boss_room_max_x = 2*(BattleDef.roomBound + BattleDef.roomInterval);
+                int boss_room_max_y = 2*(BattleDef.roomBound + BattleDef.roomInterval) + BattleDef.roomBound/2 + BattleDef.roomInterval + 0.65*BattleDef.roomBound;
+                int boss_room_min_x = boss_room_max_x - 1.3*BattleDef.roomBound;
+                int boss_room_min_y = boss_room_max_y - 1.3*BattleDef.roomBound;
+                if(_x <= boss_room_max_x && _x >= boss_room_min_x && _y <= boss_room_max_y && _y >= boss_room_min_y){
+                    return 23;
+                }
+            }
+            return Vector2Int.zero;
+        }
+
         // public void AddAStarRequestList(int uid){
         //     if(!aStarRequestList.Contains(uid)){
         //         aStarRequestList.Add(uid);
