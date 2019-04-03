@@ -19,6 +19,7 @@ public class DungeonUI : MonoBehaviour {
     public GameObject card;
 
     private DungeonUIState state;
+    private int currRoomId;
 
 	// Use this for initialization
 	void Start () {
@@ -56,6 +57,7 @@ public class DungeonUI : MonoBehaviour {
                 if (key != 0)
                 {
                     state = DungeonUIState.Strategy;
+                    currRoomId = key;
                     OpenDungeonInfo();
                 }
             }
@@ -80,6 +82,7 @@ public class DungeonUI : MonoBehaviour {
         close.GetComponent<RectTransform>().DOMoveX(Screen.width * 4 / 3, 0.5f);
 
         state = DungeonUIState.Idle;
+        currRoomId = -1;
         card.SetActive(false);
     }
 
@@ -88,6 +91,16 @@ public class DungeonUI : MonoBehaviour {
         GameRoot.GetInstance().QuitStrategy();
     }
 
+    public void OpenPackage(){
+        GameObject package = GameRoot.GetInstance().mainUIMng.OpenUI(16);
+        PackageUI packageUI = package.GetComponent<PackageUI>();
+        packageUI.Init(PackageType.IdleCreature,1);
+        packageUI.SelectAction += ChangeGuard;
+    }
+
+    public void ChangeGuard(List<CreatureFightData> creatures){
+
+    }
     // Update is called once per frame
     void Update () {
       

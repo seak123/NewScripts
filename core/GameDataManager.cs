@@ -53,6 +53,7 @@ public class GameDataManager
     public List<CreatureFightData> creatures;
     public List<CreatureFightData> constructures;
 
+
     public void InitData(){
         //init data
 
@@ -176,6 +177,19 @@ public class GameDataManager
 
         return battleData;
     }
+
+    //view function
+    public CreatureFightData GetInRoomConstructure(int roomId){
+        for (int i = 0; i < allStructures.Count; ++i)
+        {
+            if(allStructures[i].init_room = roomId){
+                return allStructures[i];
+            }
+        }
+        return null;
+    }
+
+    public
 
     public void SaveData(){
 
