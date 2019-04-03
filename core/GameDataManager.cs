@@ -180,16 +180,14 @@ public class GameDataManager
 
     //view function
     public CreatureFightData GetInRoomConstructure(int roomId){
-        for (int i = 0; i < allStructures.Count; ++i)
+        for (int i = 0; i < constructures.Count; ++i)
         {
-            if(allStructures[i].init_room = roomId){
-                return allStructures[i];
+            if(constructures[i].init_room == roomId){
+                return constructures[i];
             }
         }
         return null;
     }
-
-    public
 
     public void SaveData(){
 
