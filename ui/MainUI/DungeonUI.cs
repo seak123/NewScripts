@@ -16,10 +16,16 @@ public class DungeonUI : MonoBehaviour {
     public ClickEvent clickEvent;
     public GameObject quit;
     public GameObject close;
-    public GameObject card;
+    public GameObject packagePrefab;
+    public GameObject IconPrefab;
+
+    public GameObject ConstructureContainer;
 
     private DungeonUIState state;
     private int currRoomId;
+    private GameObject constructureIcon;
+    private GameObject package;
+    private GameObject[] creatureIcon;
 
 	// Use this for initialization
 	void Start () {
@@ -30,7 +36,12 @@ public class DungeonUI : MonoBehaviour {
         background.SetActive(false);
         dungeonInfo.GetComponent<RectTransform>().position = new Vector3(Screen.width/2, -Screen.height/2, 0);
         quit.GetComponent<RectTransform>().position = new Vector3(0, quit.GetComponent<RectTransform>().position.y,0);
-        close.GetComponent<RectTransform>().position = new Vector3(Screen.width*4/3, quit.GetComponent<RectTransform>().position.y, 0);
+        close.GetComponent<RectTransform>().position = new Vector3(Screen.width*7/5, quit.GetComponent<RectTransform>().position.y, 0);
+
+        package = Instantiate(packagePrefab);
+        package.transform.parent = gameObject.transform;
+        package.GetComponent<RectTransform>().position = new Vector3(Screen.width * 3 / 2, 0, 0);
+
 
     }
 
@@ -67,11 +78,22 @@ public class DungeonUI : MonoBehaviour {
     private void OpenDungeonInfo(){
         background.SetActive(true);
         GameRoot.GetInstance().CameraMng.active = false;
-        quit.GetComponent<RectTransform>().DOMoveX(-Screen.width/3, 0.5f);
+        quit.GetComponent<RectTransform>().DOMoveX(-Screen.width*2/5, 0.5f);
         dungeonInfo.GetComponent<RectTransform>().DOMoveY(0,0.5f);
         close.GetComponent<RectTransform>().DOMoveX(Screen.width, 0.5f);
-        card.SetActive(true);
-
+        if(constructureIcon==null){
+            constructureIcon = Instantiate(IconPrefab);
+            constructureIcon.transform.parent = ConstructureContainer.transform;
+            constructureIcon.transform.localPosition = Vector3.zero;
+        }
+        //card.SetActive(true);
+        CreatureFightData data = GameRoot.GetInstance().gameDataManager.GetInRoomConstructure(currRoomId);
+        if(data == null){
+            constructureIcon.SetActive(false);
+        }else{
+            constructureIcon.GetComponent<CreatureIconUI>().InjectData(data);
+            constructureIcon.SetActive(true);
+        }
     }
 
     public void CloseInfo(){
@@ -83,7 +105,7 @@ public class DungeonUI : MonoBehaviour {
 
         state = DungeonUIState.Idle;
         currRoomId = -1;
-        card.SetActive(false);
+        GameRoot.GetInstance().mainUIMng.CleanInfoUI();
     }
 
     public void Quit()
@@ -92,13 +114,28 @@ public class DungeonUI : MonoBehaviour {
     }
 
     public void OpenPackage(){
-        GameObject package = GameRoot.GetInstance().mainUIMng.OpenUI(16);
+        GameObject package = Instantiate(packagePrefab);
+        package.gameObject.transform.parent = gameObject.transform;
+        package.gameObject.transform.localPosition = Vector3.zero;
         PackageUI packageUI = package.GetComponent<PackageUI>();
-        packageUI.Init(PackageType.IdleCreature,1);
+        packageUI.Init(700,PackageType.AllCreature,1);
         packageUI.SelectAction += ChangeGuard;
     }
 
-    public void ChangeGuard(List<CreatureFightData> creatures){
+    public void OpenPackageConstructue(){
+        PackageUI packageUI = package.GetComponentInChildren<PackageUI>();
+        packageUI.Init(700, PackageType.IdleConstructure, 1);
+        package.transform.DOMoveX(Screen.width / 2, 0.5f);
+        packageUI.SelectAction += ChangeStructure;
+    }
+
+    public void ChangeStructure(List<int> list){
+        package.transform.DOMoveX(Screen.width * 3 / 2, 0.5f);
+        int newCreature = list[0];
+        GameRoot.GetInstance().gameDataManager.ChangeRoomConstructure(currRoomId, newCreature);
+    }
+
+    public void ChangeGuard(List<int> creatures){
 
     }
     // Update is called once per frame

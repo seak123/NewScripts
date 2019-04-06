@@ -1,14 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using DG.Tweening;
 
 
 public class MainUIManager : MonoBehaviour {
 
     public GameObject[] UIPrefab;
+    public GameObject creatureCardPrefab;
 
     private int currSort;
+    private GameObject cardPrefab;
     private List<GameObject> uiQueue;
 	// Use this for initialization
 	void Start () {
@@ -45,6 +47,7 @@ public class MainUIManager : MonoBehaviour {
         Destroy(uiQueue[index]);
         uiQueue.RemoveAt(index);
         --currSort;
+        CleanInfoUI();
     }
 
     public void EnterBattle(){
@@ -52,5 +55,26 @@ public class MainUIManager : MonoBehaviour {
             obj.SetActive(false);
         }
         gameObject.SetActive(false);
+    }
+
+    public void OpenCreatureCard(CreatureFightData data,Vector3 location){
+        if(cardPrefab == null){
+            cardPrefab = Instantiate(creatureCardPrefab);
+            cardPrefab.transform.parent = GameRoot.GetInstance().InfoUI.transform;
+            cardPrefab.transform.position = new Vector3(Screen.width/2,Screen.height/2);
+        }
+        cardPrefab.SetActive(true);
+        GameRoot.GetInstance().InfoUI.SetActive(true);
+        cardPrefab.transform.position = location;
+        cardPrefab.transform.localScale = Vector3.one * 0.2f;
+        cardPrefab.GetComponent<CreatureCardUI>().InjectData(data);
+        cardPrefab.transform.DOMove(new Vector3(Screen.width / 2, Screen.height / 2, 0), 0.3f);
+        cardPrefab.transform.DOScale(Vector3.one, 0.3f);
+    }
+
+    public void CleanInfoUI(){
+        if(cardPrefab!=null)
+        cardPrefab.SetActive(false);
+        GameRoot.GetInstance().InfoUI.SetActive(false);
     }
 }

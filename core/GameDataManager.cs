@@ -88,6 +88,14 @@ public class GameDataManager
         GetNewConstructure(temp,43);
 
         temp = new CreatureFightData();
+        temp.LoadData(assetManager.GetCreatureData(6011));
+        GetNewConstructure(temp);
+
+        temp = new CreatureFightData();
+        temp.LoadData(assetManager.GetCreatureData(6011));
+        GetNewConstructure(temp);
+
+        temp = new CreatureFightData();
         temp.LoadData(assetManager.GetCreatureData(10002));
         CreatureFightData boss_data = temp;
         boss_data.type = -1;
@@ -189,6 +197,17 @@ public class GameDataManager
         return null;
     }
 
+    public CreatureFightData GetCreatureFightDataByUid(int uid){
+        for (int i = 0; i < constructures.Count; ++i)
+        {
+            if (constructures[i].uid == uid)
+            {
+                return constructures[i];
+            }
+        }
+        return null;
+    }
+
     public void SaveData(){
 
         //format data
@@ -249,6 +268,38 @@ public class GameDataManager
             return 1;
         }
         return -1;
+    }
+
+    public List<CreatureFightData> GetPackageList(PackageType type){
+        List<CreatureFightData> res = new List<CreatureFightData>();
+        switch(type){
+            case PackageType.IdleCreature:
+                foreach(var unit in creatures){
+                    if(unit.init_room == 0){
+                        res.Add(unit);
+                    }
+                }
+                break;
+            case PackageType.AllCreature:
+                foreach(var unit in creatures){
+                    res.Add(unit);
+                }
+                break;
+            case PackageType.IdleConstructure:
+                foreach(var con in constructures){
+                    if (con.init_room == 0)
+                        res.Add(con);
+                }
+                break;
+        }
+        return res;
+    }
+
+    public void ChangeRoomConstructure(int roomId,int uid){
+        CreatureFightData data = GetInRoomConstructure(roomId);
+        if (data != null) data.init_room = 0;
+        data = GetCreatureFightDataByUid(uid);
+        if (data != null) data.init_room = roomId;
     }
  
 }

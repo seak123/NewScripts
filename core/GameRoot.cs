@@ -20,6 +20,10 @@ public class GameRoot : MonoBehaviour {
 
     public GameObject MainUI;
 
+    public GameObject InfoUI;
+
+    public GameObject MessageUI;
+
     public GameObject battleUI;
 
     public GameObject battleGroundUI;
@@ -125,6 +129,10 @@ public class GameRoot : MonoBehaviour {
 
     public void QuitStrategy(){
         mainUIMng.CloseUI();
+        mainUIMng.HideUI(false);
+
+        Destroy(fieldObj);
+        BattleEndAction();
         mainUIMng.HideUI(false);
     }
 

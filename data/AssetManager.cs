@@ -15,6 +15,10 @@ public class AssetManager : ScriptableObject
 
     public GameObject[] UnitPrefabs;
 
+    public Sprite[] icons;
+
+    public Sprite[] cards;
+
     public GameObject RedSlider;
     public GameObject GreenSlider;
     public GameObject Message;
@@ -57,6 +61,14 @@ public class AssetManager : ScriptableObject
 
     public GameObject GetUnitPrefab(int id){
         return UnitPrefabs[id];
+    }
+
+    public Sprite GetIcon(int id){
+        return icons[id];
+    }
+
+    public Sprite GetCards(int id){
+        return cards[id];
     }
 
 

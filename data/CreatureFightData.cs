@@ -16,6 +16,10 @@ public class CreatureFightData
 
     public string CreatureName;
 
+    public int star = 1;
+
+    public int level = 1;
+
     public float hp = 0;
 
     public float hp_up = 0;
@@ -68,12 +72,15 @@ public class CreatureFightData
 
     public int prefab;
 
+    public int icon;
+
     public void LoadData(CreatureData _data){
         id = _data.id;
         uid = _data.uid;
         type = _data.type;
         genus = _data.genus;
         CreatureName = _data.CreatureName;
+        star = _data.ini_star;
         hp = _data.hp;
         hp_up = _data.hp_up;
         attack = _data.attack;
@@ -99,6 +106,7 @@ public class CreatureFightData
         init_room = _data.init_room;
         live_time = _data.live_time;
         prefab = _data.prefab;
+        icon = _data.icon;
         skills = new int[_data.skills.Length];
         for (int i = 0; i < skills.Length; ++i)
         {

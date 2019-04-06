@@ -16,6 +16,8 @@ public class CreatureData : ScriptableObject
 
     public string CreatureName;
 
+    public int ini_star = 1;
+
     public float hp = 0;
 
     public float hp_up = 0;
@@ -67,6 +69,8 @@ public class CreatureData : ScriptableObject
     public int[] skills;
 
     public int prefab;
+
+    public int icon;
 
 
     //public static CreatureData Clone(CreatureData data)

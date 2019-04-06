@@ -14,9 +14,9 @@ public class RandomMapCreator : MonoBehaviour {
 
     // -2:buildArea,-1:backObstacle,0:empty,1-x:base&x_type,2-x:decorator&x_type
     private int[,] mapGrids;
-    private int col = BattleDef.columnGridNum / 16;
-    private int row = BattleDef.rowGridNum / 16;
-    private int bound = 10;
+    private readonly int col = BattleDef.columnGridNum / 16;
+    private readonly int row = BattleDef.rowGridNum / 16;
+    private readonly int bound = 10;
     private int mCol;
     private int mRow;
 
@@ -25,13 +25,13 @@ public class RandomMapCreator : MonoBehaviour {
     void Start()
     {
         //init map grids
-        mCol = col+bound*2;
-        mRow = row+bound*2;
-        mapGrids = new int[mCol, mRow];
+        mCol = col;
+        mRow = row;
+        mapGrids = new int[mRow, mCol];
         objCache = new List<GameObject>();
 
-        for (int i = 0; i < mCol;++i){
-            for (int j = 0; j < mRow;++j){
+        for (int i = 0; i < mRow;++i){
+            for (int j = 0; j < mCol;++j){
                 mapGrids[i, j] = 0;
             }
         }
@@ -60,11 +60,26 @@ public class RandomMapCreator : MonoBehaviour {
     private void InitBaseObstacle(){
         int count = baseObstacle.Length;
         int curr_type = UnityEngine.Random.Range(1,count+1);
-        for (int i = 0; i < mCol; ++i)
+        GameDataManager mng = GameRoot.GetInstance().gameDataManager;
+        //int start_row = 3;
+        //int end_row = 2 + mng.roomRow;
+        //int start_col = 3 - (int)(mng.roomCol / 2);
+        //int end_col = 2 + mng.roomCol;
+        //int boss_room_max_x = 2 * (BattleDef.roomBound + BattleDef.roomInterval);
+        //int boss_room_max_y = 3 * (BattleDef.roomBound + BattleDef.roomInterval) + (int)0.1 * BattleDef.roomBound;
+        //int boss_room_min_x = boss_room_max_x - (int)1.2 * BattleDef.roomBound;
+        //int boss_room_min_y = boss_room_max_y - (int)1.2 * BattleDef.roomBound;
+        int maxX = Mathf.CeilToInt((2 + mng.roomRow) * (BattleDef.roomBound + BattleDef.roomInterval)/16)+8;
+        int minX = Mathf.FloorToInt((BattleDef.roomBound + BattleDef.roomInterval)/16);
+        int maxY = Mathf.CeilToInt((1 + mng.roomCol) * (BattleDef.roomBound + BattleDef.roomInterval)/16)+4;
+        int minY = Mathf.FloorToInt((2-(int)(mng.roomCol/2)) * (BattleDef.roomBound + BattleDef.roomInterval)/16);
+
+        for (int i = 0; i < mRow; ++i)
         {
-            for (int j = 0; j < mRow; ++j)
+            for (int j = 0; j < mCol; ++j)
             {
-                if (i >= bound && i < mCol - bound && j >= bound && j < mRow - bound) continue;
+                if (i > maxX+bound || i < minX-bound || j > maxY+bound || j < minY-bound) continue;
+                if (i < maxX && i > minX && j < maxY && j > minY) continue;
                 if (mapGrids[i, j] == 0)
                 {
                     float flag = UnityEngine.Random.Range(0f,1f);
@@ -159,12 +174,12 @@ public class RandomMapCreator : MonoBehaviour {
                 if(value>0&&value<20 ){
                     GameObject obj = Instantiate(baseObstacle[value%10]);
                     objCache.Add(obj);
-                    obj.transform.position = new Vector3((i+1) * 0.64f - 0.32f-bound*0.64f, 0, (j+1) * 0.64f - 0.32f - bound * 0.64f);
+                    obj.transform.position = new Vector3((i+1) * 0.64f - 0.32f, 0, (j+1) * 0.64f - 0.32f);
                 }else if(value>=20){
                     //Debug.Log("index:" +value%10);
                     GameObject obj = Instantiate(decorator[value % 10]);
                     objCache.Add(obj);
-                    obj.transform.position = new Vector3((i + 1) * 0.64f - 0.32f - bound * 0.64f, 0, (j + 1) * 0.64f - 0.32f - bound * 0.64f);
+                    obj.transform.position = new Vector3((i + 1) * 0.64f - 0.32f, 0, (j + 1) * 0.64f - 0.32f);
                 }
             }
         }

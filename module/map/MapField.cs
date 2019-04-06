@@ -30,6 +30,7 @@ namespace Map
         private Dictionary<Vector2,Vector2> roomMap;
         private List<Vector2> entityRemoveCache;
         // private List<int> aStarRequestList;
+        private List<GameObject> mapObjList;
 
         private AssetManager mng;
 
@@ -96,6 +97,7 @@ namespace Map
             GetViewPos(gridX, gridY, out x, out y);
             GameObject obj = Instantiate(temPortal, new Vector3(x, 1.7f, y), Quaternion.identity);
             obj.transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
+            mapObjList.Add(obj);
         }
 
         public void CreateBossRoom(int gridX,int gridY){
@@ -103,6 +105,7 @@ namespace Map
             GetViewPos(gridX, gridY, out x, out y);
             GameObject obj = Instantiate(temBossRoom, new Vector3(x, 1.7f, y), Quaternion.identity);
             obj.transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
+            mapObjList.Add(obj);
         }
 
         public void CreateRoom(int gridX,int gridY){
@@ -110,6 +113,7 @@ namespace Map
             GetViewPos(gridX, gridY, out x, out y);
             GameObject obj = Instantiate(temRoom, new Vector3(x, 1.7f, y), Quaternion.identity);
             obj.transform.rotation = Quaternion.Euler(new Vector3(0, UnityEngine.Random.Range(0, 4) * 90, 0));
+            mapObjList.Add(obj);
         }
 
         public void CreateWall(int gridX,int gridY,int rotation){
@@ -117,6 +121,7 @@ namespace Map
             GetViewPos(gridX, gridY, out x, out y);
             GameObject obj = Instantiate(temWall, new Vector3(x, 1.7f, y), Quaternion.identity);
             obj.transform.rotation = Quaternion.Euler(0,rotation,0);
+            mapObjList.Add(obj);
         }
 
         public void CreatePath(int gridX, int gridY, int rotation)
@@ -125,6 +130,7 @@ namespace Map
             GetViewPos(gridX, gridY, out x, out y);
             GameObject obj = Instantiate(temPath, new Vector3(x, 1.7f, y), Quaternion.identity);
             obj.transform.rotation = Quaternion.Euler(0, rotation, 0);
+            mapObjList.Add(obj);
         }
 
         public Entity CreateEntity(int id,int uid,int side,int gridX,int gridY,int room_id){
@@ -197,6 +203,7 @@ namespace Map
             structureMap = new Dictionary<int, List<Vector2>>();
             roomMap = new Dictionary<Vector2,Vector2>();
             entityRemoveCache = new List<Vector2>();
+            mapObjList = new List<GameObject>();
 
             grids = new int[BattleDef.columnGridNum, BattleDef.rowGridNum];
             for (int i = 0; i < BattleDef.columnGridNum; ++i)
@@ -231,11 +238,15 @@ namespace Map
             foreach(var entity in entityMap){
                 Destroy(entity.Value.gameObject);
             }
+            foreach(var obj in mapObjList){
+                Destroy(obj);
+            }
             grids = null;
             structureGrids = null;
             entityMap = null;
             structureMap = null;
             entityRemoveCache = null;
+            mapObjList = null;
             isInited = false;
             // remove main castle grids
 

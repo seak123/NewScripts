@@ -4,11 +4,14 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System;
 
-public class ClickEvent : MonoBehaviour,IPointerClickHandler,IPointerDownHandler {
+public class ClickEvent : MonoBehaviour,IPointerClickHandler,IPointerDownHandler,IPointerUpHandler {
 
     public Action clickAction;
+    public Action<GameObject> clickActionObj;
+    public Action longClickAction;
 
     float time;
+    private bool isUp = true;
 
 	// Use this for initialization
 	void Start () {
@@ -23,12 +26,40 @@ public class ClickEvent : MonoBehaviour,IPointerClickHandler,IPointerDownHandler
     public void OnPointerDown(PointerEventData eventData)
     {
         time = Time.time;
+        isUp = false;
+        StartCoroutine(Grow());
+        if (Time.time - time < 0.3f) return;
+        if (longClickAction != null)
+        {
+            longClickAction();
+        }
     }
 
     public void OnPointerClick(PointerEventData eventData){
-        if (Time.time - time > 0.1f) return;
+        if (Time.time - time > 0.15f) return;
         if(clickAction!=null){
             clickAction();
+        }
+        if(clickActionObj!=null){
+            clickActionObj(gameObject);
+        }
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        isUp = true;
+    }
+
+    private IEnumerator Grow(){
+        while(true){
+            if (isUp) break;
+            if(Time.time - time > 0.3f){
+                if(longClickAction!=null){
+                    longClickAction();
+                }
+                break;
+            }
+            yield return null;
         }
     }
 }
