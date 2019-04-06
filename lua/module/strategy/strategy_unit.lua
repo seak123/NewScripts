@@ -69,6 +69,10 @@ function this:update( delta )
 
 end
 
+function this:remove(  )
+    self.entity:Remove()
+end
+
 function this:do_appear( delta )
     self.appear_process = self.appear_process +delta
     if self.appear_process >= self.data.ready_time then

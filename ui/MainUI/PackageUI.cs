@@ -31,6 +31,7 @@ public class PackageUI : MonoBehaviour {
 
     public void Init(float height,PackageType type,int selectNum)
     {
+        CleanUp();
         dataList = new List<CreatureFightData>();
         entities = new List<GameObject>();
         SelectUid = new List<int>();
@@ -48,6 +49,7 @@ public class PackageUI : MonoBehaviour {
             GameObject entity = Instantiate(iconPrefab);
             entity.GetComponent<ClickEvent>().clickActionObj += IconClicked;
             entity.transform.parent = scroll.content.gameObject.transform;
+            entity.transform.localScale = Vector3.one;
             entity.GetComponent<RectTransform>().localPosition = new Vector2((col - 1) * 125 + 75,-row * 135 - 75);
             entities.Add(entity);
         }
@@ -55,13 +57,32 @@ public class PackageUI : MonoBehaviour {
     }
 
     public void IconClicked(GameObject obj){
+        int uid = obj.GetComponent<CreatureIconUI>().creatureData.uid;
+        if (SelectUid.Contains(uid)){
+            SelectUid.Remove(uid);
+            RefreshView();
+            return;
+        }
         if(SelectUid.Count<needNum)
         SelectUid.Add(obj.GetComponent<CreatureIconUI>().creatureData.uid);
+        else if(needNum == 1){
+            SelectUid[0] = uid;
+        }
         RefreshView();
     }
 
     public void Confirm(){
         SelectAction(SelectUid);
+    }
+
+    public void CleanUp(){
+        if (entities != null)
+        {
+            foreach (var obj in entities)
+            {
+                Destroy(obj);
+            }
+        }
     }
 
     public void RefreshView(){

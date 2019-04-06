@@ -14,6 +14,15 @@ function this:add_unit( data)
     table.insert(self.units,unit)
 end
 
+function this:remove_entity( _uid )
+    for k,u in ipairs(self.units) do
+        if u.uid == _uid then
+            u:remove()
+            table.remove( self.units, k)
+        end
+    end
+end
+
 -- args can be unit or pos
 function this:distance(a_unit,b_unit  )
     local a_pos = a_unit

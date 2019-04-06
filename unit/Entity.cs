@@ -273,6 +273,16 @@ namespace Map
             Destroy(gameObject, 2f);
             
         }
+        public void Remove()
+        {
+          
+            alive = false;
+
+            //GameRoot.GetInstance().PlayerMng.AddSaving(GetSocketPos("S_Center"), 3 - side, (int)(cost * BattleDef.KillEarnFactor));
+            GameRoot.GetInstance().MapField.RemoveEntity(this, 0f);
+            Destroy(hpBar, 0f);
+            Destroy(gameObject, 0f);
+        }
 
         private void Start()
         {

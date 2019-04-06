@@ -297,9 +297,16 @@ public class GameDataManager
 
     public void ChangeRoomConstructure(int roomId,int uid){
         CreatureFightData data = GetInRoomConstructure(roomId);
-        if (data != null) data.init_room = 0;
+        if (data != null)
+        {
+            data.init_room = 0;
+            GameRoot.GetInstance().Bridge.RemoveEntity(data.uid);
+        }
         data = GetCreatureFightDataByUid(uid);
-        if (data != null) data.init_room = roomId;
+        if (data != null) {
+            data.init_room = roomId;
+            GameRoot.GetInstance().Bridge.AddEntity(AssetManager.PackCreatureData(data));
+        }
     }
  
 }

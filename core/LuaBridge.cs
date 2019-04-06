@@ -14,6 +14,8 @@ public class LuaBridge : LuaClient
         private LuaFunction startBattle;
         private LuaFunction startStrategy;
         private LuaFunction luaUpdate;
+        private LuaFunction removeEntity;
+        private LuaFunction addEntity;
 
         private LuaTable luaRoot;
         private LuaEngine luaEngine;
@@ -54,6 +56,8 @@ public class LuaBridge : LuaClient
                 startBattle = luaState.GetFunction("start_battle");
                 startStrategy = luaState.GetFunction("start_strategy");
                 luaUpdate = luaState.GetFunction("lua_update");
+                removeEntity = luaState.GetFunction("remove_entity");
+                addEntity = luaState.GetFunction("add_entity");
 
                 
             }
@@ -116,6 +120,20 @@ public class LuaBridge : LuaClient
         func.PCall();
         func.EndPCall();
 
+    }
+
+    public void RemoveEntity(int uid){
+        removeEntity.BeginPCall();
+        removeEntity.Push(uid);
+        removeEntity.PCall();
+        removeEntity.EndPCall();
+    }
+
+    public void AddEntity(UnitData data){
+        addEntity.BeginPCall();
+        addEntity.Push(data);
+        addEntity.PCall();
+        addEntity.EndPCall();
     }
 
     public int GetEnemyNum(){

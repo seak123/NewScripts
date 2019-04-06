@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
+using Data;
 
 public enum DungeonUIState{
     Idle = 1,
@@ -40,6 +41,7 @@ public class DungeonUI : MonoBehaviour {
 
         package = Instantiate(packagePrefab);
         package.transform.parent = gameObject.transform;
+        package.transform.localScale = Vector3.one;
         package.GetComponent<RectTransform>().position = new Vector3(Screen.width * 3 / 2, 0, 0);
 
 
@@ -85,6 +87,7 @@ public class DungeonUI : MonoBehaviour {
             constructureIcon = Instantiate(IconPrefab);
             constructureIcon.transform.parent = ConstructureContainer.transform;
             constructureIcon.transform.localPosition = Vector3.zero;
+            constructureIcon.transform.localScale = Vector3.one;
         }
         //card.SetActive(true);
         CreatureFightData data = GameRoot.GetInstance().gameDataManager.GetInRoomConstructure(currRoomId);
@@ -114,7 +117,7 @@ public class DungeonUI : MonoBehaviour {
     }
 
     public void OpenPackage(){
-        GameObject package = Instantiate(packagePrefab);
+       //GameObject package = Instantiate(packagePrefab);
         package.gameObject.transform.parent = gameObject.transform;
         package.gameObject.transform.localPosition = Vector3.zero;
         PackageUI packageUI = package.GetComponent<PackageUI>();
@@ -130,9 +133,14 @@ public class DungeonUI : MonoBehaviour {
     }
 
     public void ChangeStructure(List<int> list){
+        GameDataManager mng = GameRoot.GetInstance().gameDataManager;
         package.transform.DOMoveX(Screen.width * 3 / 2, 0.5f);
         int newCreature = list[0];
-        GameRoot.GetInstance().gameDataManager.ChangeRoomConstructure(currRoomId, newCreature);
+        //data change
+        mng.ChangeRoomConstructure(currRoomId, newCreature);
+        PackageUI packageUI = package.GetComponentInChildren<PackageUI>();
+        packageUI.SelectAction -= ChangeStructure;
+
     }
 
     public void ChangeGuard(List<int> creatures){

@@ -155,8 +155,6 @@ namespace Map
             entity.posY = (int)pos.y;
             entity.animator = obj.GetComponentInChildren<Animator>();
 
-          
-
             entityMap.Add(uid, entity);
             entity.gameObject.SetActive(false);
             return entity;

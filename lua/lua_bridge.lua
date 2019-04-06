@@ -37,6 +37,16 @@ function caster_skill( side,skill_id,pos_x,pos_y,arg1,arg2,arg3)
     end
 end
 
+function remove_entity( uid )
+   if battle_mng.session ~= nil then
+        battle_mng.session.field:remove_entity(uid)
+   end
+end
+
+function add_entity( data )
+    battle_mng.session.field:add_unit(data)
+end
+
 function enemy_num(  )
     local num = #battle_mng.session.field.units[2]
     return num

@@ -134,6 +134,7 @@ public class GameRoot : MonoBehaviour {
         Destroy(fieldObj);
         BattleEndAction();
         mainUIMng.HideUI(false);
+        gameDataManager.SaveData();
     }
 
 
