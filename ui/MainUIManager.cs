@@ -24,10 +24,12 @@ public class MainUIManager : MonoBehaviour {
     private int currSort;
     private GameObject cardPrefab;
     private List<GameObject> uiQueue;
+    private List<Action> sceneFuncList;
 	// Use this for initialization
 	void Start () {
         currSort = 10;
         uiQueue = new List<GameObject>();
+        sceneFuncList = new List<Action>();
 	}
 
     public void HideUI(bool flag){
@@ -86,14 +88,13 @@ public class MainUIManager : MonoBehaviour {
     }
 
     public void ChangeScene(List<int> uiList,Action completedFunc,string sceneName,int spriteId){
-        completedFunc();
         loadingImage.SetActive(true);
         loadingImage.GetComponent<Image>().sprite = loadingSprite[spriteId];
         siteName.text = sceneName;
         loadingImage.GetComponent<Image>().color = new Color(0, 0, 0, 0);
         loadingImage.GetComponent<Image>().DOColor(new Color(1, 1, 1, 1), 0.8f).onComplete += ()=>{
 
-           
+            sceneFuncList.Add(completedFunc);
             loadingImage.GetComponent<Image>().DOColor(new Color(0, 0, 0, 0), 0.8f).onComplete += () =>
             {
                 siteBand.SetActive(true);
@@ -122,5 +123,15 @@ public class MainUIManager : MonoBehaviour {
                 loadingImage.SetActive(false);
             };
             };
+    }
+
+    private void Update()
+    {
+        if(sceneFuncList.Count>0){
+            foreach(var func in sceneFuncList){
+                func();
+            }
+            sceneFuncList.Clear();
+        }
     }
 }

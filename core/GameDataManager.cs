@@ -220,6 +220,13 @@ public class GameDataManager
                 return constructures[i];
             }
         }
+        for (int i = 0; i < creatures.Count; ++i)
+        {
+            if (creatures[i].uid == uid)
+            {
+                return creatures[i];
+            }
+        }
         return null;
     }
 
@@ -321,6 +328,20 @@ public class GameDataManager
         if (data != null) {
             data.init_room = roomId;
             GameRoot.GetInstance().Bridge.AddEntity(AssetManager.PackCreatureData(data));
+        }
+    }
+
+    public void ChangeRoomCreature(int roomId,int oldUid,int newUid){
+        CreatureFightData oldData = GetCreatureFightDataByUid(oldUid);
+        if(oldData!=null){
+            oldData.init_room = 0;
+            GameRoot.GetInstance().Bridge.RemoveEntity(oldData.uid);
+        }
+        CreatureFightData newData = GetCreatureFightDataByUid(newUid);
+        if (newData != null)
+        {
+            newData.init_room = roomId;
+            GameRoot.GetInstance().Bridge.AddEntity(AssetManager.PackCreatureData(newData));
         }
     }
  

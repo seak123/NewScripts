@@ -84,7 +84,7 @@ public class CamaraManager : MonoBehaviour {
     public void StartBattle(){
         state = MoveCameraStateFSM.Idle;
         camareMng = gameObject.GetComponent<CamaraManager>();
-        lastSingleTouchPosition = useMouse ? (Vector2)Input.mousePosition : Input.GetTouch(0).position;
+        //lastSingleTouchPosition = useMouse ? (Vector2)Input.mousePosition : Input.GetTouch(0).position;
         m_Camera = cameraObj.GetComponent<Camera>();
         m_CameraOffset = new Vector3(16.65f, 29.88f, 20f);
         xMin = 1;

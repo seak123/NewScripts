@@ -37,8 +37,8 @@ public class DungeonUI : MonoBehaviour,ISceneUI {
         partIcons = new GameObject[4];
         for (int i = 0; i < 4;++i){
             partIcons[i] = Instantiate(IconPrefab);
-            partIcons[i].transform.position = new Vector3(-2, 0, 0);
             partIcons[i].transform.parent = PartContainer[i].transform;
+            partIcons[i].transform.localPosition = new Vector3(-2, 0, 0);
             partIcons[i].transform.localScale = Vector3.one;
             partIcons[i].SetActive(false);
         }
@@ -115,7 +115,6 @@ public class DungeonUI : MonoBehaviour,ISceneUI {
         dungeonInfo.GetComponent<RectTransform>().DOMoveY(-Screen.height / 2, 0.5f);
         quit.GetComponent<RectTransform>().DOMoveX(0, 0.5f);
         close.GetComponent<RectTransform>().DOMoveX(Screen.width * 4 / 3, 0.5f);
-        package.transform.DOMoveX(Screen.width * 3 / 2, 0.3f);
 
         state = DungeonUIState.Idle;
         currRoomId = -1;
@@ -168,7 +167,7 @@ public class DungeonUI : MonoBehaviour,ISceneUI {
             newCreature = list[0];
             //data change
 
-            mng.ChangeRoomConstructure(currRoomId, newCreature);
+            mng.ChangeRoomCreature(currRoomId, -1,newCreature);
         }
         PackageUI packageUI = package.GetComponentInChildren<PackageUI>();
         packageUI.SelectAction -= ChangeCreature;
