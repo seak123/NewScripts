@@ -117,14 +117,22 @@ public class GameRoot : MonoBehaviour {
     }
 
     public void StartStrategy(){
-        BattleStartAction();
-        mainUIMng.HideUI(true);
-        mainUIMng.OpenUI(14);
-        fieldObj = Instantiate(BattleField.assetManager.GetField(0));
-        fieldObj.transform.position = Vector3.zero;
+        List<int> uiList = new List<int>
+        {
+            14
+        };
+        Action action = new Action(()=>{
+            BattleStartAction();
+            mainUIMng.HideUI(true);
+            fieldObj = Instantiate(BattleField.assetManager.GetField(0));
+            fieldObj.transform.position = Vector3.zero;
 
-        battleData = gameDataManager.GetBattleData();
-        Bridge.StartStrategy(battleData);
+            battleData = gameDataManager.GetBattleData();
+            Bridge.StartStrategy(battleData);
+        });
+
+        mainUIMng.ChangeScene(uiList, action,"地牢",14);
+       
     }
 
     public void QuitStrategy(){

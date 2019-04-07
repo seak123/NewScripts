@@ -1,13 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using System;
 using DG.Tweening;
 
+public enum UIType{
+    MainUI = 1,
+    SceneUI = 2,
+    SubUI = 3,
+}
 
 public class MainUIManager : MonoBehaviour {
 
     public GameObject[] UIPrefab;
+    public UIType[] UITypes;
+    public Sprite[] loadingSprite;
     public GameObject creatureCardPrefab;
+    public GameObject loadingImage;
+    public GameObject siteBand;
+    public Text siteName;
 
     private int currSort;
     private GameObject cardPrefab;
@@ -36,6 +48,8 @@ public class MainUIManager : MonoBehaviour {
         //ui.transform.SetParent(gameObject.transform);
         Canvas canvas = ui.GetComponent<Canvas>();
         canvas.sortingOrder = currSort;
+        ISceneUI uiScript = ui.GetComponent<ISceneUI>();
+        if (uiScript != null) uiScript.OnEnter();
         ++currSort;
 
         uiQueue.Add(ui);
@@ -48,13 +62,6 @@ public class MainUIManager : MonoBehaviour {
         uiQueue.RemoveAt(index);
         --currSort;
         CleanInfoUI();
-    }
-
-    public void EnterBattle(){
-        foreach(var obj in uiQueue){
-            obj.SetActive(false);
-        }
-        gameObject.SetActive(false);
     }
 
     public void OpenCreatureCard(CreatureFightData data,Vector3 location){
@@ -76,5 +83,44 @@ public class MainUIManager : MonoBehaviour {
         if(cardPrefab!=null)
         cardPrefab.SetActive(false);
         GameRoot.GetInstance().InfoUI.SetActive(false);
+    }
+
+    public void ChangeScene(List<int> uiList,Action completedFunc,string sceneName,int spriteId){
+        completedFunc();
+        loadingImage.SetActive(true);
+        loadingImage.GetComponent<Image>().sprite = loadingSprite[spriteId];
+        siteName.text = sceneName;
+        loadingImage.GetComponent<Image>().color = new Color(0, 0, 0, 0);
+        loadingImage.GetComponent<Image>().DOColor(new Color(1, 1, 1, 1), 0.8f).onComplete += ()=>{
+
+           
+            loadingImage.GetComponent<Image>().DOColor(new Color(0, 0, 0, 0), 0.8f).onComplete += () =>
+            {
+                siteBand.SetActive(true);
+                siteBand.GetComponent<Image>().color = new Color(1, 1, 1, 0);
+                siteBand.GetComponent<Image>().DOColor(new Color(1,1,1,1),0.5f).onComplete +=()=>{
+
+                        siteBand.GetComponent<Image>().DOColor(new Color(1, 1, 1, 1), 2f).onComplete += () =>
+                        {
+                            siteBand.GetComponent<Image>().DOColor(new Color(1, 1, 1, 0), 0.5f).onComplete += () =>
+                            {
+                                siteBand.SetActive(false);
+                            };
+                        };
+                };
+                siteName.GetComponent<Text>().color = new Color(1, 0.9f, 0.65f, 0);
+                siteName.GetComponent<Text>().DOColor(new Color(1,0.9f, 0.65f, 1), 0.5f).onComplete += () => {
+                        siteName.GetComponent<Text>().DOColor(new Color(1, 0.9f, 0.65f, 1), 2f).onComplete += () =>
+                        {
+                            siteName.GetComponent<Text>().DOColor(new Color(1, 0.9f, 0.65f, 0), 0.5f);
+                        };
+                };
+                foreach (var ui in uiList)
+                {
+                    OpenUI(ui);
+                }
+                loadingImage.SetActive(false);
+            };
+            };
     }
 }

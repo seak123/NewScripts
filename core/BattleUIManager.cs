@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using Data;
 
-public class BattleUIManager : MonoBehaviour {
+public class BattleUIManager : MonoBehaviour,ISceneUI {
 
     //public Slider MagicSlider;
     //public GameObject MagicStone;
@@ -21,6 +21,9 @@ public class BattleUIManager : MonoBehaviour {
    
     //private int oldMagicValue=0;
     //private float resetCache = 0;
+    public void OnEnter(){
+
+    }
    
     public void InitBattleUI(){
         InitPanelPosition();

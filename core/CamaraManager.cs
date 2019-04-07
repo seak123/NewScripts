@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using PowerInject;
+using DG.Tweening;
 
 [Insert]
 public class CamaraManager : MonoBehaviour {
@@ -27,7 +28,12 @@ public class CamaraManager : MonoBehaviour {
     public float minSize = 3.2f;
 
     public bool active = false;
+    public bool closing = false;
+    public bool closeIn = false;
+    private readonly float closingTime = 0.6f;
+    private readonly float closingView = 30;
 
+    private Vector3 closingPos;
     //记录上一次手机触摸位置判断用户是在左放大还是缩小手势
     private Vector2 oldPosition1;
     private Vector2 oldPosition2;
@@ -93,7 +99,20 @@ public class CamaraManager : MonoBehaviour {
         active = false;
     }
 
+    public void MoveClose(Vector2 pos){
+        active = false;
+        closing = true;
+        closeIn = true;
+        closingPos = new Vector3(pos.x - 13, 29.88f, pos.y);
+        m_Camera.transform.DOMove(closingPos, closingTime).onComplete += () => { closing = false; m_Camera.fieldOfView = closingView; };
+    }
 
+    public void MoveRecover(){
+        closeIn = false;
+        closing = true;
+        m_Camera.transform.DOMove(m_CameraOffset,closingTime).onComplete += () => { active = true; closing = false; m_Camera.fieldOfView = 60; };
+    }
+   
     /// <summary>
     /// 触摸缩放摄像头
     /// </summary>
@@ -259,6 +278,15 @@ public class CamaraManager : MonoBehaviour {
             if (UpdateUI != null)
             {
                 UpdateUI();
+            }
+        }
+        if(closing){
+            if(closeIn){
+                m_Camera.fieldOfView -= (60-closingView) / closingTime*Time.deltaTime;
+                m_Camera.fieldOfView = Mathf.Max(m_Camera.fieldOfView, closingView);
+            }else{
+                m_Camera.fieldOfView += (60-closingView) / closingTime*Time.deltaTime;
+                m_Camera.fieldOfView = Mathf.Min(m_Camera.fieldOfView, 60);
             }
         }
     }

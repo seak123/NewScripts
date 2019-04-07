@@ -12,6 +12,11 @@ public class CreatureFightData
 
     public int type = 0;
 
+    //constructureType: 0,trap 1,position
+    public int con_type = 0;
+
+    public int contain_num = 3;
+
     public int genus = 1;
 
     public string CreatureName;
@@ -78,6 +83,8 @@ public class CreatureFightData
         id = _data.id;
         uid = _data.uid;
         type = _data.type;
+        con_type = _data.con_type;
+        contain_num = _data.contain_num;
         genus = _data.genus;
         CreatureName = _data.CreatureName;
         star = _data.ini_star;

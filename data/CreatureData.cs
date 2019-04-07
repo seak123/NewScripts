@@ -12,6 +12,10 @@ public class CreatureData : ScriptableObject
 
     public int type = 0;
 
+    public int con_type = 0;
+
+    public int contain_num = 3;
+
     public int genus = 1;
 
     public string CreatureName;

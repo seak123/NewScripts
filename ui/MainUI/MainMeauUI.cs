@@ -2,7 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MainMeauUI : MonoBehaviour {
+public interface ISceneUI{
+    void OnEnter();
+}
+
+public class MainMeauUI : MonoBehaviour,ISceneUI {
+
+    public void OnEnter()
+    {
+
+    }
 
     public void NewGame()
     {

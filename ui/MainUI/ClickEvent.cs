@@ -11,6 +11,7 @@ public class ClickEvent : MonoBehaviour,IPointerClickHandler,IPointerDownHandler
     public Action longClickAction;
 
     float time;
+    Vector2 clickPos;
     private bool isUp = true;
 
 	// Use this for initialization
@@ -26,6 +27,7 @@ public class ClickEvent : MonoBehaviour,IPointerClickHandler,IPointerDownHandler
     public void OnPointerDown(PointerEventData eventData)
     {
         time = Time.time;
+        clickPos = eventData.position;
         isUp = false;
         StartCoroutine(Grow());
         if (Time.time - time < 0.3f) return;
@@ -36,7 +38,9 @@ public class ClickEvent : MonoBehaviour,IPointerClickHandler,IPointerDownHandler
     }
 
     public void OnPointerClick(PointerEventData eventData){
+        float dis = Vector2.Distance(eventData.position, clickPos);
         if (Time.time - time > 0.15f) return;
+        if (dis > 5) return;
         if(clickAction!=null){
             clickAction();
         }

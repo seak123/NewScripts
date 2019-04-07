@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapUIManager : MonoBehaviour {
+public class MapUIManager : MonoBehaviour,ISceneUI {
 
 
 	// Use this for initialization
@@ -18,6 +18,10 @@ public class MapUIManager : MonoBehaviour {
     }
 
     public void RefreshView(){
+
+    }
+
+    public void OnEnter(){
 
     }
 

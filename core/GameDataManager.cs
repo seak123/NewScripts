@@ -87,13 +87,18 @@ public class GameDataManager
         temp.LoadData(assetManager.GetCreatureData(6011));
         GetNewConstructure(temp,43);
 
-        temp = new CreatureFightData();
-        temp.LoadData(assetManager.GetCreatureData(6011));
-        GetNewConstructure(temp);
+        for (int i = 0; i < 20;++i){
+            temp = new CreatureFightData();
+            temp.LoadData(assetManager.GetCreatureData(6011));
+            GetNewConstructure(temp);
+        }
 
-        temp = new CreatureFightData();
-        temp.LoadData(assetManager.GetCreatureData(6011));
-        GetNewConstructure(temp);
+        for (int i = 0; i < 20; ++i)
+        {
+            temp = new CreatureFightData();
+            temp.LoadData(assetManager.GetCreatureData(1081));
+            GetNewCreature(temp);
+        }
 
         temp = new CreatureFightData();
         temp.LoadData(assetManager.GetCreatureData(10002));
@@ -195,6 +200,16 @@ public class GameDataManager
             }
         }
         return null;
+    }
+
+    public List<CreatureFightData> GetInRoomCreature(int roomId){
+        List<CreatureFightData> list = new List<CreatureFightData>();
+        for (int i = 0; i < creatures.Count;++i){
+            if(creatures[i].init_room == roomId){
+                list.Add(creatures[i]);
+            }
+        }
+        return list;
     }
 
     public CreatureFightData GetCreatureFightDataByUid(int uid){

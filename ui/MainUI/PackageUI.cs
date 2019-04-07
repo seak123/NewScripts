@@ -29,7 +29,7 @@ public class PackageUI : MonoBehaviour {
 		
 	}
 
-    public void Init(float height,PackageType type,int selectNum)
+    public void Init(PackageType type,int selectNum)
     {
         CleanUp();
         dataList = new List<CreatureFightData>();
@@ -50,7 +50,7 @@ public class PackageUI : MonoBehaviour {
             entity.GetComponent<ClickEvent>().clickActionObj += IconClicked;
             entity.transform.parent = scroll.content.gameObject.transform;
             entity.transform.localScale = Vector3.one;
-            entity.GetComponent<RectTransform>().localPosition = new Vector2((col - 1) * 125 + 75,-row * 135 - 75);
+            entity.GetComponent<RectTransform>().localPosition = new Vector2((col - 1) * 135 + 75,-row * 135 - 75);
             entities.Add(entity);
         }
         RefreshView();

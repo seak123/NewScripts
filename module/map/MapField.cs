@@ -388,6 +388,19 @@ namespace Map
             return Vector2Int.zero;
         }
 
+        public Vector2Int GetRoomCenter(int x,int y){
+            if(x==2&&y==3){
+                return new Vector2Int((x+1) * (BattleDef.roomBound + BattleDef.roomInterval) - (int)(BattleDef.roomBound*1.1)-BattleDef.roomInterval,
+                                      (y - 1) * (BattleDef.roomBound + BattleDef.roomInterval) + BattleDef.roomBound / 2 + BattleDef.roomInterval
+                                     );
+            }
+            else{
+                return new Vector2Int((x - 1) * (BattleDef.roomBound + BattleDef.roomInterval) + BattleDef.roomBound / 2 + BattleDef.roomInterval,
+                                      (y - 1) * (BattleDef.roomBound + BattleDef.roomInterval) + BattleDef.roomBound / 2 + BattleDef.roomInterval
+                                     );
+            }
+        }
+
         // public void AddAStarRequestList(int uid){
         //     if(!aStarRequestList.Contains(uid)){
         //         aStarRequestList.Add(uid);
