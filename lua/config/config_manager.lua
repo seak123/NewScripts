@@ -15,6 +15,7 @@ this.unit_config = {
     [1091] = "config.unit.109_elf_pikeman.elf_pikeman_unit",
     [5011] = "config.unit.501_ice_dragon.ice_dragon_unit",
     [6011] = "config.unit.601_fire_tower.fire_tower_unit",
+    [6021] = "config.unit.602_natural_power.natural_power_unit",
     [20001] = "config.hero.1_natural_artemis.units.20001_porcupine",
     [20002] = "config.hero.1_natural_artemis.units.20002_sprite_deer"
 }

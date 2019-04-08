@@ -88,6 +88,7 @@ public class MainUIManager : MonoBehaviour {
     }
 
     public void ChangeScene(List<int> uiList,Action completedFunc,string sceneName,int spriteId){
+ 
         loadingImage.SetActive(true);
         loadingImage.GetComponent<Image>().sprite = loadingSprite[spriteId];
         siteName.text = sceneName;
@@ -95,6 +96,7 @@ public class MainUIManager : MonoBehaviour {
         loadingImage.GetComponent<Image>().DOColor(new Color(1, 1, 1, 1), 0.8f).onComplete += ()=>{
 
             sceneFuncList.Add(completedFunc);
+           
             loadingImage.GetComponent<Image>().DOColor(new Color(0, 0, 0, 0), 0.8f).onComplete += () =>
             {
                 siteBand.SetActive(true);

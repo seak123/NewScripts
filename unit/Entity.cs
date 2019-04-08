@@ -215,7 +215,7 @@ namespace Map
         // >>>>>>>>>>>>>>>>>>>> Animator
         public void AnimCasterBreak()
         {
-            if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+            if (animator != null && !animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
             {
                 animator.SetTrigger("Break");
             }
@@ -228,7 +228,7 @@ namespace Map
             //    animator.SetTrigger("Break");
 
             //}
-            if (!animator.GetCurrentAnimatorStateInfo(0).IsName(name))
+            if (animator != null && !animator.GetCurrentAnimatorStateInfo(0).IsName(name))
             {
                  animator.SetTrigger(name);
             }
@@ -241,7 +241,7 @@ namespace Map
             //{
             //    animator.SetTrigger("Break");
             //}
-            if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
+            if (animator != null && !animator.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
             {
                 animatorAttackSpeed = attack_rate;
                 animator.SetTrigger("Attack");
@@ -260,10 +260,11 @@ namespace Map
         public void Die()
         {
             gameObject.transform.Find("Circle").gameObject.SetActive(false);
-            if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+            if (animator != null && !animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
             {
                 animator.SetTrigger("Break");
             }
+            if(animator != null)
             animator.SetTrigger("Die");
             alive = false;
 
@@ -288,7 +289,6 @@ namespace Map
         {
             mng = GameRoot.GetInstance().BattleField.assetManager;
            
-            gameObject.transform.Find("Size").gameObject.SetActive(false);
             baseSpeed = GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(id).base_speed;
             //init hp bar and side
             if (type != 1)
@@ -316,21 +316,24 @@ namespace Map
 
         private void Update()
         {
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
+            if (animator != null)
             {
-                animator.speed = animatorAttackSpeed;
-            }
-            else if (animator.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
-            {
-                animator.speed = moveSpeed / baseSpeed;
-            }
-            else
-            {
-                animator.speed = 1;
+                if (animator.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
+                {
+                    animator.speed = animatorAttackSpeed;
+                }
+                else if (animator.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
+                {
+                    animator.speed = moveSpeed / baseSpeed;
+                }
+                else
+                {
+                    animator.speed = 1;
+                }
             }
             if(alive == false){
 
-                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Die"))
+                if (animator != null && !animator.GetCurrentAnimatorStateInfo(0).IsName("Die"))
                 {
                     animator.SetTrigger("Die");
                 }

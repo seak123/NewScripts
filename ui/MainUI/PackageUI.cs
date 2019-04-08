@@ -41,7 +41,7 @@ public class PackageUI : MonoBehaviour {
         //gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(690, height);
         ScrollRect scroll = gameObject.GetComponentInChildren<ScrollRect>();
         int creatureNum = creatures.Count;
-        scroll.content.sizeDelta = new Vector2(690, Mathf.CeilToInt((float)creatureNum/5f)*135+10);
+        scroll.content.sizeDelta = new Vector2(690, Mathf.CeilToInt((float)creatureNum/5f)*133+13);
         for (int i = 0; i < creatureNum;++i){
             dataList.Add(creatures[i]);
             int row = i / 5;
@@ -50,7 +50,7 @@ public class PackageUI : MonoBehaviour {
             entity.GetComponent<ClickEvent>().clickActionObj += IconClicked;
             entity.transform.parent = scroll.content.gameObject.transform;
             entity.transform.localScale = Vector3.one;
-            entity.GetComponent<RectTransform>().localPosition = new Vector2((col - 1) * 135 + 75,-row * 135 - 75);
+            entity.GetComponent<RectTransform>().localPosition = new Vector2((col - 1) * 133 + 73,-row * 133 - 73);
             entities.Add(entity);
         }
         RefreshView();

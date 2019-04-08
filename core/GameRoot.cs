@@ -68,6 +68,8 @@ public class GameRoot : MonoBehaviour {
     public GameDataManager gameDataManager;
 
 
+
+
 	// Use this for initialization
 	void Start () {
         Debug.Log("GameRoot Start");
@@ -102,6 +104,7 @@ public class GameRoot : MonoBehaviour {
 
     public void StartBattle(){
         //Time.timeScale = 3;
+
         BattleStartAction();
         mainUIMng.HideUI(true);
         battleGroundUI = mainUIMng.OpenUI(4);
@@ -114,9 +117,11 @@ public class GameRoot : MonoBehaviour {
         battleData = gameDataManager.GetBattleData();
 
         Bridge.StartBattle(battleData);
+
     }
 
     public void StartStrategy(){
+
         List<int> uiList = new List<int>
         {
             14
@@ -129,6 +134,7 @@ public class GameRoot : MonoBehaviour {
 
             battleData = gameDataManager.GetBattleData();
             Bridge.StartStrategy(battleData);
+
         });
 
         mainUIMng.ChangeScene(uiList, action,"地牢",14);

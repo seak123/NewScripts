@@ -66,36 +66,48 @@ public class GameDataManager
         roomCol = 3;
         creatures = new List<CreatureFightData>();
         constructures = new List<CreatureFightData>();
+        rooms = new Dictionary<int, List<CreatureFightData>>();
 
         AssetManager assetManager = GameRoot.GetInstance().BattleField.assetManager;
         CreatureFightData temp = new CreatureFightData();
-        temp.LoadData(assetManager.GetCreatureData(1081));
-        GetNewCreature(temp);
-        ChangeRoomSubData(33,10,temp.uid)
-        temp = new CreatureFightData();
-        temp.LoadData(assetManager.GetCreatureData(1081));
-        GetNewCreature(temp);
-        ChangeRoomSubData(33,10,temp.uid);
-        temp = new CreatureFightData();
-        temp.LoadData(assetManager.GetCreatureData(1081));
-        GetNewCreature(temp);
-        ChangeRoomSubData(33,10,temp.uid);
-
+        temp.LoadData(assetManager.GetCreatureData(6011));
+        GetNewConstructure(temp);
+        ChangeRoomConstructure(34, temp.uid, true);
 
         temp = new CreatureFightData();
         temp.LoadData(assetManager.GetCreatureData(6011));
         GetNewConstructure(temp);
-        ChangeRoomConstructure(34,temp.uid);
+        ChangeRoomConstructure(32, temp.uid, true);
 
         temp = new CreatureFightData();
         temp.LoadData(assetManager.GetCreatureData(6011));
         GetNewConstructure(temp);
-        ChangeRoomConstructure(32,temp.uid);
+        ChangeRoomConstructure(43, temp.uid, true);
 
         temp = new CreatureFightData();
-        temp.LoadData(assetManager.GetCreatureData(6011));
+        temp.LoadData(assetManager.GetCreatureData(6021));
         GetNewConstructure(temp);
-        ChangeRoomConstructure(43,temp.uid);
+        ChangeRoomConstructure(33, temp.uid, true);
+
+        temp = new CreatureFightData();
+        temp.LoadData(assetManager.GetCreatureData(1081));
+        GetNewCreature(temp);
+        ChangeRoomSubData(33, 10, temp.uid,true);
+        temp = new CreatureFightData();
+        temp.LoadData(assetManager.GetCreatureData(1081));
+        GetNewCreature(temp);
+        ChangeRoomSubData(33,10,temp.uid,true);
+        temp = new CreatureFightData();
+        temp.LoadData(assetManager.GetCreatureData(1081));
+        GetNewCreature(temp);
+        ChangeRoomSubData(33,10,temp.uid,true);
+
+
+
+
+        temp = new CreatureFightData();
+        temp.LoadData(assetManager.GetCreatureData(6021));
+        GetNewConstructure(temp);
 
         for (int i = 0; i < 20;++i){
             temp = new CreatureFightData();
@@ -365,49 +377,53 @@ public class GameDataManager
         return res;
     }
 
-    public void ChangeRoomConstructure(int roomId,int uid){
+    public void ChangeRoomConstructure(int roomId,int uid,bool rawData = false){
         CreatureFightData oldData = GetInRoomConstructure(roomId);
         if (oldData != null)
         {
             oldData.init_room = 0;
-            GameRoot.GetInstance().Bridge.RemoveEntity(oldData.uid);
+            if (rawData == false)
+                GameRoot.GetInstance().Bridge.RemoveEntity(oldData.uid);
         }
-        newData = GetCreatureFightDataByUid(uid);
+        CreatureFightData newData = GetCreatureFightDataByUid(uid);
         if (newData != null) {
             newData.init_room = roomId;
-            GameRoot.GetInstance().Bridge.AddEntity(AssetManager.PackCreatureData(newData));
+            if (rawData == false)
+                GameRoot.GetInstance().Bridge.AddEntity(AssetManager.PackCreatureData(newData));
         }
         CleanInRoomData(roomId);
     }
 
-    public void ChangeRoomSubData(int roomId,int index,int uid){
+    public void ChangeRoomSubData(int roomId,int index,int uid,bool rawData = false){
         List<CreatureFightData> subDatas = GetInRoomSubData(roomId);
-        if(index < subDatas.Count){
+        CreatureFightData newData = GetCreatureFightDataByUid(uid);
+        if (index < subDatas.Count){
             CreatureFightData oldData = subDatas[index];
             if(oldData!=null){
                 oldData.init_room = 0;
-                if(oldData.type != 2)
+                if(oldData.type != 2&&rawData==false)
                 GameRoot.GetInstance().Bridge.RemoveEntity(oldData.uid);
                 subDatas.RemoveAt(index);
             }
-            CreatureFightData newData = GetCreatureFightDataByUid(newUid);
+
             if (newData != null)
             {
                 newData.init_room = roomId;
-                if(newData.type != 2)
+                if(newData.type != 2 && rawData == false)
                 GameRoot.GetInstance().Bridge.AddEntity(AssetManager.PackCreatureData(newData));
                 subDatas.Insert(index,newData);
             }
         }else{
-            CreatureFightData newData = GetCreatureFightDataByUid(newUid);
+
             if (newData != null)
             {
                 newData.init_room = roomId;
-                if(newData.type != 2)
-                GameRoot.GetInstance().Bridge.AddEntity(AssetManager.PackCreatureData(newData));
+
                 subDatas.Add(newData);
             }
         }
         CleanInRoomData(roomId);
+        if (newData.type != 2 && rawData == false&&newData.init_room!=0)
+            GameRoot.GetInstance().Bridge.AddEntity(AssetManager.PackCreatureData(newData));
     }
 }

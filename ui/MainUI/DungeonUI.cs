@@ -25,6 +25,7 @@ public class DungeonUI : MonoBehaviour,ISceneUI {
 
     private DungeonUIState state;
     private int currRoomId;
+    private int currIndex;
     private Vector2Int currRoomCenter;
     private GameObject constructureIcon;
     private GameObject[] partIcons;
@@ -134,10 +135,11 @@ public class DungeonUI : MonoBehaviour,ISceneUI {
         packageUI.SelectAction += ChangeStructure;
     }
 
-    public void OpenPackageCreature(){
+    public void OpenPackageCreature(int index){
         PackageUI packageUI = package.GetComponentInChildren<PackageUI>();
         packageUI.Init(PackageType.IdleCreature, 1);
         package.transform.DOMoveX(Screen.width / 2, 0.3f);
+        currIndex = index;
         packageUI.SelectAction += ChangeCreature;
     }
 
@@ -158,7 +160,7 @@ public class DungeonUI : MonoBehaviour,ISceneUI {
 
     }
 
-    public void ChangeCreature(List<int> list,int index){
+    public void ChangeCreature(List<int> list){
         GameDataManager mng = GameRoot.GetInstance().gameDataManager;
         package.transform.DOMoveX(Screen.width * 3 / 2, 0.3f);
         int newCreature;
@@ -167,7 +169,7 @@ public class DungeonUI : MonoBehaviour,ISceneUI {
             newCreature = list[0];
             //data change
 
-            mng.ChangeRoomSubData(currRoomId,index,newCreature);
+            mng.ChangeRoomSubData(currRoomId,currIndex,newCreature);
         }
         PackageUI packageUI = package.GetComponentInChildren<PackageUI>();
         packageUI.SelectAction -= ChangeCreature;

@@ -44,7 +44,9 @@ public class CreatureIconUI : MonoBehaviour {
 
         //reset color
         if(data.type == 1){
-            bound.color = new Color(0.66f,0.66f,0.66f);
+            if (data.con_type == 0)
+                bound.color = new Color(0.05f, 0.58f, 0.7f);
+            else bound.color = new Color(0.7f,0.2f,0.15f);
         }else{
             bound.color = new Color(0.51f,0.38f,0.51f);
         }
