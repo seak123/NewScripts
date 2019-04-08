@@ -12,7 +12,7 @@ public class CreatureFightData
 
     public int type = 0;
 
-    //constructureType: 0,trap 1,position
+    //constructureType: 0,position 2,trap
     public int con_type = 0;
 
     public int contain_num = 3;

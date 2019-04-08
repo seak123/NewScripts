@@ -158,7 +158,7 @@ public class DungeonUI : MonoBehaviour,ISceneUI {
 
     }
 
-    public void ChangeCreature(List<int> list){
+    public void ChangeCreature(List<int> list,int index){
         GameDataManager mng = GameRoot.GetInstance().gameDataManager;
         package.transform.DOMoveX(Screen.width * 3 / 2, 0.3f);
         int newCreature;
@@ -167,15 +167,11 @@ public class DungeonUI : MonoBehaviour,ISceneUI {
             newCreature = list[0];
             //data change
 
-            mng.ChangeRoomCreature(currRoomId, -1,newCreature);
+            mng.ChangeRoomSubData(currRoomId,index,newCreature);
         }
         PackageUI packageUI = package.GetComponentInChildren<PackageUI>();
         packageUI.SelectAction -= ChangeCreature;
         RefreshInfo();
-    }
-
-    public void ChangeGuard(List<int> creatures){
-
     }
 
     public void RefreshInfo(){
@@ -191,7 +187,7 @@ public class DungeonUI : MonoBehaviour,ISceneUI {
             constructureIcon.SetActive(true);
         }
 
-        List<CreatureFightData> datas = GameRoot.GetInstance().gameDataManager.GetInRoomCreature(currRoomId);
+        List<CreatureFightData> datas = GameRoot.GetInstance().gameDataManager.GetInRoomSubData(currRoomId);
         if(data != null)
             num = data.contain_num;
         foreach(var obj in PartContainer){
