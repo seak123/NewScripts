@@ -33,22 +33,16 @@ function this:unreg(item)
 	end
 end
 
--- push player control to trigger system
-function this:push_decide( caster, skill, aim )
-	-- selector of target (passive state)
-	local target = nil
-	if caster.statectrl.confused == true then target = self.sess.field:get_alive_one(aim.side) else target = aim end
-	table.insert(self.queue_back, function() skill:execute(self.sess, caster, target, true) end )
-end
-
 function this:handle_global_ev(event_name)
   return self:intn_handle_ev(event_name, -3, nil)
 end
 
 function this:handle_ev(event_name, target)
-	-- body
-  self:intn_handle_ev(event_name, target.uid, target)
-  self:intn_handle_ev(event_name, -target.side, target)
+	-- trigger unit event
+	self:intn_handle_ev(event_name, target.uid, target)
+	-- trigger room event
+	self:intn_handle_ev(event_name, -target.location, target)
+	-- trigger other event
 end
 
 -- handle event internal 
@@ -56,9 +50,9 @@ function this:intn_handle_ev(event_name, key, target)
   local arr_tr = self.triggers[key]
 	if arr_tr ~= nil then 
 		for _, v in ipairs(arr_tr) do 
-			if v:check(self.sess, event_name, target) then
+			-- if v:check(self.sess, event_name, target) then
 				v:execute(self.sess, target)
-			end
+			--end
 		end
 	end
 end

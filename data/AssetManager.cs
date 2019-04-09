@@ -78,6 +78,7 @@ public class AssetManager : ScriptableObject
             id = data.id,
             uid = data.uid,
             type = data.type,
+            con_type = data.con_type,
             side = _side,
             genus = data.genus,
             name = data.CreatureName,

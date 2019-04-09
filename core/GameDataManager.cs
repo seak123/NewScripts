@@ -373,6 +373,23 @@ public class GameDataManager
                         res.Add(con);
                 }
                 break;
+            case PackageType.AllConstructure:
+                foreach(var con in constructures){
+                    res.Add(con);
+                }
+                break;
+            case PackageType.IdlePartTool:
+                foreach(var part in partTools){
+                    if(part.init_room == 0){
+                        res.Add(part);
+                    }
+                }
+                break;
+            case PackageType.AllPartTool:
+                foreach(var part in partTools){
+                    res.Add(part);
+                }
+                break;
         }
         return res;
     }

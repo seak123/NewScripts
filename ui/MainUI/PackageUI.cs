@@ -8,6 +8,9 @@ public enum PackageType{
     IdleCreature = 1,
     AllCreature = 2,
     IdleConstructure = 3,
+    AllConstructure = 4,
+    IdlePartTool = 5,
+    AllPartTool = 6,
 }
 
 public class PackageUI : MonoBehaviour {

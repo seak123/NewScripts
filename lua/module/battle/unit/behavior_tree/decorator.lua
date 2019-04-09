@@ -143,7 +143,7 @@ function this:check_SkillAvaliable()
                 flag = flag and v(self.database)
             end
             if flag == true then
-                self.database.skill_index = index
+                self.database.skill_index = master.skills_coold[index].index
                 return true
             end
         end

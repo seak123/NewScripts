@@ -53,6 +53,9 @@ local function make_event(name)
     end
 end
 
+make_event("on_appear")
+make_event("on_enter_room")
+make_event("on_leave_room")
 make_event("pre_normal_damage")
 make_event("pre_normal_damaged")
 make_event("pre_damage")
@@ -116,14 +119,20 @@ function this:init(  )
    self.skills = self.config.skills
    self.skills_coold = {}
    self.energy = 0
+
+   self.triggers = {}
   
    for i,v in ipairs(self.skills) do
         if v.skill_type == "passive" then
             local database = pack_data.pack_database(self,self,self.transform.grid_pos)
             local buff = buff.new(v,database)
             buff:execute(self.sess,self)
+        elseif v.skill_type == "trigger" then
+            local trigger = require(v.execute).new(v,self)
+            table.insert( self.triggers, trigger)
+            self.sess.trigger:reg(trigger)
         else
-            table.insert(self.skills_coold,{coold =v.coold,value = 0})
+            table.insert(self.skills_coold,{coold =v.coold,value = 0,index = i})
         end
    end
 
@@ -169,7 +178,7 @@ function this:dispatch( name,src )
     end
     local trigger = self.sess.trigger
     self.buffcont:handle(self.sess, name)
-    --trigger:handle_ev(name, self)
+    trigger:handle_ev(name, self)
 end
 
 function this:do_attack( delta ,enemy)
@@ -213,6 +222,9 @@ function this:do_appear( delta )
     self.appear_process = self.appear_process +delta
     if self.appear_process >= self.data.ready_time then
         self.appeared = 1
+        -- appear
+        self:on_appear()
+        self:on_enter_room()
         return true
     end
     return false
@@ -242,6 +254,10 @@ function this:die(  )
     if self.alive ~= 0 then return end
     self.alive = 2
     self:on_die()
+    self.buffcont:remove_all(self.sess)
+    for _,tr in ipairs(self.triggers) do
+        self.sess.trigger:unreg(tr)
+    end
     self.sess.field:unit_die(self)
     self.entity:Die()
 end

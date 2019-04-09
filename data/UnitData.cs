@@ -19,6 +19,8 @@ namespace Data
         //type: 0,creature  1,construction
         public int type = 1;
 
+        public int con_type = 0;
+
         //genus: 1,ground 2,fly
         public int genus = 1;
 
