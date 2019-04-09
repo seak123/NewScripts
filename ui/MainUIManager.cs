@@ -17,13 +17,16 @@ public class MainUIManager : MonoBehaviour {
     public UIType[] UITypes;
     public Sprite[] loadingSprite;
     public GameObject creatureCardPrefab;
-    public GameObject loadingImage;
-    public GameObject siteBand;
-    public Text siteName;
+    public GameObject LoadingPrefab;
+    // public GameObject loadingImage;
+    // public GameObject siteBand;
+    // public Text siteName;
 
     private int currSort;
+    private GameObject loadingObj;
     private GameObject cardPrefab;
     private List<GameObject> uiQueue;
+    private int sceneCache = 0;
     private List<Action> sceneFuncList;
 	// Use this for initialization
 	void Start () {
@@ -63,7 +66,6 @@ public class MainUIManager : MonoBehaviour {
         Destroy(uiQueue[index]);
         uiQueue.RemoveAt(index);
         --currSort;
-        CleanInfoUI();
     }
 
     public void OpenCreatureCard(CreatureFightData data,Vector3 location){
@@ -87,14 +89,22 @@ public class MainUIManager : MonoBehaviour {
         GameRoot.GetInstance().InfoUI.SetActive(false);
     }
 
-    public void ChangeScene(List<int> uiList,Action completedFunc,string sceneName,int spriteId){
- 
+    public void OpenScene(List<int> uiList,Action completedFunc,string sceneName,int spriteId){
+        GameObject loading = Instantiate(LoadingPrefab);
+        LoadingUI uiScript = loading.GetComponent<LoadingUI>();
+        loading.transform.parent = GameRoot.GetInstance().LoadingUI.transform;
+        loadingObj = loading;
+        GameObject loadingImage = uiScript.loadingImage;
+        GameObject siteBand = uiScript.siteBand;
+        Text siteName = uiScript.siteName;
+
         loadingImage.SetActive(true);
         loadingImage.GetComponent<Image>().sprite = loadingSprite[spriteId];
         siteName.text = sceneName;
         loadingImage.GetComponent<Image>().color = new Color(0, 0, 0, 0);
         loadingImage.GetComponent<Image>().DOColor(new Color(1, 1, 1, 1), 0.8f).onComplete += ()=>{
-
+            //loading at here
+            HideUI(true);
             sceneFuncList.Add(completedFunc);
            
             loadingImage.GetComponent<Image>().DOColor(new Color(0, 0, 0, 0), 0.8f).onComplete += () =>
@@ -115,16 +125,28 @@ public class MainUIManager : MonoBehaviour {
                 siteName.GetComponent<Text>().DOColor(new Color(1,0.9f, 0.65f, 1), 0.5f).onComplete += () => {
                         siteName.GetComponent<Text>().DOColor(new Color(1, 0.9f, 0.65f, 1), 2f).onComplete += () =>
                         {
-                            siteName.GetComponent<Text>().DOColor(new Color(1, 0.9f, 0.65f, 0), 0.5f);
+                            siteName.GetComponent<Text>().DOColor(new Color(1, 0.9f, 0.65f, 0), 0.5f).onComplete += ()=>{
+                                Destroy(loadingObj);
+                            };
                         };
                 };
                 foreach (var ui in uiList)
                 {
                     OpenUI(ui);
+                    ++sceneCache;
                 }
                 loadingImage.SetActive(false);
             };
             };
+    }
+
+    public void CloseScene(){
+        while(sceneCache>0){
+            --sceneCache;
+            CloseUI();
+            CleanInfoUI();
+        }
+        HideUI(false);
     }
 
     private void Update()

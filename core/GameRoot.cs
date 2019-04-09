@@ -18,6 +18,8 @@ public class GameRoot : MonoBehaviour {
 
     public static Action BattleEndAction;
 
+    public GameObject LoadingUI;
+
     public GameObject MainUI;
 
     public GameObject InfoUI;
@@ -128,7 +130,6 @@ public class GameRoot : MonoBehaviour {
         };
         Action action = new Action(()=>{
             BattleStartAction();
-            mainUIMng.HideUI(true);
             fieldObj = Instantiate(BattleField.assetManager.GetField(0));
             fieldObj.transform.position = Vector3.zero;
 
@@ -137,13 +138,12 @@ public class GameRoot : MonoBehaviour {
 
         });
 
-        mainUIMng.ChangeScene(uiList, action,"地牢",14);
+        mainUIMng.OpenScene(uiList, action,"地牢",14);
        
     }
 
     public void QuitStrategy(){
-        mainUIMng.CloseUI();
-        mainUIMng.HideUI(false);
+        mainUIMng.CloseScene();
 
         Destroy(fieldObj);
         BattleEndAction();

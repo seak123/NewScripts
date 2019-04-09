@@ -23,7 +23,7 @@ public class DungeonUI : MonoBehaviour,ISceneUI {
     public GameObject ConstructureContainer;
     public GameObject[] PartContainer;
 
-    private DungeonUIState state;
+    public DungeonUIState state;
     private int currRoomId;
     private int currIndex;
     private Vector2Int currRoomCenter;
@@ -112,12 +112,11 @@ public class DungeonUI : MonoBehaviour,ISceneUI {
     public void CloseInfo(){
         if (GameRoot.GetInstance().CameraMng.closing == true) return;
         background.SetActive(false);
-        GameRoot.GetInstance().CameraMng.MoveRecover();
+        GameRoot.GetInstance().CameraMng.MoveRecover(this);
         dungeonInfo.GetComponent<RectTransform>().DOMoveY(-Screen.height / 2, 0.5f);
         quit.GetComponent<RectTransform>().DOMoveX(0, 0.5f);
         close.GetComponent<RectTransform>().DOMoveX(Screen.width * 4 / 3, 0.5f);
 
-        state = DungeonUIState.Idle;
         currRoomId = -1;
         GameRoot.GetInstance().mainUIMng.CleanInfoUI();
         CleanUp();

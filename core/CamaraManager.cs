@@ -107,10 +107,10 @@ public class CamaraManager : MonoBehaviour {
         m_Camera.transform.DOMove(closingPos, closingTime).onComplete += () => { closing = false; m_Camera.fieldOfView = closingView; };
     }
 
-    public void MoveRecover(){
+    public void MoveRecover(DungeonUI ui){
         closeIn = false;
         closing = true;
-        m_Camera.transform.DOMove(m_CameraOffset,closingTime).onComplete += () => { active = true; closing = false; m_Camera.fieldOfView = 60; };
+        m_Camera.transform.DOMove(m_CameraOffset,closingTime).onComplete += () => { active = true; closing = false; m_Camera.fieldOfView = 60;ui.state = DungeonUIState.Idle; };
     }
    
     /// <summary>
