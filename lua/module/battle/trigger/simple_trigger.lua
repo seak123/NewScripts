@@ -1,6 +1,5 @@
 local base = require("module.battle.trigger.base_trigger")
 local this = class("simple_trigger", base)
-local skill = require("module.battle.skill.skill_new")
 local pack_data = require("module.battle.skill.utils.pack_database")
 
 function this:ctor(vo, owner)
@@ -24,9 +23,9 @@ function this:execute(sess, target)
   elseif self.target_type == "enemy" then
     if self.owner.side == target.side then return end
   end
-
+  print("@@simple trigger attach!:"..target.uid)
   self.database = pack_data.pack_database(self.owner,target,target.transform.grid_pos)
-  local raw_skill = require(self.root.execute).new(self.root,database)
+  local raw_skill = require(self.root.execute).new(self.root,self.database)
   raw_skill:execute(sess,target)
 end
 

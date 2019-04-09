@@ -50,9 +50,9 @@ function this:intn_handle_ev(event_name, key, target)
   local arr_tr = self.triggers[key]
 	if arr_tr ~= nil then 
 		for _, v in ipairs(arr_tr) do 
-			-- if v:check(self.sess, event_name, target) then
+			if v:check(self.sess, event_name, target) then
 				v:execute(self.sess, target)
-			--end
+			end
 		end
 	end
 end

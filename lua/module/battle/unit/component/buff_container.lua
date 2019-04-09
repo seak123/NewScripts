@@ -40,7 +40,7 @@ end
 function this:remove_buff(sess, buff)
     buff:remove(sess)
 
-    buff:detach(sess, self.master)
+    buff:detach_buff(sess, self.master)
     self.buffs[buff:get_key()] = nil
 end
   
@@ -48,7 +48,7 @@ function this:remove_buff_by_id( sess,buff_id )
 
     local buff = self.buffs[buff_id]
     if buff ~= nil then buff:remove(sess)
-        buff:detach(sess,self.unit)
+        buff:detach_buff(sess,self.unit)
         self.buffs[buff_id] = nil
     end
 end
@@ -90,7 +90,7 @@ end
   -- other : other buff container
 function this:move_buff(sess, other, buff)
     other:remove_buff(sess, buff)
-    buff:attach(sess,self.unit)
+    buff:attach_buff(sess,self.unit)
     self.buffs[buff.vo.buff_id] = buff
 end
   
@@ -100,7 +100,7 @@ function this:remove_all(sess)
             --inform_new_buff in remove func
             v:remove(sess)
         end
-        v:detach(sess, self.unit)
+        v:detach_buff(sess, self.unit)
     end
     self.buffs = {}
 end

@@ -23,7 +23,7 @@ public class MainUIManager : MonoBehaviour {
     // public Text siteName;
 
     private int currSort;
-    private GameObject loadingObj;
+    private List<GameObject> loadingCache;
     private GameObject cardPrefab;
     private List<GameObject> uiQueue;
     private int sceneCache = 0;
@@ -33,6 +33,7 @@ public class MainUIManager : MonoBehaviour {
         currSort = 10;
         uiQueue = new List<GameObject>();
         sceneFuncList = new List<Action>();
+        loadingCache = new List<GameObject>();
 	}
 
     public void HideUI(bool flag){
@@ -93,12 +94,14 @@ public class MainUIManager : MonoBehaviour {
         GameObject loading = Instantiate(LoadingPrefab);
         LoadingUI uiScript = loading.GetComponent<LoadingUI>();
         loading.transform.parent = GameRoot.GetInstance().LoadingUI.transform;
-        loadingObj = loading;
+        loading.transform.localPosition = Vector3.zero;
+        loadingCache.Insert(0,loading);
         GameObject loadingImage = uiScript.loadingImage;
         GameObject siteBand = uiScript.siteBand;
         Text siteName = uiScript.siteName;
 
         loadingImage.SetActive(true);
+        siteBand.SetActive(false);
         loadingImage.GetComponent<Image>().sprite = loadingSprite[spriteId];
         siteName.text = sceneName;
         loadingImage.GetComponent<Image>().color = new Color(0, 0, 0, 0);
@@ -126,7 +129,8 @@ public class MainUIManager : MonoBehaviour {
                         siteName.GetComponent<Text>().DOColor(new Color(1, 0.9f, 0.65f, 1), 2f).onComplete += () =>
                         {
                             siteName.GetComponent<Text>().DOColor(new Color(1, 0.9f, 0.65f, 0), 0.5f).onComplete += ()=>{
-                                Destroy(loadingObj);
+                            loadingCache.Remove(loading);
+                            Destroy(loading);
                             };
                         };
                 };
@@ -146,6 +150,8 @@ public class MainUIManager : MonoBehaviour {
             CloseUI();
             CleanInfoUI();
         }
+
+        foreach (var obj in loadingCache) obj.SetActive(false);
         HideUI(false);
     }
 

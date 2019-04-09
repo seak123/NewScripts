@@ -4,7 +4,7 @@ local decorator = require("module.battle.unit.behavior_tree.data.decorator_vo")
 
 local ac_appear = action.new()
 ac_appear.action_type = action.ACTION.Appear
-ac_appear.priority = 3
+ac_appear.priority = 2
 
 local ac_idle = action.new()
 ac_idle.action_type = action.ACTION.Idle

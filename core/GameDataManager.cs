@@ -70,35 +70,35 @@ public class GameDataManager
 
         AssetManager assetManager = GameRoot.GetInstance().BattleField.assetManager;
         CreatureFightData temp = new CreatureFightData();
-        temp.LoadData(assetManager.GetCreatureData(6011));
+        temp.LoadData(assetManager.GetCreatureData(601));
         GetNewConstructure(temp);
         ChangeRoomConstructure(34, temp.uid, true);
 
         temp = new CreatureFightData();
-        temp.LoadData(assetManager.GetCreatureData(6011));
+        temp.LoadData(assetManager.GetCreatureData(601));
         GetNewConstructure(temp);
         ChangeRoomConstructure(32, temp.uid, true);
 
         temp = new CreatureFightData();
-        temp.LoadData(assetManager.GetCreatureData(6011));
+        temp.LoadData(assetManager.GetCreatureData(601));
         GetNewConstructure(temp);
         ChangeRoomConstructure(43, temp.uid, true);
 
         temp = new CreatureFightData();
-        temp.LoadData(assetManager.GetCreatureData(6021));
+        temp.LoadData(assetManager.GetCreatureData(701));
         GetNewConstructure(temp);
         ChangeRoomConstructure(33, temp.uid, true);
 
         temp = new CreatureFightData();
-        temp.LoadData(assetManager.GetCreatureData(1081));
+        temp.LoadData(assetManager.GetCreatureData(108));
         GetNewCreature(temp);
         ChangeRoomSubData(33, 10, temp.uid,true);
         temp = new CreatureFightData();
-        temp.LoadData(assetManager.GetCreatureData(1081));
+        temp.LoadData(assetManager.GetCreatureData(108));
         GetNewCreature(temp);
         ChangeRoomSubData(33,10,temp.uid,true);
         temp = new CreatureFightData();
-        temp.LoadData(assetManager.GetCreatureData(1081));
+        temp.LoadData(assetManager.GetCreatureData(108));
         GetNewCreature(temp);
         ChangeRoomSubData(33,10,temp.uid,true);
 
@@ -106,19 +106,19 @@ public class GameDataManager
 
 
         temp = new CreatureFightData();
-        temp.LoadData(assetManager.GetCreatureData(6021));
+        temp.LoadData(assetManager.GetCreatureData(701));
         GetNewConstructure(temp);
 
         for (int i = 0; i < 20;++i){
             temp = new CreatureFightData();
-            temp.LoadData(assetManager.GetCreatureData(6011));
+            temp.LoadData(assetManager.GetCreatureData(601));
             GetNewConstructure(temp);
         }
 
         for (int i = 0; i < 20; ++i)
         {
             temp = new CreatureFightData();
-            temp.LoadData(assetManager.GetCreatureData(1081));
+            temp.LoadData(assetManager.GetCreatureData(108));
             GetNewCreature(temp);
         }
 
@@ -211,7 +211,7 @@ public class GameDataManager
         for (int i = 0; i < 20; ++i)
         {
             CreatureFightData temp = new CreatureFightData();
-            temp.LoadData(GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(1091));
+            temp.LoadData(GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(109));
             battleData.enemys[i] = AssetManager.PackCreatureData(temp, 2);
             battleData.enemys[i].init_room = -1;
         }

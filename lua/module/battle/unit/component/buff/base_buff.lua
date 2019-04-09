@@ -24,6 +24,7 @@ function this:handle(sess, name)
 	local ev = self[ev_name]
 	if ev ~= nil then 
 		for _, v in ipairs(ev) do
+			print("@@handle evnet:"..name.." id:"..self.carrier.uid)
 			v.func(v.obj,sess,self.carrier)
 		end
 	end

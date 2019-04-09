@@ -24,18 +24,18 @@ end
 
 --keep checkers
 function this:check(sess, event_name, target)
-	-- if self.vo.occasion == event_name then 
-  --   if self.checkers ~= nil then
-  --     for _, v in ipairs(self.checkers) do
-  --       if not v(sess, self,target) then 
-  --         return false
-  --       end
-  --     end
-  --   end
-	-- 	return true
-	-- else 
-	-- 	return false
-	-- end
+	if self.vo.occasion == event_name then 
+    -- if self.checkers ~= nil then
+    --   for _, v in ipairs(self.checkers) do
+    --     if not v(sess, self,target) then 
+    --       return false
+    --     end
+    --   end
+    -- end
+		return true
+	else 
+		return false
+	end
 end
 
 function this:execute(trigger,sess, target)
