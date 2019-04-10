@@ -95,8 +95,11 @@ public class MainUIManager : MonoBehaviour {
         LoadingUI uiScript = loading.GetComponent<LoadingUI>();
         loading.transform.parent = GameRoot.GetInstance().LoadingUI.transform;
         loading.transform.localPosition = Vector3.zero;
+        //loading.GetComponent<RectTransform>().position = new Vector3(Screen.width/2, Screen.height, 0);
+        loading.transform.localScale = Vector3.one;
         loadingCache.Insert(0,loading);
         GameObject loadingImage = uiScript.loadingImage;
+        loadingImage.transform.localScale = Vector3.one * ((float)Screen.height/(float)Screen.width) / (1334f / 750f);
         GameObject siteBand = uiScript.siteBand;
         Text siteName = uiScript.siteName;
 
