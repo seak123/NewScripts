@@ -24,8 +24,9 @@ end
 
 function this:execute( sess,delta )
     
+    if self.targets[1].alive ~= 0 then self:clean_up() return "completed" end
     if self.init == false then
-        if self.targets[1].alive ~= 0 then self:clean_up() return "completed" end
+        
         self.effect_entity = self.effect[1]:execute(sess,self.targets[1])
 
         self.timepass = 0
