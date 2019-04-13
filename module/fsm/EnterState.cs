@@ -19,7 +19,7 @@ public class EnterState : FsmState
     {
         //GameRoot.BattleStartAction += BattleEnter;
         //GameRoot.BattleStartDelayAction += BattleStart;
-        cameraMng = GameRoot.GetInstance().Camara.GetComponent<CamaraManager>();
+        cameraMng = GameRoot.GetInstance().CameraMng;
         uiMng = GameRoot.GetInstance().battleUI.GetComponent<BattleUIManager>();
     }
 

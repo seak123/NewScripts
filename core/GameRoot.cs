@@ -32,8 +32,6 @@ public class GameRoot : MonoBehaviour {
 
     public GameObject battleTextUI;
 
-    public GameObject Camara;
-
     public BattleData battleData;
 
     private static GameRoot instance;

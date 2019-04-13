@@ -42,6 +42,10 @@ public class BattleUIManager : MonoBehaviour,ISceneUI {
         //goldSlider.transform.DOLocalMove(new Vector3(27, -162, 0), 0.8f);
     }
 
+    public void ChangeTimeScale(){
+        GameRoot.GetInstance().Schedular.ChangeTimeScale();
+    }
+
   
     
 }

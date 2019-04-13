@@ -386,7 +386,7 @@ namespace Map
                     return;
                 }
                 Canvas canvas = GameRoot.GetInstance().battleUI.GetComponent<Canvas>();
-                CamaraManager camara = GameRoot.GetInstance().Camara.GetComponent<CamaraManager>();
+                CamaraManager camara = GameRoot.GetInstance().CameraMng;
                 Vector2 screenPos = Camera.main.WorldToScreenPoint(GetSocketPos("S_Hp"));
                 //Vector2 uiPos = Vector2.zero;
                 //RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.transform as RectTransform, screenPos, canvas.worldCamera, out uiPos);
@@ -395,7 +395,7 @@ namespace Map
                 //hpBar.GetComponent<RectTransform>().position = new Vector3(0, 0, 0);
                 hpBar.transform.position = new Vector3(screenPos.x, screenPos.y, 0);
 
-                hpBar.transform.localScale = new Vector3(1+((float)radius-4)/16f, 1f, 1)*2f;
+                hpBar.transform.localScale = new Vector3(1+((float)radius-4)/16f, 1f, 1)*0.5f;
 
             }
         }

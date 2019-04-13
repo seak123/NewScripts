@@ -58,8 +58,9 @@ function this.make_special_calc(command)
 end
 
 function this.damage(caster,target,value,source,type )
-  -- flag means: 1, crit;2,miss;
-  local flag,value = 0,value
+  -- flag means:0,noraml attack 1, crit;2,miss;3,heal;
+  local flag = 0;
+
   local crit_factor = 1
   if source == damage_vo.DamageSource.Attack then
     if math.random() > caster.property:get("hit_rate") and math.random() < target.property:get("dodge") then
@@ -82,6 +83,7 @@ function this.damage(caster,target,value,source,type )
       defence_factor = 2-((100-battle_def.DefenceFactor)/100)^(-target_def)
     end
     value = value * defence_factor * crit_factor
+    caster.sess.effect_mng:PrintMessage(target.uid,math.round(value),flag)
     return flag,value
   end
   if type == damage_vo.DamageType.Magic then
@@ -98,6 +100,7 @@ function this.damage(caster,target,value,source,type )
 end
 
 function this.heal( caster,target,value )
+  caster.sess.effect_mng:PrintMessage(target.uid,math.round(value),3)
    return value
 end
 

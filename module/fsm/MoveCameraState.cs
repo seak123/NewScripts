@@ -25,7 +25,7 @@ public class MoveCameraState : FsmState
     public override void OnEnter()
     {
         Debug.Log("Enter MoveCameraState");
-        camareMng = GameRoot.GetInstance().Camara.GetComponent<CamaraManager>();
+        camareMng = GameRoot.GetInstance().CameraMng;
         state = MoveCameraStateFSM.Idle;
         lastSingleTouchPosition = useMouse ? (Vector2)Input.mousePosition : Input.GetTouch(0).position;
     }

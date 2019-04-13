@@ -45,6 +45,8 @@ public class PlayerData{
 
 public class GameDataManager
 {
+    //system data
+    public int timeScaleFlag;
     //data
     public int unitUid;
     public int roomRow;
@@ -59,6 +61,7 @@ public class GameDataManager
 
 
     public void InitData(){
+        timeScaleFlag = 0;
         //init data
 
         unitUid = 0;

@@ -98,7 +98,8 @@ public class EffectManager : MonoBehaviour {
         return effectEntity;
     }
 
-    public void PrintMessage(int uid,string text){
+    //flag:1,crit,2,miss,3,heal
+    public void PrintMessage(int uid,string text,int flag){
         MapField mapField = GameRoot.GetInstance().MapField;
         Entity entity;
       
@@ -107,7 +108,7 @@ public class EffectManager : MonoBehaviour {
             Debug.Log("entity is null");
             return; }
         Canvas canvas = GameRoot.GetInstance().battleTextUI.GetComponent<Canvas>();
-        CamaraManager camara = GameRoot.GetInstance().Camara.GetComponent<CamaraManager>();
+        CamaraManager camara = GameRoot.GetInstance().CameraMng;
         Vector2 screenPos = Camera.main.WorldToScreenPoint(entity.GetSocketPos("S_Center"));
         //Vector2 uiPos = Vector2.zero;
 
@@ -119,10 +120,28 @@ public class EffectManager : MonoBehaviour {
         //hpBar.GetComponent<RectTransform>().sizeDelta = new Vector2(Mathf.Sqrt(radius) / 2 * 80, 22);
         message.SetActive(true);
         message.GetComponent<Text>().text = StrUtil.GetText(text);
-        if(entity.side == 1){
-            message.GetComponent<Text>().color = new Color(0.34f, 0.87f, 0.34f);
+        if(entity.side == 2){
+            switch(flag){
+                case 0:
+                    message.GetComponent<Text>().color = new Color(0.96f, 0.05f, 0f);
+                    break;
+                case 1:
+                    message.GetComponent<Text>().color = new Color(0.8f, 0f, 0.55f);
+                    message.GetComponent<TipMessage>().SetLogo(int.Parse(text));
+                    message.transform.DOScale(Vector3.one * 2, 0.1f).onComplete+=()=>{
+                        message.transform.DOScale(Vector3.one, 0.2f);
+                    };
+                    break;
+            }
+
         }else{
-            message.GetComponent<Text>().color = new Color(0.88f, 0.49f, 0.83f);
+            switch(flag){
+                case 0:
+                case 1:
+                    message.GetComponent<Text>().color = new Color(0.6f, 0.6f, 0.6f);
+                    message.transform.localScale = Vector3.one * 0.6f;
+                    break;
+            }
         }
         message.transform.position = new Vector3(screenPos.x, screenPos.y, 0);
 
@@ -131,13 +150,13 @@ public class EffectManager : MonoBehaviour {
         {
             effect = message,
             uid = uid,
-            duration = 2,
+            duration = 0.5f,
             pos = entity.GetSocketPos("S_Center")
         };
         messageCantainer.Add(effect);
 
-        float scale = camara.minSize / camara.size;
-        message.transform.localScale = Vector3.one * scale;
+        //float scale = camara.minSize / camara.size;
+        message.transform.localScale = Vector3.one;
         //message.transform.DOMoveY(message.transform.position.y + 20, 0.2f);
         //Destroy(message, 0.2f);
 
@@ -149,7 +168,7 @@ public class EffectManager : MonoBehaviour {
         tips.SetActive(true);
         tips.GetComponent<Text>().text = "+"+value.ToString();
         Canvas canvas = GameRoot.GetInstance().battleTextUI.GetComponent<Canvas>();
-        CamaraManager camara = GameRoot.GetInstance().Camara.GetComponent<CamaraManager>();
+        CamaraManager camara = GameRoot.GetInstance().CameraMng;
         Vector2 screenPos = Camera.main.WorldToScreenPoint(pos);
         tips.transform.position = new Vector3(screenPos.x, screenPos.y, 0);
 
@@ -157,12 +176,12 @@ public class EffectManager : MonoBehaviour {
         {
             effect = tips,
             uid = -1,
-            duration = 2,
+            duration = 0.5f,
             pos = pos
         };
         messageCantainer.Add(effect);
-        float scale = camara.minSize / camara.size;
-        tips.transform.localScale = Vector3.one * scale;
+        //float scale = camara.minSize / camara.size;
+        tips.transform.localScale = Vector3.one;
     }
 
     private void Update()
@@ -181,14 +200,14 @@ public class EffectManager : MonoBehaviour {
 
 
                 Canvas canvas = GameRoot.GetInstance().battleTextUI.GetComponent<Canvas>();
-                CamaraManager camara = GameRoot.GetInstance().Camara.GetComponent<CamaraManager>();
+                CamaraManager camara = GameRoot.GetInstance().CameraMng;
                 Vector2 screenPos = Camera.main.WorldToScreenPoint(effect.pos);
 
                 float scale = camara.minSize / camara.size;
                 float hight = Screen.height / 10 * scale;
 
-                effect.effect.transform.position = new Vector3(screenPos.x, screenPos.y+Mathf.Clamp(2-effect.duration,0,0.8f)*hight, 0);
-                effect.effect.transform.localScale = Vector3.one * scale;
+                effect.effect.transform.position = new Vector3(screenPos.x, screenPos.y + Mathf.Clamp((0.5f - effect.duration) * 0.2f, 0, 0.35f) * hight, 0);
+                //effect.effect.transform.localScale = Vector3.one;
 
                 messageCantainer[index].duration = effect.duration - Time.deltaTime;
             }

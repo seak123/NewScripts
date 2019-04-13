@@ -23,12 +23,25 @@ public class Schedular : MonoBehaviour {
     [OnInjected]
     public void AddRootAction(){
         GameRoot.moduleInit += Init;
+        GameRoot.BattleStartAction += ResetTimeScale;
+        GameRoot.BattleEndAction += ResetTimeScale;
     }
 
     public void Init()
     {
         //Bridge.Init();
         Debug.Log("Schedular Init");
+    }
+
+    public void ResetTimeScale()
+    {
+        Time.timeScale = (float)(GameRoot.GetInstance().gameDataManager.timeScaleFlag % 4) * 0.5f + 1f;
+    }
+
+
+    public void ChangeTimeScale(){
+        GameRoot.GetInstance().gameDataManager.timeScaleFlag = GameRoot.GetInstance().gameDataManager.timeScaleFlag + 1;
+        Time.timeScale = (float)(GameRoot.GetInstance().gameDataManager.timeScaleFlag % 4) * 0.5f + 1f;
     }
 
 }
