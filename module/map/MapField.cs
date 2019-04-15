@@ -111,7 +111,7 @@ namespace Map
         public void CreateRoom(int gridX,int gridY){
             float x, y;
             GetViewPos(gridX, gridY, out x, out y);
-            GameObject obj = Instantiate(temRoom, new Vector3(x, 1.7f, y), Quaternion.identity);
+            GameObject obj = Instantiate(temRoom, new Vector3(x, 1.2f, y), Quaternion.identity);
             obj.transform.rotation = Quaternion.Euler(new Vector3(0, UnityEngine.Random.Range(0, 4) * 90, 0));
             mapObjList.Add(obj);
         }
