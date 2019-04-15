@@ -13,6 +13,6 @@ public class TipMessage : MonoBehaviour {
             value = value / 10;
             ++num;
         }
-        CritLogo.GetComponent<RectTransform>().localPosition = new Vector3(7*num, 0, 0);
+        CritLogo.GetComponent<RectTransform>().localPosition = new Vector3(12.2f*num, 0, 0);
     }
 }

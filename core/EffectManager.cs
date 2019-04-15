@@ -119,17 +119,18 @@ public class EffectManager : MonoBehaviour {
         message.GetComponent<RectTransform>().parent = GameRoot.GetInstance().battleTextUI.GetComponent<RectTransform>();
         //hpBar.GetComponent<RectTransform>().sizeDelta = new Vector2(Mathf.Sqrt(radius) / 2 * 80, 22);
         message.SetActive(true);
-        message.GetComponent<Text>().text = StrUtil.GetText(text);
+        message.GetComponentInChildren<Text>().text = StrUtil.GetText(text);
         if(entity.side == 2){
             switch(flag){
                 case 0:
-                    message.GetComponent<Text>().color = new Color(0.96f, 0.05f, 0f);
+                    message.GetComponentInChildren<Text>().color = new Color(0.96f, 0.05f, 0f);
+                    message.transform.localScale = Vector3.one*0.75f;
                     break;
                 case 1:
-                    message.GetComponent<Text>().color = new Color(0.8f, 0f, 0.55f);
+                    message.GetComponentInChildren<Text>().color = new Color(0.9f, 0.1f, 0.7f);
                     message.GetComponent<TipMessage>().SetLogo(int.Parse(text));
-                    message.transform.DOScale(Vector3.one * 2, 0.1f).onComplete+=()=>{
-                        message.transform.DOScale(Vector3.one, 0.2f);
+                    message.transform.DOScale(Vector3.one * 2.5f, 0.15f).onComplete+=()=>{
+                        message.transform.DOScale(Vector3.one, 0.15f);
                     };
                     break;
             }
@@ -138,25 +139,37 @@ public class EffectManager : MonoBehaviour {
             switch(flag){
                 case 0:
                 case 1:
-                    message.GetComponent<Text>().color = new Color(0.6f, 0.6f, 0.6f);
-                    message.transform.localScale = Vector3.one * 0.6f;
+                    message.GetComponentInChildren<Text>().color = new Color(0.7f, 0.6f, 1f);
+                    message.transform.localScale = Vector3.one * 0.75f;
                     break;
             }
         }
         message.transform.position = new Vector3(screenPos.x, screenPos.y, 0);
+        Color t_color = message.GetComponentInChildren<Text>().color;
+        message.GetComponentInChildren<Text>().DOColor(new Color(t_color.r, t_color.g, t_color.b, 1), 0.3f).onComplete += () =>
+        {
+            message.GetComponentInChildren<Text>().DOColor(new Color(t_color.r, t_color.g, t_color.b, 0), 0.4f);
+        };
+        Image logo = message.GetComponent<TipMessage>().CritLogo.GetComponentInChildren<Image>();
+        Color l_color = logo.color;
+        if(logo!=null && logo.gameObject.activeSelf == true)
+        logo.DOColor(new Color(l_color.r, l_color.g, l_color.b, 1), 0.3f).onComplete += () =>
+        {
+            logo.DOColor(new Color(l_color.r, l_color.g, l_color.b, 0), 0.4f);
+        };
 
         //init message struct
         MessageEffect effect = new MessageEffect
         {
             effect = message,
             uid = uid,
-            duration = 0.5f,
+            duration = 0.8f,
             pos = entity.GetSocketPos("S_Center")
         };
         messageCantainer.Add(effect);
 
         //float scale = camara.minSize / camara.size;
-        message.transform.localScale = Vector3.one;
+        //message.transform.localScale = Vector3.one;
         //message.transform.DOMoveY(message.transform.position.y + 20, 0.2f);
         //Destroy(message, 0.2f);
 
@@ -176,7 +189,7 @@ public class EffectManager : MonoBehaviour {
         {
             effect = tips,
             uid = -1,
-            duration = 0.5f,
+            duration = 0.6f,
             pos = pos
         };
         messageCantainer.Add(effect);
@@ -206,8 +219,7 @@ public class EffectManager : MonoBehaviour {
                 float scale = camara.minSize / camara.size;
                 float hight = Screen.height / 10 * scale;
 
-                effect.effect.transform.position = new Vector3(screenPos.x, screenPos.y + Mathf.Clamp((0.5f - effect.duration) * 0.2f, 0, 0.35f) * hight, 0);
-                //effect.effect.transform.localScale = Vector3.one;
+                effect.effect.transform.position = new Vector3(screenPos.x, screenPos.y + Mathf.Clamp((0.7f - effect.duration) * 0.3f, 0, 0.5f) * hight, 0);
 
                 messageCantainer[index].duration = effect.duration - Time.deltaTime;
             }
