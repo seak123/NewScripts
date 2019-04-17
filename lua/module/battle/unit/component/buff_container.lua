@@ -1,5 +1,7 @@
 local this = class("buff_container")
+local vo_buff = require("module.battle.skill.raw_skill_vo.buff_vo")
 local stack = require("module.battle.unit.component.buff.stack_buff")
+local attr = require("module.battle.unit.component.buff.attr_buff")
 
 function this:ctor( master )
     self.buffs = {}
@@ -21,7 +23,11 @@ function this:add_buff(sess, buff_vo, inst)
     buff = self.buffs[buff_id]
 
     if buff == nil then
-        buff = stack.new(sess,buff_vo.buff_id, buff_vo)
+        if buff_vo.buff_type == vo_buff.BuffType.Stack then
+            buff = stack.new(sess,buff_vo.buff_id,buff_vo)
+        elseif buff_vo.buff_type == vo_buff.BuffType.Attr then
+            buff = attr.new(sess,buff_vo.buff_id,buff_vo)
+        end
         buff:attach_buff(sess, self.master)
         self.buffs[buff:get_key()] = buff
     end

@@ -69,6 +69,7 @@ make_event("post_healed")
 make_event("on_kill")
 make_event("on_die")
 make_event("on_attack")
+make_event("post_attack")
 
 function this:init(  )
     -- init data
@@ -191,6 +192,7 @@ function this:do_attack( delta ,enemy)
         local attack_skill = entire_skill.new(self.sess,self.attack_skill_vo)
         self:on_attack() 
         attack_skill:execute(database)
+        self:post_attack()
         self.energy = self.energy + 1
         self.energy = math.min( self.energy,20)
     end
