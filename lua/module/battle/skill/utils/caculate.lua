@@ -3,15 +3,23 @@ local damage_vo = require("module.battle.skill.raw_skill_vo.damage_vo")
 local battle_def = require("module.battle.battle_def")
 
 function this.make_common_attack(rate, add) 
-  return function(sess, caster, target)
+  return function(self,sess, caster, target)
+    if add == nil then add = 0 end
     return rate * caster.property:get("attack") + add
   end
 end
 
 function this.make_rest_hp(rate,add_rate )
-  return function (sess,caster,target  )
+  return function (self,sess,caster,target  )
     local value = caster.hp_max * rate
     return math.floor( (caster.hp_max-caster.hp)/value )*add_rate
+  end
+end
+
+function this.make_buff_stack( rate,add )
+  return function (obj,sess,caster,target )
+    local stack = obj.buff:get_inst_count()
+    return rate*stack + add
   end
 end
 

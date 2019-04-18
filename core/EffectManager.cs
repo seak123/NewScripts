@@ -205,7 +205,6 @@ public class EffectManager : MonoBehaviour {
                 MapField mapField = GameRoot.GetInstance().MapField;
                 //Debug.Log("duration " + effect.duration);
                 if(effect.duration<=0){
-                    Debug.Log("destroy");
                     messageCantainer.RemoveAt(index);
                     Destroy(effect.effect);
                     continue;

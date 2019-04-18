@@ -24,19 +24,19 @@ function this:add_buff(sess, buff_vo, inst)
 
     if buff == nil then
         if buff_vo.buff_type == vo_buff.BuffType.Stack then
-            buff = stack.new(sess,buff_vo.buff_id,buff_vo)
+            buff = stack.new(sess,buff_vo.buff_id,buff_vo,inst.database)
         elseif buff_vo.buff_type == vo_buff.BuffType.Attr then
-            buff = attr.new(sess,buff_vo.buff_id,buff_vo)
+            buff = attr.new(sess,buff_vo.buff_id,buff_vo,inst.database)
         end
         buff:attach_buff(sess, self.master)
         self.buffs[buff:get_key()] = buff
     end
-    buff:handle_stack(sess,inst)
+    buff:handle_stack(sess,inst,buff_vo.stack_num)
     return buff
 end
 
 function this:clear_remove( sess )
-    for _, b in ipairs(self.buffs) do
+    for _, b in pairs(self.buffs) do
         if b.is_remove then
             self:remove_buff(sess,b)
         end

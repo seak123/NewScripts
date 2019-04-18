@@ -69,6 +69,7 @@ public class GameDataManager
         roomCol = 3;
         creatures = new List<CreatureFightData>();
         constructures = new List<CreatureFightData>();
+        partTools = new List<CreatureFightData>();
         rooms = new Dictionary<int, List<CreatureFightData>>();
 
         AssetManager assetManager = GameRoot.GetInstance().BattleField.assetManager;

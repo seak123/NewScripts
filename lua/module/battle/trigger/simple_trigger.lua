@@ -23,7 +23,7 @@ function this:execute(sess, target)
   elseif self.target_type == "enemy" then
     if self.owner.side == target.side then return end
   end
-  print("@@simple trigger attach!:"..target.uid)
+
   self.database = pack_data.pack_database(self.owner,target,target.transform.grid_pos)
   local raw_skill = require(self.root.execute).new(self.root,self.database)
   raw_skill:execute(sess,target)

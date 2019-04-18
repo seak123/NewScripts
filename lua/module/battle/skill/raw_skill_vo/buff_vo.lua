@@ -13,6 +13,7 @@ this.buff_id = 0
 this.duration = 0
 -- max_stack == -1 means no limit
 this.max_stack = 1
+this.stack_num = 1
 
 -- 0: instance 1:all-refresh
 this.update_type = 0
@@ -26,5 +27,9 @@ this.execute_type = 1
 
 -- buff type: 1,stack  2,attr:update after attack
 this.buff_type = this.BuffType.Stack
+
+
+----------attr buff property
+this.tick_occasion = "post_attack"
 
 return this

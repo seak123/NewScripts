@@ -3,7 +3,7 @@
 local base = require("module.battle.unit.component.buff.base_buff")
 local this = class("stack_buff", base)
 
-function this:ctor(sess,buff_id, buff_vo)
+function this:ctor(sess,buff_id, buff_vo,database)
 	self:init(sess,buff_id, buff_vo)
 	self.stacks = {}
 	self.limit = buff_vo.max_stack

@@ -10,31 +10,15 @@ local aoe = require("module.battle.skill.ripe_skill_vo.aoe_skill_vo")
 local damage = require("module.battle.skill.raw_skill_vo.damage_vo")
 local state = require("module.battle.skill.raw_skill_vo.state_vo")
 local caster = require("module.battle.skill.raw_skill_vo.caster_skill_vo")
+local common_buff = require("module.battle.skill.raw_skill_vo.common_buff_vo")
 
 local trigger = require("module.battle.trigger.vo.trigger_vo")
 local this = {}
 
+local sp_buff = common_buff.new()
+common_buff.buff_type = common_buff.BuffType.Rage
+common_buff.stack_num = 8
 
-local prop0 = property.new()
-prop0.prop_name = "attack_rateadd"
-prop0.calc = calc.make_common_calc(60)
-
-local effect0 = effect.new()
-effect0.effect_id = 1091
-effect0.execute_pos = effect.ExecutePos.Target
-effect0.attach = true
-
-
-local sp_buff = buff.new()
-sp_buff.buff_id = 1091
-sp_buff.duration = 4
-sp_buff.execute_type = 1
-sp_buff.max_stack = 1
--- 2bit: 11
-sp_buff.feature = 3
-sp_buff.checkers = {check.check_chance(0.2)}
-sp_buff.buff_occasion = "on_attack"
-sp_buff:append("belongs",prop0,effect0)
 
 local buff0 = buff.new()
 buff0.buff_id = 1090

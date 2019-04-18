@@ -8,6 +8,7 @@ public class CreatureCardUI : MonoBehaviour {
     public GameObject constructureCard;
     public Text constructureName;
     public Image constructureIcon;
+    //unit property
     public GameObject unitCard;
     public Image unitSprite;
     public Text unitName;

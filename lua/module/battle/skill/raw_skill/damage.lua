@@ -19,7 +19,7 @@ function this:execute(sess, target)
 
     local database = self.database
     -- damage execute
-    local value = self.vo.calc(sess,database.caster,target)
+    local value = self.vo.calc(self,sess,database.caster,target)
 
     local judge,damage = calc.damage(database.caster, target, value,self.vo.damage_source ,self.vo.damage_type)
 

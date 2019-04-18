@@ -43,6 +43,7 @@ function this:update( delta )
     if self.duration <0 then return end
     self.tick_cache = self.tick_cache + delta
     if self.tick_cache > 1 then
+        self.tick_cache = 0
         for _,v in ipairs(self.belongs) do
             if v.vo.buff_occasion == "on_tick" then
             end

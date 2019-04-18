@@ -15,7 +15,7 @@ end
 function this:execute(sess,target)
     local database = self.database
     local prop_name = self.vo.prop_name
-    local change_value = self.vo.calc(sess,database.caster,target)
+    local change_value = self.vo.calc(self,sess,database.caster,target)
 
     if self.vo.value_type == property_vo.ValueType.Additive then
         self.value = self.value + change_value

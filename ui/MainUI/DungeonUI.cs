@@ -135,11 +135,25 @@ public class DungeonUI : MonoBehaviour,ISceneUI {
     }
 
     public void OpenPackageCreature(int index){
+        CreatureFightData roomData = GameRoot.GetInstance().gameDataManager.GetInRoomConstructure(currRoomId);
         PackageUI packageUI = package.GetComponentInChildren<PackageUI>();
-        packageUI.Init(PackageType.IdleCreature, 1);
-        package.transform.DOMoveX(Screen.width / 2, 0.3f);
-        currIndex = index;
-        packageUI.SelectAction += ChangeCreature;
+        if (roomData == null) return;
+        switch(roomData.con_type){
+            case 0:
+                packageUI.Init(PackageType.IdleCreature, 1);
+                package.transform.DOMoveX(Screen.width / 2, 0.3f);
+                currIndex = index;
+                packageUI.SelectAction += ChangeCreature;
+                break;
+            case 2:
+                packageUI.Init(PackageType.IdlePartTool, 1);
+                package.transform.DOMoveX(Screen.width / 2, 0.3f);
+                currIndex = index;
+                packageUI.SelectAction += ChangeCreature;
+                break;
+        }
+
+
     }
 
     public void ChangeStructure(List<int> list){

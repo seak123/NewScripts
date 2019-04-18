@@ -6,6 +6,7 @@ this.execute = "module.battle.skill.raw_skill.common_buff"
 
 this.BuffType = {
     Poison = "Poison",
+    Rage = "Rage"
 }
 
 this.buff_type = this.BuffType.Poison

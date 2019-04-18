@@ -3,70 +3,73 @@
 local base = require("module.battle.unit.component.buff.base_buff")
 local this = class("attr_buff", base)
 
-function this:ctor(sess,buff_id, buff_vo)
+function this:ctor(sess,buff_id, buff_vo,database)
 	self:init(sess,buff_id, buff_vo)
-	self.stacks = {}
+	self.sess = sess
+	self.stack = 0
 	self.limit = buff_vo.max_stack
 	self.update_type = buff_vo.update_type
+	self.belongs = {}
+
+    if buff_vo.belongs ~= nil then
+        for _,v in ipairs(buff_vo.belongs) do
+            local clazz = require(v.execute)
+            local item = clazz.new(v,database)
+            table.insert( self.belongs, item)
+        end
+    end
+	
+	for _, v in ipairs(self.belongs) do
+		v:attach(self)
+	end
+
+	self:append_callback(buff_vo.tick_occasion, this.remove_stack, self)
 end
 
-function this:handle_stack (sess,inst)
-	table.insert(self.stacks, inst)
-	inst.buff = self
-	local count = #self.stacks 
-	if self.limit ~= -1 and count > self.limit then 
-		for n = 1, count - self.limit do
-			self:remove_stack(1)
-		end
-	end
-	inst:attach(sess)
-	if self.update_type ~=0 then
-		for _, inst in ipairs(self.stacks) do
-			inst:refresh()
-		end
+function this:handle_stack (sess,inst,stack_num)
+	self.stack = self.stack + stack_num
+
+	for _, v in ipairs(self.belongs) do
+        if v.vo.buff_occasion == "on_add" then
+            v:execute(sess,self.carrier)
+        end
 	end
 end
 
-function this:remove_stack( index )
-	 self.stacks[index]:detach(self.sess)
-	 table.remove( self.stacks, index)
+function this:remove_stack()
+	self.stack = math.floor( self.stack/2 )
 end
 
 function this:update(delta)
-	for index=#self.stacks,1,-1 do
-		self.stacks[index]:update(delta)
-		if self.stacks[index].is_expire == true then
-			self:remove_stack(index)
-		end
+    for _,v in ipairs(self.belongs) do
+		if v.vo.buff_occasion == "on_tick" then
+			v:execute(self.sess,self.carrier)
+        end
 	end
+	
 	self:check_live()
 end
 
 function this:check_live()
-	if #self.stacks == 0 then self.is_remove = true end
+	if self:get_inst_count() == 0 then self.is_remove = true print("@@is_removeing!!!!!") end
 end
 
 function this:get_inst_count() 
-	return #self.stacks
+	return self.stack
 end
 
-function this:get_inst()
-	local index = math.random(#self.stacks)
-	return self.stacks[index]
-end
 
 function this:get_key()
 	return self.buff_id
 end
 
 function this:remove(sess)
-
-	if #self.stacks > 0 then
-		for index =#self.stacks,1,-1 do
-			self:remove_stack(index)
-		end
+	for _, v in ipairs(self.belongs) do
+        if v.vo.buff_occasion == "on_remove" then
+            v:execute(sess,self.buff.carrier)
+        end
+		v:detach(self)
 	end
-
 	self.is_remove = true
 end
 

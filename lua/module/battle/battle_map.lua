@@ -29,11 +29,11 @@ function this:init(  )
     self.boss_room = self:get_boss_room()
 
     -- portal room
-    self.room_table[-1] = {X=self:get_room_center(self.entry_room).X + battle_def.room_bound/2 + 75,Y=self:get_room_center(self.entry_room).Y}
+    self.room_table[-1] = {X=self:get_room_center(self.entry_room).X + battle_def.room_bound/2 + 120,Y=self:get_room_center(self.entry_room).Y}
     self.room_table[self.boss_room] = {X=self:get_room_center(self.boss_room+10).X-battle_def.room_interval-battle_def.room_bound*1.1,Y=self:get_room_center(self.boss_room+10).Y}
     -------------- init view
     ------create portal
-    self.sess.map:CreatePortal(self.room_table[-1].X-25,self.room_table[-1].Y)
+    self.sess.map:CreatePortal(self.room_table[-1].X-95,self.room_table[-1].Y)
     ------ create room
     for id,pos in pairs(self.room_table) do
         if id == -1 then
@@ -50,19 +50,19 @@ function this:init(  )
         local tem_id
         tem_id = id + 10
         if self:get_room_center(tem_id) == nil and tem_id ~= self.portal_room and tem_id ~= self.boss_room then
-            self.sess.map:CreateWall(pos.X + battle_def.room_bound/2+3,pos.Y+4,0)
+            self.sess.map:CreateWall(pos.X + battle_def.room_bound/2+9,pos.Y+4,0)
         end
         tem_id = id - 10
         if self:get_room_center(tem_id) == nil and tem_id ~= self.portal_room and tem_id ~= self.boss_room then
-            self.sess.map:CreateWall(pos.X - battle_def.room_bound/2-2,pos.Y+4,0)
+            self.sess.map:CreateWall(pos.X - battle_def.room_bound/2-7,pos.Y+4,0)
         end
         tem_id = id + 1
         if self:get_room_center(tem_id) == nil and tem_id ~= self.portal_room and tem_id ~= self.boss_room then
-            self.sess.map:CreateWall(pos.X ,pos.Y+ battle_def.room_bound/2+2,90)
+            self.sess.map:CreateWall(pos.X ,pos.Y+ battle_def.room_bound/2+7,90)
         end
         tem_id = id - 1
         if self:get_room_center(tem_id) == nil and tem_id ~= self.portal_room and tem_id ~= self.boss_room then
-            self.sess.map:CreateWall(pos.X,pos.Y- battle_def.room_bound/2-5,90)
+            self.sess.map:CreateWall(pos.X,pos.Y- battle_def.room_bound/2-9,90)
         end
     end
     end
