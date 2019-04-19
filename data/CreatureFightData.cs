@@ -25,6 +25,10 @@ public class CreatureFightData
 
     public int level = 1;
 
+    public int exp = 0;
+
+    public int expMax = 0;
+
     public float hp = 0;
 
     public float hp_up = 0;

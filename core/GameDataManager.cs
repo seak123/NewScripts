@@ -72,63 +72,42 @@ public class GameDataManager
         partTools = new List<CreatureFightData>();
         rooms = new Dictionary<int, List<CreatureFightData>>();
 
-        AssetManager assetManager = GameRoot.GetInstance().BattleField.assetManager;
-        CreatureFightData temp = new CreatureFightData();
-        temp.LoadData(assetManager.GetCreatureData(601));
-        GetNewConstructure(temp);
-        ChangeRoomConstructure(34, temp.uid, true);
+        int uid = GetNewConstructure(CreateNewCreature(601,3));
+        ChangeRoomConstructure(34, uid, true);
 
-        temp = new CreatureFightData();
-        temp.LoadData(assetManager.GetCreatureData(601));
-        GetNewConstructure(temp);
-        ChangeRoomConstructure(32, temp.uid, true);
+        uid = GetNewConstructure(CreateNewCreature(601, 2));
+        ChangeRoomConstructure(32, uid, true);
 
-        temp = new CreatureFightData();
-        temp.LoadData(assetManager.GetCreatureData(601));
-        GetNewConstructure(temp);
-        ChangeRoomConstructure(43, temp.uid, true);
+        uid = GetNewConstructure(CreateNewCreature(601, 2));
+        ChangeRoomConstructure(43, uid, true);
 
-        temp = new CreatureFightData();
-        temp.LoadData(assetManager.GetCreatureData(701));
-        GetNewConstructure(temp);
-        ChangeRoomConstructure(33, temp.uid, true);
+        uid = GetNewConstructure(CreateNewCreature(701, 10));
+        ChangeRoomConstructure(33, uid, true);
 
-        temp = new CreatureFightData();
-        temp.LoadData(assetManager.GetCreatureData(108));
-        GetNewCreature(temp);
-        ChangeRoomSubData(33, 10, temp.uid,true);
-        temp = new CreatureFightData();
-        temp.LoadData(assetManager.GetCreatureData(108));
-        GetNewCreature(temp);
-        ChangeRoomSubData(33,10,temp.uid,true);
-        temp = new CreatureFightData();
-        temp.LoadData(assetManager.GetCreatureData(108));
-        GetNewCreature(temp);
-        ChangeRoomSubData(33,10,temp.uid,true);
+        uid = GetNewCreature(CreateNewCreature(108, 2));
+        ChangeRoomSubData(33, 10, uid,true);
+        uid = GetNewCreature(CreateNewCreature(108, 12));
+        ChangeRoomSubData(33,10,uid,true);
+        uid = GetNewCreature(CreateNewCreature(108, 9));
+        ChangeRoomSubData(33, 10, uid, true);
 
 
 
 
-        temp = new CreatureFightData();
-        temp.LoadData(assetManager.GetCreatureData(701));
-        GetNewConstructure(temp);
+        GetNewConstructure(CreateNewCreature(701, 12));
+
 
         for (int i = 0; i < 20;++i){
-            temp = new CreatureFightData();
-            temp.LoadData(assetManager.GetCreatureData(601));
-            GetNewConstructure(temp);
+            GetNewConstructure(CreateNewCreature(601, 1));
         }
 
         for (int i = 0; i < 20; ++i)
         {
-            temp = new CreatureFightData();
-            temp.LoadData(assetManager.GetCreatureData(108));
-            GetNewCreature(temp);
+            GetNewCreature(CreateNewCreature(108, 1));
         }
 
-        temp = new CreatureFightData();
-        temp.LoadData(assetManager.GetCreatureData(10002));
-        CreatureFightData boss_data = temp;
+
+        CreatureFightData boss_data = CreateNewCreature(10002, 1);
         boss_data.type = -1;
         boss_data.uid = -1;
         boss_data.init_room = 23;
@@ -138,19 +117,31 @@ public class GameDataManager
 
     }
 
+    //create new data
+    public CreatureFightData CreateNewCreature(int id,int level){
+        AssetManager assetManager = GameRoot.GetInstance().BattleField.assetManager;
+        CreatureFightData temp = new CreatureFightData();
+        temp.LoadData(assetManager.GetCreatureData(id));
+        temp.level = level;
+        temp.expMax = level * 90;
+        temp.exp = UnityEngine.Random.Range(0,temp.expMax);
+        return temp;
+    }
 //get new data
-    public void GetNewCreature(CreatureFightData creature){
+    public int GetNewCreature(CreatureFightData creature){
         creature.uid = unitUid;
         creature.init_room = 0;
         ++unitUid;
         creatures.Add(creature);
+        return creature.uid;
     }
 
-    public void GetNewConstructure(CreatureFightData constructure){
+    public int GetNewConstructure(CreatureFightData constructure){
         constructure.uid = unitUid;
         constructure.init_room = 0;
         ++unitUid;
         constructures.Add(constructure);
+        return constructure.uid;
     }
 
     public void GetNewPartTool(CreatureFightData partTool){

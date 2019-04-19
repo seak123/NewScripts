@@ -65,6 +65,6 @@ this.DefaultGroundHurtZ = 0.75
 this.Attack_Rate_Factor = 0.02
 
 -----------------damage
-this.DefenceFactor = 6
+this.DefenceFactor = 2
 
 return this
