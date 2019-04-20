@@ -107,10 +107,13 @@ public class CreatureCardUI : MonoBehaviour {
                 unitCard.SetActive(false);
                 skillCard.SetActive(true);
                 constructureCard.SetActive(false);
-            }else{
+                notify.GetComponent<Text>().text = StrUtil.GetText("点击翻转查看属性");
+            }
+            else{
                 unitCard.SetActive(true);
                 skillCard.SetActive(false);
                 constructureCard.SetActive(false);
+                notify.GetComponent<Text>().text = StrUtil.GetText("点击翻转查看能力");
             }
             gameObject.transform.DOScale(new Vector3(1, 1, 1), 0.15f).onComplete += () =>
             {
@@ -118,7 +121,7 @@ public class CreatureCardUI : MonoBehaviour {
                 notify.SetActive(true);
                 isNotify = true;
                 notifyState = -1;
-                notify.GetComponent<Text>().text = StrUtil.GetText("点击翻转查看属性");
+
             };
         };
     }

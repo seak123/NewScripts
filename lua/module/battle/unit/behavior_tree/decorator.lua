@@ -53,13 +53,38 @@ function this:get_next_room_id( now_id )
     end
 
     if #new_rooms ~= 0 then
+        local boss_id = self.database.master.sess.battle_map:get_boss_room()
         for _,v in ipairs(new_rooms) do
-            if v == self.database.master.sess.battle_map:get_boss_room() then
+            if v == boss_id then
                 return v
             end
         end
-        local index = math.random(#new_rooms)
-        return new_rooms[index]
+        local function dis_2_boss(in_id,boss_id)
+            local in_x = math.floor(in_id/10)
+            local in_y = in_id - in_x*10
+            local boss_x = math.floor( boss_id/10 )
+            local boss_y = boss_id - boss_x*10
+            return (in_x-boss_x)*(in_x-boss_x)+(in_y-boss_y)*(in_y-boss_y)
+        end
+        table.sort( new_rooms, function(a,b  )
+            local dis_a = dis_2_boss(a,boss_id)
+            local dis_b = dis_2_boss(b,boss_id)
+            if dis_a == dis_b then
+                if math.random() < 0.5 then
+                    return true
+                else
+                    return false
+                end
+            end
+            return dis_a<dis_b
+        end )
+        --local index = math.random(#new_rooms)
+        for _,v in ipairs(new_rooms) do
+            if math.random() < 0.6 then
+                return v
+            end
+        end
+        return new_rooms[#new_rooms]
     elseif #valid_rooms ~= 0 then
         local boss_room = self.database.master.sess.battle_map:get_boss_room()
         local boss_row = math.modf(boss_room/10)

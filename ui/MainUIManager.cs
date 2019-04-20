@@ -81,7 +81,9 @@ public class MainUIManager : MonoBehaviour {
         cardPrefab.transform.localScale = Vector3.one * 0.2f;
         cardPrefab.GetComponent<CreatureCardUI>().InjectData(data);
         cardPrefab.transform.DOMove(new Vector3(Screen.width / 2, Screen.height / 2, 0), 0.3f);
-        cardPrefab.transform.DOScale(Vector3.one, 0.3f);
+        cardPrefab.transform.DOScale(Vector3.one*1.05f, 0.3f).onComplete +=()=>{
+            cardPrefab.transform.DOScale(Vector3.one, 0.05f);
+        };
     }
 
     public void CleanInfoUI(){
