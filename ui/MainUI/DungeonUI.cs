@@ -75,6 +75,7 @@ public class DungeonUI : MonoBehaviour,ISceneUI {
             {
                 Vector2Int id = GameRoot.GetInstance().MapField.GetRoomViewId(gridX, gridY);
                 Vector2Int center = GameRoot.GetInstance().MapField.GetRoomCenter(id.x, id.y);
+                Debug.Log("center Pos:" + center);
                 int key = id.x * 10 + id.y;
                 if (key != 0)
                 {
@@ -89,7 +90,7 @@ public class DungeonUI : MonoBehaviour,ISceneUI {
 
     private void OpenDungeonInfo(){
         background.SetActive(true);
-        GameRoot.GetInstance().CameraMng.MoveClose(new Vector2(currRoomCenter.x / 25, currRoomCenter.y / 25));
+        GameRoot.GetInstance().CameraMng.MoveClose(new Vector2((float)currRoomCenter.x / 25f, (float)currRoomCenter.y / 25f));
         quit.GetComponent<RectTransform>().DOMoveX(-Screen.width*2/5, 0.5f);
         dungeonInfo.GetComponent<RectTransform>().DOMoveY(0,0.5f);
         close.GetComponent<RectTransform>().DOMoveX(Screen.width, 0.5f);

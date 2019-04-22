@@ -53,6 +53,7 @@ public class MapUIManager : MonoBehaviour,ISceneUI {
     {
         currMapType = MapType.Monster;
         isAnim = false;
+        SwitchToDaily();
 
     }
 
@@ -124,7 +125,9 @@ public class MapUIManager : MonoBehaviour,ISceneUI {
                 };
                 dailyBack.transform.DOScale(new Vector3(1.68f, 1, 1), 0.2f);
                 dailyBtn.GetComponent<RectTransform>().DOMoveX(135*sizeOffset, 0.2f);
-                dailyIcon.transform.DOScale(Vector3.one * 1.3f, 0.2f);
+                dailyIcon.transform.DOScale(Vector3.one * 1.5f, 0.2f).onComplete +=()=>{
+                    dailyIcon.transform.DOScale(Vector3.one * 1.3f, 0.1f);
+                };
                 dailyIcon.GetComponent<RectTransform>().DOLocalMoveY(60, 0.2f);
 
                 castleBack.GetComponent<Image>().DOColor(new Color(0.4f, 0.5f, 0.5f), 0.2f);
@@ -181,7 +184,9 @@ public class MapUIManager : MonoBehaviour,ISceneUI {
                 };
                 castleBack.transform.DOScale(new Vector3(1.68f, 1, 1), 0.2f);
                 castleBtn.GetComponent<RectTransform>().DOMoveX(295 * sizeOffset, 0.2f);
-                castleIcon.transform.DOScale(Vector3.one*1.3f, 0.2f);
+                castleIcon.transform.DOScale(Vector3.one*1.5f, 0.2f).onComplete += ()=>{
+                    castleIcon.transform.DOScale(Vector3.one * 1.3f, 0.1f);
+                };
                 castleIcon.GetComponent<RectTransform>().DOLocalMoveY(60, 0.2f);
 
 
@@ -239,7 +244,9 @@ public class MapUIManager : MonoBehaviour,ISceneUI {
                 };
                 monsterBack.transform.DOScale(new Vector3(1.68f, 1, 1), 0.2f);
                 monsterBtn.GetComponent<RectTransform>().DOMoveX(455 * sizeOffset, 0.2f);
-                monsterIcon.transform.DOScale(Vector3.one * 1.5f, 0.2f);
+                monsterIcon.transform.DOScale(Vector3.one * 1.5f, 0.2f).onComplete +=()=>{
+                    monsterIcon.transform.DOScale(Vector3.one * 1.3f, 0.1f);
+                };
                 monsterIcon.GetComponent<RectTransform>().DOLocalMoveY(60, 0.2f);
 
                 previewBack.GetComponent<Image>().DOColor(new Color(0.4f, 0.5f, 0.5f), 0.2f);
@@ -292,7 +299,9 @@ public class MapUIManager : MonoBehaviour,ISceneUI {
                 };
                 previewBack.transform.DOScale(new Vector3(1.68f, 1, 1), 0.2f);
                 previewBtn.GetComponent<RectTransform>().DOMoveX(615 * sizeOffset, 0.2f);
-                previewIcon.transform.DOScale(Vector3.one * 1.5f, 0.2f);
+                previewIcon.transform.DOScale(Vector3.one * 1.5f, 0.2f).onComplete +=()=>{
+                    previewIcon.transform.DOScale(Vector3.one * 1.3f, 0.1f);
+                };
                 previewIcon.GetComponent<RectTransform>().DOLocalMoveY(60, 0.2f);
                 break;
         }
