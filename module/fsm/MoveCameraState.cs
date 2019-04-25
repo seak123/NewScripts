@@ -104,29 +104,29 @@ public class MoveCameraState : FsmState
         //用鼠标的
         if (useMouse)
         {
-            camareMng.size -= Input.GetAxis("Mouse ScrollWheel") * camareMng.scaleFactor;
-            camareMng.size = Mathf.Clamp(camareMng.size, camareMng.minSize, camareMng.maxSize);
-            if (Input.GetMouseButtonDown(0))
-            {
-                camareMng.touchLeaving = false;
-                lastSingleTouchPosition = Input.mousePosition;
-                //Debug.Log("GetMouseButtonDown:" + lastSingleTouchPosition);
-            }
-            if (Input.GetMouseButton(0))
-            {
+            //camareMng.size -= Input.GetAxis("Mouse ScrollWheel") * camareMng.scaleFactor;
+            //camareMng.size = Mathf.Clamp(camareMng.size, camareMng.minSize, camareMng.maxSize);
+            //if (Input.GetMouseButtonDown(0))
+            //{
+            //    camareMng.touchLeaving = false;
+            //    lastSingleTouchPosition = Input.mousePosition;
+            //    //Debug.Log("GetMouseButtonDown:" + lastSingleTouchPosition);
+            //}
+            //if (Input.GetMouseButton(0))
+            //{
                
-                Vector3 lastTouchPos = Camera.main.ScreenToWorldPoint(new Vector3(lastSingleTouchPosition.x, lastSingleTouchPosition.y, -1));
-                float deltaY = Input.mousePosition.y - lastSingleTouchPosition.y;
-                Vector3 currTouchPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, lastSingleTouchPosition.y+deltaY*1.4f, -1));
+            //    Vector3 lastTouchPos = Camera.main.ScreenToWorldPoint(new Vector3(lastSingleTouchPosition.x, lastSingleTouchPosition.y, -1));
+            //    float deltaY = Input.mousePosition.y - lastSingleTouchPosition.y;
+            //    Vector3 currTouchPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, lastSingleTouchPosition.y+deltaY*1.4f, -1));
 
-                Vector3 delta = lastTouchPos - currTouchPos;
-                camareMng.MoveCamera(delta);
-                lastSingleTouchPosition = Input.mousePosition;
-            }
-            if (Input.GetMouseButtonUp(0)){
-                camareMng.touchLeaving = true;
-                return GameState.IdleState;
-            }
+            //    Vector3 delta = lastTouchPos - currTouchPos;
+            //    camareMng.MoveCamera(delta);
+            //    lastSingleTouchPosition = Input.mousePosition;
+            //}
+            //if (Input.GetMouseButtonUp(0)){
+            //    camareMng.touchLeaving = true;
+            //    return GameState.IdleState;
+            //}
         }
 
         return GameState.KeepRunning;

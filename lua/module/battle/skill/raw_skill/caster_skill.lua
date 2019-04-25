@@ -15,6 +15,9 @@ end
 function this:execute(sess, target)
     local database = self.database
     if target.alive ~= 0 then return end
+    if self:check(sess,database,target) == false then
+        return
+    end
     local skill_vo = {
         root = {}
     }

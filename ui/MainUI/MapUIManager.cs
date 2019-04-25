@@ -12,7 +12,11 @@ public enum MapType{
 }
 
 public class MapUIManager : MonoBehaviour,ISceneUI {
+    //MAIN UI
+    public GameObject mainUIPanel;
+    public float singlePanelWidth;
 
+    //BOTTOM UI
     public GameObject dailyBtn;
     public GameObject dailyBack;
     public GameObject dailyIcon;
@@ -111,6 +115,8 @@ public class MapUIManager : MonoBehaviour,ISceneUI {
     public void RefreshView(){
         switch(currMapType){
             case MapType.DailyMap:
+                mainUIPanel.GetComponent<RectTransform>().DOMoveX(375*sizeOffset,0.5f);
+
                 dailyBack.GetComponent<Image>().DOColor(new Color(0.68f, 0.86f, 0.86f),0.2f).onComplete += ()=>{
 
                     dailyName.SetActive(true);
@@ -157,6 +163,8 @@ public class MapUIManager : MonoBehaviour,ISceneUI {
                 previewArrow1.SetActive(false);
                 break;
             case MapType.Castle:
+                mainUIPanel.GetComponent<RectTransform>().DOMoveX((-singlePanelWidth + 375) * sizeOffset, 0.5f);
+
                 dailyBack.GetComponent<Image>().DOColor(new Color(0.4f, 0.5f, 0.5f), 0.2f);
                 dailyBack.transform.DOScale(Vector3.one, 0.2f);
                 dailyBtn.GetComponent<RectTransform>().DOMoveX(80 * sizeOffset, 0.2f);
@@ -208,6 +216,8 @@ public class MapUIManager : MonoBehaviour,ISceneUI {
                 previewArrow1.SetActive(false);
                 break;
             case MapType.Monster:
+                mainUIPanel.GetComponent<RectTransform>().DOMoveX((-singlePanelWidth * 2 + 375) * sizeOffset, 0.5f);
+
                 dailyBack.GetComponent<Image>().DOColor(new Color(0.4f, 0.5f, 0.5f), 0.2f);
                 dailyBack.transform.DOScale(Vector3.one, 0.2f);
                 dailyBtn.GetComponent<RectTransform>().DOMoveX(80 * sizeOffset, 0.2f);
@@ -258,6 +268,8 @@ public class MapUIManager : MonoBehaviour,ISceneUI {
                 previewArrow1.SetActive(false);
                 break;
             case MapType.Preview:
+                mainUIPanel.GetComponent<RectTransform>().DOMoveX((-singlePanelWidth * 3 + 375) * sizeOffset, 0.5f);
+
                 dailyBack.GetComponent<Image>().DOColor(new Color(0.4f, 0.5f, 0.5f), 0.2f);
                 dailyBack.transform.DOScale(Vector3.one, 0.2f);
                 dailyBtn.GetComponent<RectTransform>().DOMoveX(80 * sizeOffset, 0.2f);

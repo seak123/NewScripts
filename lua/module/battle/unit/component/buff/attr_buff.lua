@@ -51,7 +51,7 @@ function this:update(delta)
 end
 
 function this:check_live()
-	if self:get_inst_count() == 0 then self.is_remove = true print("@@is_removeing!!!!!") end
+	if self:get_inst_count() == 0 then self.is_remove = true end
 end
 
 function this:get_inst_count() 

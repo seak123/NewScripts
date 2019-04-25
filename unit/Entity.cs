@@ -395,7 +395,7 @@ namespace Map
                 //hpBar.GetComponent<RectTransform>().position = new Vector3(0, 0, 0);
                 hpBar.transform.position = new Vector3(screenPos.x, screenPos.y, 0);
 
-                hpBar.transform.localScale = new Vector3(1+((float)radius-4)/16f, 1f, 1)*0.5f;
+                hpBar.transform.localScale = new Vector3(1+((float)radius-4)/16f, 1f, 1)*0.5f*camara.GetViewSize();
 
             }
         }

@@ -16,16 +16,16 @@ public class CamaraManager : MonoBehaviour {
 
     public GameObject cameraObj;
     //摄像机View Size
-    public float size = 6.4f;
+    public float viewField = 60f;
     //缩放系数
-    public float scaleFactor = 0;
+    public float scaleFactor = 1f;
 
     //滚动系数
     public float scrollFactor = 0.1f;
 
 
-    public float maxSize = 12.8f;
-    public float minSize = 3.2f;
+    public float maxSize = 80;
+    public float minSize = 20;
 
     public bool active = false;
     public bool closing = false;
@@ -64,7 +64,11 @@ public class CamaraManager : MonoBehaviour {
     //初始化游戏信息设置
     void Start()
     {
+        
+    }
 
+    public float GetViewSize(){
+        return 60f/viewField;
     }
 
     [OnInjected]
@@ -91,7 +95,10 @@ public class CamaraManager : MonoBehaviour {
         xMax = 23;
         zMin = 12.5f;
         zMax = 27.8f;
-        //size = 16f;
+        viewField = 60f;
+        maxSize = 80f;
+        minSize = 40f;
+        scaleFactor = 0.5f;
         active = true;
     }
 
@@ -110,7 +117,7 @@ public class CamaraManager : MonoBehaviour {
     public void MoveRecover(DungeonUI ui){
         closeIn = false;
         closing = true;
-        m_Camera.transform.DOMove(m_CameraOffset,closingTime).onComplete += () => { active = true; closing = false; m_Camera.fieldOfView = 60;ui.state = DungeonUIState.Idle; };
+        m_Camera.transform.DOMove(m_CameraOffset,closingTime).onComplete += () => { active = true; closing = false; m_Camera.fieldOfView = viewField;ui.state = DungeonUIState.Idle; };
     }
    
     /// <summary>
@@ -138,7 +145,7 @@ public class CamaraManager : MonoBehaviour {
         ////备份上一次触摸点的位置，用于对比
         //oldPosition1 = tempPosition1;
         //oldPosition2 = tempPosition2;
-        //m_Camera.fieldOfView -= (currentTouchDistance - lastTouchDistance) * scaleFactor * Time.deltaTime;
+        viewField -= (currentTouchDistance - lastTouchDistance) * scaleFactor*Time.deltaTime*3f;
     }
 
 
@@ -231,8 +238,8 @@ public class CamaraManager : MonoBehaviour {
             //用鼠标的
             if (useMouse)
             {
-                camareMng.size -= Input.GetAxis("Mouse ScrollWheel") * camareMng.scaleFactor;
-                camareMng.size = Mathf.Clamp(camareMng.size, camareMng.minSize, camareMng.maxSize);
+                camareMng.viewField -= Input.GetAxis("Mouse ScrollWheel") * camareMng.scaleFactor;
+                camareMng.viewField = Mathf.Clamp(camareMng.viewField, camareMng.minSize, camareMng.maxSize);
                 if (Input.GetMouseButtonDown(0))
                 {
                     camareMng.touchLeaving = false;
@@ -274,7 +281,8 @@ public class CamaraManager : MonoBehaviour {
 
             var position = m_CameraOffset;
             m_Camera.transform.position = position;
-            m_Camera.orthographicSize = size;
+            viewField = Mathf.Clamp(viewField, camareMng.minSize, camareMng.maxSize);
+            m_Camera.fieldOfView = viewField;
             if (UpdateUI != null)
             {
                 UpdateUI();
@@ -282,11 +290,11 @@ public class CamaraManager : MonoBehaviour {
         }
         if(closing){
             if(closeIn){
-                m_Camera.fieldOfView -= (60-closingView) / closingTime*Time.deltaTime;
+                m_Camera.fieldOfView -= (viewField-closingView) / closingTime*Time.deltaTime;
                 m_Camera.fieldOfView = Mathf.Max(m_Camera.fieldOfView, closingView);
             }else{
-                m_Camera.fieldOfView += (60-closingView) / closingTime*Time.deltaTime;
-                m_Camera.fieldOfView = Mathf.Min(m_Camera.fieldOfView, 60);
+                m_Camera.fieldOfView += (viewField-closingView) / closingTime*Time.deltaTime;
+                m_Camera.fieldOfView = Mathf.Min(m_Camera.fieldOfView, viewField);
             }
         }
     }

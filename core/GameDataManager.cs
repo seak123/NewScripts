@@ -73,38 +73,47 @@ public class GameDataManager
         rooms = new Dictionary<int, List<CreatureFightData>>();
 
         int uid = GetNewConstructure(CreateNewCreature(601,3));
-        ChangeRoomConstructure(34, uid, true);
+        //ChangeRoomConstructure(34, uid, true);
 
         uid = GetNewConstructure(CreateNewCreature(601, 2));
-        ChangeRoomConstructure(32, uid, true);
+        //ChangeRoomConstructure(32, uid, true);
 
         uid = GetNewConstructure(CreateNewCreature(601, 2));
-        ChangeRoomConstructure(43, uid, true);
+        //ChangeRoomConstructure(43, uid, true);
 
         uid = GetNewConstructure(CreateNewCreature(701, 10));
-        ChangeRoomConstructure(33, uid, true);
+        //ChangeRoomConstructure(33, uid, true);
 
         uid = GetNewCreature(CreateNewCreature(108, 2));
-        ChangeRoomSubData(33, 10, uid,true);
+        //ChangeRoomSubData(33, 10, uid,true);
         uid = GetNewCreature(CreateNewCreature(108, 12));
-        ChangeRoomSubData(33,10,uid,true);
+        //ChangeRoomSubData(33,10,uid,true);
         uid = GetNewCreature(CreateNewCreature(108, 9));
-        ChangeRoomSubData(33, 10, uid, true);
+        //ChangeRoomSubData(33, 10, uid, true);
 
 
 
 
         GetNewConstructure(CreateNewCreature(701, 12));
 
+        GetNewConstructure(CreateNewCreature(701, 2));
 
-        for (int i = 0; i < 20;++i){
-            GetNewConstructure(CreateNewCreature(601, 1));
-        }
+        GetNewConstructure(CreateNewCreature(701, 34));
 
-        for (int i = 0; i < 20; ++i)
-        {
-            GetNewCreature(CreateNewCreature(108, 1));
-        }
+
+        //for (int i = 0; i < 20;++i){
+        //    GetNewConstructure(CreateNewCreature(601, 1));
+        //}
+
+
+        //for (int i = 0; i < 20; ++i)
+        //{
+        //    GetNewCreature(CreateNewCreature(108, 1));
+        //}
+        GetNewCreature(CreateNewCreature(302, 10));
+        GetNewCreature(CreateNewCreature(302, 13));
+        GetNewCreature(CreateNewCreature(302, 4));
+        GetNewCreature(CreateNewCreature(302, 89));
 
 
         CreatureFightData boss_data = CreateNewCreature(10002, 1);
@@ -201,9 +210,9 @@ public class GameDataManager
             battleData.units[allStructures.Count + i] = allCreatures[i];
         }
 
-        battleData.enemys = new UnitData[20];
+        battleData.enemys = new UnitData[40];
 
-        for (int i = 0; i < 20; ++i)
+        for (int i = 0; i < 40; ++i)
         {
             CreatureFightData temp = new CreatureFightData();
             temp.LoadData(GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(109));

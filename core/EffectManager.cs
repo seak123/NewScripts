@@ -6,11 +6,17 @@ using DG.Tweening;
 using UnityEngine.UI;
 using Map;
 
+public enum BattleUICanvas{
+    Message = 0,
+    BattleText = 1,
+}
+
 public class MessageEffect{
     public GameObject effect;
     public int uid;
     public float duration;
     public Vector3 pos;
+    public BattleUICanvas canvas;
 }
 
 [Insert]
@@ -164,7 +170,8 @@ public class EffectManager : MonoBehaviour {
             effect = message,
             uid = uid,
             duration = 0.8f,
-            pos = entity.GetSocketPos("S_Center")
+            pos = entity.GetSocketPos("S_Center"),
+            canvas = BattleUICanvas.BattleText,
         };
         messageCantainer.Add(effect);
 
@@ -215,10 +222,17 @@ public class EffectManager : MonoBehaviour {
                 CamaraManager camara = GameRoot.GetInstance().CameraMng;
                 Vector2 screenPos = Camera.main.WorldToScreenPoint(effect.pos);
 
-                float scale = camara.minSize / camara.size;
+                float scale = camara.GetViewSize();
                 float hight = Screen.height / 10 * scale;
 
                 effect.effect.transform.position = new Vector3(screenPos.x, screenPos.y + Mathf.Clamp((0.7f - effect.duration) * 0.3f, 0, 0.5f) * hight, 0);
+                if(effect.canvas == BattleUICanvas.BattleText){
+                    Text text = effect.effect.GetComponentInChildren<Text>();
+                    if(text!=null){
+                        text.gameObject.transform.localScale = new Vector3(0.7f,1f,1f)*scale;
+                    }
+                }
+
 
                 messageCantainer[index].duration = effect.duration - Time.deltaTime;
             }

@@ -14,6 +14,7 @@ this.unit_config = {
     [108] = "config.unit.108_elf_archer.elf_archer_unit",
     [109] = "config.unit.109_elf_pikeman.elf_pikeman_unit",
     [301] = "config.unit.301_ice_dragon.ice_dragon_unit",
+    [302] = "config.unit.302_wraith_magic_sword.wraith_magic_unit",
     [601] = "config.unit.601_fire_tower.fire_tower_unit",
     [701] = "config.unit.701_natural_power.natural_power_unit",
 }
