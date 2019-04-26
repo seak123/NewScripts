@@ -132,8 +132,10 @@ public class GameDataManager
         CreatureFightData temp = new CreatureFightData();
         temp.LoadData(assetManager.GetCreatureData(id));
         temp.level = level;
-        temp.expMax = level * 90;
-        temp.exp = UnityEngine.Random.Range(0,temp.expMax);
+        temp.hp = temp.hp + (level - 1) * temp.hp_up;
+        temp.attack = temp.attack + (level - 1) * temp.attack_up;
+        temp.expMax = level * 20;
+        temp.exp = level == 1 ? 0 : UnityEngine.Random.Range(0,temp.expMax);
         return temp;
     }
 //get new data
@@ -268,7 +270,7 @@ public class GameDataManager
         return null;
     }
 
-    private void CleanInRoomData(int roomId){
+    private void CleanInRoomData(int roomId,bool rawData = false){
         CreatureFightData roomData = GetInRoomConstructure(roomId);
         List<CreatureFightData> subDatas = GetInRoomSubData(roomId);
         if(roomData!=null){
@@ -277,18 +279,24 @@ public class GameDataManager
             for(int i = subDatas.Count-1;i>=0;--i){
                 if(subDatas[i].type!=conType){
                     subDatas[i].init_room = 0;
+                    if (subDatas[i].type != 2 && rawData == false)
+                        GameRoot.GetInstance().Bridge.RemoveEntity(subDatas[i].uid);
                     subDatas.RemoveAt(i);
                 }
             }
             for(int i = subDatas.Count-1;i>=0;--i){
                 if(i>remainNum){
                     subDatas[i].init_room = 0;
+                    if (subDatas[i].type != 2 && rawData == false)
+                        GameRoot.GetInstance().Bridge.RemoveEntity(subDatas[i].uid);
                     subDatas.RemoveAt(i);
                 }
             }
         }else{
             for(int i = subDatas.Count-1;i>=0;--i){
                 subDatas[i].init_room = 0;
+                if (subDatas[i].type != 2 && rawData == false)
+                    GameRoot.GetInstance().Bridge.RemoveEntity(subDatas[i].uid);
                 subDatas.RemoveAt(i);
             }
         }   
@@ -412,7 +420,7 @@ public class GameDataManager
             if (rawData == false)
                 GameRoot.GetInstance().Bridge.AddEntity(AssetManager.PackCreatureData(newData));
         }
-        CleanInRoomData(roomId);
+        CleanInRoomData(roomId,rawData);
     }
 
     public void ChangeRoomSubData(int roomId,int index,int uid,bool rawData = false){
@@ -439,12 +447,11 @@ public class GameDataManager
             if (newData != null)
             {
                 newData.init_room = roomId;
-
+                if (newData.type != 2 && rawData == false && newData.init_room != 0)
+                    GameRoot.GetInstance().Bridge.AddEntity(AssetManager.PackCreatureData(newData));
                 subDatas.Add(newData);
             }
         }
-        CleanInRoomData(roomId);
-        if (newData.type != 2 && rawData == false&&newData.init_room!=0)
-            GameRoot.GetInstance().Bridge.AddEntity(AssetManager.PackCreatureData(newData));
+        CleanInRoomData(roomId,rawData);
     }
 }
