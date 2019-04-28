@@ -26,7 +26,7 @@ function this:execute(sess, target)
     end
 
     local buff_vo = this["get_buff_vo_"..self.vo.buff_type]()
-    buff_vo.stack_num = self.vo.stack_num
+    buff_vo.stack_num = self.vo.stack_num(self,sess,database.caster,target)
 
     self:add_buff(sess,database,_target,buff_vo)
 
@@ -54,7 +54,7 @@ function this.get_buff_vo_Poison (  )
     return buff_vo
 end
 
-function this.get_buff_vo_Rage(  )
+function this.get_buff_vo_Strength(  )
     local attack_add = prop.new()
     attack_add.value_type = prop.ValueType.Override
     attack_add.prop_name = "attackadd"

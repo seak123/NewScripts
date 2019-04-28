@@ -22,6 +22,8 @@ public class GameRoot : MonoBehaviour {
 
     public GameObject MainUI;
 
+    public GameObject TipUI;
+
     public GameObject InfoUI;
 
     public GameObject MessageUI;

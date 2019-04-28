@@ -16,8 +16,8 @@ local trigger = require("module.battle.trigger.vo.trigger_vo")
 local this = {}
 
 local sp_buff = common_buff.new()
-common_buff.buff_type = common_buff.BuffType.Rage
-common_buff.stack_num = 8
+common_buff.buff_type = common_buff.BuffType.Strength
+common_buff.stack_num = calc.make_common_level(0,20)
 
 
 local buff0 = buff.new()

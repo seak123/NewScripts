@@ -16,6 +16,7 @@ function this:ctor( sess,data,uid ,struct_uid)
     self.sess = sess
     self.data = data
     self.id = data.id
+    self.level = data.level
     -- type: 0,creature;1,structure;2,partTool;-1,boss
     self.type = data.type
     -- genus: 1,ground 2,fly

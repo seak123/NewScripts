@@ -24,7 +24,9 @@ this.skill_config = {
 }
 
 this.common_attr = {
-    
+    [108] = require("config.unit.108_elf_archer.elf_archer_sp_attr_1"),
+    [109] = require("config.unit.109_elf_pikeman.elf_pikeman_sp_attr_1"),
+    [302] = require("config.unit.302_wraith_magic_sword.wraith_magic_sp_attr"),
 }
 
 this.hero_config = {
@@ -51,12 +53,14 @@ function this.get_unit_config( data )
     else
         unit_vo.ai_vo = require("config.ai_config.normal_ai")
     end
-    for _,v in ipairs(config.sp_attr) do
-        table.insert( unit_vo.skills, v)
+
+    for i=0,data.skills.Length-1 do
+        table.insert( unit_vo.skills, this.get_common_attr(data.skills[i]))
     end
-    for _,v in ipairs(config.skills) do
-        table.insert( unit_vo.skills, v)
-    end
+    -- for _,v in ipairs(data.skills) do
+        
+    --     table.insert( unit_vo.skills, v)
+    -- end
     return unit_vo
 end
 
@@ -67,11 +71,9 @@ function this.get_hero_config( data )
         ai_vo = require("config.ai_config.normal_boss_ai"),
         skills = {}
     }
-    for _,v in ipairs(config.sp_attr) do
-        table.insert( unit_vo.skills, v)
-    end
     for _,v in ipairs(config.skills) do
-        table.insert( unit_vo.skills, v)
+        local vo = this.get_common_attr(v)
+        table.insert( unit_vo.skills, vo)
     end
     return unit_vo
 end
@@ -82,6 +84,10 @@ end
 
 function this.get_card_config( id )
     return this.card_config[id]
+end
+
+function this.get_common_attr( id )
+    return this.common_attr[id]
 end
 
 return this

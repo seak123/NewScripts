@@ -39,6 +39,7 @@ public class PlayerData{
     public CreatureFightData boss;
     public List<CreatureFightData> creatures;
     public List<CreatureFightData> constructures;
+    public List<CreatureFightData> partTools;
 
 }
 
@@ -312,7 +313,8 @@ public class GameDataManager
             roomRow = roomRow,
             boss = boss,
             creatures = new List<CreatureFightData>(),
-            constructures = new List<CreatureFightData>()
+            constructures = new List<CreatureFightData>(),
+            partTools = new List<CreatureFightData>(),
         };
 
         foreach (var creature in creatures){
@@ -321,6 +323,10 @@ public class GameDataManager
 
         foreach(var constructure in constructures){
             data.constructures.Add(constructure);
+        }
+
+        foreach(var tool in partTools){
+            data.partTools.Add(tool);
         }
 
         BinaryFormatter formatter = new BinaryFormatter();
@@ -345,12 +351,20 @@ public class GameDataManager
             boss = new CreatureFightData();
             creatures = new List<CreatureFightData>();
             constructures = new List<CreatureFightData>();
+            partTools = new List<CreatureFightData>();
+            rooms = new Dictionary<int, List<CreatureFightData>>();
 
             boss = data.boss;
 
             int creatureNum = data.creatures.Count;
             for (int i = 0; i < creatureNum;++i){
                 creatures.Add(data.creatures[i]);
+                if(data.creatures[i].init_room!=0){
+                    if(!rooms.ContainsKey(data.creatures[i].init_room)){
+                        rooms.Add(data.creatures[i].init_room, new List<CreatureFightData>());
+                    }
+                    rooms[data.creatures[i].init_room].Add(data.creatures[i]);
+                }
             }
 
             int constructureNum = data.constructures.Count;

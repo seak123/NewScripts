@@ -9,6 +9,13 @@ function this.make_common_attack(rate, add)
   end
 end
 
+function this.make_common_level(rate,add )
+  return function(self,sess, caster, target)
+    if add == nil then add = 0 end
+    return rate * caster.level + add
+  end
+end
+
 function this.make_rest_hp(rate,add_rate )
   return function (self,sess,caster,target  )
     local value = caster.hp_max * rate

@@ -28,12 +28,14 @@ public class CreatureCardUI : MonoBehaviour {
 
     //skill property
     public GameObject skillCard;
+    public SkillIconUI[] skillIcons;
 
     //notify
     public GameObject notify;
 
     //click event
-    public ClickEvent clickEvent;
+    public ClickEvent clickEvent_1;
+    public ClickEvent clickEvent_2;
 
 
 
@@ -44,7 +46,8 @@ public class CreatureCardUI : MonoBehaviour {
 
     private void Start()
     {
-        clickEvent.clickAction += ExchangeCard;
+        clickEvent_1.clickAction += ExchangeCard;
+        clickEvent_2.clickAction += ExchangeCard;
     }
 
     public void CleanUp(){
@@ -79,6 +82,17 @@ public class CreatureCardUI : MonoBehaviour {
                 isNotify = true;
                 notifyState = -1;
                 notify.GetComponent<Text>().text = StrUtil.GetText("点击翻转查看能力");
+                //skill data
+                int[] skills = data.skills;
+                int num = skills.Length;
+                for (int i = 0; i < skillIcons.Length;++i){
+                    skillIcons[i].gameObject.SetActive(false);
+                }
+                for (int i = 0; i < num;++i){
+                    skillIcons[i].gameObject.SetActive(true);
+                    skillIcons[i].InjectData(GameRoot.GetInstance().BattleField.assetManager.GetSkillData(skills[i]));
+                }
+
                 break;
             case 1:
                 unitCard.SetActive(false);

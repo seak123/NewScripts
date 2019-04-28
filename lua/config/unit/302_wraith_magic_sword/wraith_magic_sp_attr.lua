@@ -28,6 +28,7 @@ local aoe0 = aoe.new()
 aoe0.can_repeat = false
 aoe0.tick = -1
 aoe0.duration = 0
+aoe0.cantain_curr_target = true
 aoe0.radius = 48
 aoe0:append("raw_skills",aoe_dam)
 
@@ -40,7 +41,7 @@ normal:append("raw_skills",effect0)
 
 local caster0 = caster.new()
 caster0.on_target = 0
-caster0.checkers = {check.check_chance(0.3)}
+caster0.checkers = {check.check_chance(0.2)}
 caster0.buff_occasion = "pre_normal_damage"
 caster0.skills = {normal,delay0}
 

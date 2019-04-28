@@ -76,6 +76,7 @@ public class AssetManager : ScriptableObject
         UnitData pack = new UnitData
         {
             id = data.id,
+            level = data.level,
             uid = data.uid,
             type = data.type,
             con_type = data.con_type,

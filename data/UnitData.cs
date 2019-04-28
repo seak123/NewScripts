@@ -9,6 +9,8 @@ namespace Data
     {
         public int id = 0;
 
+        public int level = 0;
+
         public int uid = 0;
 
         public string name = "admin";
