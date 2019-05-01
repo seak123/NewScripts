@@ -92,6 +92,9 @@ public class GameDataManager
         uid = GetNewCreature(CreateNewCreature(108, 9));
         //ChangeRoomSubData(33, 10, uid, true);
 
+        uid = GetNewCreature(CreateNewCreature(108, 9));
+        uid = GetNewCreature(CreateNewCreature(108, 9));
+
 
 
 

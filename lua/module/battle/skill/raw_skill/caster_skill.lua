@@ -27,8 +27,10 @@ function this:execute(sess, target)
     local _target
     if self.vo.on_target == 1 then
         _target =  sess.field:get_unit(sess.trace:get_last_data().target_uid)
+        if _target == nil then print("caster skill target is nil") end
     else
         _target = sess.field:get_unit(sess.trace:get_last_data().caster_uid)
+        if _target == nil then print("caster skill target is nil") end
     end
     local skill = entire_skill.new(sess,skill_vo)
     local new_database = pack.pack_database(database.caster,_target,database.target_pos)
