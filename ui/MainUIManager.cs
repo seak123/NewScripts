@@ -11,6 +11,16 @@ public enum UIType{
     SubUI = 3,
 }
 
+public enum SystemTipType{
+    Tip = 1,
+    Warning = 2,
+}
+
+public class MessageComponent{
+    public GameObject message;
+    public float timePass;
+}
+
 public class MainUIManager : MonoBehaviour {
 
     public GameObject[] UIPrefab;
@@ -19,6 +29,7 @@ public class MainUIManager : MonoBehaviour {
     public GameObject creatureCardPrefab;
     public GameObject LoadingPrefab;
     public GameObject tipPrefab;
+    public GameObject messagePrefab;
     // public GameObject loadingImage;
     // public GameObject siteBand;
     // public Text siteName;
@@ -28,6 +39,7 @@ public class MainUIManager : MonoBehaviour {
     private int currSort;
     private List<GameObject> loadingCache;
     private List<GameObject> tipCache;
+    private List<MessageComponent> messageCache;
     private GameObject cardPrefab;
     private List<GameObject> uiQueue;
     private int sceneCache = 0;
@@ -45,6 +57,7 @@ public class MainUIManager : MonoBehaviour {
         sceneFuncList = new List<Action>();
         loadingCache = new List<GameObject>();
         tipCache = new List<GameObject>();
+        messageCache = new List<MessageComponent>();
 	}
 
     public void HideUI(bool flag){
@@ -104,6 +117,7 @@ public class MainUIManager : MonoBehaviour {
         {
             GameObject obj = Instantiate(tipPrefab);
             obj.transform.parent = GameRoot.GetInstance().TipUI.transform;
+            obj.transform.localScale = Vector3.one;
             Tip script = obj.GetComponent<Tip>();
             script.InjectContent(contents[i]);
             obj.GetComponent<RectTransform>().position = location;
@@ -111,6 +125,30 @@ public class MainUIManager : MonoBehaviour {
         }
         showTop = location + new Vector3(0, topEdge*sizeFactor, 0);
         showBottom = location - new Vector3(0, bottomEdge*sizeFactor, 0);
+    }
+
+    public void PushMessage(string content,SystemTipType type){
+        GameObject obj = Instantiate(messagePrefab);
+        obj.transform.parent = GameRoot.GetInstance().MessageUI.transform;
+        obj.GetComponent<RectTransform>().position = new Vector3(Screen.width / 2, Screen.height * 3 / 4, 0);
+        obj.transform.localScale = Vector3.one;
+        switch(type){
+            case SystemTipType.Tip:
+                obj.GetComponent<Text>().color = new Color(0.33f,0.73f,0.84f);
+                break;
+            case SystemTipType.Warning:
+                obj.GetComponent<Text>().color = new Color(0.77f,0.17f,0);
+                break;
+        }
+        obj.GetComponent<Text>().text = content;
+        for (int i = 0; i < messageCache.Count;++i){
+            messageCache[i].message.GetComponent<RectTransform>().position += new Vector3(0, 30* ((float)Screen.width / 750f), 0);
+        }
+        messageCache.Add(new MessageComponent()
+        {
+            message = obj,
+            timePass = 0,
+        });
     }
 
     public void CleanInfoUI(){
@@ -217,23 +255,37 @@ public class MainUIManager : MonoBehaviour {
         if(tipCache.Count!=0){
             float wholeSize = 0;
             foreach(var obj in tipCache){
-                wholeSize += obj.GetComponent<RectTransform>().sizeDelta.y+30*sizeFactor+10*sizeFactor;
+                obj.SetActive(true);
+                wholeSize += (obj.GetComponent<RectTransform>().sizeDelta.y+30)*sizeFactor+10*sizeFactor;
             }
             if(showTop.y+wholeSize<Screen.height){
                 float start = showTop.y+wholeSize;
                 for (int i = 0; i < tipCache.Count;++i){
-                    tipCache[i].GetComponent<RectTransform>().position = new Vector3(tipCache[i].GetComponent<RectTransform>().position.x, start - tipCache[i].GetComponent<RectTransform>().sizeDelta.y / 2-15*sizeFactor, 0);
-                    start -= tipCache[i].GetComponent<RectTransform>().sizeDelta.y+30*sizeFactor+10*sizeFactor;
+                    tipCache[i].GetComponent<RectTransform>().position = new Vector3(tipCache[i].GetComponent<RectTransform>().position.x, start - (tipCache[i].GetComponent<RectTransform>().sizeDelta.y / 2+15)*sizeFactor, 0);
+                    start -= (tipCache[i].GetComponent<RectTransform>().sizeDelta.y+30)*sizeFactor+10*sizeFactor;
                 }
             }else{
                 float start = showBottom.y -10*sizeFactor;
                 for (int i = 0; i < tipCache.Count; ++i)
                 {
-                    tipCache[i].GetComponent<RectTransform>().position = new Vector3(tipCache[i].GetComponent<RectTransform>().position.x, start - tipCache[i].GetComponent<RectTransform>().sizeDelta.y / 2-15*sizeFactor, 0);
-                    start -= tipCache[i].GetComponent<RectTransform>().sizeDelta.y+30*sizeFactor+10*sizeFactor;
+                    tipCache[i].GetComponent<RectTransform>().position = new Vector3(tipCache[i].GetComponent<RectTransform>().position.x, start - (tipCache[i].GetComponent<RectTransform>().sizeDelta.y / 2+15) * sizeFactor, 0);
+                    start -= (tipCache[i].GetComponent<RectTransform>().sizeDelta.y + 30) * sizeFactor + 10 * sizeFactor;
                 }
             }
 
+        }
+
+        //message
+        for (int i = messageCache.Count-1; i >= 0;--i){
+            messageCache[i].timePass += Time.deltaTime;
+            if(messageCache[i].timePass>2){
+                Color _c = messageCache[i].message.GetComponent<Text>().color;
+                messageCache[i].message.GetComponent<Text>().color = new Color(_c.r, _c.g, _c.b, 3 - messageCache[i].timePass);
+            }
+            if(messageCache[i].timePass>3){
+                Destroy(messageCache[i].message);
+                messageCache.RemoveAt(i);
+            }
         }
     }
 }

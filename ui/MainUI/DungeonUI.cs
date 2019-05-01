@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
+using UnityEngine.UI;
 using Data;
 
 public enum DungeonUIState{
@@ -27,6 +28,8 @@ public class DungeonUI : MonoBehaviour,ISceneUI {
 
     public GameObject ConstructureContainer;
     public GameObject[] PartContainer;
+    public Text[] IdleTxt;
+    private float idleTime;
 
     public DungeonUIState state;
     private int currRoomId;
@@ -42,6 +45,7 @@ public class DungeonUI : MonoBehaviour,ISceneUI {
 
 	// Use this for initialization
 	void Start () {
+        idleTime = 0;
         state = DungeonUIState.Idle;
         clickEvent.clickAction += OnClick;
         partIcons = new GameObject[4];
@@ -125,6 +129,21 @@ public class DungeonUI : MonoBehaviour,ISceneUI {
 
     private void OpenDungeonInfo(){
         background.SetActive(true);
+
+        string roomName = StrUtil.GetText("开始布置地牢房间");
+        int key_1 = currRoomId / 10;
+        int key_2 = currRoomId - key_1 * 10;
+        roomName += ((char)(62 + key_1)).ToString()+"-";
+        if(key_2-3<0){
+            roomName += (3 - key_2).ToString() + "-L";
+        }else if(key_2-3>0){
+            roomName += (key_2-3).ToString() + "-R";
+        }else{
+            roomName += "0";
+        }
+        if(key_1<3)roomName = StrUtil.GetText("开始布置BOSS房间");
+
+        GameRoot.GetInstance().mainUIMng.PushMessage(roomName, SystemTipType.Tip);
         GameRoot.GetInstance().CameraMng.MoveClose(new Vector2((float)currRoomCenter.x / 25f, (float)currRoomCenter.y / 25f));
         quit.GetComponent<RectTransform>().DOMoveX(-Screen.width*2/5, 0.5f);
         dungeonInfo.GetComponent<RectTransform>().DOMoveY(0,0.5f);
@@ -395,7 +414,13 @@ public class DungeonUI : MonoBehaviour,ISceneUI {
     }
     // Update is called once per frame
     void Update () {
-      
+        idleTime += Time.deltaTime;
+        float offset = idleTime % 2;
+        float v = 0.2f + Mathf.Abs((offset - 1)) * 0.6f;
+        foreach (var txt in IdleTxt){
+            txt.color = new Color(txt.color.r, txt.color.g, txt.color.b, v);
+
+        }
     }
 
 }

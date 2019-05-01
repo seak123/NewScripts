@@ -204,6 +204,38 @@ function this:do_attack( delta ,enemy)
     return false
 end
 
+function this:mark_enemy( unit )
+    if self.mark_units == nil then
+        self.mark_units = {}
+    end
+    for _,u in ipairs(self.mark_units) do
+        if u.uid == unit.uid then return end
+    end
+    table.insert( self.mark_units, unit)
+end
+
+function this:dis_mark_enemy( unit )
+    for i=#self.mark_units,1,-1 do
+        if self.mark_units[i].uid == unit.uid then
+            table.remove( self.mark_units, i )
+        end
+    end
+end
+
+function this:get_mark_num(  )
+    if self.mark_units == nil then return 0 end
+    local num = 0
+    for i=#self.mark_units,1,-1 do
+        if self.mark_units[i].alive == 0 then
+            num = num + 1 
+        else
+            table.remove( self.mark_units, i)
+        end
+    end
+
+    return num
+end
+
 function this:do_skill(delta,target,pos ,index )
     local old_value = self.skill_process
     self.skill_process = self.skill_process + delta

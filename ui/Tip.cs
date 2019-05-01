@@ -18,6 +18,6 @@ public class Tip : MonoBehaviour {
     private void Update()
     {
         float sizeFactor = (float)Screen.width / 750f;
-        bound.gameObject.GetComponent<RectTransform>().sizeDelta = parentTxt.gameObject.GetComponent<RectTransform>().sizeDelta+new Vector2(30*sizeFactor,30*sizeFactor);
+        bound.gameObject.GetComponent<RectTransform>().sizeDelta = parentTxt.gameObject.GetComponent<RectTransform>().sizeDelta+new Vector2(30,30);
     }
 }

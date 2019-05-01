@@ -126,7 +126,7 @@ function this:find_enemy( with_structure,unit,is_find_friend,active,range)
         local dis = self:distance(unit,u)
         if  u.type < type_flag and u.side == enemy_side then
             local threat = unit.threat_value[u.uid]
-            if threat ~= nil or active == 1 or u.uid == self.boss.uid then
+            if threat ~= nil or active == 1 or u.uid == self.boss.uid or u:get_mark_num()==0 then
                 if threat == nil then
                     -- set base threat_value
                     unit.threat_value[u.uid] = 10
@@ -140,7 +140,6 @@ function this:find_enemy( with_structure,unit,is_find_friend,active,range)
             end
         end
     end
-
     return enemy
 end
 

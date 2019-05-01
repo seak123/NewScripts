@@ -238,12 +238,14 @@ function this:enter_Attack(  )
     self.database.master.attack_process = 0
     self.runtime = 0
     self.max_runtime = 5
+    self.database.target:mark_enemy(self.database.master)
     return true
 end
 
 function this:abort_Attack(  )
     self.database.master.attack_process = 0
     self.database.master.entity:AnimCasterBreak()
+    self.database.target:dis_mark_enemy(self.database.master)
 end
 
 function this:update_Attack( delta )
@@ -259,12 +261,14 @@ function this:update_Attack( delta )
         self.runtime = self.runtime + delta
         if self.runtime > self.max_runtime then
             self.running = false
+            self.database.target:dis_mark_enemy(self.database.master)
             return "failure" 
         end
         return "running"
     else
         self.running = false
         self.database.pre_attack_target = self.database.target
+        self.database.target:dis_mark_enemy(self.database.master)
         return "completed"
     end
 end

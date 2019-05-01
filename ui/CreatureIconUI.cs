@@ -11,6 +11,8 @@ public class CreatureIconUI : MonoBehaviour {
 
     public Image icon;
 
+    public Image back;
+
     public Image bound;
 
     public GameObject selected;
@@ -45,12 +47,21 @@ public class CreatureIconUI : MonoBehaviour {
         //reset color
         if(data.type == 1){
             if (data.con_type == 0)
-                bound.color = new Color(0.3f, 0.45f, 0.5f);
-            else bound.color = new Color(0.55f,0.3f,0.3f);
+            {
+                bound.color = new Color(0.347f, 0.67f, 0.8f);
+                back.color = new Color(0.3f, 0.38f, 0.4f);
+            }
+            else {
+                bound.color = new Color(0.75f, 0.4f, 0.47f);
+                back.color = new Color(0.36f, 0.24f, 0.27f);
+            }
         }else if(data.type == 0){
-            bound.color = new Color(0.45f,0.35f,0.45f);
-        }else if(data.type == 2){
-            bound.color = new Color(0.45f,0.55f,0.4f);
+            bound.color = new Color(0.69f,0.53f,0.73f);
+            back.color = new Color(0.41f, 0.33f, 0.44f);
+        }
+        else if(data.type == 2){
+            bound.color = new Color(0.82f,0.74f,0.46f);
+            back.color = new Color(0.62f, 0.54f, 0.26f);
         }
         creatureData = data;
     }

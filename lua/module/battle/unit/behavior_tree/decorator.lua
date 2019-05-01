@@ -117,10 +117,12 @@ function this:check_EnemyAround(  )
         local active = nil
         if self.database.master.side == 1 then
             active = 1
+            unit = field:find_enemy(false,self.database.master,false,active)
         else
             active = 0
+            unit = field:find_enemy(false,self.database.master,false,active,0)
         end
-        unit = field:find_enemy(false,self.database.master,false,active)
+        
     end
     if self.database.master.statectrl:has_feature("confused") then
         unit = field:find_enemy(false,self.database.master,true)

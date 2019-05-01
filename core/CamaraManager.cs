@@ -99,6 +99,7 @@ public class CamaraManager : MonoBehaviour {
         maxSize = 80f;
         minSize = 40f;
         scaleFactor = 0.5f;
+        scrollFactor = 0.45f;
         active = true;
     }
 
@@ -117,7 +118,7 @@ public class CamaraManager : MonoBehaviour {
     public void MoveRecover(DungeonUI ui){
         closeIn = false;
         closing = true;
-        m_Camera.transform.DOMove(m_CameraOffset,closingTime).onComplete += () => { active = true; closing = false; m_Camera.fieldOfView = viewField;ui.state = DungeonUIState.Idle; };
+        m_Camera.transform.DOMove(m_CameraOffset,closingTime).onComplete += () => { active = true; closing = false; m_Camera.fieldOfView = viewField; ui.state = DungeonUIState.Idle; speed = Vector3.zero; };
     }
    
     /// <summary>
@@ -165,7 +166,7 @@ public class CamaraManager : MonoBehaviour {
         Vector3 v = delta*scrollFactor;
         //if(v!=Vector3.zero) Debug.Log(v);
         speed = delta / Time.deltaTime;
-        m_CameraOffset += new Vector3(-v.x, 0, -v.z) * m_Camera.transform.position.y;
+        m_CameraOffset += new Vector3(-v.x*0.8f, 0, -v.z) * m_Camera.transform.position.y;
 
 
         //把摄像机的位置控制在范围内lastSingleTouchPosition
