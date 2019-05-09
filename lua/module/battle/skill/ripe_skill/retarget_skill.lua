@@ -9,14 +9,24 @@ function this:ctor( vo,database )
 end
 
 function this:execute( sess,delta )
+    if self.vo.target_source == 0 then
+        self.target = self.database.target
+    else
+        self.target = sess.field:get_unit(sess.trace:get_last_data().target_uid)
+    end
     if self.vo.is_friend == false then
         self.target_side = 3 - self.database.caster.side
-        if self.vo.cantain_curr_target == false then table.insert( self.database.target_trace,sess.trace:get_last_data().target_uid) end
+        if self.vo.cantain_curr_target == false then table.insert( self.database.target_trace,self.target.uid) end
     else
         self.target_side = self.database.caster.side
-        if self.vo.cantain_curr_target == false then table.insert( self.database.target_trace,sess.trace:get_last_data().caster_uid) end
+        if self.vo.cantain_curr_target == false then table.insert( self.database.target_trace,self.target.uid) end
     end
     
+    if self.vo.on_target == 0 then
+        self.center_unit = self.database.caster
+    else
+        self.center_unit = self.target
+    end
     
     self.targets = {}
     self[self.vo.target_type.."_select"](self,sess)
@@ -25,8 +35,8 @@ function this:execute( sess,delta )
 end
 
 function this:self_select( sess )
-    table.insert( self.targets, self.database.master)
-    table.insert( self.database.target_trace, self.database.master.uid )
+    table.insert( self.targets, self.center_unit)
+    table.insert( self.database.target_trace, self.center_unit.uid )
 end
 
 function this:random_select( sess )
@@ -37,7 +47,7 @@ function this:random_select( sess )
         func = self:check_repeat()
     end
     for i=1,self.vo.num do
-        local unit = sess.field:find_random_unit(false,self.target_side,self.database.master,func)
+        local unit = sess.field:find_random_unit(false,self.target_side,self.center_unit,func)
         if unit ~= nil then
             table.insert( self.targets, unit )
             table.insert( self.database.target_trace, unit.uid ) 
@@ -54,11 +64,11 @@ function this:distance_select( sess )
         func = self:check_repeat()
     end
     --for i=1,self.vo.num do
-        local unit = sess.field:get_units(false,self.target_side,self.database.caster,self.vo.num,func)
+        local unit = sess.field:get_units(false,self.target_side,self.center_unit,self.vo.num,func)
         --local close_unit = field:get_units(true,3-database.main_castle.side,database.main_castle,1)[1]
         if unit ~= nil then
             for _,u in ipairs(unit) do
-                if sess.field:distance(u,self.database.caster) <= self.vo.distance then
+                if sess.field:distance(u,self.center_unit) <= self.vo.distance then
                     table.insert( self.targets, u )
                     table.insert( self.database.target_trace, u.uid )
                 end
@@ -82,7 +92,7 @@ function this:random_hurted_select( sess )
         func2 = self:check_repeat()
     end
     for i=1,self.vo.num do
-        local unit = sess.field:find_random_unit(false,self.target_side,self.database.master,func)
+        local unit = sess.field:find_random_unit(false,self.target_side,self.center_unit,func)
         if unit == nil then
             break
         end
@@ -90,7 +100,7 @@ function this:random_hurted_select( sess )
         table.insert( self.database.target_trace,unit.uid )
     end
     for i=#self.targets+1,self.vo.num do
-        local unit = sess.field:find_random_unit(false,self.target_side,self.database.master,func2)
+        local unit = sess.field:find_random_unit(false,self.target_side,self.center_unit,func2)
         if unit ~= nil then
             table.insert( self.targets,unit )
             table.insert( self.database.target_trace,unit.uid )

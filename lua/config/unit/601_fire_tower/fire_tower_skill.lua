@@ -11,7 +11,8 @@ local this = {}
 
 
 local damage0 = damage.new()
-damage0.calc = calc.make_common_attack(1, 0) 
+damage0.calc = calc.make_common_attack(1, 0)
+damage0.damage_source = damage.DamageSource.Skill 
 
 local normal = normal_skill.new()
 normal:append("raw_skills",damage0)
@@ -28,6 +29,7 @@ throw:append("childs",normal)
 this.root = {throw}
 this.decorators = {decorator.check_skill_EnemyInRange(true,1)}
 this.coold = 2
+this.range = 1
 this.energy = 0
 
 return this

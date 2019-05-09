@@ -1,8 +1,10 @@
 local this = class("entire_skill")
+local trace = require("module.battle.battle_trace")
 
 function this:ctor( sess,skill_vo)
     self.sess = sess
     self.vo = skill_vo
+    self.range = skill_vo.range
 end
 
 function this:execute(database )
@@ -14,6 +16,8 @@ function this:execute(database )
         table.insert( skill.targets, database.target)
         table.insert( self.playing, skill )
     end
+    local trace_data = trace.trace_skill(database.caster,database.target)
+    self.sess.trace:push(trace_data)
     self.sess.skill_mng:reg(self)
 end
 

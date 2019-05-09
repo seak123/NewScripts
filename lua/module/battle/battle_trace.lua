@@ -20,6 +20,14 @@ function this:get_last_data(  )
     return self.last_data
 end
 
+function this.trace_skill(caster,target)
+    return {
+        type_name = "trace_skill",
+        caster_uid = caster.uid,
+        target_uid = target.uid
+    }
+end
+
 function this.trace_attack(caster,target)
     return {
         type_name = "trace_attack",

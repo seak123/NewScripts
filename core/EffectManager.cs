@@ -105,7 +105,7 @@ public class EffectManager : MonoBehaviour {
         return effectEntity;
     }
 
-    //flag:1,crit,2,miss,3,heal
+    //flag:1,crit,2,miss,3,heal,4,warning
     public void PrintMessage(int uid,string text,int flag){
         MapField mapField = GameRoot.GetInstance().MapField;
         Entity entity;
@@ -126,19 +126,26 @@ public class EffectManager : MonoBehaviour {
         message.GetComponent<RectTransform>().parent = GameRoot.GetInstance().battleTextUI.GetComponent<RectTransform>();
         //hpBar.GetComponent<RectTransform>().sizeDelta = new Vector2(Mathf.Sqrt(radius) / 2 * 80, 22);
         message.SetActive(true);
-        message.GetComponentInChildren<Text>().text = StrUtil.GetText(text);
+
         if(entity.side == 2){
             switch(flag){
                 case 0:
+                    message.GetComponentInChildren<Text>().text = text;
                     message.GetComponentInChildren<Text>().color = new Color(0.96f, 0.05f, 0f);
                     message.transform.localScale = Vector3.one*0.75f;
                     break;
                 case 1:
+                    message.GetComponentInChildren<Text>().text = text;
                     message.GetComponentInChildren<Text>().color = new Color(0.9f, 0.1f, 0.7f);
                     message.GetComponent<TipMessage>().SetLogo(int.Parse(text));
                     message.transform.DOScale(Vector3.one * 2.5f, 0.15f).onComplete+=()=>{
                         message.transform.DOScale(Vector3.one, 0.15f);
                     };
+                    break;
+                case 4:
+                    message.GetComponentInChildren<Text>().text = StrUtil.GetText(text);
+                    message.GetComponentInChildren<Text>().color = new Color(0.87f, 0.82f, 0.34f);
+                    message.transform.localScale = Vector3.one * 1.25f;
                     break;
             }
 
@@ -146,8 +153,14 @@ public class EffectManager : MonoBehaviour {
             switch(flag){
                 case 0:
                 case 1:
+                    message.GetComponentInChildren<Text>().text = text;
                     message.GetComponentInChildren<Text>().color = new Color(0.7f, 0.6f, 1f);
                     message.transform.localScale = Vector3.one * 0.75f;
+                    break;
+                case 4:
+                    message.GetComponentInChildren<Text>().text = StrUtil.GetText(text);
+                    message.GetComponentInChildren<Text>().color = new Color(0.87f, 0.82f, 0.34f);
+                    message.transform.localScale = Vector3.one * 1.25f;
                     break;
             }
         }

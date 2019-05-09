@@ -213,11 +213,45 @@ namespace Map
         }
 
         // >>>>>>>>>>>>>>>>>>>> Animator
+        private void SetAnimatorState(string stateName){
+            if (animator == null) return;
+            switch (stateName){
+                case "Walk":
+                    animator.SetBool("Walk", true);
+                    animator.SetBool("Attack", false);
+                    animator.SetBool("Die", false);
+                    animator.SetBool("Caster", false);
+                    break;
+                case "Attack":
+                    animator.SetBool("Walk", false);
+                    animator.SetBool("Attack", true);
+                    animator.SetBool("Die", false);
+                    animator.SetBool("Caster", false);
+                    break;
+                case "Die":
+                    animator.SetBool("Walk", false);
+                    animator.SetBool("Attack", false);
+                    animator.SetBool("Die", true);
+                    animator.SetBool("Caster", false);
+                    break;
+                case "Caster":
+                    animator.SetBool("Walk", false);
+                    animator.SetBool("Attack", false);
+                    animator.SetBool("Die", false);
+                    animator.SetBool("Caster", true);
+                    break;
+            }
+        }
+
         public void AnimCasterBreak()
         {
             if (animator != null && !animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
             {
                 animator.SetTrigger("Break");
+                animator.SetBool("Walk", false);
+                animator.SetBool("Attack", false);
+                animator.SetBool("Die", false);
+                animator.SetBool("Caster", false);
             }
         }
 
@@ -228,10 +262,7 @@ namespace Map
             //    animator.SetTrigger("Break");
 
             //}
-            if (animator != null && !animator.GetCurrentAnimatorStateInfo(0).IsName(name))
-            {
-                 animator.SetTrigger(name);
-            }
+            SetAnimatorState(name);
            
         }
 
@@ -241,12 +272,10 @@ namespace Map
             //{
             //    animator.SetTrigger("Break");
             //}
-            if (animator != null && !animator.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
-            {
+            SetAnimatorState("Attack");
                 animatorAttackSpeed = attack_rate;
-                animator.SetTrigger("Attack");
+             
                 animator.speed = animatorAttackSpeed;
-            }
             
 
         }
@@ -265,7 +294,7 @@ namespace Map
                 animator.SetTrigger("Break");
             }
             if(animator != null)
-            animator.SetTrigger("Die");
+                SetAnimatorState("Die");
             alive = false;
 
             //GameRoot.GetInstance().PlayerMng.AddSaving(GetSocketPos("S_Center"), 3 - side, (int)(cost * BattleDef.KillEarnFactor));

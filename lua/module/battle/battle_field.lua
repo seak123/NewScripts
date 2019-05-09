@@ -189,11 +189,13 @@ function this:find_friend( with_structure,unit,condition_func ,range)
     if with_structure == true then type_flag = 2 else type_flag =1 end
 
     local units = nil
-    if range == nil or range == 1 then
-        units = self.room_units[unit.location]
-    else
+    if range == -1 then
         units = self.units[side]
+    else
+        if range == nil then range = 1 end
+        units = self.room_units[unit.location]
     end
+    
     if condition_func == nil then
         for _,u in ipairs(units) do
             local dis = self:distance(unit,u)
@@ -296,6 +298,19 @@ function this:distance(a_unit,b_unit  )
     local x =a_pos.X - b_pos.X
     local y = a_pos.Y - b_pos.Y
     return math.sqrt( x*x + y*y )
+end
+
+function this:check_range(a_room,b_room,range  )
+    local a_x = math.floor( a_room/10 )
+    local a_y = a_room-a_x*10
+    local b_x = math.floor( b_room/10 )
+    local b_y = b_room-b_x*10
+    local dis = math.max(math.abs( a_x-b_x ) ,math.abs( a_y-b_y ) )
+    if dis < range then
+        return true
+    else
+        return false
+    end
 end
 
 function this:update( delta )

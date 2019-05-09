@@ -83,6 +83,10 @@ public class GameDataManager
         //ChangeRoomConstructure(43, uid, true);
         GetNewConstructure(CreateNewCreature(602, 2));
 
+        GetNewConstructure(CreateNewCreature(602, 2));
+
+        GetNewConstructure(CreateNewCreature(602, 2));
+
         uid = GetNewConstructure(CreateNewCreature(701, 10));
         //ChangeRoomConstructure(33, uid, true);
 

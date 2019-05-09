@@ -11,6 +11,7 @@ function this:execute( sess,target )
     self.target_side = target.side
     self.target = target
     self.target_trace = {}
+    
     if self.vo.cantain_curr_target== false then table.insert( self.target_trace, target.uid) end
     local targets = self[self.vo.target_type.."_select"](self,sess)
     

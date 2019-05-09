@@ -266,6 +266,10 @@ function this:do_skill(delta,target,pos ,index )
     if old_value <self.caster_channal and self.skill_process >= self.caster_channal then
         local database = pack_data.pack_database(self,target,pos)
         local skill = entire_skill.new(self.sess,self.skills[index])
+        -- check skill range
+        local range = self.skills[index].range
+        if self.sess.field:check_range(self.location,target.location,range) == false then self.sess.effect_mng:PrintMessage(self.uid,"超出范围!",4) return true  end
+        -----------
         self.skills_coold[index].value = self.skills_coold[index].coold
         self.energy = self.energy - self.skills[index].energy
         skill:execute(database)
