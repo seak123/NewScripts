@@ -98,6 +98,7 @@ public class AssetManager : ScriptableObject
             magic_suck = data.magic_suck,
             coold_reduce = data.coold_reduce,
             radius = data.radius,
+            block_num = data.block_num,
             attack_range = data.attack_range,
             channal = data.channal,
             ready_time = data.ready_time,

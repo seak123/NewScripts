@@ -41,7 +41,7 @@ normal:append("raw_skills",effect0)
 
 local caster0 = caster.new()
 caster0.on_target = 0
-caster0.checkers = {check.check_chance(0.2)}
+caster0.checkers = {check.check_chance(0.5)}
 caster0.buff_occasion = "pre_normal_damage"
 caster0.skills = {normal,delay0}
 

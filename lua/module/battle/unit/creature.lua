@@ -12,11 +12,13 @@ local entire_skill = require("module.battle.skill.entire_skill")
 local pack_data = require("module.battle.skill.utils.pack_database")
 local buff = require("module.battle.skill.raw_skill.buff")
 
+
 function this:ctor( sess,data,uid ,struct_uid)
     self.sess = sess
     self.data = data
     self.id = data.id
     self.level = data.level
+    self.block_num = data.block_num
     -- type: 0,creature;1,structure;2,partTool;-1,boss
     self.type = data.type
     -- genus: 1,ground 2,fly
@@ -184,6 +186,7 @@ function this:dispatch( name,src )
 end
 
 function this:do_attack( delta ,enemy)
+    if enemy == nil then print("do attack,but enemy is nil") end
     local old_value = self.attack_process
     self.attack_process = self.attack_process + delta
     local trace_data = trace.trace_attack(self,enemy)
@@ -204,17 +207,37 @@ function this:do_attack( delta ,enemy)
     return false
 end
 
+function this:enter_fight( enemy )
+    if self.side == 1 then return end
+    self.enemy = enemy
+    if enemy:mark_enemy(self) == false then return false end
+    return true
+end
+
+function this:leave_fight(  )
+    if self.side == 1 then return end
+    if self.enemy ~= nil then
+        self.enemy:dis_mark_enemy(self)
+    end
+    self.enemy = nil
+end
+
 function this:mark_enemy( unit )
+    if self.side == 2 then return true end
     if self.mark_units == nil then
         self.mark_units = {}
     end
+
     for _,u in ipairs(self.mark_units) do
-        if u.uid == unit.uid then return end
+        if u.uid == unit.uid then return true end
     end
+    if self:get_fight_state() == false then return false end
     table.insert( self.mark_units, unit)
+    return true
 end
 
 function this:dis_mark_enemy( unit )
+    if self.side == 2 then return end
     for i=#self.mark_units,1,-1 do
         if self.mark_units[i].uid == unit.uid then
             table.remove( self.mark_units, i )
@@ -222,8 +245,9 @@ function this:dis_mark_enemy( unit )
     end
 end
 
-function this:get_mark_num(  )
-    if self.mark_units == nil then return 0 end
+function this:get_fight_state(  )
+    if self.side == 2 then return true end
+    if self.mark_units == nil then return true end
     local num = 0
     for i=#self.mark_units,1,-1 do
         if self.mark_units[i].alive == 0 then
@@ -232,8 +256,8 @@ function this:get_mark_num(  )
             table.remove( self.mark_units, i)
         end
     end
-
-    return num
+    if num >= self.block_num then  return false end
+    return true
 end
 
 function this:do_skill(delta,target,pos ,index )
@@ -246,7 +270,7 @@ function this:do_skill(delta,target,pos ,index )
         self.energy = self.energy - self.skills[index].energy
         skill:execute(database)
     end
-    if self.skill_process >= self.caster_channal*2 then
+    if self.skill_process >= (self.caster_channal+0.5) then
         self.skill_process = 0
         return true
     end
@@ -267,10 +291,6 @@ end
 
 function this:damage( value,source )
     self.hp = self.hp - value
-    if self.threat_value[source.uid] == nil then
-        self.threat_value[source.uid] = 10
-    end
-    self.threat_value[source.uid] = self.threat_value[source.uid] + 1
     self.entity:SetHp(self.hp,self.max_hp,0)
     if self.hp <= 0 then
         self.hp = 0

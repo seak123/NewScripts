@@ -65,6 +65,8 @@ public class CreatureFightData
 
     public int radius = 4;
 
+    public int block_num = 1;
+
     public float attack_range = 4;
 
     public float channal = 1;
@@ -110,6 +112,7 @@ public class CreatureFightData
         magic_suck = _data.magic_suck;
         coold_reduce = _data.coold_reduce;
         radius = _data.radius;
+        block_num = _data.block_num;
         attack_range = _data.attack_range;
         channal = _data.channal;
         ready_time = _data.ready_time;

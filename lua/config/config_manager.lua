@@ -16,6 +16,7 @@ this.unit_config = {
     [301] = "config.unit.301_ice_dragon.ice_dragon_unit",
     [302] = "config.unit.302_wraith_magic_sword.wraith_magic_unit",
     [601] = "config.unit.601_fire_tower.fire_tower_unit",
+    [602] = "config.unit.602_lighting_storm.lighting_storm_unit",
     [701] = "config.unit.701_natural_power.natural_power_unit",
 }
 
@@ -27,6 +28,8 @@ this.common_attr = {
     [108] = require("config.unit.108_elf_archer.elf_archer_sp_attr_1"),
     [109] = require("config.unit.109_elf_pikeman.elf_pikeman_sp_attr_1"),
     [302] = require("config.unit.302_wraith_magic_sword.wraith_magic_sp_attr"),
+    [601] = require("config.unit.601_fire_tower.fire_tower_skill"),
+    [602] = require("config.unit.602_lighting_storm.lighting_storm_skill")
 }
 
 this.hero_config = {

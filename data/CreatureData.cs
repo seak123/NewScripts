@@ -58,6 +58,8 @@ public class CreatureData : ScriptableObject
 
     public int radius = 4;
 
+    public int block_num = 1;
+
     public float attack_range = 4;
 
     public float channal = 1;

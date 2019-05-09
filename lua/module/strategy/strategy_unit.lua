@@ -86,4 +86,8 @@ function this:do_disappear(  )
     
 end
 
+function this:leave_fight(  )
+    
+end
+
 return this

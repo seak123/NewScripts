@@ -63,7 +63,7 @@ function this:update_enemys( delta )
         self.field:add_unit(self.vo.enemys[self.summoun_count],-1)
         self.summoun_process = 0
         self.summoun_count = self.summoun_count + 1
-        self.summoun_interval = math.random()*0.5 + 5.5
+        self.summoun_interval = math.random()*0.5 + 0.5
     end
 end
 

@@ -27,6 +27,7 @@ normal1:append("raw_skills",sp_buff,effect1)
 local caster0 = caster.new()
 caster0.buff_occasion = "on_attack"
 caster0.checkers = {check.check_chance(0.2)}
+caster0.on_target = 0
 caster0.skills = {normal1}
 
 local buff0 = buff.new()

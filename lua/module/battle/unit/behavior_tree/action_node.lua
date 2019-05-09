@@ -55,6 +55,7 @@ end
 
 function this:enter_MoveForward(  )
     if self.database.master.statectrl:has_feature("de_move") then return false end
+    self.database.master:leave_fight()
     -- print("uid:"..self.database.master.uid.." enter forward state")
     self.database.master.entity:AnimCasterAction(transform.AnimationState.Walk)
     self.runtime = 0
@@ -133,6 +134,7 @@ end
 
 function this:enter_MoveToPos(  )
     if self.database.master.statectrl:has_feature("de_move") then return false end
+    self.database.master:leave_fight()
     -- print("uid:"..self.database.master.uid.." enter movetopos state")
     self.database.master.entity:AnimCasterAction(transform.AnimationState.Walk)
     self.runtime = 0
@@ -228,6 +230,7 @@ end
 
 function this:enter_Attack(  )
     if self.database.master.statectrl:has_feature("de_attack") then return false end
+    if self.database.master:enter_fight(self.database.target)==false then return false end
     -- print("uid:"..self.database.master.uid.." enter attack state")
     local base_interval = self.database.master.property:get("base_attack_interval")
     local attack_rate = self.database.master.property:get("attack_rate")
@@ -238,14 +241,13 @@ function this:enter_Attack(  )
     self.database.master.attack_process = 0
     self.runtime = 0
     self.max_runtime = 5
-    self.database.target:mark_enemy(self.database.master)
+    
     return true
 end
 
 function this:abort_Attack(  )
     self.database.master.attack_process = 0
     self.database.master.entity:AnimCasterBreak()
-    self.database.target:dis_mark_enemy(self.database.master)
 end
 
 function this:update_Attack( delta )
@@ -261,14 +263,12 @@ function this:update_Attack( delta )
         self.runtime = self.runtime + delta
         if self.runtime > self.max_runtime then
             self.running = false
-            self.database.target:dis_mark_enemy(self.database.master)
             return "failure" 
         end
         return "running"
     else
         self.running = false
         self.database.pre_attack_target = self.database.target
-        self.database.target:dis_mark_enemy(self.database.master)
         return "completed"
     end
 end
@@ -378,6 +378,7 @@ end
 
 function this:enter_Idle(  )
     self.database.master.entity:AnimCasterBreak()
+    self.database.master:leave_fight()
 end
 
 function this:abort_Idle(  )

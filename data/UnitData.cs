@@ -64,6 +64,8 @@ namespace Data
 
         public int radius =0;
 
+        public int block_num = 1;
+
         public float attack_range =0;
 
         public float channal = 0;

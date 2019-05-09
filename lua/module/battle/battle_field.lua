@@ -32,6 +32,7 @@ end
 
 function this:add_boss( data )
     local uid = self.counter
+    print("create new unit "..data.name.." uid:"..uid)
     self.counter = self.counter + 1
     local unit = creature.new(self.sess,data,uid,-1)
     table.insert( self.units[data.side],unit)
@@ -102,14 +103,12 @@ end
 --just for normal attack
 -- range: 0,all map  1,only room
 -- active: 0,not active 1,active
-function this:find_enemy( with_structure,unit,is_find_friend,active,range)
+function this:find_enemy( with_structure,unit,is_find_friend,range)
     local enemy_side = 3 - unit.side
     if is_find_friend ~= nil and is_find_friend == true then
         enemy_side = unit.side
     end
     local enemy = nil
-    local threat_enemy = nil
-    local max_threat = -9999
     local min_dis = 9999
 
     local type_flag = 0
@@ -121,18 +120,10 @@ function this:find_enemy( with_structure,unit,is_find_friend,active,range)
     else
         units = self.units[enemy_side]
     end
-
     for _,u in ipairs(units) do
         local dis = self:distance(unit,u)
         if  u.type < type_flag and u.side == enemy_side then
-            local threat = unit.threat_value[u.uid]
-            if threat ~= nil or active == 1 or u.uid == self.boss.uid or u:get_mark_num()==0 then
-                if threat == nil then
-                    -- set base threat_value
-                    unit.threat_value[u.uid] = 10
-                    threat = 10
-                end
-
+            if u.uid == self.boss.uid or u:get_fight_state()==true then
                 if dis < min_dis then
                     min_dis = dis
                     enemy = u

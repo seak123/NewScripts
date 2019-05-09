@@ -72,6 +72,7 @@ public class EffectManager : MonoBehaviour {
         Entity entity;
         if(unitUid != -1){
             entity = mapField.FindEntity(unitUid);
+            if (entity == null) Debug.Log("CreateEffect fail:entity is null");
             pos = entity.GetSocketPos(data.effectSocket);
         }else{
             float v_x, v_y;

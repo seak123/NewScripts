@@ -72,11 +72,11 @@ public class CreatureCardUI : MonoBehaviour {
                 expSlider.value = (float)data.exp / (float)data.expMax;
                 hp.text = Mathf.FloorToInt(data.hp).ToString();
                 attack.text = Mathf.FloorToInt(data.attack).ToString();
-                baseAttackFrame.text = (data.base_attack_interval).ToString("F2")+"s";
+                baseAttackFrame.text = StrUtil.GetText(GetAttackRateString(data.base_attack_interval));
                 attackRange.text = Mathf.FloorToInt(data.attack_range).ToString();
                 defence.text = Mathf.FloorToInt(data.defence).ToString();
                 reduce.text = data.defence>=0?(data.defence*2f/(100f+data.defence*2f)*100f).ToString("F2")+"%":"-"+((1-Mathf.Pow((100f-2f)/100f,-data.defence))*100f).ToString("F2")+"%";
-                speed.text = Mathf.FloorToInt(data.speed).ToString();
+                speed.text = StrUtil.GetText(GetSpeedString(data.speed));
 
                 notify.SetActive(true);
                 isNotify = true;
@@ -107,6 +107,68 @@ public class CreatureCardUI : MonoBehaviour {
                 break;
         }
    
+    }
+
+    private string GetAttackRateString(float rate){
+        if(rate<=0.4f){
+            return "极其快";
+        }else if(rate>0.4f&&rate<=0.8f){
+            return "非常快";
+        }else if(rate>0.8f&&rate<=1.2f){
+            return "快";
+        }else if(rate>1.2f&&rate<=1.6f){
+            return "较快";
+        }else if(rate>1.6f&&rate<=2f){
+            return "普通";
+        }else if(rate>2f&&rate<=2.4f){
+            return "较慢";
+        }else if(rate>2.4f&&rate<=2.8f){
+            return "慢";
+        }else if(rate>2.8f&&rate<=3.2f){
+            return "非常慢";
+        }else{
+            return "极其慢";
+        }
+    }
+
+    private string GetSpeedString(float rate)
+    {
+        if (rate > 72f)
+        {
+            return "极其快";
+        }
+        else if (rate > 64f && rate <= 72f)
+        {
+            return "非常快";
+        }
+        else if (rate > 56f && rate <= 64f)
+        {
+            return "快";
+        }
+        else if (rate > 48f && rate <= 56f)
+        {
+            return "较快";
+        }
+        else if (rate > 40f && rate <= 48f)
+        {
+            return "普通";
+        }
+        else if (rate > 32f && rate <= 40f)
+        {
+            return "较慢";
+        }
+        else if (rate > 24f && rate <= 32f)
+        {
+            return "慢";
+        }
+        else if (rate > 16f && rate <= 24f)
+        {
+            return "非常慢";
+        }
+        else
+        {
+            return "极其慢";
+        }
     }
 
     public void ExchangeCard(){
