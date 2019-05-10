@@ -64,7 +64,7 @@ public class CreatureData : ScriptableObject
 
     public float channal = 1;
 
-    public float ready_time = 1;
+    public float ready_time = 0.2f;
 
     public int cost = 1;
 

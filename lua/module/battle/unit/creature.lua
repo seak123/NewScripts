@@ -79,6 +79,7 @@ function this:init(  )
     self.alive = 0
     -- threat value
     self.threat_value = {}
+    self.effects = {}
     -- wait for appear action
     self.appeared = 0
     -- init room
@@ -145,6 +146,11 @@ function this:init(  )
    self.max_hp = self.hp
 end
 
+function this:update_hp(  )
+    local old_rate = self.hp/self.max_hp
+    self.max_hp = self.property:get("hp")
+    self.hp = self.max_hp*old_rate
+end
 
 
 function this:update( delta )
@@ -209,6 +215,7 @@ end
 
 function this:enter_fight( enemy )
     if self.side == 1 then return end
+    if self.type == -1 then return true end
     self.enemy = enemy
     if enemy:mark_enemy(self) == false then return false end
     return true
@@ -216,6 +223,7 @@ end
 
 function this:leave_fight(  )
     if self.side == 1 then return end
+    if self.type == -1 then return end
     if self.enemy ~= nil then
         self.enemy:dis_mark_enemy(self)
     end
@@ -247,6 +255,7 @@ end
 
 function this:get_fight_state(  )
     if self.side == 2 then return true end
+    if self.type == -1 then return true end
     if self.mark_units == nil then return true end
     local num = 0
     for i=#self.mark_units,1,-1 do
@@ -285,6 +294,21 @@ function this:do_appear( delta )
     self.appear_process = self.appear_process +delta
     if self.appear_process >= self.data.ready_time then
         self.appeared = 1
+        -- appear enemy evaluate
+        local eval_lvl = self.data.enemy_level
+        if eval_lvl == 1 then
+            self.property:change_prop("hprate",1)
+            self.property:change_prop("attackrate",1)
+            self.entity:ScaleEntity(1.25)
+            self:update_hp()
+            table.insert( self.effects, self.sess.effect_mng:CreateEffect(10,true,self.uid,0,0))
+        elseif eval_lvl == 2 then
+            self.property:change_prop("hprate",10)
+            self.property:change_prop("attackrate",10)
+            self.entity:ScaleEntity(1.5)
+            self:update_hp()
+            table.insert( self.effects, self.sess.effect_mng:CreateEffect(11,true,self.uid,0,0))
+        end
         -- appear
         self:on_appear()
         self:on_enter_room()
@@ -314,6 +338,9 @@ function this:die(  )
     self.alive = 2
     self:on_die()
     self.buffcont:remove_all(self.sess)
+    for _,e in ipairs(self.effects) do
+        e:CleanUp(0,0)
+    end
     for _,tr in ipairs(self.triggers) do
         self.sess.trigger:unreg(tr)
     end

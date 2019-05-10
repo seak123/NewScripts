@@ -221,15 +221,21 @@ public class GameDataManager
             battleData.units[allStructures.Count + i] = allCreatures[i];
         }
 
-        battleData.enemys = new UnitData[40];
+        battleData.enemys = new UnitData[25];
 
-        for (int i = 0; i < 40; ++i)
+        for (int i = 0; i < 24; ++i)
         {
             CreatureFightData temp = new CreatureFightData();
             temp.LoadData(GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(109));
+            if (UnityEngine.Random.Range(0f, 1f) < 0.1f) temp.enemy_level = 1;
             battleData.enemys[i] = AssetManager.PackCreatureData(temp, 2);
             battleData.enemys[i].init_room = -1;
         }
+        CreatureFightData e_boss = new CreatureFightData();
+        e_boss.LoadData(GameRoot.GetInstance().BattleField.assetManager.GetCreatureData(110));
+        e_boss.enemy_level = 2;
+        battleData.enemys[24] = AssetManager.PackCreatureData(e_boss, 2);
+        battleData.enemys[24].init_room = -1;
 
         battleData.boss = GetHeroData();
 

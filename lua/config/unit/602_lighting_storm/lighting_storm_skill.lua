@@ -28,7 +28,7 @@ effect1.execute_pos = effect.ExecutePos.Caster
 effect1.attach = true
 
 local normal0 = normal_skill.new()
-normal0:append("raw_skills",damage0,effect0)
+normal0:append("raw_skills",effect0,damage0)
 
 local normal1 = normal_skill.new()
 normal1:append("raw_skills",effect1)

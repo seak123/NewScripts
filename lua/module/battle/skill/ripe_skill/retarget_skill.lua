@@ -10,7 +10,7 @@ end
 
 function this:execute( sess,delta )
     if self.vo.target_source == 0 then
-        self.target = self.database.target
+        self.target = self.targets[1]
     else
         self.target = sess.field:get_unit(sess.trace:get_last_data().target_uid)
     end

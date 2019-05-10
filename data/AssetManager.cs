@@ -80,6 +80,7 @@ public class AssetManager : ScriptableObject
             uid = data.uid,
             type = data.type,
             con_type = data.con_type,
+            enemy_level = data.enemy_level,
             side = _side,
             genus = data.genus,
             name = data.CreatureName,

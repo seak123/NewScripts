@@ -14,6 +14,8 @@ public class CreatureFightData
 
     //constructureType: 0,position 2,trap
     public int con_type = 0;
+    //0,normal_enemy 1,rare_enemy 2,boss_enemy
+    public int enemy_level = 0;
 
     public int contain_num = 3;
 

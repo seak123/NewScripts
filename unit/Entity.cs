@@ -212,6 +212,10 @@ namespace Map
             }
         }
 
+        public void ScaleEntity(float delta){
+            gameObject.transform.localScale = Vector3.one * delta;
+        }
+
         // >>>>>>>>>>>>>>>>>>>> Animator
         private void SetAnimatorState(string stateName){
             if (animator == null) return;

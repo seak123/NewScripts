@@ -123,7 +123,7 @@ function this:find_enemy( with_structure,unit,is_find_friend,range)
     for _,u in ipairs(units) do
         local dis = self:distance(unit,u)
         if  u.type < type_flag and u.side == enemy_side then
-            if u.uid == self.boss.uid or u:get_fight_state()==true then
+            if u.type == -1 or u:get_fight_state()==true then
                 if dis < min_dis then
                     min_dis = dis
                     enemy = u
