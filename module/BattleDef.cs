@@ -5,7 +5,7 @@ using UnityEngine;
 public static class BattleDef
 {
     //sys data
-    public static string language = "chinese";
+    public static string language = "english";
 
     //map data
     public static bool useCollision = false;

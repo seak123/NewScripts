@@ -66,7 +66,7 @@ public class GameDataManager
         //init data
 
         unitUid = 0;
-        roomRow = 3;
+        roomRow = 4;
         roomCol = 3;
         creatures = new List<CreatureFightData>();
         constructures = new List<CreatureFightData>();
@@ -80,7 +80,13 @@ public class GameDataManager
         //ChangeRoomConstructure(32, uid, true);
 
         uid = GetNewConstructure(CreateNewCreature(601, 2));
+
+        GetNewConstructure(CreateNewCreature(601, 2));
         //ChangeRoomConstructure(43, uid, true);
+        GetNewConstructure(CreateNewCreature(602, 2));
+
+        GetNewConstructure(CreateNewCreature(602, 2));
+
         GetNewConstructure(CreateNewCreature(602, 2));
 
         GetNewConstructure(CreateNewCreature(602, 2));

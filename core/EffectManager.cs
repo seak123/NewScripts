@@ -145,7 +145,7 @@ public class EffectManager : MonoBehaviour {
                 case 4:
                     message.GetComponentInChildren<Text>().text = StrUtil.GetText(text);
                     message.GetComponentInChildren<Text>().color = new Color(0.87f, 0.82f, 0.34f);
-                    message.transform.localScale = Vector3.one * 1.25f;
+                    message.transform.localScale = new Vector3(1.4f,1,1);
                     break;
             }
 
@@ -160,7 +160,7 @@ public class EffectManager : MonoBehaviour {
                 case 4:
                     message.GetComponentInChildren<Text>().text = StrUtil.GetText(text);
                     message.GetComponentInChildren<Text>().color = new Color(0.87f, 0.82f, 0.34f);
-                    message.transform.localScale = Vector3.one * 1.25f;
+                    message.transform.localScale = new Vector3(1.4f, 1, 1);
                     break;
             }
         }
@@ -243,7 +243,7 @@ public class EffectManager : MonoBehaviour {
                 if(effect.canvas == BattleUICanvas.BattleText){
                     Text text = effect.effect.GetComponentInChildren<Text>();
                     if(text!=null){
-                        text.gameObject.transform.localScale = new Vector3(0.7f,1f,1f)*scale;
+                        text.gameObject.transform.localScale = new Vector3(0.7f,1f,1f)*scale*1.3f;
                     }
                 }
 
