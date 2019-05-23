@@ -44,6 +44,11 @@ public static class BattleDef
 
     public static float CardPushSpeed = 2f;
 
+    //game data
+    public static int bossNum = 8;
+
+    public static int achieveNum = 20;
+
     //utils
 #if UNITY_EDITOR
     public static bool useMouse = true;

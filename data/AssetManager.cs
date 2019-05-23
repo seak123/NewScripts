@@ -5,6 +5,8 @@ using Data;
 
 public class AssetManager : ScriptableObject
 {
+    public HeroData[] heroDatas;
+
     public CreatureData[] creatures;
 
     public EffectData[] effects;
@@ -23,6 +25,14 @@ public class AssetManager : ScriptableObject
     public GameObject GreenSlider;
     public GameObject Message;
     public GameObject GoldTips;
+
+    public HeroData GetHeroData(int id){
+        foreach (var data in heroDatas)
+        {
+            if (data.id == id) return data;
+        }
+        return null;
+    }
 
     public CreatureData GetCreatureData(int id){
         return FindDataById(id);

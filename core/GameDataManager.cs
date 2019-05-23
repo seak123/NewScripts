@@ -27,7 +27,7 @@ public enum PlayerProperty{
     HeroCooldReduce = 22,
 }
 [Serializable]
-public class PlayerData{
+public class GameData{
     //system data
     public int unitUid;
     //player base data
@@ -43,9 +43,18 @@ public class PlayerData{
 
 }
 
+[Serializable]
+public class PlayerData{
+    //hero exp
+    public List<int> bossExp;
+}
+
 
 public class GameDataManager
 {
+    //player data
+    public List<int> bossExp;
+
     //system data
     public int timeScaleFlag;
     //data
@@ -62,73 +71,76 @@ public class GameDataManager
 
 
     public void InitData(){
+
+        bossExp = new List<int>();
+
         timeScaleFlag = 0;
         //init data
 
         unitUid = 0;
-        roomRow = 4;
+        roomRow = 3;
         roomCol = 3;
         creatures = new List<CreatureFightData>();
         constructures = new List<CreatureFightData>();
         partTools = new List<CreatureFightData>();
         rooms = new Dictionary<int, List<CreatureFightData>>();
 
-        int uid = GetNewConstructure(CreateNewCreature(601,3));
-        //ChangeRoomConstructure(34, uid, true);
+        //int uid = GetNewConstructure(CreateNewCreature(601,3));
+        ////ChangeRoomConstructure(34, uid, true);
 
-        uid = GetNewConstructure(CreateNewCreature(601, 2));
-        //ChangeRoomConstructure(32, uid, true);
+        //uid = GetNewConstructure(CreateNewCreature(601, 2));
+        ////ChangeRoomConstructure(32, uid, true);
 
-        uid = GetNewConstructure(CreateNewCreature(601, 2));
+        //uid = GetNewConstructure(CreateNewCreature(601, 2));
 
-        GetNewConstructure(CreateNewCreature(601, 2));
-        //ChangeRoomConstructure(43, uid, true);
-        GetNewConstructure(CreateNewCreature(602, 2));
+        //GetNewConstructure(CreateNewCreature(601, 2));
+        ////ChangeRoomConstructure(43, uid, true);
+        //GetNewConstructure(CreateNewCreature(602, 2));
 
-        GetNewConstructure(CreateNewCreature(602, 2));
+        //GetNewConstructure(CreateNewCreature(602, 2));
 
-        GetNewConstructure(CreateNewCreature(602, 2));
+        //GetNewConstructure(CreateNewCreature(602, 2));
 
-        GetNewConstructure(CreateNewCreature(602, 2));
+        //GetNewConstructure(CreateNewCreature(602, 2));
 
-        GetNewConstructure(CreateNewCreature(602, 2));
+        //GetNewConstructure(CreateNewCreature(602, 2));
 
-        uid = GetNewConstructure(CreateNewCreature(701, 10));
-        //ChangeRoomConstructure(33, uid, true);
+        //uid = GetNewConstructure(CreateNewCreature(701, 10));
+        ////ChangeRoomConstructure(33, uid, true);
 
-        uid = GetNewCreature(CreateNewCreature(108, 2));
-        //ChangeRoomSubData(33, 10, uid,true);
-        uid = GetNewCreature(CreateNewCreature(108, 12));
-        //ChangeRoomSubData(33,10,uid,true);
-        uid = GetNewCreature(CreateNewCreature(108, 9));
-        //ChangeRoomSubData(33, 10, uid, true);
+        //uid = GetNewCreature(CreateNewCreature(108, 2));
+        ////ChangeRoomSubData(33, 10, uid,true);
+        //uid = GetNewCreature(CreateNewCreature(108, 12));
+        ////ChangeRoomSubData(33,10,uid,true);
+        //uid = GetNewCreature(CreateNewCreature(108, 9));
+        ////ChangeRoomSubData(33, 10, uid, true);
 
-        uid = GetNewCreature(CreateNewCreature(108, 9));
-        uid = GetNewCreature(CreateNewCreature(108, 9));
-
-
+        //uid = GetNewCreature(CreateNewCreature(108, 9));
+        //uid = GetNewCreature(CreateNewCreature(108, 9));
 
 
-        GetNewConstructure(CreateNewCreature(701, 12));
-
-        GetNewConstructure(CreateNewCreature(701, 2));
-
-        GetNewConstructure(CreateNewCreature(701, 34));
 
 
-        //for (int i = 0; i < 20;++i){
-        //    GetNewConstructure(CreateNewCreature(601, 1));
-        //}
+        //GetNewConstructure(CreateNewCreature(701, 12));
+
+        //GetNewConstructure(CreateNewCreature(701, 2));
+
+        //GetNewConstructure(CreateNewCreature(701, 34));
 
 
-        //for (int i = 0; i < 20; ++i)
-        //{
-        //    GetNewCreature(CreateNewCreature(108, 1));
-        //}
-        GetNewCreature(CreateNewCreature(302, 10));
-        GetNewCreature(CreateNewCreature(302, 13));
-        GetNewCreature(CreateNewCreature(302, 4));
-        GetNewCreature(CreateNewCreature(302, 89));
+        ////for (int i = 0; i < 20;++i){
+        ////    GetNewConstructure(CreateNewCreature(601, 1));
+        ////}
+
+
+        ////for (int i = 0; i < 20; ++i)
+        ////{
+        ////    GetNewCreature(CreateNewCreature(108, 1));
+        ////}
+        //GetNewCreature(CreateNewCreature(302, 10));
+        //GetNewCreature(CreateNewCreature(302, 13));
+        //GetNewCreature(CreateNewCreature(302, 4));
+        //GetNewCreature(CreateNewCreature(302, 89));
 
 
         CreatureFightData boss_data = CreateNewCreature(10002, 1);
@@ -137,8 +149,7 @@ public class GameDataManager
         boss_data.init_room = 23;
         boss = boss_data;
 
-        SaveData();
-
+        LoadPlayerData();
     }
 
     //create new data
@@ -199,8 +210,8 @@ public class GameDataManager
 
 
     public UnitData GetHeroData(){
-        UnitData res;
-
+        UnitData res=null;
+        if(boss!=null)
         res = AssetManager.PackCreatureData(boss);
         return res;
     }
@@ -323,10 +334,45 @@ public class GameDataManager
         }   
     }
 
+    public void SavePlayerData(){
+        PlayerData data = new PlayerData
+        {
+            bossExp = new List<int>(),
+        };
+        foreach(var v in bossExp){
+            data.bossExp.Add(v);
+        }
+        BinaryFormatter formatter = new BinaryFormatter();
+        FileStream file = File.Create(Application.persistentDataPath + "/playersave.save");
+        formatter.Serialize(file, data);
+        file.Close();
+    }
+
+    public void LoadPlayerData()
+    {
+        PlayerData data;
+        if (File.Exists(Application.persistentDataPath + "/playersave.save"))
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream file = File.Open(Application.persistentDataPath + "/playersave.save", FileMode.Open);
+            data = (PlayerData)formatter.Deserialize(file);
+            file.Close();
+        }else{
+            data = new PlayerData
+            {
+                bossExp = new List<int>(),
+            };
+            for (int i = 0; i < BattleDef.bossNum;++i){
+                data.bossExp.Add(0);
+            }
+        }
+
+        bossExp = data.bossExp;
+    }
     public void SaveData(){
 
         //format data
-        PlayerData data = new PlayerData
+        GameData data = new GameData
         {
             unitUid = unitUid,
             roomCol = roomCol,
@@ -357,11 +403,11 @@ public class GameDataManager
     }
 
     public int LoadData(){
-        PlayerData data;
+        GameData data;
         if(File.Exists(Application.persistentDataPath + "/gamesave.save")){
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream file = File.Open(Application.persistentDataPath + "/gamesave.save", FileMode.Open);
-            data = (PlayerData)formatter.Deserialize(file);
+            data = (GameData)formatter.Deserialize(file);
             file.Close();
 
             //load data
@@ -487,5 +533,31 @@ public class GameDataManager
             }
         }
         CleanInRoomData(roomId,rawData);
+    }
+
+    private void AddMemOnArray(ref int[] array,int key){
+        List<int> cache = new List<int>();
+        foreach (var v in array)
+        {
+            cache.Add(v);
+        }
+        array = new int[cache.Count + 1];
+        for (int i = 0; i < cache.Count; ++i)
+        {
+            array[i] = cache[i];
+        }
+        array[cache.Count] = key;
+    }
+
+    public void InjectBossSkill(int skillId){
+        switch(skillId){
+            case 100101:
+                AddMemOnArray(ref boss.skills, 10011);
+                break;
+            case 100102:
+                GetNewConstructure(CreateNewCreature(601, 1));
+                GetNewConstructure(CreateNewCreature(601, 1));
+                break;
+        }
     }
 }

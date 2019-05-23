@@ -18,7 +18,8 @@ public static class StrUtil  {
             if(str[0]=='-'){
                 continue;
             }
-            string[] txt = str.Split('=');
+            string[] txt = str.Split('@');
+            //if (texts.ContainsKey(txt[0])) Debug.Log(txt[0]);
             texts.Add(txt[0], txt[1]);
         }
     }

@@ -7,7 +7,7 @@ public class TextCtrl : MonoBehaviour {
 
     public string text;
 
-    private void Start()
+    private void Awake()
     {
         string content = StrUtil.GetText(text);
         Text comp = gameObject.GetComponent<Text>();

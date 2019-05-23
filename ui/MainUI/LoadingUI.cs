@@ -8,6 +8,7 @@ public class LoadingUI : MonoBehaviour {
     public GameObject loadingImage;
     public GameObject siteBand;
     public Text siteName;
+    public TextCtrl txtCtrl;
 
 	// Use this for initialization
 	void Start () {

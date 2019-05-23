@@ -83,6 +83,8 @@ public class CreatureFightData
 
     public int[] skills;
 
+    public int[] passives;
+
     public int prefab;
 
     public int icon;
@@ -127,6 +129,11 @@ public class CreatureFightData
         for (int i = 0; i < skills.Length; ++i)
         {
             skills[i] = _data.skills[i];
+        }
+        passives = new int[_data.passives.Length];
+        for (int i = 0; i < passives.Length; ++i)
+        {
+            passives[i] = _data.passives[i];
         }
     }
 

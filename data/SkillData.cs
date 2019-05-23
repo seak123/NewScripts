@@ -5,6 +5,7 @@ using UnityEngine;
 public enum SkillTip{
     Energy = 0,
     Strength = 1,
+    Vampire,
 }
 
 public class SkillData : ScriptableObject

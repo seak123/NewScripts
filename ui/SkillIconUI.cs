@@ -8,15 +8,19 @@ public class SkillIconUI : MonoBehaviour {
     public Image bound;
     public Image icon;
     public Text skillName;
+    public GameObject lockObj;
 
     private ClickEvent clickEvent;
     private string detailName;
     private SkillData skillData;
 
+    private bool isLocked;
+
     private void Start()
     {
         clickEvent = gameObject.GetComponent<ClickEvent>();
         clickEvent.longClickAction += OpenDestination;
+        isLocked = false;
     }
 
     public void InjectData(SkillData data){
@@ -53,20 +57,39 @@ public class SkillIconUI : MonoBehaviour {
     }
 
     public void OpenDestination(){
-        Debug.Log("show skill des");
-        if (skillData == null) return;
-        List<string> contents = new List<string>();
-        contents.Add("<color=#2CFFFFFF><b>"+StrUtil.GetText(skillData.skill_name)+"</b></color>"+":\n"+StrUtil.GetText(skillData.skill_des));
-        for (int i = 0; i < skillData.tips.Length;++i){
-            switch(skillData.tips[i]){
-                case SkillTip.Energy:
-                    contents.Add(StrUtil.GetText("<color=#2CFFFFFF><b>力量</b></color>:每层力量提供额外1点攻击力，普通攻击后层数减半"));
-                    break;
-                case SkillTip.Strength:
-                    contents.Add(StrUtil.GetText("<color=#2CFFFFFF><b>力量</b></color>:每层力量提供额外1点攻击力，普通攻击后层数减半"));
-                    break;
+        if (!isLocked)
+        {
+            Debug.Log("show skill des");
+            if (skillData == null) return;
+            List<string> contents = new List<string>();
+            contents.Add("<color=#2CFFFFFF><b>" + StrUtil.GetText(skillData.skill_name) + "</b></color>" + ":\n" + StrUtil.GetText(skillData.skill_des));
+            for (int i = 0; i < skillData.tips.Length; ++i)
+            {
+                switch (skillData.tips[i])
+                {
+                    case SkillTip.Energy:
+                        contents.Add(StrUtil.GetText("<color=#2CFFFFFF><b>力量</b></color>:每层力量提供额外1点攻击力,普通攻击后层数减半"));
+                        break;
+                    case SkillTip.Strength:
+                        contents.Add(StrUtil.GetText("<color=#2CFFFFFF><b>力量</b></color>:每层力量提供额外1点攻击力,普通攻击后层数减半"));
+                        break;
+                    case SkillTip.Vampire:
+                        contents.Add(StrUtil.GetText("<color=#2CFFFFFF><b>吸血</b></color>:每层吸血在攻击时提供1点生命回复,普通攻击后层数减半"));
+                        break;
+                }
             }
+            RectTransform tran = gameObject.GetComponent<RectTransform>();
+            GameRoot.GetInstance().mainUIMng.OpenTip(contents, tran.position, tran.sizeDelta.x/2, tran.sizeDelta.y/2);
         }
-        GameRoot.GetInstance().mainUIMng.OpenTip(contents,gameObject.GetComponent<RectTransform>().position,50,50);
+    }
+
+    public void SetLock(bool flag){
+        if(flag){
+            lockObj.SetActive(true);
+            isLocked = true;
+        }else{
+            lockObj.SetActive(false);
+            isLocked = false;
+        }
     }
 }

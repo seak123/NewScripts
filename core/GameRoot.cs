@@ -92,7 +92,23 @@ public class GameRoot : MonoBehaviour {
     public void StartNewGame(){
         gameDataManager.InitData();
         moduleInit();
-        GameRoot.GetInstance().mainUIMng.OpenUI(9);
+        //GameRoot.GetInstance().mainUIMng.OpenUI(9);
+       
+        List<int> uiList = new List<int>
+        {
+            7
+        };
+        Action action = new Action(() => {
+            BattleStartAction();
+            CameraMng.SetSelectHeroFactor();
+            fieldObj = Instantiate(BattleField.assetManager.GetField(0));
+            fieldObj.transform.position = Vector3.zero;
+
+            battleData = gameDataManager.GetBattleData();
+            Bridge.StartStrategy(battleData);
+        });
+
+        mainUIMng.OpenScene(uiList, action, "魔王室", 14);
     }
 
     public void LoadGame(){
@@ -149,6 +165,12 @@ public class GameRoot : MonoBehaviour {
         BattleEndAction();
         mainUIMng.HideUI(false);
         gameDataManager.SaveData();
+    }
+
+    public void QuitSelectHero(){
+        Destroy(fieldObj);
+        BattleEndAction();
+        mainUIMng.HideUI(false);
     }
 
 

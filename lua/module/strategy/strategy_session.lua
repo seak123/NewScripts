@@ -33,7 +33,9 @@ function this:init_battle_data( vo )
         self.field:add_unit( vo.units[i])
     end
     self.boss_vo = vo.boss
+    if self.boss_vo ~= nil then
     self.field:add_unit(self.boss_vo)
+    end
 end
 
 

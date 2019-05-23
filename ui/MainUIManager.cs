@@ -21,7 +21,8 @@ public class MessageComponent{
     public float timePass;
 }
 
-public class MainUIManager : MonoBehaviour {
+public class MainUIManager : MonoBehaviour
+{
 
     public GameObject[] UIPrefab;
     public UIType[] UITypes;
@@ -47,9 +48,11 @@ public class MainUIManager : MonoBehaviour {
     private bool showTip = false;
     private Vector3 showTop;
     private Vector3 showBottom;
+
     private float sizeFactor;
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         currSort = 10;
         showTip = false;
         sizeFactor = (float)Screen.width / 750f;
@@ -58,22 +61,28 @@ public class MainUIManager : MonoBehaviour {
         loadingCache = new List<GameObject>();
         tipCache = new List<GameObject>();
         messageCache = new List<MessageComponent>();
-	}
+    }
 
-    public void HideUI(bool flag){
-        if(flag){
-            foreach(var obj in uiQueue){
+    public void HideUI(bool flag)
+    {
+        if (flag)
+        {
+            foreach (var obj in uiQueue)
+            {
                 obj.SetActive(false);
             }
-        }else{
+        }
+        else
+        {
             foreach (var obj in uiQueue)
             {
                 obj.SetActive(true);
             }
         }
     }
-	
-    public GameObject OpenUI(int id){
+
+    public GameObject OpenUI(int id)
+    {
         GameObject ui = Instantiate(UIPrefab[id]);
         //ui.transform.SetParent(gameObject.transform);
         Canvas canvas = ui.GetComponent<Canvas>();
@@ -86,18 +95,21 @@ public class MainUIManager : MonoBehaviour {
         return ui;
     }
 
-    public void CloseUI(){
+    public void CloseUI()
+    {
         int index = uiQueue.Count - 1;
         Destroy(uiQueue[index]);
         uiQueue.RemoveAt(index);
         --currSort;
     }
 
-    public void OpenCreatureCard(CreatureFightData data,Vector3 location){
-        if(cardPrefab == null){
+    public void OpenCreatureCard(CreatureFightData data, Vector3 location)
+    {
+        if (cardPrefab == null)
+        {
             cardPrefab = Instantiate(creatureCardPrefab);
             cardPrefab.transform.parent = GameRoot.GetInstance().InfoUI.transform;
-            cardPrefab.transform.position = new Vector3(Screen.width/2,Screen.height/2);
+            cardPrefab.transform.position = new Vector3(Screen.width / 2, Screen.height / 2);
         }
         cardPrefab.SetActive(true);
         GameRoot.GetInstance().InfoUI.SetActive(true);
@@ -105,12 +117,14 @@ public class MainUIManager : MonoBehaviour {
         cardPrefab.transform.localScale = Vector3.one * 0.2f;
         cardPrefab.GetComponent<CreatureCardUI>().InjectData(data);
         cardPrefab.transform.DOMove(new Vector3(Screen.width / 2, Screen.height / 2, 0), 0.3f);
-        cardPrefab.transform.DOScale(Vector3.one*1.05f, 0.3f).onComplete +=()=>{
+        cardPrefab.transform.DOScale(Vector3.one * 1.05f, 0.3f).onComplete += () =>
+        {
             cardPrefab.transform.DOScale(Vector3.one, 0.05f);
         };
     }
 
-    public void OpenTip(List<string> contents,Vector3 location,float topEdge,float bottomEdge){
+    public void OpenTip(List<string> contents, Vector3 location, float topEdge, float bottomEdge)
+    {
         if (showTip == true) return;
         showTip = true;
         for (int i = 0; i < contents.Count; ++i)
@@ -123,9 +137,10 @@ public class MainUIManager : MonoBehaviour {
             obj.GetComponent<RectTransform>().position = location;
             tipCache.Add(obj);
         }
-        showTop = location + new Vector3(0, topEdge*sizeFactor, 0);
-        showBottom = location - new Vector3(0, bottomEdge*sizeFactor, 0);
+        showTop = location + new Vector3(0, topEdge * sizeFactor, 0);
+        showBottom = location - new Vector3(0, bottomEdge * sizeFactor, 0);
     }
+
 
     public void PushMessage(string content,SystemTipType type){
         GameObject obj = Instantiate(messagePrefab);
@@ -173,7 +188,8 @@ public class MainUIManager : MonoBehaviour {
         loadingImage.SetActive(true);
         siteBand.SetActive(false);
         loadingImage.GetComponent<Image>().sprite = loadingSprite[spriteId];
-        siteName.text = sceneName;
+        siteName.text = StrUtil.GetText(sceneName);
+
         loadingImage.GetComponent<Image>().color = new Color(0, 0, 0, 0);
         loadingImage.GetComponent<Image>().DOColor(new Color(1, 1, 1, 1), 0.8f).onComplete += ()=>{
             //loading at here
@@ -258,17 +274,23 @@ public class MainUIManager : MonoBehaviour {
                 obj.SetActive(true);
                 wholeSize += (obj.GetComponent<RectTransform>().sizeDelta.y+30)*sizeFactor+10*sizeFactor;
             }
+            float xPos = tipCache[0].GetComponent<RectTransform>().position.x;
+            if((xPos+150*sizeFactor)>Screen.width-30*sizeFactor){
+                xPos = Screen.width - 180 * sizeFactor;
+            }else if((xPos-150*sizeFactor)<30*sizeFactor){
+                xPos = 180 * sizeFactor;
+            }
             if(showTop.y+wholeSize<Screen.height){
                 float start = showTop.y+wholeSize;
                 for (int i = 0; i < tipCache.Count;++i){
-                    tipCache[i].GetComponent<RectTransform>().position = new Vector3(tipCache[i].GetComponent<RectTransform>().position.x, start - (tipCache[i].GetComponent<RectTransform>().sizeDelta.y / 2+15)*sizeFactor, 0);
+                    tipCache[i].GetComponent<RectTransform>().position = new Vector3(xPos, start - (tipCache[i].GetComponent<RectTransform>().sizeDelta.y / 2+15)*sizeFactor, 0);
                     start -= (tipCache[i].GetComponent<RectTransform>().sizeDelta.y+30)*sizeFactor+10*sizeFactor;
                 }
             }else{
                 float start = showBottom.y -10*sizeFactor;
                 for (int i = 0; i < tipCache.Count; ++i)
                 {
-                    tipCache[i].GetComponent<RectTransform>().position = new Vector3(tipCache[i].GetComponent<RectTransform>().position.x, start - (tipCache[i].GetComponent<RectTransform>().sizeDelta.y / 2+15) * sizeFactor, 0);
+                    tipCache[i].GetComponent<RectTransform>().position = new Vector3(xPos, start - (tipCache[i].GetComponent<RectTransform>().sizeDelta.y / 2+15) * sizeFactor, 0);
                     start -= (tipCache[i].GetComponent<RectTransform>().sizeDelta.y + 30) * sizeFactor + 10 * sizeFactor;
                 }
             }

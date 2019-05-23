@@ -6,29 +6,33 @@ public class HeroData : ScriptableObject
 {
     public int id;
 
-    public int type = -1;
+    public int uid;
+
+    public int type = 0;
+
+    public int con_type = 0;
+
+    public int contain_num = 3;
 
     public int genus = 1;
 
-    public int opposite_type = 1;
+    public string CreatureName;
 
-    public string creatureName;
+    public int ini_star = 1;
 
-    public float base_hp = 0;
+    public float hp = 0;
 
-    public float add_hp = 0;
+    public float hp_up = 0;
 
-    public float base_attack = 0;
+    public float attack = 0;
 
-    public float add_attack = 0;
+    public float attack_up = 0;
 
-    public float base_attack_rate = 0;
+    public float base_attack_interval = 1;
 
-    public float add_attack_rate = 0;
+    public float attack_rate = 0;
 
-    public float base_defence = 0;
-
-    public float add_defence = 0;
+    public float defence = 0;
 
     public float magic_resist = 0;
 
@@ -52,28 +56,27 @@ public class HeroData : ScriptableObject
 
     public int radius = 4;
 
+    public int block_num = 1;
+
     public float attack_range = 4;
 
     public float channal = 1;
 
-    public float ready_time = 1;
+    public float ready_time = 0.2f;
 
     public int cost = 1;
+
+    public int init_room = 0;
 
     public float live_time = -1;
 
     public int[] skills;
 
-    public GameObject prefab;
+    public int[] passives;
 
-    //card info
+    public int prefab;
 
-    public string card_name = "none";
+    public int icon;
 
-    public int race = 0;
-
-    public Sprite icon;
-
-    public GameObject heroPrefab;
-
+    public int[] talents;
 }

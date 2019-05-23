@@ -83,6 +83,7 @@ public class CamaraManager : MonoBehaviour {
     public void Init()
     {
         Debug.Log("CameraManager Init");
+
     }
 
     public void StartBattle(){
@@ -91,6 +92,7 @@ public class CamaraManager : MonoBehaviour {
         //lastSingleTouchPosition = useMouse ? (Vector2)Input.mousePosition : Input.GetTouch(0).position;
         m_Camera = cameraObj.GetComponent<Camera>();
         m_CameraOffset = new Vector3(16.65f, 29.88f, 20f);
+        m_Camera.transform.rotation = Quaternion.Euler(66.5f, 90f, 0f);
         xMin = 1;
         xMax = 23;
         zMin = 12.5f;
@@ -103,8 +105,15 @@ public class CamaraManager : MonoBehaviour {
         active = true;
     }
 
+    public void SetSelectHeroFactor(){
+        cameraObj.transform.position = new Vector3(59.2f, 49.8f, 20f);
+        cameraObj.transform.rotation = Quaternion.Euler(66.598f, 270f, 0f);
+        active = false;
+    }
+
     public void CleanUp(){
         active = false;
+       
     }
 
     public void MoveClose(Vector2 pos){
@@ -119,6 +128,16 @@ public class CamaraManager : MonoBehaviour {
         closeIn = false;
         closing = true;
         m_Camera.transform.DOMove(m_CameraOffset,closingTime).onComplete += () => { active = true; closing = false; m_Camera.fieldOfView = viewField; ui.state = DungeonUIState.Idle; speed = Vector3.zero; };
+    }
+
+    public void PlaySelectHero(){
+        active = false;
+        cameraObj.GetComponent<Animation>().Play("HeroSelect");
+    }
+
+    public void StopSelectHero(){
+        cameraObj.GetComponent<Animation>().Stop();
+        SetSelectHeroFactor();
     }
    
     /// <summary>
