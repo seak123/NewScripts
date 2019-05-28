@@ -149,15 +149,15 @@ public class MainUIManager : MonoBehaviour
         obj.transform.localScale = Vector3.one;
         switch(type){
             case SystemTipType.Tip:
-                obj.GetComponent<Text>().color = new Color(0.33f,0.73f,0.84f);
+                obj.GetComponent<Text>().color = new Color(0.51f,0.93f,0.56f);
                 break;
             case SystemTipType.Warning:
-                obj.GetComponent<Text>().color = new Color(0.77f,0.17f,0);
+                obj.GetComponent<Text>().color = new Color(0.94f,0.40f,0.46f);
                 break;
         }
         obj.GetComponent<Text>().text = content;
         for (int i = 0; i < messageCache.Count;++i){
-            messageCache[i].message.GetComponent<RectTransform>().position += new Vector3(0, 30* ((float)Screen.width / 750f), 0);
+            messageCache[i].message.GetComponent<RectTransform>().position += new Vector3(0, 35* ((float)Screen.width / 750f), 0);
         }
         messageCache.Add(new MessageComponent()
         {

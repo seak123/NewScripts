@@ -22,14 +22,14 @@ public class HeroIconUI : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        float screenFactor = (float)Screen.width / 750f;
+        //float screenFactor = (float)Screen.width / 750f;
         if(isSelect){
             if(select.transform.localPosition.y>100){
-                animSpeed = -80*screenFactor;
+                animSpeed = -60;
             }else if(select.transform.localPosition.y<80){
-                animSpeed = 80*screenFactor;
+                animSpeed = 60;
             }
-            select.transform.position += new Vector3(0, animSpeed * Time.deltaTime, 0);
+            select.transform.localPosition += new Vector3(0, animSpeed * Time.deltaTime, 0);
         }
 	}
 

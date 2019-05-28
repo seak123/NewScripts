@@ -29,6 +29,7 @@ public static class StrUtil  {
         if(BattleDef.language == "chinese"){
             res = key;
         }else{
+            if (!texts.ContainsKey(key)) Debug.Log("Cannot find text " + key);
             res = texts[key];
         }
         if(res==null){

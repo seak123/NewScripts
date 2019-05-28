@@ -41,7 +41,7 @@ public class HeroSelectUI : MonoBehaviour,ISceneUI {
         skillPanel.GetComponent<RectTransform>().DOMoveX(Screen.width, 0.5f).SetDelay(2f);
         heroPanel.GetComponent<RectTransform>().position = new Vector3(Screen.width/2, -Screen.height/2, 0);
         heroPanel.GetComponent<RectTransform>().DOMoveY(0, 0.5f).SetDelay(2f).onComplete +=()=>{
-            GameRoot.GetInstance().mainUIMng.PushMessage(StrUtil.GetText("选择你的魔王"),SystemTipType.Warning);
+            GameRoot.GetInstance().mainUIMng.PushMessage(StrUtil.GetText("选择你的魔王"),SystemTipType.Tip);
         };
 
         InitData();
@@ -70,6 +70,7 @@ public class HeroSelectUI : MonoBehaviour,ISceneUI {
             s.SetSelect(false);
         }
         obj.GetComponent<HeroIconUI>().SetSelect(true);
+        GameRoot.GetInstance().gameDataManager.ChangeBoss(obj.GetComponent<HeroIconUI>().heroData.id);
         RefreshView(obj.GetComponent<HeroIconUI>().heroData.id);
     }
 
@@ -78,11 +79,17 @@ public class HeroSelectUI : MonoBehaviour,ISceneUI {
         currBossId = key;
         HeroData data = GameRoot.GetInstance().BattleField.assetManager.GetHeroData(key);
         bossName.text = StrUtil.GetText(data.CreatureName);
-        bossProfi.text = StrUtil.GetText("熟练度:")+ GameRoot.GetInstance().gameDataManager.bossExp[data.id - 1001].ToString();
+        int exp = GameRoot.GetInstance().gameDataManager.bossExp[data.id - 1001];
+        bossProfi.text = StrUtil.GetText("熟练度:")+ exp.ToString();
         skill1.InjectData(GameRoot.GetInstance().BattleField.assetManager.GetSkillData(data.skills[0]));
         skill2.InjectData(GameRoot.GetInstance().BattleField.assetManager.GetSkillData(data.skills[1]));
         skill3.InjectData(GameRoot.GetInstance().BattleField.assetManager.GetSkillData(data.skills[2]));
         skill4.InjectData(GameRoot.GetInstance().BattleField.assetManager.GetSkillData(data.skills[3]));
+
+        if (exp < 60) skill4.SetLock(true); else skill4.SetLock(false);
+        if (exp < 30) skill3.SetLock(true); else skill3.SetLock(false);
+        if (exp < 10) skill2.SetLock(true); else skill2.SetLock(false);
+
     }
 
     // Use this for initialization
@@ -100,7 +107,8 @@ public class HeroSelectUI : MonoBehaviour,ISceneUI {
         GameRoot.GetInstance().CameraMng.StopSelectHero();
         GameRoot.GetInstance().mainUIMng.CloseScene();
         GameRoot.GetInstance().QuitSelectHero();
-        GameRoot.GetInstance().mainUIMng.OpenUI(9);
+        GameRoot.GetInstance().gameDataManager.InitGameData();
+        GameRoot.GetInstance().mainUIMng.OpenUI(8);
     }
 
     public void Back(){
@@ -109,5 +117,7 @@ public class HeroSelectUI : MonoBehaviour,ISceneUI {
         GameRoot.GetInstance().mainUIMng.CloseScene();
         GameRoot.GetInstance().QuitSelectHero();
         GameRoot.GetInstance().mainUIMng.OpenUI(0);
+
+       
     }
 }

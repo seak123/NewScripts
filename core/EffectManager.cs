@@ -131,21 +131,21 @@ public class EffectManager : MonoBehaviour {
             switch(flag){
                 case 0:
                     message.GetComponentInChildren<Text>().text = text;
-                    message.GetComponentInChildren<Text>().color = new Color(0.96f, 0.05f, 0f);
-                    message.transform.localScale = Vector3.one*0.75f;
+                    message.GetComponentInChildren<Text>().color = new Color(0.95f, 0.10f, 0.18f);
+                    message.transform.localScale = Vector3.one;
                     break;
                 case 1:
                     message.GetComponentInChildren<Text>().text = text;
                     message.GetComponentInChildren<Text>().color = new Color(0.9f, 0.1f, 0.7f);
                     message.GetComponent<TipMessage>().SetLogo(int.Parse(text));
                     message.transform.DOScale(Vector3.one * 2.5f, 0.15f).onComplete+=()=>{
-                        message.transform.DOScale(Vector3.one, 0.15f);
+                        message.transform.DOScale(Vector3.one*1.2f, 0.3f);
                     };
                     break;
                 case 4:
                     message.GetComponentInChildren<Text>().text = StrUtil.GetText(text);
                     message.GetComponentInChildren<Text>().color = new Color(0.87f, 0.82f, 0.34f);
-                    message.transform.localScale = new Vector3(1.4f,1,1);
+                    message.transform.localScale = new Vector3(1.2f,1,1);
                     break;
             }
 
@@ -155,20 +155,20 @@ public class EffectManager : MonoBehaviour {
                 case 1:
                     message.GetComponentInChildren<Text>().text = text;
                     message.GetComponentInChildren<Text>().color = new Color(0.7f, 0.6f, 1f);
-                    message.transform.localScale = Vector3.one * 0.75f;
+                    message.transform.localScale = Vector3.one;
                     break;
                 case 4:
                     message.GetComponentInChildren<Text>().text = StrUtil.GetText(text);
                     message.GetComponentInChildren<Text>().color = new Color(0.87f, 0.82f, 0.34f);
-                    message.transform.localScale = new Vector3(1.4f, 1, 1);
+                    message.transform.localScale = new Vector3(1.2f, 1, 1);
                     break;
             }
         }
         message.transform.position = new Vector3(screenPos.x, screenPos.y, 0);
         Color t_color = message.GetComponentInChildren<Text>().color;
-        message.GetComponentInChildren<Text>().DOColor(new Color(t_color.r, t_color.g, t_color.b, 1), 0.3f).onComplete += () =>
+        message.GetComponentInChildren<Text>().DOColor(new Color(t_color.r, t_color.g, t_color.b, 1), 0.5f).onComplete += () =>
         {
-            message.GetComponentInChildren<Text>().DOColor(new Color(t_color.r, t_color.g, t_color.b, 0), 0.4f);
+            message.GetComponentInChildren<Text>().DOColor(new Color(t_color.r, t_color.g, t_color.b, 0), 0.5f);
         };
         Image logo = message.GetComponent<TipMessage>().CritLogo.GetComponentInChildren<Image>();
         Color l_color = logo.color;
@@ -183,7 +183,7 @@ public class EffectManager : MonoBehaviour {
         {
             effect = message,
             uid = uid,
-            duration = 0.8f,
+            duration = 1.1f,
             pos = entity.GetSocketPos("S_Center"),
             canvas = BattleUICanvas.BattleText,
         };
@@ -239,11 +239,11 @@ public class EffectManager : MonoBehaviour {
                 float scale = camara.GetViewSize();
                 float hight = Screen.height / 10 * scale;
 
-                effect.effect.transform.position = new Vector3(screenPos.x, screenPos.y + Mathf.Clamp((0.7f - effect.duration) * 0.3f, 0, 0.5f) * hight, 0);
+                effect.effect.transform.position = new Vector3(screenPos.x, screenPos.y + Mathf.Clamp((1.1f - effect.duration) * 0.2f, 0, 0.2f) * hight, 0);
                 if(effect.canvas == BattleUICanvas.BattleText){
                     Text text = effect.effect.GetComponentInChildren<Text>();
                     if(text!=null){
-                        text.gameObject.transform.localScale = new Vector3(0.7f,1f,1f)*scale*1.3f;
+                        text.gameObject.transform.localScale = Vector3.one*scale*1.3f;
                     }
                 }
 

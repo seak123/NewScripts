@@ -34,7 +34,7 @@ this.common_attr = {
 }
 
 this.hero_config = {
-    [10002] = "config.hero.2_lava_boss.unit.lava_unit",
+    [1002] = "config.hero.2_lava_boss.unit.lava_unit",
 }
 
 function this.get_unit_config( data )

@@ -10,7 +10,7 @@ namespace Map
     public class MapField : MonoBehaviour
     {
         public GameObject assitField;
-        public GameObject temRoom;
+        public GameObject[] temRoom;
         public GameObject temWall;
         public GameObject temPath;
         public GameObject temBossRoom;
@@ -108,10 +108,22 @@ namespace Map
             mapObjList.Add(obj);
         }
 
+        public void CreateRoomIndex(int gridX,int gridY,int index){
+            float x, y;
+            GetViewPos(gridX, gridY, out x, out y);
+            GameObject obj = Instantiate(temRoom[index], new Vector3(x, 1.7f, y), Quaternion.identity);
+            obj.transform.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
+            mapObjList.Add(obj);
+        }
+
         public void CreateRoom(int gridX,int gridY){
             float x, y;
             GetViewPos(gridX, gridY, out x, out y);
-            GameObject obj = Instantiate(temRoom, new Vector3(x, 1.7f, y), Quaternion.identity);
+            int i = 0;
+            while(UnityEngine.Random.Range(0f,1f)<0.6&&i<temRoom.Length-1){
+                ++i;
+            }
+            GameObject obj = Instantiate(temRoom[i], new Vector3(x, 1.7f, y), Quaternion.identity);
             obj.transform.rotation = Quaternion.Euler(new Vector3(0, UnityEngine.Random.Range(0, 4) * 90, 0));
             mapObjList.Add(obj);
         }
@@ -173,9 +185,8 @@ namespace Map
         public void RemoveEntity(Entity entity,float delay){
 
             MarkMovable(entity.posX, entity.posY, entity.radius, false);
-            //entityMap.Remove(entity.uid);
-
-            entityRemoveCache.Add(new Vector2(entity.uid,delay));
+            if(delay<=0)entityMap.Remove(entity.uid);
+            else entityRemoveCache.Add(new Vector2(entity.uid,delay));
         }
 
         public Entity FindEntity(int uid){

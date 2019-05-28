@@ -35,7 +35,7 @@ public class AssetManager : ScriptableObject
     }
 
     public CreatureData GetCreatureData(int id){
-        return FindDataById(id);
+        return id > 1000 ? HeroData.PackHeroData2(GetHeroData(id)) : FindDataById(id);
     }
 
     private CreatureData FindDataById(int key){

@@ -77,7 +77,7 @@ public class GameDataManager
         timeScaleFlag = 0;
         //init data
 
-        unitUid = 0;
+        unitUid = 1;
         roomRow = 3;
         roomCol = 3;
         creatures = new List<CreatureFightData>();
@@ -85,6 +85,10 @@ public class GameDataManager
         partTools = new List<CreatureFightData>();
         rooms = new Dictionary<int, List<CreatureFightData>>();
 
+        ChangeRoomConstructure(43, GetNewConstructure(CreateNewCreature(701, 1)), true);
+        ChangeRoomSubData(43, 10, GetNewCreature(CreateNewCreature(108, 1)),true);
+        ChangeRoomSubData(43, 10, GetNewCreature(CreateNewCreature(108, 1)),true);
+        ChangeRoomSubData(43, 10, GetNewCreature(CreateNewCreature(108, 1)),true);
         //int uid = GetNewConstructure(CreateNewCreature(601,3));
         ////ChangeRoomConstructure(34, uid, true);
 
@@ -143,13 +147,29 @@ public class GameDataManager
         //GetNewCreature(CreateNewCreature(302, 89));
 
 
-        CreatureFightData boss_data = CreateNewCreature(10002, 1);
-        boss_data.type = -1;
-        boss_data.uid = -1;
-        boss_data.init_room = 23;
-        boss = boss_data;
+        //CreatureFightData boss_data = CreateNewCreature(10002, 1);
+        //boss_data.type = -1;
+        //boss_data.uid = -1;
+        //boss_data.init_room = 23;
+        //boss = boss_data;
 
         LoadPlayerData();
+    }
+
+    public void InitGameData(){
+        //inject boss data
+        int boss_id = boss.id;
+        HeroData heroData = GameRoot.GetInstance().BattleField.assetManager.GetHeroData(boss_id);
+        boss = HeroData.PackHeroData(heroData);
+        boss.uid = 0;
+        boss.init_room = 23;
+        boss.type = -1;
+        foreach(int key in heroData.talents){
+            SkillData skillData = GameRoot.GetInstance().BattleField.assetManager.GetSkillData(key);
+            if (skillData.needExp <= bossExp[boss_id-1001]){
+                InjectBossSkill(key);
+            }
+        }
     }
 
     //create new data
@@ -357,18 +377,29 @@ public class GameDataManager
             FileStream file = File.Open(Application.persistentDataPath + "/playersave.save", FileMode.Open);
             data = (PlayerData)formatter.Deserialize(file);
             file.Close();
-        }else{
-            data = new PlayerData
-            {
-                bossExp = new List<int>(),
-            };
-            for (int i = 0; i < BattleDef.bossNum;++i){
-                data.bossExp.Add(0);
-            }
+            bossExp = data.bossExp;
+        }
+        else{
+            CleanAllData();
         }
 
-        bossExp = data.bossExp;
+
     }
+
+    public void CleanAllData(){
+        PlayerData data;
+        data = new PlayerData
+        {
+            bossExp = new List<int>(),
+        };
+        for (int i = 0; i < BattleDef.bossNum; ++i)
+        {
+            data.bossExp.Add(0);
+        }
+        bossExp = data.bossExp;
+        SavePlayerData();
+    }
+
     public void SaveData(){
 
         //format data
@@ -486,6 +517,18 @@ public class GameDataManager
         return res;
     }
 
+    public void ChangeBoss(int id){
+        HeroData data= GameRoot.GetInstance().BattleField.assetManager.GetHeroData(id);
+        CreatureFightData boss_data = HeroData.PackHeroData(data);
+        boss_data.type = -1;
+        boss_data.uid = 0;
+        boss_data.init_room = 23;
+        boss = boss_data;
+
+        GameRoot.GetInstance().Bridge.RemoveEntity(0);
+        GameRoot.GetInstance().Bridge.AddEntity(AssetManager.PackCreatureData(boss_data));
+    }
+
     public void ChangeRoomConstructure(int roomId,int uid,bool rawData = false){
         CreatureFightData oldData = GetInRoomConstructure(roomId);
         if (oldData != null)
@@ -551,12 +594,18 @@ public class GameDataManager
 
     public void InjectBossSkill(int skillId){
         switch(skillId){
-            case 100101:
+            case 1001001:
                 AddMemOnArray(ref boss.skills, 10011);
                 break;
-            case 100102:
+            case 1001002:
                 GetNewConstructure(CreateNewCreature(601, 1));
                 GetNewConstructure(CreateNewCreature(601, 1));
+                break;
+            case 1002004:
+                GetNewConstructure(CreateNewCreature(601, 1));
+                GetNewConstructure(CreateNewCreature(601, 1));
+                GetNewConstructure(CreateNewCreature(602, 1));
+                GetNewConstructure(CreateNewCreature(602, 1));
                 break;
         }
     }

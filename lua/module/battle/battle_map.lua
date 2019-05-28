@@ -39,6 +39,8 @@ function this:init(  )
         if id == -1 then
         elseif id == self.boss_room then
             self.sess.map:CreateBossRoom(pos.X,pos.Y)
+        elseif id == self.boss_room + 10 then
+            self.sess.map:CreateRoomIndex(pos.X,pos.Y,3)
         else 
             self.sess.map:CreateRoom(pos.X,pos.Y)
         end
@@ -120,13 +122,13 @@ function this:init(  )
     end
     end
     -- add boos path
-    local boss_path = {
-        X = self:get_room_center(self.boss_room).X + battle_def.room_bound*0.65 + battle_def.room_interval/2,
-        Y = self:get_room_center(self.boss_room).Y,
-        R = 0,
-        Offset = {X = 0,Y = 0}
-    }
-    check_path(boss_path)
+    -- local boss_path = {
+    --     X = self:get_room_center(self.boss_room).X + battle_def.room_bound*0.65 + battle_def.room_interval/2,
+    --     Y = self:get_room_center(self.boss_room).Y,
+    --     R = 0,
+    --     Offset = {X = 0,Y = 0}
+    -- }
+    -- check_path(boss_path)
 
     for _,pos in ipairs(path_pos) do
         self.sess.map:CreatePath(pos.X+pos.Offset.X,pos.Y+pos.Offset.Y,pos.R)

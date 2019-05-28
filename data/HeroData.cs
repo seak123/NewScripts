@@ -79,4 +79,90 @@ public class HeroData : ScriptableObject
     public int icon;
 
     public int[] talents;
+
+    public static CreatureFightData PackHeroData(HeroData _data){
+        CreatureFightData data = new CreatureFightData
+        {
+            id = _data.id,
+            uid = _data.uid,
+            type = _data.type,
+            con_type = _data.con_type,
+            contain_num = _data.contain_num,
+            genus = _data.genus,
+            CreatureName = _data.CreatureName,
+            star = _data.ini_star,
+            hp = _data.hp,
+            hp_up = _data.hp_up,
+            attack = _data.attack,
+            attack_up = _data.attack_up,
+            base_attack_interval = _data.base_attack_interval,
+            attack_rate = _data.attack_rate,
+            defence = _data.defence,
+            magic_resist = _data.magic_resist,
+            crit = _data.crit,
+            crit_value = _data.crit_value,
+            hit_rate = _data.hit_rate,
+            dodge = _data.dodge,
+            speed = _data.speed,
+            base_speed = _data.base_speed,
+            physic_suck = _data.physic_suck,
+            magic_suck = _data.magic_suck,
+            coold_reduce = _data.coold_reduce,
+            radius = _data.radius,
+            block_num = _data.block_num,
+            attack_range = _data.attack_range,
+            channal = _data.channal,
+            ready_time = _data.ready_time,
+            cost = _data.cost,
+            init_room = _data.init_room,
+            live_time = _data.live_time,
+            prefab = _data.prefab,
+            icon = _data.icon,
+        };
+        data.skills = new int[0];
+      
+        return data;
+    }
+    public static CreatureData PackHeroData2(HeroData _data){
+        CreatureData data = new CreatureData
+        {
+            id = _data.id,
+            uid = _data.uid,
+            type = _data.type,
+            con_type = _data.con_type,
+            contain_num = _data.contain_num,
+            genus = _data.genus,
+            CreatureName = _data.CreatureName,
+            hp = _data.hp,
+            hp_up = _data.hp_up,
+            attack = _data.attack,
+            attack_up = _data.attack_up,
+            base_attack_interval = _data.base_attack_interval,
+            attack_rate = _data.attack_rate,
+            defence = _data.defence,
+            magic_resist = _data.magic_resist,
+            crit = _data.crit,
+            crit_value = _data.crit_value,
+            hit_rate = _data.hit_rate,
+            dodge = _data.dodge,
+            speed = _data.speed,
+            base_speed = _data.base_speed,
+            physic_suck = _data.physic_suck,
+            magic_suck = _data.magic_suck,
+            coold_reduce = _data.coold_reduce,
+            radius = _data.radius,
+            block_num = _data.block_num,
+            attack_range = _data.attack_range,
+            channal = _data.channal,
+            ready_time = _data.ready_time,
+            cost = _data.cost,
+            init_room = _data.init_room,
+            live_time = _data.live_time,
+            prefab = _data.prefab,
+            icon = _data.icon,
+        };
+        data.skills = new int[0];
+       
+        return data;
+    }
 }

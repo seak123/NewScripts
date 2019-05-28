@@ -21,6 +21,7 @@ public class MainMeauUI : MonoBehaviour,ISceneUI {
 
     public GameObject Back;
     public GameObject[] Images;
+    public GameObject[] clouds;
     public Text GameName;
 
     private float animOffset;
@@ -41,6 +42,10 @@ public class MainMeauUI : MonoBehaviour,ISceneUI {
         Back.GetComponent<Image>().DOColor(new Color(0.45f, 0.43f, 0.45f,1), 0.5f);
         foreach(var obj in Images){
             obj.GetComponent<Image>().DOColor(new Color(1, 1, 1, 1), 0.5f);
+        }
+        foreach (var obj in clouds)
+        {
+            obj.GetComponent<Image>().DOColor(new Color(1, 1, 1, 0.5f), 0.5f);
         }
         text1.DOColor(new Color(0.76f, 0.96f, 0.96f, 1), 0.5f);
         text2.DOColor(new Color(0.76f, 0.96f, 0.96f, 1), 0.5f);
@@ -74,6 +79,10 @@ public class MainMeauUI : MonoBehaviour,ISceneUI {
         foreach (var obj in Images)
         {
             obj.GetComponent<Image>().color = new Color(1,1,1,0);
+        }
+        foreach (var obj in clouds)
+        {
+            obj.GetComponent<Image>().color = new Color(1, 1, 1, 0);
         }
         Back.GetComponent<Image>().color = new Color(0.45f, 0.43f, 0.45f, 0);
         text1.color = new Color(0.76f, 0.96f, 0.96f, 0);
@@ -124,5 +133,9 @@ public class MainMeauUI : MonoBehaviour,ISceneUI {
 
     public void LoadGame(){
         GameRoot.GetInstance().LoadGame();
+    }
+
+    public void CleanAllData(){
+        GameRoot.GetInstance().gameDataManager.CleanAllData();
     }
 }

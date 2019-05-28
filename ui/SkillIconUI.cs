@@ -47,7 +47,7 @@ public class SkillIconUI : MonoBehaviour {
                 bound.color = new Color(0.43f, 0.82f, 0.47f);
                 break;
             case 5:
-                detailName = StrUtil.GetText(data.name) + "(D)";
+                detailName = StrUtil.GetText(data.skill_name) + "(D)";
                 skillName.color = new Color(0.9f, 0.9f, 0.9f);
                 bound.color = new Color(0.9f, 0.9f, 0.9f);
                 break;
@@ -57,9 +57,7 @@ public class SkillIconUI : MonoBehaviour {
     }
 
     public void OpenDestination(){
-        if (!isLocked)
-        {
-            Debug.Log("show skill des");
+            
             if (skillData == null) return;
             List<string> contents = new List<string>();
             contents.Add("<color=#2CFFFFFF><b>" + StrUtil.GetText(skillData.skill_name) + "</b></color>" + ":\n" + StrUtil.GetText(skillData.skill_des));
@@ -76,11 +74,13 @@ public class SkillIconUI : MonoBehaviour {
                     case SkillTip.Vampire:
                         contents.Add(StrUtil.GetText("<color=#2CFFFFFF><b>吸血</b></color>:每层吸血在攻击时提供1点生命回复,普通攻击后层数减半"));
                         break;
+                    case SkillTip.Weak:
+                        contents.Add(StrUtil.GetText("<color=#2CFFFFFF><b>虚弱</b></color>:攻击力减少35%,普通攻击后层数减1"));
+                    break;
                 }
             }
             RectTransform tran = gameObject.GetComponent<RectTransform>();
             GameRoot.GetInstance().mainUIMng.OpenTip(contents, tran.position, tran.sizeDelta.x/2, tran.sizeDelta.y/2);
-        }
     }
 
     public void SetLock(bool flag){
