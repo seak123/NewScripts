@@ -138,8 +138,10 @@ public class EffectManager : MonoBehaviour {
                     message.GetComponentInChildren<Text>().text = text;
                     message.GetComponentInChildren<Text>().color = new Color(0.9f, 0.1f, 0.7f);
                     message.GetComponent<TipMessage>().SetLogo(int.Parse(text));
-                    message.transform.DOScale(Vector3.one * 2.5f, 0.15f).onComplete+=()=>{
-                        message.transform.DOScale(Vector3.one*1.2f, 0.3f);
+                    message.transform.DOScale(Vector3.one * 3.5f, 0.1f).onComplete+=()=>{
+                        message.transform.DOScale(Vector3.one*2f, 0.15f).onComplete+=()=>{
+                            message.transform.DOScale(Vector3.one * 1.5f, 0.45f);
+                        };
                     };
                     break;
                 case 4:
@@ -155,12 +157,12 @@ public class EffectManager : MonoBehaviour {
                 case 1:
                     message.GetComponentInChildren<Text>().text = text;
                     message.GetComponentInChildren<Text>().color = new Color(0.7f, 0.6f, 1f);
-                    message.transform.localScale = Vector3.one;
+                    message.transform.localScale = Vector3.one*0.7f;
                     break;
                 case 4:
                     message.GetComponentInChildren<Text>().text = StrUtil.GetText(text);
                     message.GetComponentInChildren<Text>().color = new Color(0.87f, 0.82f, 0.34f);
-                    message.transform.localScale = new Vector3(1.2f, 1, 1);
+                    message.transform.localScale = new Vector3(0.96f, 0.8f, 0.8f);
                     break;
             }
         }

@@ -108,7 +108,7 @@ public class GameRoot : MonoBehaviour {
             Bridge.StartStrategy(battleData);
         });
 
-        mainUIMng.OpenScene(uiList, action, "魔王室", 14);
+        mainUIMng.OpenScene(uiList, action, "魔王室");
     }
 
     public void LoadGame(){
@@ -154,7 +154,7 @@ public class GameRoot : MonoBehaviour {
 
         });
 
-        mainUIMng.OpenScene(uiList, action,"地牢",14);
+        mainUIMng.OpenScene(uiList, action,"地牢");
        
     }
 

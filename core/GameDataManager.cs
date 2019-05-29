@@ -594,18 +594,28 @@ public class GameDataManager
 
     public void InjectBossSkill(int skillId){
         switch(skillId){
-            case 1001001:
+            case 10010001:
                 AddMemOnArray(ref boss.skills, 10011);
                 break;
-            case 1001002:
+            case 10010002:
                 GetNewConstructure(CreateNewCreature(601, 1));
                 GetNewConstructure(CreateNewCreature(601, 1));
                 break;
-            case 1002004:
+            case 100101:
+                GetNewConstructure(CreateNewCreature(701, 1));
+                GetNewConstructure(CreateNewCreature(701, 1));
+                GetNewConstructure(CreateNewCreature(701, 1));
                 GetNewConstructure(CreateNewCreature(601, 1));
                 GetNewConstructure(CreateNewCreature(601, 1));
                 GetNewConstructure(CreateNewCreature(602, 1));
                 GetNewConstructure(CreateNewCreature(602, 1));
+                GetNewConstructure(CreateNewCreature(601, 1));
+                GetNewConstructure(CreateNewCreature(601, 1));
+                GetNewConstructure(CreateNewCreature(602, 1));
+                GetNewConstructure(CreateNewCreature(602, 1));
+                GetNewCreature(CreateNewCreature(302, 60));
+                GetNewCreature(CreateNewCreature(302, 60));
+                GetNewCreature(CreateNewCreature(302, 60));
                 break;
         }
     }

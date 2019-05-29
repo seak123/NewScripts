@@ -7,6 +7,10 @@ using DG.Tweening;
 public class HeroInfoUI : MonoBehaviour, ISceneUI
 {
 
+    public GameObject quitBtn;
+    public GameObject nextBtn;
+
+
     public Text proficiency;
     public Text talent;
     public Image heroSprite;
@@ -67,5 +71,25 @@ public class HeroInfoUI : MonoBehaviour, ISceneUI
         }
 
         talent.text = StrUtil.GetText("天赋") + " "+unlockNum+"/"+heroData.talents.Length;
+
+        quitBtn.GetComponent<RectTransform>().position = new Vector3(-Screen.width * 2 / 5, quitBtn.GetComponent<RectTransform>().position.y, 0);
+        quitBtn.GetComponent<RectTransform>().DOMoveX(0, 0.5f);
+        nextBtn.GetComponent<RectTransform>().position = new Vector3(Screen.width * 3 / 2, quitBtn.GetComponent<RectTransform>().position.y, 0);
+        nextBtn.GetComponent<RectTransform>().DOMoveX(Screen.width, 0.5f);
+        float x = heroName.gameObject.GetComponent<RectTransform>().position.x;
+        heroName.gameObject.GetComponent<RectTransform>().position = new Vector3(-Screen.width * 2 / 5, heroName.GetComponent<RectTransform>().position.y, 0);
+        heroName.gameObject.GetComponent<RectTransform>().DOMoveX(x, 0.5f);
+
+        float x_2 = proficiency.gameObject.GetComponent<RectTransform>().position.x;
+        proficiency.gameObject.GetComponent<RectTransform>().position = new Vector3(-Screen.width * 2 / 5, proficiency.GetComponent<RectTransform>().position.y, 0);
+        proficiency.gameObject.GetComponent<RectTransform>().DOMoveX(x_2, 0.5f);
+
+        float x_3 = talent.gameObject.GetComponent<RectTransform>().position.x;
+        talent.gameObject.GetComponent<RectTransform>().position = new Vector3(-Screen.width * 2 / 5, talent.GetComponent<RectTransform>().position.y, 0);
+        talent.gameObject.GetComponent<RectTransform>().DOMoveX(x_3, 0.5f);
+
+        float x_4 = skillPanel.gameObject.GetComponent<RectTransform>().position.x;
+        skillPanel.gameObject.GetComponent<RectTransform>().position = new Vector3(-Screen.width * 2 / 5, skillPanel.GetComponent<RectTransform>().position.y, 0);
+        skillPanel.gameObject.GetComponent<RectTransform>().DOMoveX(x_4, 0.5f);
     }
 }

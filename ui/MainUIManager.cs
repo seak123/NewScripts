@@ -26,7 +26,7 @@ public class MainUIManager : MonoBehaviour
 
     public GameObject[] UIPrefab;
     public UIType[] UITypes;
-    public Sprite[] loadingSprite;
+    public Sprite loadingSprite;
     public GameObject creatureCardPrefab;
     public GameObject LoadingPrefab;
     public GameObject tipPrefab;
@@ -172,7 +172,7 @@ public class MainUIManager : MonoBehaviour
         GameRoot.GetInstance().InfoUI.SetActive(false);
     }
 
-    public void OpenScene(List<int> uiList,Action completedFunc,string sceneName,int spriteId){
+    public void OpenScene(List<int> uiList,Action completedFunc,string sceneName){
         GameObject loading = Instantiate(LoadingPrefab);
         LoadingUI uiScript = loading.GetComponent<LoadingUI>();
         loading.transform.parent = GameRoot.GetInstance().LoadingUI.transform;
@@ -187,7 +187,7 @@ public class MainUIManager : MonoBehaviour
 
         loadingImage.SetActive(true);
         siteBand.SetActive(false);
-        loadingImage.GetComponent<Image>().sprite = loadingSprite[spriteId];
+        loadingImage.GetComponent<Image>().sprite = loadingSprite;
         siteName.text = StrUtil.GetText(sceneName);
 
         loadingImage.GetComponent<Image>().color = new Color(0, 0, 0, 0);
